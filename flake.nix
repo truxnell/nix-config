@@ -20,7 +20,7 @@
 
 
   };
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, sops-nix, ... }@inputs:
     with inputs;
     {
 
@@ -45,6 +45,7 @@
 
             modules = [
               (./nixos/hosts + "/${x}/default.nix")
+              sops-nix.nixosModules.sops
             ];
           };
         })
