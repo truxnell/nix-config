@@ -1,0 +1,9 @@
+---
+keys:
+  - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
+
+creation_rules:
+  - path_regex: .*\.sops\.yaml$
+    key_groups:
+      - age:
+          - *nixosvm
