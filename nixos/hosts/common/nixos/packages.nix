@@ -12,6 +12,7 @@
     # TODO Move
     nixpkgs-fmt
     nil
+    gh
   ];
    
   programs.mtr.enable = true;

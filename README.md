@@ -10,7 +10,11 @@ Frustrations with other methods tend to be bitrot and config drift - very annoyi
 
 ## Getting started
 
-TBC
+To Install
+
+```
+# nixos-rebuild switch --flake github:truxnell/nix-config#HOST
+```
 
 ## Goals
 
