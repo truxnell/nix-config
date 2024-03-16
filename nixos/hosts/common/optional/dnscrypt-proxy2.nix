@@ -13,18 +13,22 @@
     dhcpcd.extraConfig = "nohook resolv.conf";
   };
 
+  config.users.users.dnscrypt.isSystemUser = true;
+  config.users.users.dnscrypt.group = "dnscrypt";
+  config.users.groups.dnscrypt = { };
+
   # configure secret for forwarding rules
   config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".sopsFile = ./dnscrypt-proxy2.sops.yaml;
-  config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".mode = "0440";
+  config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".mode = "0444";
+  config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".path = "/run/dnscrypt-forwarding-rules.txt";
 
   # Restart dnscrypt when secret changes
-  config.sops.secrets.monitoring_token.restartUnits = [ "dnscrypt-proxy2" ];
+  config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".restartUnits = [ "dnscrypt-proxy2" ];
 
   config.services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
       require_dnssec = true;
-
       forwarding_rules = config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".path;
 
       server_names = [ "NextDNS-f6fe35" ];

@@ -13,7 +13,8 @@
     nixpkgs-fmt
     nil
     gh
+    sops
   ];
-   
+
   programs.mtr.enable = true;
 }
