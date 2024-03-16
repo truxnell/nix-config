@@ -1,3 +1,8 @@
 {
-  "recommendations": ["jnoortheen.nix-ide"]
+  "recommendations": [
+    "jnoortheen.nix-ide",
+    "shipitsmarter.sops-edit",
+    "ionutvmi.path-autocomplete",
+    "redhat.vscode-yaml"
+  ]
 }

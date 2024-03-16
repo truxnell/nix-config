@@ -18,7 +18,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-
   };
   outputs = { self, nixpkgs, sops-nix, ... }@inputs:
     with inputs;
@@ -27,7 +26,7 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
 
-       # Each subdirectory in ./machines is a host. Add them all to
+      # Each subdirectory in ./machines is a host. Add them all to
       # nixosConfigurations. Host configurations need a file called
       # configuration.nix that will be read first
       nixosConfigurations = builtins.listToAttrs (map
@@ -50,5 +49,5 @@
           };
         })
         (builtins.attrNames (builtins.readDir ./nixos/hosts)));
-};
+    };
 }
