@@ -6,7 +6,7 @@
 
 {
   imports =
-    [ 
+    [
       # Host-specific
       ./hardware-configuration.nix
 
@@ -20,6 +20,7 @@
       ../common/optional/gnome.nix
       ../common/optional/editors/vscode
       ../common/optional/firefox.nix
+      ../common/optional/sops-nix.nix
 
     ];
 
@@ -48,7 +49,7 @@
   # services.xserver.enable = true;
 
 
-  
+
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
