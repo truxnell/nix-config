@@ -13,22 +13,12 @@
       autoLogin.user = "truxnell"; # TODO move to config overlay
     };
     layout = "us"; # `localctl` will give you 
-
-
-    # Touchpad
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-        middleEmulation = false;
-        tapping = true;
-      };
-    };
   };
 
 
   # And dconf
   programs.dconf.enable = true;
+  # dconf write /org/gnome/mutter/experimental-features "['scale-monitor-framebuffer']"
 
   # Exclude default GNOME packages that dont interest me.
   environment.gnome.excludePackages = (with pkgs; [
