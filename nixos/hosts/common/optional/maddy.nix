@@ -1,16 +1,18 @@
 { inputs, outputs, config, ... }: {
 
   # init secret
-  config.sops.secrets."system/networking/dcloudflare-dyndns/apiTokenFile".sopsFile = ./cloudflare-dyndns.sops.yaml;
-  config.sops.secrets."system/networking/dcloudflare-dyndns/domains".sopsFile = ./cloudflare-dyndns.sops.yaml;
+  config.sops.secrets."system/mail/maddy/envFile" = {
+    sopsFile = ./maddy.sops.yaml;
+    owner = "maddy";
+    group = "maddy";
+  };
 
-  # Cloudflare dynamic dns to keep my DNS records pointed at home
-  services.maddy = {
+  # 
+  config.services.maddy = {
     enable = true;
-    ipv6 = false;
-    proxied = true;
-    apiTokenFile = config.secret.sops."system/networking/dcloudflare-dyndns/apiTokenFile".path;
-    domains = config.secret.sops."system/networking/dcloudflare-dyndns/domains".path;
+    secrets = [ config.sops.secrets."system/mail/maddy/envFile".path ];
+    config = builtins.readFile ./maddy.conf;
+
   };
 
 }
