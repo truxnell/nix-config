@@ -39,7 +39,7 @@ tasks:
         msg: "nixos-rebuild not found"
       - sh: which nvd
         msg: "nvd not found"
-        
+
   .prompt_to_continue:
     internal: true
     prompt: Do you want to continue applying this configuration?
