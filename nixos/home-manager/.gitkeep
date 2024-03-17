@@ -1,4 +1,4 @@
-My home infrastructure, 
+My home infrastructure,
 
 ![](https://imgur.com/ISNnzgN.png)
 
@@ -23,7 +23,7 @@ My home infrastructure,
     - [work_laptop](hosts/work_laptop/README.md) (nix-darwin running on a MacBook Pro)
   - [modules](modules) (Custom NixOS and home-manager modules)
   - [overlays](overlays) (Custom overlays, primarily used for packages currently)
-  - [pkgs](pkgs) (Custom Packages, mainly items not yet in official nixpkgs) 
+  - [pkgs](pkgs) (Custom Packages, mainly items not yet in official nixpkgs)
 - [shell.nix](shell.nix) (Shell for bootstrapping flake-enabled nix and home-manager)
 - [nixpkgs.nix](nixpkgs.nix) (Used by shell.nix - useful to avoid using channels when using legacy nix commands)
 

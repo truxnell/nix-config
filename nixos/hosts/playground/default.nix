@@ -1,7 +1,9 @@
-{ config, lib, ... }:
-
 {
-  imports = [ ./playground.nix ];
+  config,
+  lib,
+  ...
+}: {
+  imports = [./playground.nix];
   boot.isContainer = true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   networking = {

@@ -1,3 +1,8 @@
-{ config, pkgs, lib, inputs, outputs, ... }:
-
-{ }
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  outputs,
+  ...
+}: {}
