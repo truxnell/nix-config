@@ -21,6 +21,8 @@
       ../common/optional/editors/vscode
       ../common/optional/firefox.nix
       ../common/optional/sops-nix.nix
+      ../common/optional/cloudflare-dyndns.nix
+
 
     ];
 
