@@ -1,16 +1,16 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [ 
-      # Host-specific
-      ./hardware-configuration.nix
-
-    ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Host-specific
+    ./hardware-configuration.nix
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -63,7 +63,6 @@
     ];
   };
 
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -88,7 +87,6 @@
     };
   };
 
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -104,7 +102,7 @@
   services.openssh.enable = true;
 
   users.users.root.openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
   ];
 
   # may fix issues with network service failing during a nixos-rebuild
@@ -139,6 +137,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }
-

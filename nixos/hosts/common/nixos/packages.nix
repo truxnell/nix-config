@@ -1,5 +1,9 @@
-{ config, pkgs, lib, ... }:
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   environment.systemPackages = with pkgs; [
     bat
     jq
@@ -10,13 +14,14 @@
     git
     dnsutils
     nvd
+    gh
 
     # TODO Move
-    nixpkgs-fmt
-    nil
-    gh
-    sops
   ];
-
+  programs.direnv = {
+    # TODO move to home-manager
+    enable = true;
+    nix-direnv.enable = true;
+  };
   programs.mtr.enable = true;
 }

@@ -1,12 +1,20 @@
-{ inputs, outputs, config, sops-nix, ... }: {
-  imports = [
-    # inputs.home-manager.nixosModules.home-manager
-    #inputs.sops-nix.nixosModules.sops
-    ./locale.nix
-    ./nix.nix
-    ./openssh.nix
-    ./packages.nix
-  ] ++ (builtins.attrValues {});
+{
+  inputs,
+  outputs,
+  config,
+  sops-nix,
+  ...
+}: {
+  imports =
+    [
+      # inputs.home-manager.nixosModules.home-manager
+      #inputs.sops-nix.nixosModules.sops
+      ./locale.nix
+      ./nix.nix
+      ./openssh.nix
+      ./packages.nix
+    ]
+    ++ (builtins.attrValues {});
 
   # home-manager.extraSpecialArgs = { inherit inputs outputs; }; TODO Home-manager
 

@@ -1,6 +1,9 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   services.prometheus.exporters = {
     node = {
       enable = true;
@@ -20,10 +23,9 @@
       enable = true;
     };
   };
-  
+
   networking.firewall.allowedTCPPorts = [
     config.services.prometheus.exporters.node.port
     config.services.prometheus.exporters.smartctl.port
   ];
-
 }
