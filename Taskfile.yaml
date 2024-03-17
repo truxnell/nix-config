@@ -2,12 +2,15 @@
 version: "3"
 
 includes:
-  sops:
+  sop:
     taskfile: ".taskfiles/sops"
     dir: .taskfiles/sops
   nix:
     taskfile: ".taskfiles/nix"
     dir: "{{.ROOT_DIR}}"
+  pre:
+    taskfile: ".taskfiles/pre-commit"
+    dir: "{{.ROOT_DOR}}"
 
 tasks:
   default:
