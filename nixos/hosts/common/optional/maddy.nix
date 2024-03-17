@@ -7,6 +7,10 @@
     group = "maddy";
   };
 
+  # Restart dnscrypt when secret changes
+  config.sops.secrets."system/mail/maddy/envFile".restartUnits = [ "maddy" ];
+
+
   # 
   config.services.maddy = {
     enable = true;
