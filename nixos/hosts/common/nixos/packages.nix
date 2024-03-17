@@ -9,6 +9,8 @@
     vim
     git
     dnsutils
+    nvd
+
     # TODO Move
     nixpkgs-fmt
     nil
