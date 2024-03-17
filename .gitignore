@@ -1,2 +1,3 @@
 .mozilla
 **/*.tmp.sops.yaml
+result
