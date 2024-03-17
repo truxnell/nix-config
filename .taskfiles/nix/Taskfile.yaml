@@ -1,0 +1,45 @@
+---
+version: "3"
+
+vars:
+  host: $HOSTNAME
+
+tasks:
+  apply:
+    desc: Build and apply nix configuration
+    silent: true
+    requires:
+      vars:
+        - host
+    cmds:
+      - task: build
+        vars:
+          host: "{{ .host }}"
+      - task: .prompt_to_continue
+      - sudo nixos-rebuild switch --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+
+  build:
+    desc: Build nix configuration
+    silent: true
+    requires:
+      vars:
+        - host
+    cmds:
+      - nixos-rebuild build --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
+      - nvd diff /run/current-system result
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+      - sh: which nvd
+        msg: "nvd not found"
+        
+  .prompt_to_continue:
+    internal: true
+    prompt: Do you want to continue applying this configuration?
