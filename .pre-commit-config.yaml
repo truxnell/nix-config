@@ -2,11 +2,6 @@
 fail_fast: false
 
 repos:
-  - repo: https://github.com/kamadorueda/alejandra
-    rev: 3.0.0
-    hooks:
-      - id: alejandra-system
-
   - repo: https://github.com/adrienverge/yamllint
     rev: v1.32.0
     hooks:
