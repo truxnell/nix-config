@@ -23,10 +23,19 @@
     nixpkgs,
     sops-nix,
     ...
-  } @ inputs:
+  } @ inputs: let
+    inherit (self) outputs;
+    forAllSystems = nixpkgs.lib.genAttrs [
+      "aarch64-linux"
+      # "i686-linux"
+      "x86_64-linux"
+      # "aarch64-darwin"
+      # "x86_64-darwin"
+    ];
+  in
     with inputs; {
       # Use nixpkgs-fmt for 'nix fmt'
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixpkgs-fmt;
+      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
       # Each subdirectory in ./machines is a host. Add them all to
       # nixosConfigurations. Host configurations need a file called
