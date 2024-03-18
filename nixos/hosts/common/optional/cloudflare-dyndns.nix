@@ -1,7 +1,6 @@
-{
-  config,
-  lib,
-  ...
+{ config
+, lib
+, ...
 }: {
   # Current nixpkgs cf-ddns only supports using a env file for the apitoken
   # but not for domains, which makes them hard to find.
@@ -16,7 +15,7 @@
   config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".sopsFile = ./cloudflare-dyndns.sops.yaml;
 
   # Restart when secret changes
-  config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = ["cloudflare-dyndns"];
+  config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns" ];
 
   # Cloudflare dynamic dns to keep my DNS records pointed at home
   config.services.cloudflare-dyndns = {
@@ -24,6 +23,6 @@
     ipv6 = false;
     proxied = true;
     apiTokenFile = config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".path;
-    domains = [];
+    domains = [ ];
   };
 }

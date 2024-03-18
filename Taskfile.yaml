@@ -28,3 +28,8 @@ tasks:
     cmds:
       - task: lint
       - task: pc-run
+
+  format:
+    desc: Check project files
+    cmds:
+      - nixpkgs-fmt {{.ROOT_DIR}}

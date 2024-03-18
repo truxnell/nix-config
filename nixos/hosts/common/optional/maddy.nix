@@ -1,8 +1,7 @@
-{
-  inputs,
-  outputs,
-  config,
-  ...
+{ inputs
+, outputs
+, config
+, ...
 }: {
   # init secret
   config.sops.secrets."system/mail/maddy/envFile" = {
@@ -12,12 +11,12 @@
   };
 
   # Restart dnscrypt when secret changes
-  config.sops.secrets."system/mail/maddy/envFile".restartUnits = ["maddy"];
+  config.sops.secrets."system/mail/maddy/envFile".restartUnits = [ "maddy" ];
 
   #
   config.services.maddy = {
     enable = true;
-    secrets = [config.sops.secrets."system/mail/maddy/envFile".path];
+    secrets = [ config.sops.secrets."system/mail/maddy/envFile".path ];
     config = builtins.readFile ./maddy.conf;
   };
 }

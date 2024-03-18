@@ -1,9 +1,8 @@
-{
-  inputs,
-  outputs,
-  config,
-  sops-nix,
-  ...
+{ inputs
+, outputs
+, config
+, sops-nix
+, ...
 }: {
   imports =
     [
@@ -14,7 +13,7 @@
       ./openssh.nix
       ./packages.nix
     ]
-    ++ (builtins.attrValues {});
+    ++ (builtins.attrValues { });
 
   # home-manager.extraSpecialArgs = { inherit inputs outputs; }; TODO Home-manager
 
