@@ -17,3 +17,14 @@ tasks:
     silent: true
     cmds:
       - task -l
+
+  lint:
+    desc: Run statix lint
+    cmds:
+      - statix check .
+
+  check:
+    desc: Check project files
+    cmds:
+      - task: lint
+      - task: pc-run

@@ -1,8 +1,7 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
+{ config
+, pkgs
+, lib
+, ...
 }: {
   # Enable vscode & addons
   environment.systemPackages = with pkgs; [
@@ -11,6 +10,8 @@
       vscodeExtensions = with vscode-extensions;
         [
           bbenoist.nix
+          mkhl.direnv
+
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {

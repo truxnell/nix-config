@@ -17,7 +17,11 @@
     gh
 
     # TODO Move
+    nil
+    nixpkgs-fmt
+    statix
   ];
+
   programs.direnv = {
     # TODO move to home-manager
     enable = true;
