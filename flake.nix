@@ -18,21 +18,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = {
-    self,
-    nixpkgs,
-    sops-nix,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    forAllSystems = nixpkgs.lib.genAttrs [
-      "aarch64-linux"
-      # "i686-linux"
-      "x86_64-linux"
-      # "aarch64-darwin"
-      # "x86_64-darwin"
-    ];
-  in
+  outputs =
+    { self
+    , nixpkgs
+    , sops-nix
+    , ...
+    } @ inputs:
+    let
+      inherit (self) outputs;
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "aarch64-linux"
+        # "i686-linux"
+        "x86_64-linux"
+        # "aarch64-darwin"
+        # "x86_64-darwin"
+      ];
+    in
     with inputs; {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
@@ -48,7 +49,7 @@
             # Technically, adding the inputs is redundant as they can be also
             # accessed with flake-self.inputs.X, but adding them individually
             # allows to only pass what is needed to each module.
-            specialArgs = {flake-self = self;} // inputs;
+            specialArgs = { flake-self = self; } // inputs;
 
             system = "x86_64-linux";
 

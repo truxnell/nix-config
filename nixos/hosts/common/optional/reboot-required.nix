@@ -1,10 +1,9 @@
-{
-  config,
-  pkgs,
-  ...
+{ config
+, pkgs
+, ...
 }: {
   systemd.timers."reboot-required-check" = {
-    wantedBy = ["timers.target"];
+    wantedBy = [ "timers.target" ];
     timerConfig = {
       # start at boot
       OnBootSec = "0m";
