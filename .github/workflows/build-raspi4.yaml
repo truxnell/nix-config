@@ -25,7 +25,7 @@ jobs:
         shell: bash
       - name: Build SD Image
         run: |
-          nix build .#images.rip4
+          nix build .#images.rpi4
       - uses: actions/upload-artifact@v3
         with:
           name: rpi4.img
