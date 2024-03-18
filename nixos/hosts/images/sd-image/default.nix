@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 {
-  imports = [
-    <nixos-hardware/raspberry-pi/4>
-  ];
+  # imports = [
+  #   <nixos-hardware/raspberry-pi/4>
+  # ];
 
   nixpkgs = {
 
@@ -30,14 +30,14 @@
     };
   };
 
-  # https://nixos.wiki/wiki/NixOS_on_ARM/Raspberry_Pi_4
-  hardware = {
-    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
-    deviceTree = {
-      enable = true;
-      filter = "*rpi-4-*.dtb";
-    };
-  };
+  # # https://nixos.wiki/wiki/NixOS_on_ARM/Raspberry_Pi_4
+  # hardware = {
+  #   raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+  #   deviceTree = {
+  #     enable = true;
+  #     filter = "*rpi-4-*.dtb";
+  #   };
+  # };
 
   console.enable = false;
 
