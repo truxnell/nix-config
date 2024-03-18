@@ -43,3 +43,9 @@ tasks:
   .prompt_to_continue:
     internal: true
     prompt: Do you want to continue applying this configuration?
+
+  build-image-rpi4:
+    desc: Build basic machine build-image
+    silent: true
+    cmds:
+      - nix build .#images.rpi4
