@@ -68,6 +68,15 @@
               ./nixos/hosts/nixosvm
             ];
           };
+
+          dns01 = nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+            system = "aarch64-linux";
+            modules = defaultModules ++ [
+              ./nixos/hosts/dns01
+            ];
+          };
+
           # isoimage = nixpkgs.lib.nixosSystem {
           #   system = "x86_64-linux";
           #   inherit specialArgs;
