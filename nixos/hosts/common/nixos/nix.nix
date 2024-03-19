@@ -1,5 +1,6 @@
 { inputs
 , lib
+, pkgs
 , ...
 }: {
   nix = {
@@ -13,4 +14,10 @@
       options = "--delete-older-than 5d";
     };
   };
+
+  # Enable printing changes on nix build etc with nvd
+  system.activationScripts.report-changes = ''
+    PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}
+    nvd diff $(ls -dv /nix/var/nix/profiles/system-*-link | tail -2)
+  '';
 }
