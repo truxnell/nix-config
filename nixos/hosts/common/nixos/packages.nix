@@ -14,6 +14,7 @@
     dnsutils
     nvd
     gh
+    nix
 
     # TODO Move
     nil
