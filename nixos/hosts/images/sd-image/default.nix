@@ -61,7 +61,7 @@
   nixpkgs.hostPlatform = "aarch64-linux";
 
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1.... username@tld"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
   ];
   system.stateVersion = "23.11";
 
