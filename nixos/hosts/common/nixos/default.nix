@@ -25,7 +25,7 @@
     };
   };
 
-  # TODO Shared sops location
+  # TODO Shared sops location, probably in home-manager?
   # sops.age.keyFile = "/var/lib/sops-nix/key.txt";
 
   # Increase open file limit for sudoers
@@ -52,7 +52,7 @@
   # programs.msmtp = {
   #   enable = true;
   #   accounts.default = {
-  #     host = "smtp-relay.mcbadass.local";
+  #     host = "maddy.home.tld";
   #     from = "${config.networking.hostName}@trux.dev";
   #   };
   #   defaults = {
