@@ -45,7 +45,7 @@
     libraspberrypi
     raspberrypi-eeprom
     ssh-to-age
-    vi
+    vim
     git
     curl
     wget
