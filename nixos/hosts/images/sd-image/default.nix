@@ -5,6 +5,13 @@
   #   <nixos-hardware/raspberry-pi/4>
   # ];
 
+  nix = {
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "@wheel" ];
+    };
+  };
+
   nixpkgs = {
 
     # Configure your nixpkgs instance
