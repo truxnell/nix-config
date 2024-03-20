@@ -77,13 +77,13 @@
             ];
           };
 
-          dns02 = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-            system = "aarch64-linux";
-            modules = defaultModules ++ [
-              ./nixos/hosts/dns02
-            ];
-          };
+          # dns02 = nixpkgs.lib.nixosSystem {
+          #   inherit specialArgs;
+          #   system = "aarch64-linux";
+          #   modules = defaultModules ++ [
+          #     ./nixos/hosts/dns02
+          #   ];
+          # };
 
           # isoimage = nixpkgs.lib.nixosSystem {
           #   system = "x86_64-linux";
@@ -105,7 +105,37 @@
             ];
           };
         };
+      # simple shortcut to allow for easier referencing of correct
+      # key for building images
+      # > nix build .#images.rpi4
       images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
+
+      # deploy-rs
+      deploy.nodes =
+        let
+          mkDeployConfig = hostname: configuration: {
+            inherit hostname;
+            profiles.system =
+              let
+                inherit (configuration.config.nixpkgs.hostPlatform) system;
+              in
+              {
+                path = deploy-rs.lib."${system}".activate.nixos configuration;
+                sshUser = "truxnell";
+                user = "root";
+                sshOpts = [ "-t" ];
+                autoRollback = false;
+                magicRollback = true;
+              };
+          };
+        in
+        {
+          dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
+          # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
+        };
+
+      # deploy-rs: This is highly advised, and will prevent many possible mistakes
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 
 }
