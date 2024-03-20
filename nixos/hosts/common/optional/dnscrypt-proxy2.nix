@@ -28,11 +28,11 @@
     settings = {
       require_dnssec = true;
       forwarding_rules = config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".path;
-
-      server_names = [ "NextDNS-f6fe35" ];
+      listen_addresses = [ "0.0.0 .0:53" ];
+      server_names = [ "NextDNS" ];
 
       static = {
-        "NextDNS-f6fe35" = {
+        "NextDNS" = {
           stamp = "sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8HL2Y2ZmUzNQ";
         };
       };
