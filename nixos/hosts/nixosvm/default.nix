@@ -16,13 +16,11 @@
     ../common/optional/fish.nix
     ../common/optional/monitoring.nix
     ../common/optional/reboot-required.nix
-    ../common/optional/dnscrypt-proxy2.nix
     ../common/optional/gnome.nix
     ../common/optional/editors/vscode
     ../common/optional/firefox.nix
     ../common/optional/sops-nix.nix
-    ../common/optional/cloudflare-dyndns.nix
-    ../common/optional/maddy.nix
+
   ];
 
   boot.loader.systemd-boot.enable = true;
