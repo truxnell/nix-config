@@ -44,6 +44,12 @@
   environment.systemPackages = with pkgs; [
     libraspberrypi
     raspberrypi-eeprom
+    ssh-to-age
+    vi
+    git
+    curl
+    wget
+    dnsutils
   ];
 
   networking = {
@@ -53,6 +59,17 @@
   };
   services.openssh.enable = true;
 
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.truxnell = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    packages = with pkgs; [
+    ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
+    ];
+  };
+
   # Free up to 1GiB whenever there is less than 100MiB left.
   nix.extraOptions = ''
     min-free = ${toString (100 * 1024 * 1024)}
@@ -60,9 +77,6 @@
   '';
   nixpkgs.hostPlatform = "aarch64-linux";
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
-  ];
   system.stateVersion = "23.11";
 
 }
