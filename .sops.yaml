@@ -2,6 +2,7 @@
 keys:
   - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
   - &nixosvm2 age16mwx76r29pa9lnmagujw9adxrpujxmxu38hjfastf6pgw6v66gjs5ugewz
+  - &dns01 age1y399g6q8cg0efzqdywrswp5uugsfeuxg54ptp3vacrvaknl5dunq22wt5x
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$
@@ -9,3 +10,4 @@ creation_rules:
       - age:
           - *nixosvm
           - *nixosvm2
+          - *dns01
