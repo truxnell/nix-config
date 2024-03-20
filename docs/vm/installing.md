@@ -63,6 +63,8 @@ Set the password for the user that was created.
 passwd truxnell
 ```
 
+Also grab the ssh keys and re-encrypt sops
+
 Login as user, copy nix git
 
 ```sh
