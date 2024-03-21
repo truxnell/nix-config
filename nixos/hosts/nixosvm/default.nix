@@ -29,6 +29,9 @@
 
   networking.hostName = "nixosvm"; # Define your hostname.
 
+  # Passwordless sudo when SSH'ing with keys
+  security.pam.enableSSHAgentAuth = true;
+  security.pam.services.sudo.sshAgentAuth = true;
 
 
   # Pick only one of the below networking options.

@@ -77,13 +77,9 @@
     ];
   };
 
-  security.pam.sshAgentAuth = {
-    # Passwordless sudo when SSH'ing with keys
-    enable = true;
-    authorizedKeysFiles = [
-      "/etc/ssh/authorized_keys.d/%u"
-    ];
-  };
+  # Passwordless sudo when SSH'ing with keys
+  security.pam.enableSSHAgentAuth = true;
+  security.pam.services.sudo.sshAgentAuth = true;
 
   # Free up to 1GiB whenever there is less than 100MiB left.
   nix.extraOptions = ''

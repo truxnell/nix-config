@@ -8,6 +8,7 @@ let
   hosts = outputs.nixosConfigurations;
 in
 {
+
   services.openssh = {
     enable = true;
     settings = {
@@ -18,9 +19,11 @@ in
       StreamLocalBindUnlink = "yes";
       # Allow forwarding ports to everywhere
       GatewayPorts = "clientspecified";
+      # Don't allow home-directory authorized_keys
+
     };
   };
 
-  # Passwordless sudo when SSH'ing with keys
   security.pam.enableSSHAgentAuth = true;
+
 }
