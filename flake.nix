@@ -104,13 +104,14 @@
               ./nixos/hosts/images/sd-image
             ];
           };
-          # nix build .#images.rpi4
+          # nix build .#images.iso
           iso = nixpkgs.lib.nixosSystem {
             inherit specialArgs;
 
             modules = defaultModules ++ [
               "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-              ./nixos/hosts/images/sd-image
+              "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+              ./nixos/hosts/images/cd-dvd
             ];
           };
         };
