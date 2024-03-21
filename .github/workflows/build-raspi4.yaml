@@ -1,11 +1,17 @@
 ---
-name: sd-image-rpi4
+name: build-image
 on:
   workflow_dispatch:
+    inputs:
+      image:
+        description: 'Which image to build'
+        required: true
+        default: 'rpi4'
+        options: ['iso', 'rpi4']
 
 jobs:
   build-sd-image:
-    name: Build Raspi4 image
+    name: Build Nixos image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
@@ -25,7 +31,7 @@ jobs:
         shell: bash
       - name: Build SD Image
         run: |
-          nix build .#images.rpi4
+          nix build .#images.${{ github.event.inputs.image }}
       - uses: actions/upload-artifact@v3
         with:
           name: rpi4.img
