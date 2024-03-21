@@ -76,7 +76,7 @@ Login as user, copy nix git
 ```sh
 mkdir .local
 cd .local
-git clone https://github.com/szinn/nix-config.git
+git clone https://github.com/truxnell/nix-config.git
 cd nix-config
 ```
 
