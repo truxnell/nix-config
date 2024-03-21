@@ -65,7 +65,6 @@
     wireless.enable = false;
     networkmanager.enable = false;
   };
-  services.openssh.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.truxnell = {
