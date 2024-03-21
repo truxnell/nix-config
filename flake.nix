@@ -104,11 +104,21 @@
               ./nixos/hosts/images/sd-image
             ];
           };
+          # nix build .#images.rpi4
+          iso = nixpkgs.lib.nixosSystem {
+            inherit specialArgs;
+
+            modules = defaultModules ++ [
+              "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
+              ./nixos/hosts/images/sd-image
+            ];
+          };
         };
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4
       images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
+      images.iso = nixosConfigurations.rpi4.config.system.build.sdImage;
 
       # deploy-rs
       deploy.nodes =
