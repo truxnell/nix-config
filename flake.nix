@@ -118,7 +118,7 @@
       # key for building images
       # > nix build .#images.rpi4
       images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
-      images.iso = nixosConfigurations.rpi4.config.system.build.sdImage;
+      images.iso = nixosConfigurations.iso.config.system.build.isoImage;
 
       # deploy-rs
       deploy.nodes =
