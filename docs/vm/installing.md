@@ -65,6 +65,12 @@ passwd truxnell
 
 Also grab the ssh keys and re-encrypt sops
 
+```sh
+cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age
+```
+
+then run task
+
 Login as user, copy nix git
 
 ```sh
