@@ -73,7 +73,7 @@
             inherit specialArgs;
             system = "x86_64-linux";
             modules = defaultModules ++ [
-              ./nixos/hosts/nixosvm
+              ./nixos/hosts/rickenbacker
             ];
           };
 
