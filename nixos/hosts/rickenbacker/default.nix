@@ -27,7 +27,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
 
-  networking.hostName = "nixosvm"; # Define your hostname.
+  networking.hostName = "rickenbacker"; # Define your hostname.
+
 
 
   # Pick only one of the below networking options.
