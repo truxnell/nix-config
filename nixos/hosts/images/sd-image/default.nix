@@ -1,9 +1,10 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixos-hardware, ... }:
 
 {
-  # imports = [
-  #   <nixos-hardware/raspberry-pi/4>
-  # ];
+  imports = [
+    # nixos-hardware.nixosModules.raspberry-pi-4
+    ../../common/nixos/openssh.nix
+  ];
 
   nix = {
     settings = {
@@ -76,10 +77,6 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
     ];
   };
-
-  # Passwordless sudo when SSH'ing with keys
-  security.pam.enableSSHAgentAuth = true;
-  security.pam.services.sudo.sshAgentAuth = true;
 
   # Free up to 1GiB whenever there is less than 100MiB left.
   nix.extraOptions = ''
