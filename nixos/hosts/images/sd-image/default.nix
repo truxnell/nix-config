@@ -77,6 +77,9 @@
     ];
   };
 
+  # Passwordless sudo when SSH'ing with keys
+  security.pam.enableSSHAgentAuth = true;
+
   # Free up to 1GiB whenever there is less than 100MiB left.
   nix.extraOptions = ''
     min-free = ${toString (100 * 1024 * 1024)}
