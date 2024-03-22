@@ -28,7 +28,7 @@
     settings = {
       require_dnssec = true;
       forwarding_rules = config.sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".path;
-      listen_addresses = [ "0.0.0 .0:53" ];
+      listen_addresses = [ "0.0.0.0:53" ];
       server_names = [ "NextDNS" ];
 
       static = {
