@@ -10,7 +10,7 @@
       #inputs.sops-nix.nixosModules.sops
       ./locale.nix
       ./nix.nix
-      ./openssh.nix
+      # ./openssh.nix
       ./packages.nix
     ]
     ++ (builtins.attrValues { });

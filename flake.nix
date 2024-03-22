@@ -49,10 +49,12 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
+      nixosModules = import ./nixos/modules/nixos;
+
       nixosConfigurations =
         let
           defaultModules =
-            # (builtins.attrValues nixosModules) ++
+            (builtins.attrValues nixosModules) ++
             [
               sops-nix.nixosModules.sops
             ];

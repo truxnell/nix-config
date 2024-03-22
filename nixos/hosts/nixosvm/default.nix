@@ -29,6 +29,7 @@
 
   networking.hostName = "nixosvm"; # Define your hostname.
 
+  modules.services.openssh = true;
 
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
