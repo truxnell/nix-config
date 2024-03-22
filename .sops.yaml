@@ -2,7 +2,7 @@
 keys:
   - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
   - &nixosvm2 age16mwx76r29pa9lnmagujw9adxrpujxmxu38hjfastf6pgw6v66gjs5ugewz
-  - &dns01 age1y399g6q8cg0efzqdywrswp5uugsfeuxg54ptp3vacrvaknl5dunq22wt5x
+  - &dns01 age190fm3dlfxtf5smttyqxtrht4ac2ldfhkap7luppc0aap8w6r940qvjyc8t
   - &rickenbacker age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
 
 creation_rules:
