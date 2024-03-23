@@ -19,7 +19,10 @@
 
   # And dconf
   programs.dconf.enable = true;
-  # dconf write /org/gnome/mutter/experimental-features "['scale-monitor-framebuffer']"
+  
+  # https://github.com/NixOS/nixpkgs/issues/114514
+  # dconf write /org/gnome/mutter/experimental-features "['scale-monitor-framebuffer']" TODO hack for GNOME 45
+
 
   # Exclude default GNOME packages that dont interest me.
   environment.gnome.excludePackages =
