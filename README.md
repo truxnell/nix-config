@@ -35,6 +35,7 @@ To Install
   - [ ] WSL
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
+- [ ] ssh_config build from computers?
 - [ ] Add license
 - [ ] Add taskfiles
 
