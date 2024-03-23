@@ -3,7 +3,8 @@ keys:
   - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
   - &nixosvm2 age16mwx76r29pa9lnmagujw9adxrpujxmxu38hjfastf6pgw6v66gjs5ugewz
   - &dns01 age1y399g6q8cg0efzqdywrswp5uugsfeuxg54ptp3vacrvaknl5dunq22wt5x
-  - &rickenbacker age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
+  - &citadel age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
+  - &rickenbacker age1cp6vegrmqfkuj8nmt2u3z0sur7n0f7e9x9zmdv4zygp8j2pnucpsdkgagc
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$
@@ -12,4 +13,5 @@ creation_rules:
           - *nixosvm
           - *nixosvm2
           - *dns01
+          - *citadel
           - *rickenbacker
