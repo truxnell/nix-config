@@ -49,7 +49,7 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
-      nixosModules = import ./nixos/modules/nixos;
+      # nixosModules = import ./nixos/modules/nixos;
 
       nixosConfigurations =
         let
@@ -61,6 +61,27 @@
           specialArgs = {
             inherit inputs outputs;
           };
+
+          # generate a base nixos configuration with the
+          # specified overlays, hardware modules, and any extraModules applied
+          mkNixosConfig =
+            { hostname
+            , system ? "x86_64-linux"
+            , nixpkgs ? inputs.nixpkgs
+            , hardwareModules
+            , baseModules ? [
+                # home-manager.nixosModules.home-manager
+                # ./modules/nixos
+                sops-nix.nixosModules.sops
+                ./nixos/hosts/${hostname}
+              ]
+            , extraModules ? [ ]
+            }:
+            nixpkgs.lib.nixosSystem {
+              inherit system;
+              modules = baseModules ++ hardwareModules ++ extraModules;
+              specialArgs = { inherit self inputs nixpkgs; };
+            };
         in
         {
           nixosvm = nixpkgs.lib.nixosSystem {
@@ -71,13 +92,44 @@
             ];
           };
 
-          rickenbacker = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
+          # rickenbacker = nixpkgs.lib.nixosSystem {
+          #   inherit specialArgs;
+          #   system = "x86_64-linux";
+          #   modules = defaultModules ++ [
+          #     ./nixos/hosts/rickenbacker
+          #   ];
+          # };
+
+          "rickenbacker" = mkNixosConfig {
+            hostname = "rickenbacker";
             system = "x86_64-linux";
-            modules = defaultModules ++ [
-              ./nixos/hosts/rickenbacker
+            hardwareModules = [
+              # ./modules/hardware/phil.nix
+
+            ];
+            extraModules = [
+              # ./profiles/personal.nix
             ];
           };
+
+          "citadel" = mkNixosConfig {
+            hostname = "citadel";
+            system = "x86_64-linux";
+            hardwareModules = [
+              # ./modules/hardware/phil.nix
+
+            ];
+            extraModules = [
+              # ./profiles/personal.nix
+            ];
+          };
+
+          # "kclejeune@aarch64-linux" = mkNixosConfig {
+          #   system = "aarch64-linux";
+          #   hardwareModules = [./modules/hardware/phil.nix];
+          #   extraModules = [./profiles/personal.nix];
+          # };
+
 
           dns01 = nixpkgs.lib.nixosSystem {
             inherit specialArgs;
