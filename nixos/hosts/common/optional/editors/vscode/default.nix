@@ -3,6 +3,7 @@
 , lib
 , ...
 }: {
+  # TODO add USER settings.json
   # Enable vscode & addons
   environment.systemPackages = with pkgs; [
     (vscode-with-extensions.override {
