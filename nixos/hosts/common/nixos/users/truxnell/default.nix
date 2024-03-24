@@ -18,6 +18,7 @@ in
       ++ ifTheyExist [
         "network"
         "samba-users"
+        "docker"
       ];
 
     openssh.authorizedKeys.keys = [
