@@ -17,8 +17,8 @@ in
 
   config =
     {
-      security.pam.enableSSHAgentAuth = lib.mkIf cfg.sshAgentAuth.enable true;
-      security.sudo.wheelNeedsPassword = lib.mkIf cfg.wheelNeedsSudoPassword true;
+      security.pam.enableSSHAgentAuth = cfg.sshAgentAuth.enable;
+      security.sudo.wheelNeedsPassword = cfg.wheelNeedsSudoPassword;
 
     };
 
