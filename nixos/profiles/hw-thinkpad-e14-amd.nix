@@ -11,10 +11,13 @@ with lib;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
+      # why not ensure we can memtest workstatons easily?
+      grub.memtest86.enable = true;
+
     };
   };
 
-  # set xserver videodrivers if used
+  # set xserver videodrivers for amp gpu
   services.xserver.videoDrivers = [ "amdgpu" ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

@@ -18,8 +18,13 @@ with lib;
     min-free = lib.mkDefault (128 * 1000 * 1000);
   };
 
+  # set xserver videodrivers if used
+  services.xserver.enable = true;
 
-
+  # Laptop so ill likely use wireles
+  # very likely to be set by GUI packages but lets
+  # be declarative.
+  networking.networkmanager.enable = true;
 
 
 }

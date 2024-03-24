@@ -76,11 +76,11 @@
                 ./nixos/modules/nixos
                 ./nixos/hosts/${hostname}
               ]
-            , extraModules ? [ ]
+            , profileModules ? [ ]
             }:
             nixpkgs.lib.nixosSystem {
               inherit system;
-              modules = baseModules ++ hardwareModules ++ extraModules;
+              modules = baseModules ++ hardwareModules ++ profileModules;
               specialArgs = { inherit self inputs nixpkgs; };
             };
         in
@@ -92,6 +92,10 @@
             hardwareModules = [
               ./nixos/profiles/hw-thinkpad-e14-amd.nix
               inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e14-amd
+            ];
+            profileModules = [
+              ./nixos/profiles/role-worstation.nix
+
             ];
           };
 
