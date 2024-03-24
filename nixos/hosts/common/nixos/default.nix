@@ -8,7 +8,7 @@
     [
       # inputs.home-manager.nixosModules.home-manager
       #inputs.sops-nix.nixosModules.sops
-      ./locale.nix
+      # ./locale.nix
       ./nix.nix
       # ./openssh.nix
       ./packages.nix

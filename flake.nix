@@ -35,26 +35,27 @@
     , sops-nix
     , ...
     } @ inputs:
+
     let
       inherit (self) outputs;
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
-        # "i686-linux"
         "x86_64-linux"
-        # "aarch64-darwin"
-        # "x86_64-darwin"
+
       ];
     in
-    with inputs; rec {
+    rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
-      # nixosModules = import ./nixos/modules/nixos;
+      lib = import ./lib { inherit inputs; } // inputs.nixpkgs.lib;
+
 
       nixosConfigurations =
+        with self.lib;
         let
           defaultModules =
-            (builtins.attrValues nixosModules) ++
+            (builtins.attrValues lib.nixosModules) ++
             [
               sops-nix.nixosModules.sops
             ];
@@ -70,8 +71,8 @@
             , nixpkgs ? inputs.nixpkgs
             , hardwareModules
             , baseModules ? [
-                # home-manager.nixosModules.home-manager
-                # ./modules/nixos
+                ./nixos/modules/nixos
+                ./nixos/profiles
                 sops-nix.nixosModules.sops
                 ./nixos/hosts/${hostname}
               ]
@@ -193,7 +194,7 @@
                 inherit (configuration.config.nixpkgs.hostPlatform) system;
               in
               {
-                path = deploy-rs.lib."${system}".activate.nixos configuration;
+                path = inputs.deploy-rs.lib."${system}".activate.nixos configuration;
                 sshUser = "truxnell";
                 user = "root";
                 sshOpts = [ "-t" ];
@@ -208,7 +209,7 @@
         };
 
       # deploy-rs: This is highly advised, and will prevent many possible mistakes
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
     };
 
 }
