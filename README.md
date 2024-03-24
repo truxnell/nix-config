@@ -63,6 +63,21 @@ cd ~/dotfiles
 nixos-rebuild switch --flake .#nameOfMachine --target-host machineToSshInto --use-remote-sudo
 ```
 
+## Hacking at nix files
+
+Eval config to see what keys are being set.
+
+```bash
+nix eval .#nixosConfigurations.rickenbacker.config.security.sudo.WheelNeedsPassword
+nix eval .#nixosConfigurations.rickenbacker.config.mySystem.security.wheelNeedsPassword
+```
+
+Quickly run a flake to see what the next error message is as you hack.
+
+```bash
+nixos-rebuild dry-run --flake . --fast --impure
+```
+
 ## Links & References
 
 - [Misterio77/nix-starter-config](https://github.com/Misterio77/nix-starter-configs)
