@@ -11,7 +11,6 @@
     ./hardware-configuration.nix
 
     # Common imports
-    ../common/nixos
     ../common/nixos/users/truxnell
     ../common/optional/fish.nix
     ../common/optional/monitoring.nix

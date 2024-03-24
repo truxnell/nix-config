@@ -48,14 +48,14 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
+      nixosModules = import ./nixos/modules/nixos;
       lib = import ./lib { inherit inputs; } // inputs.nixpkgs.lib;
-
 
       nixosConfigurations =
         with self.lib;
         let
           defaultModules =
-            (builtins.attrValues lib.nixosModules) ++
+            (builtins.attrValues nixosModules) ++
             [
               sops-nix.nixosModules.sops
             ];
@@ -69,11 +69,11 @@
             { hostname
             , system ? "x86_64-linux"
             , nixpkgs ? inputs.nixpkgs
-            , hardwareModules
+            , hardwareModules ? [ ]
             , baseModules ? [
-                ./nixos/modules/nixos
-                ./nixos/profiles
                 sops-nix.nixosModules.sops
+                ./nixos/profiles/global.nix
+                ./nixos/modules/nixos
                 ./nixos/hosts/${hostname}
               ]
             , extraModules ? [ ]
@@ -85,104 +85,52 @@
             };
         in
         {
-          nixosvm = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-            system = "x86_64-linux";
-            modules = defaultModules ++ [
-              ./nixos/hosts/nixosvm
-            ];
-          };
-
-          # rickenbacker = nixpkgs.lib.nixosSystem {
-          #   inherit specialArgs;
-          #   system = "x86_64-linux";
-          #   modules = defaultModules ++ [
-          #     ./nixos/hosts/rickenbacker
-          #   ];
-          # };
 
           "rickenbacker" = mkNixosConfig {
             hostname = "rickenbacker";
             system = "x86_64-linux";
             hardwareModules = [
-              # ./modules/hardware/phil.nix
-
-            ];
-            extraModules = [
-              # ./profiles/personal.nix
+              ./nixos/profiles/hw-thinkpad-e14-amd.nix
+              inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e14-amd
             ];
           };
 
           "citadel" = mkNixosConfig {
             hostname = "citadel";
             system = "x86_64-linux";
-            hardwareModules = [
-              # ./modules/hardware/phil.nix
-
-            ];
-            extraModules = [
-              # ./profiles/personal.nix
-            ];
           };
 
-          # "kclejeune@aarch64-linux" = mkNixosConfig {
-          #   system = "aarch64-linux";
-          #   hardwareModules = [./modules/hardware/phil.nix];
-          #   extraModules = [./profiles/personal.nix];
-          # };
-
-
-          dns01 = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-            system = "aarch64-linux";
-            modules = defaultModules ++ [
-              ./nixos/hosts/dns01
-            ];
+          "dns01" = mkNixosConfig {
+            hostname = "dns01";
+            system = "x86_64-linux";
           };
 
-          # dns02 = nixpkgs.lib.nixosSystem {
+
+          # # nix build .#images.rpi4
+          # rpi4 = nixpkgs.lib.nixosSystem {
           #   inherit specialArgs;
-          #   system = "aarch64-linux";
+
           #   modules = defaultModules ++ [
-          #     ./nixos/hosts/dns02
+          #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+          #     ./nixos/hosts/images/sd-image
           #   ];
           # };
-
-          # isoimage = nixpkgs.lib.nixosSystem {
-          #   system = "x86_64-linux";
+          # # nix build .#images.iso
+          # iso = nixpkgs.lib.nixosSystem {
           #   inherit specialArgs;
+
           #   modules = defaultModules ++ [
-          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-graphical-gnome.nix"
-          #     { isoImage.squashfsCompression = "gzip -Xcompression-level 1"; }
-          #     ./nixos/iso
+          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
+          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+          #     ./nixos/hosts/images/cd-dvd
           #   ];
           # };
-
-          # nix build .#images.rpi4
-          rpi4 = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-
-            modules = defaultModules ++ [
-              "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-              ./nixos/hosts/images/sd-image
-            ];
-          };
-          # nix build .#images.iso
-          iso = nixpkgs.lib.nixosSystem {
-            inherit specialArgs;
-
-            modules = defaultModules ++ [
-              "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-              "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-              ./nixos/hosts/images/cd-dvd
-            ];
-          };
         };
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4
-      images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
-      images.iso = nixosConfigurations.iso.config.system.build.isoImage;
+      # images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
+      # images.iso = nixosConfigurations.iso.config.system.build.isoImage;
 
       # deploy-rs
       deploy.nodes =
