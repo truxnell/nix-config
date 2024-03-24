@@ -1,25 +1,41 @@
 { lib
 , config
+, self
 , ...
 }:
+with lib;
 let
-  cfg = config.modules.services.openssh;
+  cfg = config.mySystem.services.openssh;
 in
 {
-  options.modules.services.openssh = {
-    enable = lib.mkEnableOption "openssh";
+  options.mySystem.services.openssh = {
+    enable = mkEnableOption "openssh";
+    passwordAuthentication = mkOption
+      {
+        type = lib.types.bool;
+        description = "If password can be accepted for ssh (commonly disable for security hardening)";
+        default = false;
+
+      };
+    permitRootLogin = mkOption
+      {
+        type = types.enum [ "yes" "without-password" "prohibit-password" "forced-commands-only" "no" ];
+        description = "If root can login via ssh (commonly disable for security hardening)";
+        default = "no";
+
+      };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
       # TODO: Enable this when option becomes available
       # Don't allow home-directory authorized_keys
-      # authorizedKeysFiles = lib.mkForce ["/etc/ssh/authorized_keys.d/%u"];
+      # authorizedKeysFiles = mkForce ["/etc/ssh/authorized_keys.d/%u"];
       settings = {
         # Harden
-        PasswordAuthentication = false;
-        PermitRootLogin = "no";
+        PasswordAuthentication = cfg.passwordAuthentication;
+        PermitRootLogin = cfg.permitRootLogin;
         # Automatically remove stale sockets
         StreamLocalBindUnlink = "yes";
         # Allow forwarding ports to everywhere
@@ -27,14 +43,5 @@ in
       };
     };
 
-    # Passwordless sudo when SSH'ing with keys
-    security.pam.enableSSHAgentAuth = true;
-    # TODO: Enable this when option becomes available
-    # security.pam.sshAgentAuth = {
-    #   enable = true;
-    #   authorizedKeysFiles = [
-    #     "/etc/ssh/authorized_keys.d/%u"
-    #   ];
-    # };
   };
 }

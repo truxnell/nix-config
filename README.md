@@ -36,6 +36,7 @@ To Install
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
 - [ ] ssh_config build from computers?
+- [ ] Modularise host to allow vm builds and hw builds
 - [ ] Add license
 - [ ] Add taskfiles
 
