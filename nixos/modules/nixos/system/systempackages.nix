@@ -8,10 +8,10 @@ let
   cfg = config.mySystem.system;
 in
 {
-  options.mySystem.system.packages = {
-    autoOptimiseStore = mkOption
+  options.mySystem.system = {
+    packages = mkOption
       {
-        type = lib.types.list;
+        type = with types; listOf package;
         description = "List of system level package installs";
         default = [ ];
       };
@@ -21,6 +21,6 @@ in
   # This is NixOS so lets keep this liiight?
   # Ideally i'd keep most of it to home-manager user only stuff
   # and keep server role as light as possible
-  config.environment.system.packages = cfg.packages;
+  config.environment.systemPackages = cfg.packages;
 
 }

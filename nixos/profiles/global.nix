@@ -25,6 +25,7 @@ with lib;
     # basics for all devices
     time.timeZone = "Australia/Melbourne";
     security.increaseWheelLoginLimits = true;
+    system.packages = [ pkgs.bat ];
   };
 
   i18n = {
