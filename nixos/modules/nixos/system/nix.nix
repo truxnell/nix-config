@@ -30,7 +30,7 @@ in
 
   };
 
-  nix = {
+  config.nix = {
 
     optimise.automatic = cfg.autoOptimiseStore;
 
