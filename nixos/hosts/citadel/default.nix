@@ -9,7 +9,6 @@
   imports = [
 
     # Common imports
-    ../common/optional/fish.nix
     ../common/optional/gnome.nix
     ../common/optional/editors/vscode
     ../common/optional/firefox.nix
@@ -25,13 +24,13 @@
 
     fileSystems."/" =
       {
-        device = "/dev/disk/by-label/701fc943-ede7-41ed-8a53-3cc38fc68fe5";
+        device = "/dev/disk/by-uuid/701fc943-ede7-41ed-8a53-3cc38fc68fe5";
         fsType = "ext4";
       };
 
     fileSystems."/boot" =
       {
-        device = "/dev/disk/by-uuid/C634-F571";
+        device = "/dev/disk/by-uuid/1D5B-36D3";
         fsType = "vfat";
       };
 

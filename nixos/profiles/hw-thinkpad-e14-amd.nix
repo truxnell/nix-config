@@ -9,6 +9,9 @@ with lib;
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
 
+    # for managing/mounting ntfs
+    supportedFilesystems = [ "ntfs" ];
+
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -20,6 +23,9 @@ with lib;
 
   # set xserver videodrivers for amp gpu
   services.xserver.videoDrivers = [ "amdgpu" ];
+
+  # As this is a laptop explicitly enable nmcli (likely enabled by GUI anyway)
+  networking.networkmanager.enable = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
