@@ -3,18 +3,15 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 { config
 , lib
-, pkgs 
+, pkgs
 , ...
 }: {
   imports = [
-    ../common/optional/monitoring.nix
-    ../common/optional/reboot-required.nix
 
     ../common/optional/dnscrypt-proxy2.nix
-    ../common/optional/cloudflare-dyndns.nix
     ../common/optional/maddy.nix
   ];
-
+  mySystem.services.cfddns.enable = true;
   networking.hostName = "dns01"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
 

@@ -14,6 +14,8 @@
     ../common/optional/firefox.nix
 
   ];
+
+
   config = {
     mySystem = {
       services.openssh.enable = true;
