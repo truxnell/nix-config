@@ -25,7 +25,7 @@ in
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
     ];
 
-    packages = [ pkgs.home-manager ];
+    # packages = [ pkgs.home-manager ];
   };
 
   # home-manager.users.taylor = import ../../../../../home-manager/taylor_${config.networking.hostName}.nix; TODO home-manager?
