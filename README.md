@@ -1,6 +1,8 @@
 # Truxnell's homelab
 
 [![NixOS](https://img.shields.io/badge/NixOS-23.11-blue?style=flat&logo=nixos&logoColor=white)](https://nixos.org)
+[![built with garnix](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Ftruxnell%2Fnix-config%3Fbranch%3Dmain)](https://garnix.io)
+
 Leveraging nix, nix-os to apply machine and home configurations
 
 ## Background
