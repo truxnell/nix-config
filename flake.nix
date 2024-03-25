@@ -102,6 +102,14 @@
           "citadel" = mkNixosConfig {
             hostname = "citadel";
             system = "x86_64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-gaming-desktop.nix
+            ];
+            profileModules = [
+              ./nixos/profiles/role-worstation.nix
+
+            ];
+
           };
 
           "dns01" = mkNixosConfig {
