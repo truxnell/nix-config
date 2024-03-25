@@ -107,7 +107,6 @@
             ];
             profileModules = [
               ./nixos/profiles/role-worstation.nix
-
             ];
 
           };
@@ -165,6 +164,8 @@
         in
         {
           dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
+          rickenbacker = mkDeployConfig "rickenbacker" self.nixosConfigurations.rickenbacker;
+
           # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
         };
 
