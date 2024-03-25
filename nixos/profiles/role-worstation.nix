@@ -6,7 +6,6 @@
 with lib;
 {
 
-  config.mySystem.shell.fish.plugins = true;
   config.boot = {
 
     binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
