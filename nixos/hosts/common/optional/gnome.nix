@@ -8,18 +8,38 @@
   # GNOME plz
   services.xserver = {
     enable = true;
-    desktopManager.gnome.enable = true;
-    displayManager = {
-      gdm.enable = true;
-      defaultSession = "gnome"; # TODO move to config overlay
-      autoLogin.user = "truxnell"; # TODO move to config overlay
+    displayManager =
+      {
+        gdm.enable = true;
+        defaultSession = "gnome"; # TODO move to config overlay
+
+        autoLogin.enable = true;
+        autoLogin.user = "truxnell"; # TODO move to config overlay
+      };
+    desktopManager = {
+      # GNOME
+      gnome.enable = true;
     };
+
     layout = "us"; # `localctl` will give you
   };
 
+  # TODO remove this when possible
+  # workaround for GNOME autologin
+  # https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
+  systemd.services."getty@tty1".enable = false;
+  systemd.services."autovt@tty1".enable = false;
+
+  # TODO tidy this
+  # port forward for GNOME when using RDPMZx2bf44
+  
+  networking.firewall.allowedTCPPorts = [
+    3389
+  ];
+
   # And dconf
   programs.dconf.enable = true;
-  
+
   # https://github.com/NixOS/nixpkgs/issues/114514
   # dconf write /org/gnome/mutter/experimental-features "['scale-monitor-framebuffer']" TODO hack for GNOME 45
 
