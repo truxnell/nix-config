@@ -87,6 +87,7 @@
         {
 
           "rickenbacker" = mkNixosConfig {
+            # NixOS laptop (dualboot windows, dunno why i kept it)
             hostname = "rickenbacker";
             system = "x86_64-linux";
             hardwareModules = [
@@ -100,6 +101,8 @@
           };
 
           "citadel" = mkNixosConfig {
+            # Gaming PC (dualboot windows)
+
             hostname = "citadel";
             system = "x86_64-linux";
             hardwareModules = [
@@ -112,8 +115,17 @@
           };
 
           "dns01" = mkNixosConfig {
+            # Rpi for DNS and misc services
+
             hostname = "dns01";
-            system = "x86_64-linux";
+            system = "aarch64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-rpi4.nix
+              inputs.nixos-hardware.nixosModules.raspberry-pi-4
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+            ];
           };
 
 

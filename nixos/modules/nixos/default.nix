@@ -1,7 +1,8 @@
 {
   imports = [
     ./system
-        ./programs
+    ./programs
+    ./services
 
   ];
 }
