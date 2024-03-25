@@ -5,13 +5,15 @@
 
 with lib;
 {
-  boot = {
+
+  config.mySystem.shell.fish.plugins = true;
+  config.boot = {
 
     binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
-    plymouth.enable = true;
+    plymouth.enable = true; # hide console with splash screen
   };
 
-  nix.settings = {
+  config.nix.settings = {
     # TODO factor out into mySystem
     # Avoid disk full issues
     max-free = lib.mkDefault (1000 * 1000 * 1000);
@@ -19,12 +21,11 @@ with lib;
   };
 
   # set xserver videodrivers if used
-  services.xserver.enable = true;
+  config.services.xserver.enable = true;
 
   # Laptop so ill likely use wireles
   # very likely to be set by GUI packages but lets
   # be declarative.
-  networking.networkmanager.enable = true;
 
 
 }

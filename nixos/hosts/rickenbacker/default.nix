@@ -9,7 +9,6 @@
   imports = [
 
     # Common imports
-    ../common/optional/fish.nix
     ../common/optional/gnome.nix
     ../common/optional/editors/vscode
     ../common/optional/firefox.nix

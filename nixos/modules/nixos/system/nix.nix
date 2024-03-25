@@ -17,7 +17,7 @@ in
 
       };
     gc = {
-      enabled = mkEnableOption "automatic garbage collection" // {
+      enable = mkEnableOption "automatic garbage collection" // {
         default = true;
       };
       persistent = mkOption
@@ -35,9 +35,9 @@ in
     optimise.automatic = cfg.autoOptimiseStore;
 
     # automatically garbage collect nix store
-    gc = mkIf cfg.gc.enabled {
+    gc = mkIf cfg.gc.enable {
       # garbage collection
-      automatic = cfg.gc.enabled;
+      automatic = cfg.gc.enable;
       options = "--delete-older-than 30d";
       persistent = cfg.gc.persistent;
     };

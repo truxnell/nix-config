@@ -7,7 +7,6 @@
 , ...
 }: {
   imports = [
-    ../common/optional/fish.nix
     ../common/optional/monitoring.nix
     ../common/optional/reboot-required.nix
 
