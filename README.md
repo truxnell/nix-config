@@ -1,9 +1,10 @@
 # Truxnell's homelab
 
 [![NixOS](https://img.shields.io/badge/NIXOS-5277C3.svg?style=for-the-badge&logo=NixOS&logoColor=white)](https://nixos.org)
-[![NixOS](https://img.shields.io/badge/NixOS-23.11-blue?style=flat&logo=nixos&logoColor=white)](https://nixos.org)
+[![NixOS](https://img.shields.io/badge/NixOS-23.11-blue?style=for-the-badge&logo=nixos&logoColor=white)](https://nixos.org)
+[![MIT License](https://img.shields.io/github/license/truxnell/nix-config?style=for-the-badge)](https://github.com/truxnell/nix-config/blob/ci/LICENSE)
+
 [![built with garnix](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Ftruxnell%2Fnix-config%3Fbranch%3Dmain)](https://garnix.io)
-[![MIT License](https://img.shields.io/github/license/truxnell/nix-config)][mit]
 
 Leveraging nix, nix-os to apply machine and home configurations
 
@@ -39,6 +40,8 @@ To Install
   - [ ] WSL
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
+- [ ] ssh_config build from computers?
+- [ ] Modularise host to allow vm builds and hw builds
 - [ ] Add license
 - [ ] Add taskfiles
 
@@ -63,6 +66,21 @@ Applying configuration changes to a remote machine can be done as follows:
 ```sh
 cd ~/dotfiles
 nixos-rebuild switch --flake .#nameOfMachine --target-host machineToSshInto --use-remote-sudo
+```
+
+## Hacking at nix files
+
+Eval config to see what keys are being set.
+
+```bash
+nix eval .#nixosConfigurations.rickenbacker.config.security.sudo.WheelNeedsPassword
+nix eval .#nixosConfigurations.rickenbacker.config.mySystem.security.wheelNeedsPassword
+```
+
+Quickly run a flake to see what the next error message is as you hack.
+
+```bash
+nixos-rebuild dry-run --flake . --fast --impure
 ```
 
 ## Links & References
