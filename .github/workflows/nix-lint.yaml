@@ -32,14 +32,6 @@ jobs:
     # uses: DeterminateSystems/flake-checker-action@4b90f9fc724969ff153fe1803460917c84fe00a3
       uses: DeterminateSystems/flake-checker-action@v5
 
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.x'
-
-    - name: Generate Readme
-      run: python3 sh/readme.py
-
     - name: Commit
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
