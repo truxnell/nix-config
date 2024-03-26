@@ -18,13 +18,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: pride
+            target: citadel
           - os: ubuntu-latest
-            target: sloth
+            target: rickenbacker
           - os: ubuntu-latest
-            target: eden
-          - os: ubuntu-latest
-            target: wrath
+            target: dns01
 
     steps:
       - name: Create nix mount point
@@ -54,7 +52,7 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
 
       - uses: cachix/cachix-action@v14
         with:
