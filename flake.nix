@@ -163,6 +163,19 @@
 
       # deploy-rs: This is highly advised, and will prevent many possible mistakes
       checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+
+      # Convenience output that aggregates the outputs for home, nixos, and darwin configurations.
+      # Also used in ci to build targets generally.
+      top =
+        let
+          nixtop = nixpkgs.lib.genAttrs
+            (builtins.attrNames inputs.self.nixosConfigurations)
+            (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
+          # hometop = genAttrs
+          #   (builtins.attrNames inputs.self.homeManagerConfigurations)
+          #   (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
+        in
+        nixtop; # // hometop 
     };
 
 }
