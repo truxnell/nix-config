@@ -54,17 +54,11 @@ jobs:
             experimental-features = nix-command flakes
 
 
-      - uses: cachix/cachix-action@v14
-        with:
-          name: edeneast
-          skipPush: true
-          extraPullNames: nix-community
-
       - name: Garbage collect build dependencies
         run: nix-collect-garbage
 
       - name: Fetch old system profile
-        run: nix build github:EdenEast/nyx#top.${{ matrix.target }} -v --log-format raw --profile ./profile
+        run: nix build github:truxnell/nix-config#top.${{ matrix.target }} -v --log-format raw --profile ./profile
 
       - name: Add new system to profile
         run: |
