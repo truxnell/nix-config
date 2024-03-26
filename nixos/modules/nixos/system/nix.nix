@@ -39,7 +39,7 @@ in
       # garbage collection
       automatic = cfg.gc.enable;
       options = "--delete-older-than 30d";
-      persistent = cfg.gc.persistent;
+      inherit (cfg.gc) persistent;
     };
 
   };

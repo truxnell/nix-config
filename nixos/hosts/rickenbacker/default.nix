@@ -3,18 +3,19 @@
 , pkgs
 , ...
 }: {
-
-  # hardware-configuration.nix is missing as I've abstracted out the parts
-  
-  config.mySystem = {
-    services.openssh.enable = true;
-    security.wheelNeedsSudoPassword = false;
-  };
-
-  # TODO build this in from flake host names
-  config.networking.hostName = "rickenbacker";
-
   config = {
+
+    # hardware-configuration.nix is missing as I've abstracted out the parts
+
+    mySystem = {
+      services.openssh.enable = true;
+      security.wheelNeedsSudoPassword = false;
+    };
+
+    # TODO build this in from flake host names
+    networking.hostName = "rickenbacker";
+
+
 
     fileSystems."/" =
       {
@@ -29,5 +30,6 @@
       };
 
     swapDevices = [ ];
+
   };
 }

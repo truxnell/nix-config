@@ -5,10 +5,12 @@
 
 with config;
 {
+  mySystem = {
 
-  mySystem.de.gnome.enable = true;
-  mySystem.editor.vscodium.enable = true;
-  mySystem.browser.firefox.enable = true;
+    de.gnome.enable = true;
+    editor.vscodium.enable = true;
+    browser.firefox.enable = true;
+  };
 
   boot = {
 
