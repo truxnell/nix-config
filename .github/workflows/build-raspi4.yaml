@@ -32,7 +32,7 @@ jobs:
       - name: Build SD Image
         run: |
           nix build .#images.${{ github.event.inputs.image }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: rpi4.img
           path: ./result/sd-image/*.img*
