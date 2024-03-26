@@ -40,6 +40,8 @@ To Install
   - [ ] WSL
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
+- [ ] ssh_config build from computers?
+- [ ] Modularise host to allow vm builds and hw builds
 - [ ] Add license
 - [ ] Add taskfiles
 
@@ -64,6 +66,21 @@ Applying configuration changes to a remote machine can be done as follows:
 ```sh
 cd ~/dotfiles
 nixos-rebuild switch --flake .#nameOfMachine --target-host machineToSshInto --use-remote-sudo
+```
+
+## Hacking at nix files
+
+Eval config to see what keys are being set.
+
+```bash
+nix eval .#nixosConfigurations.rickenbacker.config.security.sudo.WheelNeedsPassword
+nix eval .#nixosConfigurations.rickenbacker.config.mySystem.security.wheelNeedsPassword
+```
+
+Quickly run a flake to see what the next error message is as you hack.
+
+```bash
+nixos-rebuild dry-run --flake . --fast --impure
 ```
 
 ## Links & References
