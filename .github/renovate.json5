@@ -8,14 +8,14 @@
     "username": "trux-bot[bot]",
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
     "repositories": ["truxnell/nix-config"],
-    "ignoreTests": false,
+    "ignoreTests": "false",
 
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
-        "enabled": true
+        "enabled": "true"
     },
     "lockFileMaintenance": {
-        "enabled": true
+        "enabled": "true"
       },
   }
