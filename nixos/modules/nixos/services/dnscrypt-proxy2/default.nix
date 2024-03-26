@@ -21,13 +21,15 @@ in
 
       dhcpcd.extraConfig = "nohook resolv.conf";
     };
+    sops.secrets = {
 
-    # configure secret for forwarding rules
-    sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".sopsFile = ./dnscrypt-proxy2.sops.yaml;
-    sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".mode = "0444"; # This is world-readable but theres nothing security related in the file
+      # configure secret for forwarding rules
+      "system/networking/dnscrypt-proxy2/forwarding-rules".sopsFile = ./dnscrypt-proxy2.sops.yaml;
+      "system/networking/dnscrypt-proxy2/forwarding-rules".mode = "0444"; # This is world-readable but theres nothing security related in the file
 
-    # Restart dnscrypt when secret changes
-    sops.secrets."system/networking/dnscrypt-proxy2/forwarding-rules".restartUnits = [ "dnscrypt-proxy2" ];
+      # Restart dnscrypt when secret changes
+      "system/networking/dnscrypt-proxy2/forwarding-rules".restartUnits = [ "dnscrypt-proxy2" ];
+    };
 
     services.dnscrypt-proxy2 = {
       enable = true;

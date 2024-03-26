@@ -11,10 +11,10 @@
 
   ];
 
-  mySystem = {
-    services.maddy.enable = true;
-    services.dnscrypt-proxy.enable = true;
-    services.cfDdns.enable = true;
+  mySystem.services = {
+    maddy.enable = true;
+    dnscrypt-proxy.enable = true;
+    cfDdns.enable = true;
   };
 
   networking.hostName = "dns01"; # Define your hostname.

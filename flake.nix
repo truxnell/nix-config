@@ -49,7 +49,6 @@
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
       nixosModules = import ./nixos/modules/nixos;
-      lib = import ./lib { inherit inputs; } // inputs.nixpkgs.lib;
 
       nixosConfigurations =
         with self.lib;
