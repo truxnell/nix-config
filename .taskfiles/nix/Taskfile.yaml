@@ -1,20 +1,19 @@
 ---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
 vars:
   host: $HOSTNAME
 
 tasks:
-  apply:
+  switch:
     desc: Build and apply nix configuration
     silent: true
     requires:
       vars:
         - host
     cmds:
-      - task: build
-        vars:
-          host: "{{ .host }}"
+      - echo "This will switch your config."
       - task: .prompt_to_continue
       - sudo nixos-rebuild switch --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
     preconditions:
@@ -23,6 +22,39 @@ tasks:
       - sh: which nixos-rebuild
         msg: "nixos-rebuild not found"
 
+  test:
+    desc: Build and apply nix configuration
+    silent: true
+    requires:
+      vars:
+        - host
+    cmds:
+      - echo "This will test your config."
+      - task: .prompt_to_continue
+      - sudo nixos-rebuild test --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+
+  dry-run:
+    desc: Build and apply nix configuration
+    silent: true
+    requires:
+      vars:
+        - host
+    cmds:
+      - echo "This will dry-run your config and add your untracked git files."
+      - git add .
+      - nixos-rebuild dry-run --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
+    preconditions:
+      - sh: which nix
+        msg: "nix not found"
+      - sh: which nixos-rebuild
+        msg: "nixos-rebuild not found"
+
+
   build:
     desc: Build nix configuration
     silent: true
@@ -30,6 +62,7 @@ tasks:
       vars:
         - host
     cmds:
+      - git add .
       - nixos-rebuild build --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
       - nvd diff /run/current-system result
     preconditions:

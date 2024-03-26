@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v23
+      uses: cachix/install-nix-action@v26
       with: 
         nix_path: nixpkgs=channel:nixos-unstable
 
