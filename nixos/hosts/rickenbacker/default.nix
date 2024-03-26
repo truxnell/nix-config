@@ -5,15 +5,7 @@
 }: {
 
   # hardware-configuration.nix is missing as I've abstracted out the parts
-  # into various areas like my global/hardware profiles, etc.
-  imports = [
-
-    # Common imports
-    ../common/optional/gnome.nix
-    ../common/optional/editors/vscode
-    ../common/optional/firefox.nix
-
-  ];
+  
   config.mySystem = {
     services.openssh.enable = true;
     security.wheelNeedsSudoPassword = false;

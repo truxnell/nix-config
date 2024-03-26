@@ -22,13 +22,13 @@ in
 
     # TODO add notifications on IP change
     # init secret
-    config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".sopsFile = ./cloudflare-dyndns.sops.yaml;
+    sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".sopsFile = ./cloudflare-dyndns.sops.yaml;
 
     # Restart when secret changes
-    config.sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns" ];
+    sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns" ];
 
     # Cloudflare dynamic dns to keep my DNS records pointed at home
-    config.services.cloudflare-dyndns = {
+    services.cloudflare-dyndns = {
       enable = true;
       ipv6 = false;
       proxied = true;
