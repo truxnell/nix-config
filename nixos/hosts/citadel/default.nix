@@ -6,14 +6,6 @@
 , pkgs
 , ...
 }: {
-  imports = [
-
-    # Common imports
-    ../common/optional/gnome.nix
-    ../common/optional/editors/vscode
-    ../common/optional/firefox.nix
-
-  ];
 
 
   config = {

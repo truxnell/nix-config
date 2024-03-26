@@ -3,16 +3,20 @@
 # Covers desktops/laptops, expected to have a GUI and do worloads
 # Will have home-manager installs
 
-with lib;
+with config;
 {
 
-  config.boot = {
+  mySystem.de.gnome.enable = true;
+  mySystem.editor.vscodium.enable = true;
+  mySystem.browser.firefox.enable = true;
+
+  boot = {
 
     binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
     plymouth.enable = true; # hide console with splash screen
   };
 
-  config.nix.settings = {
+  nix.settings = {
     # TODO factor out into mySystem
     # Avoid disk full issues
     max-free = lib.mkDefault (1000 * 1000 * 1000);
@@ -20,7 +24,7 @@ with lib;
   };
 
   # set xserver videodrivers if used
-  config.services.xserver.enable = true;
+  services.xserver.enable = true;
 
   # Laptop so ill likely use wireles
   # very likely to be set by GUI packages but lets

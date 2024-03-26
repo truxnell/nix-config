@@ -8,10 +8,15 @@
 }: {
   imports = [
 
-    ../common/optional/dnscrypt-proxy2.nix
-    ../common/optional/maddy.nix
+
   ];
-  mySystem.services.cfddns.enable = true;
+
+  mySystem = {
+    services.maddy.enable = true;
+    services.dnscrypt-proxy.enable = true;
+    services.cfDdns.enable = true;
+  };
+
   networking.hostName = "dns01"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
 

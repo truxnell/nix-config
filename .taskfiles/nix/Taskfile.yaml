@@ -45,7 +45,8 @@ tasks:
       vars:
         - host
     cmds:
-      - echo "This will dry-run your config."
+      - echo "This will dry-run your config and add your untracked git files."
+      - git add .
       - nixos-rebuild dry-run --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
     preconditions:
       - sh: which nix
@@ -61,7 +62,9 @@ tasks:
       vars:
         - host
     cmds:
+      - git add .
       - nixos-rebuild build --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
+      - nvd diff /run/current-system result
     preconditions:
       - sh: which nix
         msg: "nix not found"
