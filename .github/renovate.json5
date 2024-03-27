@@ -4,6 +4,7 @@
       "github>truxnell/renovate-config",
       "github>truxnell/renovate-config:automerge-github-actions",
     ],
+
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
     "ignoreTests": "false",
 
