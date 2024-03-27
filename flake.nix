@@ -101,7 +101,6 @@
 
           "citadel" = mkNixosConfig {
             # Gaming PC (dualboot windows)
-
             hostname = "citadel";
             system = "x86_64-linux";
             hardwareModules = [
@@ -109,6 +108,9 @@
             ];
             profileModules = [
               ./nixos/profiles/role-worstation.nix
+              # Temp
+              inputs.home-manager.nixosModules.home-manager
+              ./homes/truxnell
             ];
 
           };

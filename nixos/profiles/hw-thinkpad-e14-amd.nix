@@ -27,6 +27,5 @@ with lib;
   # As this is a laptop explicitly enable nmcli (likely enabled by GUI anyway)
   networking.networkmanager.enable = true;
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
 }

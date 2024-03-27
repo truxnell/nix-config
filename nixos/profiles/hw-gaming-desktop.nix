@@ -69,6 +69,4 @@ with lib;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
 }
