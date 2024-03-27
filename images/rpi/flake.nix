@@ -1,6 +1,6 @@
 {
   description = "A flake to build a basic NixOS iso";
-  inputs.nixos.url = "github:nixos/nixpkgs/nixos-22.11";
+  inputs.nixos.url = "github:nixos/nixpkgs/nixos-23.11";
   outputs =
     { self
     , nixos

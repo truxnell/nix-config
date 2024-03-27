@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: cachix/install-nix-action@v23
+      - uses: cachix/install-nix-action@v26
         with:
           nix_path: nixpkgs=channel:nixos-23.05
           extra_nix_config: |
@@ -32,7 +32,7 @@ jobs:
       - name: Build SD Image
         run: |
           nix build .#images.${{ github.event.inputs.image }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: rpi4.img
           path: ./result/sd-image/*.img*
