@@ -1,4 +1,13 @@
 ---
+# config files for sops & used for encrypting keys that sops-nix decrypts.
+# each machine key is derieved from its generated `ssh_hosts_ed` file
+# via ssh-to-age
+# sops encrypts the secrets ready to decrypt with the private key of any of the below machines
+# OR my 'main' key thats kept outside this repo securely.
+
+# key-per-machine is a little more secure and a little more work than
+# copying one key to each machine
+
 keys:
   - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
   - &nixosvm2 age16mwx76r29pa9lnmagujw9adxrpujxmxu38hjfastf6pgw6v66gjs5ugewz

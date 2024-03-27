@@ -1,3 +1,5 @@
+---
+# Config for garnix.io builds & caching
 builds:
   include:
     - homeConfigurations.*

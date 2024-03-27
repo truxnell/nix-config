@@ -1,4 +1,5 @@
 ---
+# go-task runner file - rest of config in .taskfiles/**.*.yaml
 version: "3"
 
 includes:
