@@ -1,3 +1,6 @@
+## STILL WIP
+## Wanted to avoid bringing in complexity of disko
+
 #!/usr/bin/env bash
 set -x
 
