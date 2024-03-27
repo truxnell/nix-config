@@ -4,10 +4,8 @@
       "github>truxnell/renovate-config",
       "github>truxnell/renovate-config:automerge-github-actions",
     ],
-    "platform": "github",
-    "username": "trux-bot[bot]",
+
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
-    "repositories": ["truxnell/nix-config"],
     "ignoreTests": "false",
 
     // TODO remove once out of beta?

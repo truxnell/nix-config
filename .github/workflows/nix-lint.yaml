@@ -1,4 +1,4 @@
-name: Nix Flake Check
+name: Nix Lint
 
 on: [pull_request]
 
