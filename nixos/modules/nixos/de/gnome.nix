@@ -41,7 +41,7 @@ in
     systemd.services."autovt@tty1".enable = false;
 
     # TODO tidy this
-    # port forward for GNOME when using RDP***REMOVED***
+    # port forward for GNOME when using RDP
 
     networking.firewall.allowedTCPPorts = [
       3389
@@ -54,27 +54,36 @@ in
     # dconf write /org/gnome/mutter/experimental-features "['scale-monitor-framebuffer']" TODO hack for GNOME 45
 
 
-    # Exclude default GNOME packages that dont interest me.
-    environment.gnome.excludePackages =
-      (with pkgs; [
-        gnome-photos
-        gnome-tour
-      ])
-      ++ (with pkgs.gnome; [
-        cheese # webcam tool
-        gnome-music
-        gnome-terminal
-        gedit # text editor
-        epiphany # web browser
-        geary # email reader
-        evince # document viewer
-        gnome-characters
-        totem # video player
-        tali # poker game
-        iagno # go game
-        hitori # sudoku game
-        atomix # puzzle game
-      ]);
+
+    environment = {
+      # Add a few extras for gnome
+      systemPackages = with pkgs; [
+        gnome.adwaita-icon-theme
+        gnome.dconf-editor
+        gnome.gnome-tweaks
+      ];
+      # Exclude default GNOME packages that dont interest me.
+      gnome.excludePackages =
+        (with pkgs; [
+          gnome-photos
+          gnome-tour
+        ])
+        ++ (with pkgs.gnome; [
+          cheese # webcam tool
+          gnome-music
+          gnome-terminal
+          gedit # text editor
+          epiphany # web browser
+          geary # email reader
+          evince # document viewer
+          gnome-characters
+          totem # video player
+          tali # poker game
+          iagno # go game
+          hitori # sudoku game
+          atomix # puzzle game
+        ]);
+    };
   };
 
 

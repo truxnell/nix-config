@@ -95,6 +95,9 @@
             ];
             profileModules = [
               ./nixos/profiles/role-worstation.nix
+              # Temp
+              inputs.home-manager.nixosModules.home-manager
+              ./homes/truxnell
 
             ];
           };
