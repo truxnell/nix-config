@@ -18,6 +18,7 @@ with lib;
 
     loader = {
       systemd-boot.enable = true;
+      systemd-boot.editor = false; # Helps security
       efi.canTouchEfiVariables = true;
       # why not ensure we can memtest workstatons easily?
       grub.memtest86.enable = true;
