@@ -9,7 +9,7 @@ let
 in
 {
   options.mySystem.services.openssh = {
-    enable = mkEnableOption "openssh";
+    enable = mkEnableOption "openssh" // { default = true; };
     passwordAuthentication = mkOption
       {
         type = lib.types.bool;
