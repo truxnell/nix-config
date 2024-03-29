@@ -38,7 +38,7 @@ in
     gc = mkIf cfg.gc.enable {
       # garbage collection
       automatic = cfg.gc.enable;
-      options = "--delete-older-than 30d";
+      options = "--delete-older-than 7d";
       inherit (cfg.gc) persistent;
     };
 
