@@ -18,6 +18,8 @@ in
     # causing a risk of no dns if service fails.
     networking = {
       nameservers = [ "10.8.10.1" ]; # TODO make varible IP
+      firewall.allowedTCPPorts = [ 53 ];
+      firewall.allowedUDPPorts = [ 53 ];
 
       dhcpcd.extraConfig = "nohook resolv.conf";
     };

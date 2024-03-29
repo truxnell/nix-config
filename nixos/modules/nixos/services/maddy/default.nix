@@ -22,9 +22,9 @@ in
 
     services.maddy = {
       enable = true;
+      openFirewall = true;
       secrets = [ config.sops.secrets."system/mail/maddy/envFile".path ];
       config = builtins.readFile ./maddy.conf;
-      openFirewall = true;
     };
 
   };

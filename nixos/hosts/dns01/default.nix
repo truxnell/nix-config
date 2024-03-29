@@ -12,6 +12,8 @@
   ];
 
   mySystem.services = {
+
+    openssh.enable = true;
     maddy.enable = true;
     dnscrypt-proxy.enable = true;
     cfDdns.enable = true;
