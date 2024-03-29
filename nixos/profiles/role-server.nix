@@ -33,9 +33,9 @@ with lib;
 
     services.udisks2.enable = mkDefault false;
     xdg = {
-      autostart.enable = mkDefault true;
+      autostart.enable = mkDefault false;
       icons.enable = mkDefault false;
-      mime.enable = mkDefault false;
+      mime.enable = mkDefault true;
       sounds.enable = mkDefault false;
     };
   };
