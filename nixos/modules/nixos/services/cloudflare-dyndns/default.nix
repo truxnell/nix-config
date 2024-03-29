@@ -27,6 +27,11 @@ in
     # Restart when secret changes
     sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns" ];
 
+    networking.firewall = {
+      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ 53 ];
+    };
+
     # Cloudflare dynamic dns to keep my DNS records pointed at home
     services.cloudflare-dyndns = {
       enable = true;

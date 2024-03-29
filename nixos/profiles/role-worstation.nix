@@ -38,7 +38,7 @@ with config;
     jq
     yq
     btop
-    vim
+    unstable.vim
     git
     dnsutils
     nix

@@ -41,14 +41,17 @@
       forAllSystems = nixpkgs.lib.genAttrs [
         "aarch64-linux"
         "x86_64-linux"
-
       ];
+
+      # import overlays, ready for wrapping in nixossystem
+
     in
     rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
       nixosModules = import ./nixos/modules/nixos;
+
 
       nixosConfigurations =
         with self.lib;
@@ -61,6 +64,7 @@
           specialArgs = {
             inherit inputs outputs;
           };
+          overlays = import ./nixos/overlays { inherit inputs; };
 
           # generate a base nixos configuration with the
           # specified overlays, hardware modules, and any extraModules applied
@@ -81,6 +85,17 @@
               inherit system;
               modules = baseModules ++ hardwareModules ++ profileModules;
               specialArgs = { inherit self inputs nixpkgs; };
+              # Add our overlays
+
+              pkgs = import nixpkgs {
+                inherit system;
+                overlays = builtins.attrValues overlays;
+                config = {
+                  allowUnfree = true;
+                  allowUnfreePredicate = _: true;
+                };
+              };
+
             };
         in
         {

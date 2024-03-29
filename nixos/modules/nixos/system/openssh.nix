@@ -29,6 +29,7 @@ in
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
+      openFirewall = true;
       # TODO: Enable this when option becomes available
       # Don't allow home-directory authorized_keys
       # authorizedKeysFiles = mkForce ["/etc/ssh/authorized_keys.d/%u"];
