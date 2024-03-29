@@ -10,8 +10,10 @@
 
 
   ];
+  mySystem.security.wheelNeedsSudoPassword = false;
 
   mySystem.services = {
+
     maddy.enable = true;
     dnscrypt-proxy.enable = true;
     cfDdns.enable = true;
