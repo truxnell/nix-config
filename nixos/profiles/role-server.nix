@@ -10,6 +10,7 @@ with lib;
     # Enable monitoring for remote scraiping
     mySystem.services.promMonitoring.enable = true;
     mySystem.services.rebootRequiredCheck.enable = true;
+    mySystem.security.wheelNeedsSudoPassword = false;
 
     nix.settings = {
       # TODO factor out into mySystem
@@ -32,7 +33,7 @@ with lib;
 
     services.udisks2.enable = mkDefault false;
     xdg = {
-      autostart.enable = mkDefault false;
+      autostart.enable = mkDefault true;
       icons.enable = mkDefault false;
       mime.enable = mkDefault false;
       sounds.enable = mkDefault false;
