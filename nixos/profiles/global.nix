@@ -36,18 +36,9 @@ with lib;
 
   # TODO refactor this shit out wow
 
-  # SOPS settings
-  # https://github.com/Mic92/sops-nix
-
-
-
-
-
-
-
-
   networking.useDHCP = lib.mkDefault true;
 
+  environment.defaultPackages = [ ];
   environment.systemPackages = with pkgs; [
     jq
     yq

@@ -2,9 +2,12 @@
   description = "My machines";
 
   inputs = {
-    # Nixpkgs and unstable
+    # Nixpkgs stable as base
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    # then overlay unstable to allow cherry-picking
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # hardware-specific overlays
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # home-manager
@@ -48,19 +51,36 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
+      # import custom nix modules I've written
       nixosModules = import ./nixos/modules/nixos;
 
+      # overlays = {
+      #   default = import ./nixos/overlays;
+      # };
+
+      # legacyPackages = forAllSystems (system:
+      #   import inputs.nixpkgs {
+      #     inherit system;
+      #     overlays = builtins.attrValues overlays;
+      #     config.allowUnfree = true;
+      #   }
+      # );
+
+      # build my system configs
       nixosConfigurations =
         with self.lib;
         let
           defaultModules =
             (builtins.attrValues nixosModules) ++
             [
+              # ensure sops is added to every config
               sops-nix.nixosModules.sops
             ];
           specialArgs = {
             inherit inputs outputs;
           };
+
+
 
           # generate a base nixos configuration with the
           # specified overlays, hardware modules, and any extraModules applied

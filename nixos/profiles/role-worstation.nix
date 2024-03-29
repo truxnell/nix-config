@@ -10,6 +10,7 @@ with config;
     de.gnome.enable = true;
     editor.vscodium.enable = true;
     browser.firefox.enable = true;
+    programs.steam.enable = true;
   };
 
   boot = {

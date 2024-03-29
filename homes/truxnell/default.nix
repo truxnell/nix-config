@@ -53,6 +53,7 @@ with lib;
       home.packages = with pkgs; [
         discord
         prusa-slicer
+        # unstable.deploy-rs
       ];
       # The state version is required and should stay at the version you
       # originally installed.
