@@ -30,47 +30,11 @@ with lib;
   };
 
 
-  i18n = {
-    defaultLocale = lib.mkDefault "en_AU.UTF-8";
-  };
-
-  # TODO refactor this shit out wow
-
-  # SOPS settings
-  # https://github.com/Mic92/sops-nix
-
-
-
-
-
-
 
 
   networking.useDHCP = lib.mkDefault true;
 
-  environment.systemPackages = with pkgs; [
-    jq
-    yq
-    btop
-    vim
-    git
-    dnsutils
-    nix
 
-    # TODO Move
-    nil
-    nixpkgs-fmt
-    statix
-    nvd
-    gh
-  ];
-
-  programs.direnv = {
-    # TODO move to home-manager
-    enable = true;
-    nix-direnv.enable = true;
-  };
-  programs.mtr.enable = true;
 
 }
 

@@ -10,6 +10,11 @@ with config;
     de.gnome.enable = true;
     editor.vscodium.enable = true;
     browser.firefox.enable = true;
+    # Lets see if fish everywhere is OK on the pi's
+    # TODO decide if i drop to bash on pis?
+    shell.fish.enable = true;
+    # But wont enable plugins globally, leave them for workstations
+
   };
 
   boot = {
@@ -28,9 +33,33 @@ with config;
   # set xserver videodrivers if used
   services.xserver.enable = true;
 
-  # Laptop so ill likely use wireles
-  # very likely to be set by GUI packages but lets
-  # be declarative.
+
+  environment.systemPackages = with pkgs; [
+    jq
+    yq
+    btop
+    vim
+    git
+    dnsutils
+    nix
+
+    # TODO Move
+    nil
+    nixpkgs-fmt
+    statix
+    nvd
+    gh
+  ];
+
+  i18n = {
+    defaultLocale = lib.mkDefault "en_AU.UTF-8";
+  };
 
 
+  programs.direnv = {
+    # TODO move to home-manager
+    enable = true;
+    nix-direnv.enable = true;
+  };
+  programs.mtr.enable = true;
 }
