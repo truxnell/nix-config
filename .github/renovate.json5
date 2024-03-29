@@ -3,22 +3,17 @@
     "extends": [
       "github>truxnell/renovate-config",
       "github>truxnell/renovate-config:automerge-github-actions",
-      "github>aquaproj/aqua-renovate-config#2.2.0",
-      "github>aquaproj/aqua-renovate-config:installer-script#2.2.0(install-aqua\\.sh)",
-      "github>aquaproj/aqua-renovate-config:file#2.2.0(^aqua/.*\\.ya?ml$)"
     ],
-    "platform": "github",
-    "username": "trux-bot[bot]",
+
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
-    "repositories": ["truxnell/nix-config"],
-    "ignoreTests": false,
+    "ignoreTests": "false",
 
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
-        "enabled": true
+        "enabled": "true"
     },
     "lockFileMaintenance": {
-        "enabled": true
+        "enabled": "true"
       },
   }
