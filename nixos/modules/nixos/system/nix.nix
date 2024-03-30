@@ -38,6 +38,7 @@ in
     gc = mkIf cfg.gc.enable {
       # garbage collection
       automatic = cfg.gc.enable;
+      dates = "daily";
       options = "--delete-older-than 7d";
       inherit (cfg.gc) persistent;
     };
