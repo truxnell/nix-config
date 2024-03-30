@@ -41,6 +41,7 @@
     { self
     , nixpkgs
     , sops-nix
+    , deploy-rs
     , home-manager
     , ...
     } @ inputs:
@@ -53,7 +54,7 @@
       ];
 
     in
-    rec {
+    {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
