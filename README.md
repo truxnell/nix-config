@@ -57,10 +57,9 @@ TBC
 
 ### Adding new node
 
-- Add to #top in flake
 - Ensure secrets are grabbed from note and all sops re-encrypte with task sops:re-encrypt
 - Add to relevant github action workflows
-- Add to settings.yaml for PR checks
+- Add to .github/settings.yaml for PR checks
 
 ## Applying configuration changes on a local machine can be done as follows:
 
