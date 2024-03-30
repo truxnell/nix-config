@@ -142,6 +142,19 @@
             ];
           };
 
+          "dns02" = mkNixosConfig {
+            # Rpi for DNS and misc services
+
+            hostname = "dns02";
+            system = "aarch64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-rpi4.nix
+              inputs.nixos-hardware.nixosModules.raspberry-pi-4
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+            ];
+          };
 
           # # nix build .#images.rpi4
           # rpi4 = nixpkgs.lib.nixosSystem {
@@ -189,8 +202,10 @@
           };
         in
         {
-          dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
           rickenbacker = mkDeployConfig "rickenbacker" self.nixosConfigurations.rickenbacker;
+          dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
+          dns02 = mkDeployConfig "10.8.10.10" self.nixosConfigurations.dns02;
+
 
           # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
         };
