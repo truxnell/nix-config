@@ -1,10 +1,14 @@
-{ config, lib, pkgs, imports, boot, ... }:
+{ config, lib, pkgs, imports, boot, self, ... }:
 # Role for headless servers
 # covers raspi's, sbc, NUC etc, anything
 # that is headless and minimal for running services
 
 with lib;
 {
+
+  # Link in desktop home mamanger profile
+  home-manager.users.truxnell = self.homeConfigurations.desktop;
+
   config = {
 
     # Enable monitoring for remote scraiping

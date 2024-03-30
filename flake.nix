@@ -63,6 +63,7 @@
           specialArgs = {
             inherit inputs outputs;
           };
+          # Import overlays for building nixosconfig with them.
           overlays = import ./nixos/overlays { inherit inputs; };
 
           # generate a base nixos configuration with the
@@ -79,19 +80,7 @@
                 home-manager.nixosModules.home-manager
                 ./nixos/profiles/global.nix # all machines get a global profile
                 ./nixos/modules/nixos # all machines get nixos modules
-                ./nixos/modules/home # all machines get home-manager modules
                 ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
-                {
-                  home-manager = {
-                    useUserPackages = true;
-                    useGlobalPkgs = true;
-                    extraSpecialArgs = {
-                      inherit inputs hostname system;
-                    };
-                    users.truxnell = "./nixos/home/truxnell";
-                  };
-                }
-
               ]
             , profileModules ? [ ]
             }:
@@ -170,26 +159,49 @@
             ];
           };
 
-          # # nix build .#images.rpi4
-          # rpi4 = nixpkgs.lib.nixosSystem {
-          #   inherit specialArgs;
-
-          #   modules = defaultModules ++ [
-          #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          #     ./nixos/hosts/images/sd-image
-          #   ];
-          # };
-          # # nix build .#images.iso
-          # iso = nixpkgs.lib.nixosSystem {
-          #   inherit specialArgs;
-
-          #   modules = defaultModules ++ [
-          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-          #     ./nixos/hosts/images/cd-dvd
-          #   ];
-          # };
         };
+
+      ## Home-manager
+      homeManagerModules = import ./nixos/modules/home;
+
+      homeConfigurations = {
+
+        # For servers (no gui)
+        server = { pkgs, lib, username, ... }: {
+          imports = [
+            ./nixos/home/profiles/global.nix
+            ./nixos/modules/home
+          ];
+        };
+
+        # For workstations (X11 + awesome)
+        desktop = { pkgs, lib, username, ... }: {
+          imports = [
+            ./nixos/home/profiles/global.nix
+            ./nixos/modules/home
+          ];
+        };
+
+        # # nix build .#images.rpi4
+        # rpi4 = nixpkgs.lib.nixosSystem {
+        #   inherit specialArgs;
+
+        #   modules = defaultModules ++ [
+        #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+        #     ./nixos/hosts/images/sd-image
+        #   ];
+        # };
+        # # nix build .#images.iso
+        # iso = nixpkgs.lib.nixosSystem {
+        #   inherit specialArgs;
+
+        #   modules = defaultModules ++ [
+        #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
+        #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+        #     ./nixos/hosts/images/cd-dvd
+        #   ];
+        # };
+      };
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4
@@ -234,11 +246,11 @@
           nixtop = nixpkgs.lib.genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-          # hometop = genAttrs
-          #   (builtins.attrNames inputs.self.homeManagerConfigurations)
-          #   (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
+          hometop = nixpkgs.lib.genAttrs
+            (builtins.attrNames inputs.self.homeManagerConfigurations)
+            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
         in
-        nixtop; # // hometop 
+        nixtop // hometop;
     };
 
 }
