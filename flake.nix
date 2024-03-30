@@ -161,8 +161,6 @@
 
         };
 
-      ## Home-manager
-      homeManagerModules = import ./nixos/modules/home;
 
       homeConfigurations = {
 
@@ -170,7 +168,8 @@
         server = { pkgs, lib, username, ... }: {
           imports = [
             ./nixos/home/profiles/global.nix
-            ./nixos/modules/home
+            ./nixos/home/profiles/server.nix
+            ./nixos/home/modules
           ];
         };
 
@@ -178,7 +177,8 @@
         desktop = { pkgs, lib, username, ... }: {
           imports = [
             ./nixos/home/profiles/global.nix
-            ./nixos/modules/home
+            ./nixos/home/profiles/workstation.nix
+            ./nixos/home/modules
           ];
         };
 
@@ -247,7 +247,7 @@
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
           hometop = nixpkgs.lib.genAttrs
-            (builtins.attrNames inputs.self.homeManagerConfigurations)
+            (builtins.attrNames inputs.self.homeConfigurations)
             (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
         in
         nixtop // hometop;

@@ -1,24 +1,30 @@
 { lib, pkgs, self, config, ... }:
-with lib;
+with config;
 {
+  # services.gpg-agent.pinentryPackage = pkgs.pinentry-qt;
+  systemd.user.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+    ZDOTDIR = "/home/pinpox/.config/zsh";
+  };
 
-  config = {
+  home = {
+    # Install these packages for my user
+    packages = with pkgs; [
+      eza
+      htop
+      unzip
+    ];
 
-    services.gpg-agent.pinentryPackage = pkgs.pinentry-qt;
-
-    # # often hangs
-    # systemd.services.systemd-networkd-wait-online.enable = false;
-    # systemd.services.NetworkManager-wait-online.enable = false;
-
-    # Home-manager nixpkgs config
-    nixpkgs = {
-
-      # Allow "unfree" licenced packages
-      config = { allowUnfree = true; };
-
-      overlays = [
-        self.overlays.default
-      ];
+    sessionVariables = {
+      # Workaround for alacritty (breaks wezterm and other apps!)
+      # LIBGL_ALWAYS_SOFTWARE = "1";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      ZDOTDIR = "/home/pinpox/.config/zsh";
     };
+
+
+
   };
 }
