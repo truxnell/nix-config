@@ -213,7 +213,7 @@
       # deploy-rs: This is highly advised, and will prevent many possible mistakes
       checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
 
-      # Convenience output that aggregates the outputs for home, nixos, and darwin configurations.
+      # Convenience output that aggregates the outputs for home, nixos.
       # Also used in ci to build targets generally.
       top =
         let

@@ -14,16 +14,20 @@ with lib;
       grub.enable = false;
       # Enables the generation of /boot/extlinux/extlinux.conf
       generic-extlinux-compatible.enable = true;
+      timeout = 2;
     };
   };
 
+  nixpkgs.hostPlatform.system = "aarch64-linux";
+  nixpkgs.buildPlatform.system = "x86_64-linux";
+
   console.enable = false;
+
   mySystem.system.packages = with pkgs; [
     libraspberrypi
     raspberrypi-eeprom
   ];
 
 
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
-
 }
+

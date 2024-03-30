@@ -31,6 +31,10 @@ with lib;
     };
     programs.command-not-found.enable = mkDefault false;
 
+    sound.enable = false;
+    hardware.pulseaudio.enable = false;
+
+
     services.udisks2.enable = mkDefault false;
     # xdg = {
     #   autostart.enable = mkDefault false;
