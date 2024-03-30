@@ -1,29 +1,37 @@
 {
-  description = "My machines";
+  description = "My nixos homelab";
 
   inputs = {
     # Nixpkgs and unstable
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # nix-community hardware quirks
+    # https://github.com/nix-community
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # home-manager
+    # home-manager - home user+dotfile manager
+    # https://github.com/nix-community/home-manager
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # sops-nix
+    # sops-nix - secrets with mozilla sops
+    # https://github.com/Mic92/sops-nix
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # deploy-rs
+    # deploy-rs - Remote deployment
+    # https://github.com/serokell/deploy-rs
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     # VSCode community extensions
+    # https://github.com/nix-community/nix-vscode-extensions
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
