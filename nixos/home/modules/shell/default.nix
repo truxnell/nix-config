@@ -1,5 +1,5 @@
 { ... }: {
   imports = [
-    ./fish
+    # ./fish
   ];
 }

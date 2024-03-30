@@ -1,6 +1,11 @@
 { lib, pkgs, self, config, ... }:
 with config;
 {
+
+  imports = [
+    ../modules
+  ];
+
   # services.gpg-agent.pinentryPackage = pkgs.pinentry-qt;
   systemd.user.sessionVariables = {
     EDITOR = "nvim";

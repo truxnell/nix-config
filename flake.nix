@@ -83,6 +83,16 @@
                 ./nixos/profiles/global.nix # all machines get a global profile
                 ./nixos/modules/nixos # all machines get nixos modules
                 ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
+                {
+                  home-manager = {
+                    useUserPackages = true;
+                    useGlobalPkgs = true;
+                    extraSpecialArgs = {
+                      inherit inputs hostname system;
+                    };
+                    users.truxnell = ./nixos/home/truxnell;
+                  };
+                }
               ]
             , profileModules ? [ ]
             }:
@@ -103,7 +113,7 @@
 
             };
         in
-        {
+        rec {
 
           "rickenbacker" = mkNixosConfig {
             # NixOS laptop (dualboot windows, dunno why i kept it)
@@ -164,46 +174,28 @@
         };
 
 
-      homeConfigurations = {
 
-        # For servers (no gui)
-        server = { pkgs, lib, username, ... }: {
-          imports = [
-            ./nixos/home/profiles/global.nix
-            ./nixos/home/profiles/server.nix
-            ./nixos/home/modules
-          ];
-        };
 
-        # For workstations (X11 + awesome)
-        desktop = { pkgs, lib, username, ... }: {
-          imports = [
-            ./nixos/home/profiles/global.nix
-            ./nixos/home/profiles/workstation.nix
-            ./nixos/home/modules
-          ];
-        };
+      # # nix build .#images.rpi4
+      # rpi4 = nixpkgs.lib.nixosSystem {
+      #   inherit specialArgs;
 
-        # # nix build .#images.rpi4
-        # rpi4 = nixpkgs.lib.nixosSystem {
-        #   inherit specialArgs;
+      #   modules = defaultModules ++ [
+      #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+      #     ./nixos/hosts/images/sd-image
+      #   ];
+      # };
+      # # nix build .#images.iso
+      # iso = nixpkgs.lib.nixosSystem {
+      #   inherit specialArgs;
 
-        #   modules = defaultModules ++ [
-        #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-        #     ./nixos/hosts/images/sd-image
-        #   ];
-        # };
-        # # nix build .#images.iso
-        # iso = nixpkgs.lib.nixosSystem {
-        #   inherit specialArgs;
+      #   modules = defaultModules ++ [
+      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
+      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+      #     ./nixos/hosts/images/cd-dvd
+      #   ];
+      # };
 
-        #   modules = defaultModules ++ [
-        #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-        #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-        #     ./nixos/hosts/images/cd-dvd
-        #   ];
-        # };
-      };
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4

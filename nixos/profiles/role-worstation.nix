@@ -6,8 +6,6 @@
 with config;
 {
 
-  # Link in desktop home mamanger profile
-  home-manager.users.truxnell = self.homeConfigurations.desktop;
 
   mySystem = {
 
