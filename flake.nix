@@ -43,6 +43,7 @@
     , sops-nix
     , deploy-rs
     , home-manager
+    , nix-vscode-extensions
     , ...
     } @ inputs:
 
