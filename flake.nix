@@ -41,6 +41,7 @@
     { self
     , nixpkgs
     , sops-nix
+    , home-manager
     , ...
     } @ inputs:
 
@@ -51,24 +52,14 @@
         "x86_64-linux"
       ];
 
-      # import overlays, ready for wrapping in nixossystem
-
     in
     rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
-      nixosModules = import ./nixos/modules/nixos;
-
-
       nixosConfigurations =
-        with self.lib;
+        # with self.lib;
         let
-          defaultModules =
-            (builtins.attrValues nixosModules) ++
-            [
-              sops-nix.nixosModules.sops
-            ];
           specialArgs = {
             inherit inputs outputs;
           };
@@ -81,11 +72,26 @@
             , system ? "x86_64-linux"
             , nixpkgs ? inputs.nixpkgs
             , hardwareModules ? [ ]
+              # basemodules is the base of the entire machine building
+              # here we import all the modules and setup home-manager
             , baseModules ? [
                 sops-nix.nixosModules.sops
-                ./nixos/profiles/global.nix
-                ./nixos/modules/nixos
-                ./nixos/hosts/${hostname}
+                home-manager.nixosModules.home-manager
+                ./nixos/profiles/global.nix # all machines get a global profile
+                ./nixos/modules/nixos # all machines get nixos modules
+                ./nixos/modules/home # all machines get home-manager modules
+                ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
+                {
+                  home-manager = {
+                    useUserPackages = true;
+                    useGlobalPkgs = true;
+                    extraSpecialArgs = {
+                      inherit inputs hostname system;
+                    };
+                    users.truxnell = "./nixos/home/truxnell";
+                  };
+                }
+
               ]
             , profileModules ? [ ]
             }:
