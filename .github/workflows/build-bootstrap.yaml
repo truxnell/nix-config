@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
+      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: cachix/install-nix-action@v26
         with:
           nix_path: nixpkgs=channel:nixos-23.05
@@ -48,6 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.1
+      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: cachix/install-nix-action@v26
         with:
           nix_path: nixpkgs=channel:nixos-23.05
@@ -62,4 +64,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           draft: true
-          files: "./result/sd-image/*.iso*"
+          files: "./result/iso/*.iso*"
