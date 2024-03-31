@@ -1,14 +1,10 @@
-{ config, lib, pkgs, imports, boot, self, ... }:
+{ config, lib, pkgs, imports, boot, ... }:
 # Role for workstations
 # Covers desktops/laptops, expected to have a GUI and do worloads
 # Will have home-manager installs
 
 with config;
 {
-
-  # Link in desktop home mamanger profile
-  home-manager.users.truxnell = self.homeConfigurations.desktop;
-
   mySystem = {
 
     de.gnome.enable = true;
@@ -38,13 +34,11 @@ with config;
   services.xserver.enable = true;
 
 
-
   environment.systemPackages = with pkgs; [
     jq
     yq
     btop
-    vim
-    unstable.deploy-rs
+    unstable.vim
     git
     dnsutils
     nix
