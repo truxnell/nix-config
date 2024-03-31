@@ -9,6 +9,7 @@ with config;
       steam
       spotify
       brightnessctl
+      prusaslicer
 
       bat
       dbus

@@ -1,10 +1,22 @@
 { inputs
 , config
+, lib
 , ...
 }: {
   imports = [
     ./shell
   ];
+
+  options.myHome.username = lib.mkOption {
+    type = lib.types.str;
+    description = "users username";
+    default = "truxnell";
+  };
+  options.myHome.homeDirectory = lib.mkOption {
+    type = lib.types.str;
+    description = "homedir";
+    default = "truxnell";
+  };
 
   # Home-manager defaults
   config = {

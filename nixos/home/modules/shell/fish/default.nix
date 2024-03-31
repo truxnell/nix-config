@@ -4,7 +4,7 @@
 , ...
 }:
 with lib; let
-  inherit (config.home) username homeDirectory;
+  inherit (config.myHome) username homeDirectory;
   cfg = config.myHome.shell.fish;
 in
 {
@@ -110,14 +110,14 @@ in
 
       programs.nix-index.enable = true;
 
-      programs.fish = {
-        functions = {
-          agent = {
-            description = "Start SSH agent";
-            body = builtins.readFile ./functions/agent.fish;
-          };
-        };
-      };
+      # programs.fish = {
+      #   functions = {
+      #     agent = {
+      #       description = "Start SSH agent";
+      #       body = builtins.readFile ./functions/agent.fish;
+      #     };
+      #   };
+      # };
     })
   ];
 }

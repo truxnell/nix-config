@@ -15,6 +15,7 @@ tasks:
     cmds:
       - echo "This will switch your config."
       - task: .prompt_to_continue
+      - git add .
       - sudo nixos-rebuild switch --flake "{{.ROOT_DIR}}/#{{.host}}" --impure
     preconditions:
       - sh: which nix
