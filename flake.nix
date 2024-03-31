@@ -90,7 +90,6 @@
                     extraSpecialArgs = {
                       inherit inputs hostname system;
                     };
-                    users.truxnell = ./nixos/home/truxnell;
                   };
                 }
               ]
@@ -125,6 +124,8 @@
             ];
             profileModules = [
               ./nixos/profiles/role-worstation.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
+
 
             ];
           };
@@ -139,6 +140,8 @@
             ];
             profileModules = [
               ./nixos/profiles/role-worstation.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
+
             ];
 
           };
@@ -154,6 +157,8 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+
             ];
           };
 
@@ -168,6 +173,7 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
 

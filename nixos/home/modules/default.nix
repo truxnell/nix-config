@@ -5,6 +5,7 @@
 }: {
   imports = [
     ./shell
+    ./programs
   ];
 
   options.myHome.username = lib.mkOption {
@@ -14,7 +15,7 @@
   };
   options.myHome.homeDirectory = lib.mkOption {
     type = lib.types.str;
-    description = "homedir";
+    description = "users homedir";
     default = "truxnell";
   };
 

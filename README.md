@@ -37,7 +37,7 @@ To Install
   - [x] DNS02 Raspi4
   - [ ] NAS
   - [x] Latop
-  - [X] Gaming desktop
+  - [x] Gaming desktop
   - [ ] WSL
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
@@ -84,6 +84,12 @@ Eval config to see what keys are being set.
 ```bash
 nix eval .#nixosConfigurations.rickenbacker.config.security.sudo.WheelNeedsPassword
 nix eval .#nixosConfigurations.rickenbacker.config.mySystem.security.wheelNeedsPassword
+```
+
+And browsing whats at a certain level in options.
+
+```bash
+nix eval .#nixosConfigurations.rickenbacker.config.home-manager.users.truxnell --apply builtins.attrNames --json
 ```
 
 Quickly run a flake to see what the next error message is as you hack.
