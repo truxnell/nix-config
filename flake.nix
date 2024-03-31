@@ -1,29 +1,37 @@
 {
-  description = "My machines";
+  description = "My nixos homelab";
 
   inputs = {
     # Nixpkgs and unstable
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # nix-community hardware quirks
+    # https://github.com/nix-community
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # home-manager
+    # home-manager - home user+dotfile manager
+    # https://github.com/nix-community/home-manager
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # sops-nix
+    # sops-nix - secrets with mozilla sops
+    # https://github.com/Mic92/sops-nix
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # deploy-rs
+    # deploy-rs - Remote deployment
+    # https://github.com/serokell/deploy-rs
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     # VSCode community extensions
+    # https://github.com/nix-community/nix-vscode-extensions
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +41,9 @@
     { self
     , nixpkgs
     , sops-nix
+    , deploy-rs
+    , home-manager
+    , nix-vscode-extensions
     , ...
     } @ inputs:
 
@@ -43,27 +54,18 @@
         "x86_64-linux"
       ];
 
-      # import overlays, ready for wrapping in nixossystem
-
     in
-    rec {
+    {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
-      nixosModules = import ./nixos/modules/nixos;
-
-
       nixosConfigurations =
-        with self.lib;
+        # with self.lib;
         let
-          defaultModules =
-            (builtins.attrValues nixosModules) ++
-            [
-              sops-nix.nixosModules.sops
-            ];
           specialArgs = {
             inherit inputs outputs;
           };
+          # Import overlays for building nixosconfig with them.
           overlays = import ./nixos/overlays { inherit inputs; };
 
           # generate a base nixos configuration with the
@@ -73,11 +75,24 @@
             , system ? "x86_64-linux"
             , nixpkgs ? inputs.nixpkgs
             , hardwareModules ? [ ]
+              # basemodules is the base of the entire machine building
+              # here we import all the modules and setup home-manager
             , baseModules ? [
                 sops-nix.nixosModules.sops
-                ./nixos/profiles/global.nix
-                ./nixos/modules/nixos
-                ./nixos/hosts/${hostname}
+                home-manager.nixosModules.home-manager
+                ./nixos/profiles/global.nix # all machines get a global profile
+                ./nixos/modules/nixos # all machines get nixos modules
+                ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
+                {
+                  home-manager = {
+                    useUserPackages = true;
+                    useGlobalPkgs = true;
+                    extraSpecialArgs = {
+                      inherit inputs hostname system;
+                    };
+                    users.truxnell = ./nixos/home/truxnell;
+                  };
+                }
               ]
             , profileModules ? [ ]
             }:
@@ -98,7 +113,7 @@
 
             };
         in
-        {
+        rec {
 
           "rickenbacker" = mkNixosConfig {
             # NixOS laptop (dualboot windows, dunno why i kept it)
@@ -156,26 +171,31 @@
             ];
           };
 
-          # # nix build .#images.rpi4
-          # rpi4 = nixpkgs.lib.nixosSystem {
-          #   inherit specialArgs;
-
-          #   modules = defaultModules ++ [
-          #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-          #     ./nixos/hosts/images/sd-image
-          #   ];
-          # };
-          # # nix build .#images.iso
-          # iso = nixpkgs.lib.nixosSystem {
-          #   inherit specialArgs;
-
-          #   modules = defaultModules ++ [
-          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-          #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-          #     ./nixos/hosts/images/cd-dvd
-          #   ];
-          # };
         };
+
+
+
+
+      # # nix build .#images.rpi4
+      # rpi4 = nixpkgs.lib.nixosSystem {
+      #   inherit specialArgs;
+
+      #   modules = defaultModules ++ [
+      #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+      #     ./nixos/hosts/images/sd-image
+      #   ];
+      # };
+      # # nix build .#images.iso
+      # iso = nixpkgs.lib.nixosSystem {
+      #   inherit specialArgs;
+
+      #   modules = defaultModules ++ [
+      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
+      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+      #     ./nixos/hosts/images/cd-dvd
+      #   ];
+      # };
+
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4
@@ -220,11 +240,11 @@
           nixtop = nixpkgs.lib.genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-          # hometop = genAttrs
-          #   (builtins.attrNames inputs.self.homeManagerConfigurations)
-          #   (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
+          hometop = nixpkgs.lib.genAttrs
+            (builtins.attrNames inputs.self.homeConfigurations)
+            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
         in
-        nixtop; # // hometop 
+        nixtop // hometop;
     };
 
 }
