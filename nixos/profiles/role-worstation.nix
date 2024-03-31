@@ -11,7 +11,7 @@ with config;
 
     de.gnome.enable = true;
     editor.vscodium.enable = true;
-    browser.firefox.enable = true;
+
     # Lets see if fish everywhere is OK on the pi's
     # TODO decide if i drop to bash on pis?
     shell.fish.enable = true;

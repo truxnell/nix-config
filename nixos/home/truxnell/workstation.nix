@@ -1,6 +1,14 @@
 { lib, pkgs, self, config, ... }:
 with config;
 {
+  imports = [
+    ./global.nix
+  ];
+
+  myHome.programs.firefox.enable = true;
+  myHome.shell.starship.enable = true;
+  myHome.shell.fish.enable = true;
+  myHome.shell.wezterm.enable = true;
 
   home = {
     # Install these packages for my user
@@ -9,7 +17,8 @@ with config;
       steam
       spotify
       brightnessctl
-      prusaslicer
+      prusa-slicer
+      bitwarden
 
       bat
       dbus

@@ -9,9 +9,7 @@ with config;
   config = {
     myHome.username = "truxnell";
     myHome.homeDirectory = "/home/truxnell/";
-    myHome.shell.starship.enable = true;
-    myHome.shell.fish.enable = true;
-    myHome.shell.wezterm.enable = true;
+
 
     # services.gpg-agent.pinentryPackage = pkgs.pinentry-qt;
     systemd.user.sessionVariables = {
