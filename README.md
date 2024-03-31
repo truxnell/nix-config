@@ -33,10 +33,11 @@ To Install
 
 - [ ] Github Actions update fly.io instances (Bitwarden)
 - [ ] Bring over hosts
-  - [ ] DNS01 Raspi4
-  - [ ] DNS02 Raspi4
+  - [x] DNS01 Raspi4
+  - [x] DNS02 Raspi4
   - [ ] NAS
-  - [ ] Latop
+  - [x] Latop
+  - [X] Gaming desktop
   - [ ] WSL
   - [ ] JJY emulator Raspi4
 - [ ] Documentation!
