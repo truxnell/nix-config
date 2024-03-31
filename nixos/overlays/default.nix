@@ -13,11 +13,9 @@
       config.allowUnfree = true;
     };
   };
-  rpi4_kernel_fix = [
-    (final: super: {
-      makeModulesClosure = x:
-        super.makeModulesClosure (x // { allowMissing = true; });
-    })
-  ];
+  rpi4_kernel_fix = final: super: {
+    makeModulesClosure = x:
+      super.makeModulesClosure (x // { allowMissing = true; });
+  };
 
 }
