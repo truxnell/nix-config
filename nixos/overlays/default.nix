@@ -3,7 +3,7 @@
 }:
 {
   # deploy-rs overlay
-  deploy-rs = inputs.deploy-rs.overlay;
+  deploy-rs = inputs.deploy-rs.overlays.default;
 
   # The unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
