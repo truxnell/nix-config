@@ -1,0 +1,65 @@
+---
+name: build-image
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "bootstrap-dev"
+
+permissions:
+  contents: write
+
+# https://stackoverflow.com/questions/66335225/how-to-cancel-previous-runs-in-the-pr-when-you-push-new-commitsupdate-the-curre
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-sd-image_rpi4:
+    name: Build Nixos sd image for rpi4
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: cachix/install-nix-action@v26
+        with:
+          nix_path: nixpkgs=channel:nixos-23.05
+          extra_nix_config: |
+            extra-platforms = aarch64-linux
+      - name: Check nix.conf
+        run: cat /etc/nix/nix.conf
+      - name: Register binfmt
+        run: |
+          docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Test binfmt availability
+        run: |
+          cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+        shell: bash
+      - name: Build SD Image
+        run: |
+          nix build .#images.rpi4
+      - name: upload NixOS rpi4 bootstrap image
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: "./result/sd-image/*.img*"
+
+  build-iso-image_generic:
+    name: Build Nixos ISO image for Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - uses: cachix/install-nix-action@v26
+        with:
+          nix_path: nixpkgs=channel:nixos-23.05
+          extra_nix_config: |
+            extra-platforms = aarch64-linux
+      - name: Check nix.conf
+        run: cat /etc/nix/nix.conf
+      - name: Build ISO Image
+        run: |
+          nix build .#images.iso
+      - name: upload NixOS ISO bootstrap image
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: "./result/sd-image/*.iso*"

@@ -55,7 +55,7 @@
       ];
 
     in
-    {
+    rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
@@ -177,36 +177,47 @@
             ];
           };
 
+          "rpi4" = mkNixosConfig {
+            # rpi image for flashing
+            # easier to flash and plug in, can directly
+            # install flake then
+
+            hostname = "bootstrap_rpi4";
+            system = "aarch64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-rpi4.nix
+              inputs.nixos-hardware.nixosModules.raspberry-pi-4
+            ];
+            profileModules = [
+              "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+              ./nixos/profiles/role-server.nix
+
+            ];
+          };
+          "iso" = mkNixosConfig {
+            # bootstrap iso image
+
+            hostname = "bootstrap_iso";
+            system = "x86_64-linux";
+            hardwareModules = [
+
+            ];
+            profileModules = [
+              "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+              ./nixos/profiles/role-server.nix
+
+            ];
+          };
+
+
+
         };
-
-
-
-
-      # # nix build .#images.rpi4
-      # rpi4 = nixpkgs.lib.nixosSystem {
-      #   inherit specialArgs;
-
-      #   modules = defaultModules ++ [
-      #     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
-      #     ./nixos/hosts/images/sd-image
-      #   ];
-      # };
-      # # nix build .#images.iso
-      # iso = nixpkgs.lib.nixosSystem {
-      #   inherit specialArgs;
-
-      #   modules = defaultModules ++ [
-      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/channel.nix"
-      #     "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
-      #     ./nixos/hosts/images/cd-dvd
-      #   ];
-      # };
 
       # simple shortcut to allow for easier referencing of correct
       # key for building images
       # > nix build .#images.rpi4
-      # images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
-      # images.iso = nixosConfigurations.iso.config.system.build.isoImage;
+      images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
+      images.iso = nixosConfigurations.iso.config.system.build.isoImage;
 
       # deploy-rs
       deploy.nodes =
@@ -231,8 +242,6 @@
           rickenbacker = mkDeployConfig "rickenbacker" self.nixosConfigurations.rickenbacker;
           dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
           dns02 = mkDeployConfig "10.8.10.10" self.nixosConfigurations.dns02;
-
-
           # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
         };
 
@@ -246,11 +255,8 @@
           nixtop = nixpkgs.lib.genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-          hometop = nixpkgs.lib.genAttrs
-            (builtins.attrNames inputs.self.homeConfigurations)
-            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
         in
-        nixtop // hometop;
+        nixtop;
     };
 
 }
