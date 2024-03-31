@@ -34,6 +34,11 @@ in
       layout = "us"; # `localctl` will give you
     };
 
+    # GNOME connection to browsers - requires flag on browser as well
+    services.gnome.gnome-browser-connector.enable = lib.any
+      (user: user.programs.firefox.enable)
+      (lib.attrValues config.home-manager.users);
+
     # TODO remove this when possible
     # workaround for GNOME autologin
     # https://github.com/NixOS/nixpkgs/issues/103746#issuecomment-945091229
