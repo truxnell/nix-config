@@ -6,6 +6,7 @@
   imports = [
     ./shell
     ./programs
+    ./security
   ];
 
   options.myHome.username = lib.mkOption {

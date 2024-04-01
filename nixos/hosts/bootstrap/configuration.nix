@@ -101,7 +101,7 @@
   # TODO Harden SSH
   services.openssh.enable = true;
 
-  users.users.root.openssh.authorizedKeys.keys = [
+  users.users.truxnell.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMZS9J1ydflZ4iJdJgO8+vnN8nNSlEwyn9tbWU9OcysW truxnell@home"
   ];
 
