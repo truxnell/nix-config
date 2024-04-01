@@ -23,7 +23,8 @@ in
       extraConfig = ''
         local wez = require('wezterm')
         return {
-      
+          -- https://github.com/wez/wezterm/issues/2011
+          enable_wayland = false,
           color_scheme   = "Dracula (Official)",
           check_for_updates = false,
           window_background_opacity = .90,
