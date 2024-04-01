@@ -9,20 +9,19 @@
 # copying one key to each machine
 
 keys:
-  - &nixosvm age1d3qtnwd73k0npgwhqwpwysdpqa2zyyjyyzs463f5rak9swmw45gsxdyjyn
-  - &nixosvm2 age16mwx76r29pa9lnmagujw9adxrpujxmxu38hjfastf6pgw6v66gjs5ugewz
   - &dns01 age1lj5vmr02qkudvv2xedfj5tq8x93gllgpr6tzylwdlt7lud4tfv5qfqsd5u
   - &dns02 age17edew3aahg3t5nte5g0a505sn96vnj8g8gqse8q06ccrrn2n3uysyshu2c
   - &citadel age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
   - &rickenbacker age1cp6vegrmqfkuj8nmt2u3z0sur7n0f7e9x9zmdv4zygp8j2pnucpsdkgagc
+  - &shodan age1j2r8mypw44uvqhfs53424h6fu2rkr5m7asl7rl3zn3xzva9m3dcqpa97gw
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$
     key_groups:
       - age:
-          - *nixosvm
-          - *nixosvm2
+
           - *dns01
           - *dns02
           - *citadel
           - *rickenbacker
+          - *shodan

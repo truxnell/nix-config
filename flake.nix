@@ -177,6 +177,21 @@
             ];
           };
 
+          "shodan" = mkNixosConfig {
+            # Rpi for DNS and misc services
+
+            hostname = "shodan";
+            system = "x86_64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-generic-x86.nix
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+            ];
+          };
+
+
         };
 
 
@@ -228,10 +243,9 @@
           };
         in
         {
-          rickenbacker = mkDeployConfig "rickenbacker" self.nixosConfigurations.rickenbacker;
           dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
           dns02 = mkDeployConfig "10.8.10.10" self.nixosConfigurations.dns02;
-
+          shodan = mkDeployConfig "10.8.20.33" self.nixosConfigurations.shodan;
 
           # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
         };
@@ -246,11 +260,8 @@
           nixtop = nixpkgs.lib.genAttrs
             (builtins.attrNames inputs.self.nixosConfigurations)
             (attr: inputs.self.nixosConfigurations.${attr}.config.system.build.toplevel);
-          hometop = nixpkgs.lib.genAttrs
-            (builtins.attrNames inputs.self.homeConfigurations)
-            (attr: inputs.self.homeManagerConfigurations.${attr}.activationPackage);
         in
-        nixtop // hometop;
+        nixtop;
     };
 
 }

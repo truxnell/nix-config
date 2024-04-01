@@ -6,6 +6,7 @@
     ./browser
     ./de
     ./editor
+    ./containers
 
   ];
 }
