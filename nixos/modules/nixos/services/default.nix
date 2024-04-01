@@ -7,5 +7,6 @@
     ./dnscrypt-proxy2
     ./cockpit
     ./podman
+    ./traefik
   ];
 }

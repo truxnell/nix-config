@@ -29,7 +29,9 @@ with lib;
     # But wont enable plugins globally, leave them for workstations
   };
 
-
+  # required for yubico
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.pcscd.enable = true;
 
 
   networking.useDHCP = lib.mkDefault true;

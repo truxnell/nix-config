@@ -9,6 +9,7 @@ with config;
   myHome.shell.starship.enable = true;
   myHome.shell.fish.enable = true;
   myHome.shell.wezterm.enable = true;
+
   myHome.security = {
     ssh = {
       enable = true;
@@ -53,6 +54,8 @@ with config;
       brightnessctl
       prusa-slicer
       bitwarden
+      yubioath-flutter
+      yubikey-manager-qt
 
       bat
       dbus
