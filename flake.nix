@@ -6,6 +6,9 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # nur
+    nur.url = "github:nix-community/NUR";
+
     # nix-community hardware quirks
     # https://github.com/nix-community
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -80,6 +83,7 @@
             , baseModules ? [
                 sops-nix.nixosModules.sops
                 home-manager.nixosModules.home-manager
+                inputs.nur.overlay
                 ./nixos/profiles/global.nix # all machines get a global profile
                 ./nixos/modules/nixos # all machines get nixos modules
                 ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
