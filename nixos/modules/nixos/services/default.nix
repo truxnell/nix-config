@@ -8,5 +8,6 @@
     ./cockpit
     ./podman
     ./traefik
+    ./nfs
   ];
 }
