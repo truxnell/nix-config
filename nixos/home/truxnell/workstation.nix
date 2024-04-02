@@ -40,6 +40,12 @@ with config;
           user = "root";
           identityFile = "~/.ssh/id_ed25519";
         };
+        helios = {
+          hostname = "helios";
+          username = "nat";
+          port = 22;
+          identityFile = "~/.ssh/id_ed25519";
+        };
 
       };
     };
@@ -65,6 +71,7 @@ with config;
       python3
       fzf
       ripgrep
+      flyctl # fly.io control line
 
     ];
 
