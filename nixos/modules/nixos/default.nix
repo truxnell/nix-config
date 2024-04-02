@@ -7,6 +7,6 @@
     ./de
     ./editor
     ./containers
-
+    ./hardware
   ];
 }
