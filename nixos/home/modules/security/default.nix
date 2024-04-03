@@ -1,6 +1,5 @@
 { ... }: {
   imports = [
-    ./browsers
-    ./de
+    ./ssh
   ];
 }

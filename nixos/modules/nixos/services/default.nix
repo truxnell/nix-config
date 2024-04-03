@@ -5,5 +5,9 @@
     ./cloudflare-dyndns
     ./maddy
     ./dnscrypt-proxy2
+    ./cockpit
+    ./podman
+    ./traefik
+    ./nfs
   ];
 }

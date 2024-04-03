@@ -1,0 +1,27 @@
+{
+  "nix-module": {
+    "prefix": "nm",
+    "body": [
+      "{ lib",
+      ", config",
+      ", pkgs",
+      ", ...",
+      "}:",
+      "with lib;",
+      "let",
+      "  cfg = config.mySystem.${1}.${2};",
+      "in",
+      "{",
+      "  options.mySystem.${1}.${2}.enable = mkEnableOption \"${3}\";",
+      "",
+      "  config = mkIf cfg.enable {",
+      "",
+      "  $4{}",
+      "",
+      "  };",
+      "}",
+      ""
+    ],
+    "description": "nix-module"
+  }
+}

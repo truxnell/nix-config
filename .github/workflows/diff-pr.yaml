@@ -54,6 +54,7 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
             extra-platforms = aarch64-linux
+      - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: Register binfmt
         run: |
           docker run --rm --privileged multiarch/qemu-user-static --reset -p yes

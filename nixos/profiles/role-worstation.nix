@@ -15,8 +15,8 @@ with config;
     # Lets see if fish everywhere is OK on the pi's
     # TODO decide if i drop to bash on pis?
     shell.fish.enable = true;
-    # But wont enable plugins globally, leave them for workstations
 
+    nfs.nas.enable = true;
   };
 
   boot = {

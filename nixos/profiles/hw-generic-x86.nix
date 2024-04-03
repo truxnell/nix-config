@@ -3,9 +3,6 @@
 with lib;
 {
 
-  # Enable module for NVIDIA graphics
-  mySystem.hardware.nvidia.enable = true;
-
   mySystem.system.packages = with pkgs; [
     ntfs3g
   ];
@@ -13,7 +10,7 @@ with lib;
   boot = {
 
     initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
-    kernelModules = [ "kvm-amd" ];
+    kernelModules = [ ];
     extraModulePackages = [ ];
 
     # for managing/mounting ntfs
@@ -28,9 +25,6 @@ with lib;
     };
   };
 
-  # set xserver videodrivers for NVIDIA 4080 gpu
-  services.xserver.videoDrivers = [ "nvidia" ];
-
-
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
 }
