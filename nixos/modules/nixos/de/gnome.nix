@@ -37,7 +37,7 @@ in
 
         layout = "us"; # `localctl` will give you
       };
-      udev.packages = [ ] ++ optionals (cfg.systrayicons) [ pkgs.gnome.gnome-settings-daemon ]; # support appindicator
+      udev.packages = optionals cfg.systrayicons [ pkgs.gnome.gnome-settings-daemon ]; # support appindicator
 
 
     };
@@ -62,7 +62,7 @@ in
         gnomeExtensions.dash-to-dock
 
       ]
-      ++ optionals (cfg.systrayicons) [ pkgs.gnomeExtensions.appindicator ];
+      ++ optionals cfg.systrayicons [ pkgs.gnomeExtensions.appindicator ];
     };
 
     # enable gsconnect

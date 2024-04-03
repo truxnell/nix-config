@@ -7,7 +7,7 @@
 }:
 with lib.hm.gvariant; {
 
-  config = lib.mkIf (osConfig.mySystem.de.gnome.enable) {
+  config = lib.mkIf osConfig.mySystem.de.gnome.enable {
     # add user packages
     home.packages = with pkgs;  [
       dconf2nix
