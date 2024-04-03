@@ -15,6 +15,7 @@ with lib.hm.gvariant; {
 
     # worked out from dconf2nix
     # dconf dump / | dconf2nix > dconf.nix
+    # can also dconf watch
     dconf.settings = {
       "org/gnome/mutter" = {
         edge-tiling = true;
@@ -28,7 +29,12 @@ with lib.hm.gvariant; {
         enabled-extensions = [ "appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "dash-to-dock@micxgx.gmail.com" "gsconnect@andyholmes.github.io" "Vitals@CoreCoding.com" "sp-tray@sp-tray.esenliyim.github.com" ];
         favorite-apps = [ "org.gnome.Nautilus.desktop" "firefox.desktop" "org.wezfurlong.wezterm.desktop" "PrusaGcodeviewer.desktop" "spotify.desktop" "org.gnome.Console.desktop" "codium.desktop" ];
       };
-
+      "org/gnome/nautilus/preferences" = {
+        default-folder-viewer = "icon-view";
+      };
+      "org/gnome/nautilus/icon-view" = {
+        default-zoom-level = "small";
+      };
 
     };
   };
