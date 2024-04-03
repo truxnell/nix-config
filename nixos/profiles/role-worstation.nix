@@ -23,6 +23,7 @@ with config;
 
     binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
     plymouth.enable = true; # hide console with splash screen
+    
   };
 
   nix.settings = {
@@ -35,6 +36,9 @@ with config;
   # set xserver videodrivers if used
   services.xserver.enable = true;
 
+  # required for yubico
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.pcscd.enable = true;
 
 
   environment.systemPackages = with pkgs; [

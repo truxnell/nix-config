@@ -15,6 +15,7 @@
     openssh.enable = true;
     cockpit.enable = true;
     podman.enable = true;
+    traefik.enable = true;
   };
 
   boot = {
