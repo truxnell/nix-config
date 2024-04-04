@@ -32,6 +32,8 @@ with lib;
 
 
   networking.useDHCP = lib.mkDefault true;
+  networking.domain = "trux.dev"; # TODO make variable
+
 
 
 

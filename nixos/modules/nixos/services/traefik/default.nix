@@ -24,6 +24,17 @@ in
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
+    sops.secrets."system/services/traefik/apiTokenFile".sopsFile = ./secrets.sops.yaml;
+
+    # Restart when secret changes
+    sops.secrets."system/services/traefik/apiTokenFile".restartUnits = [ "traefik" ];
+
+    systemd.services.traefik = {
+      serviceConfig.EnvironmentFile = [
+        config.sops.secrets."system/services/traefik/apiTokenFile".path
+      ];
+    };
+
     services.traefik = {
       enable = true;
 
@@ -43,13 +54,13 @@ in
         # Allow backend services to have self-signed certs
         serversTransport.insecureSkipVerify = true; # TODO should this be per service?
 
-        # providers.docker = {
-        #   # endpoint = "unix:///var/run/docker.sock";
-        #   endpoint = "tcp://127.0.0.1:2375";
-        #   exposedByDefault = false;
-        #   defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
-        #   # network = "proxy";
-        # };
+        providers.docker = {
+          # endpoint = "unix:///var/run/docker.sock";
+          endpoint = "tcp://127.0.0.1:2375";
+          exposedByDefault = false;
+          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
+          # network = "proxy";
+        };
 
         # Listen on port 80 and redirect to port 443
         entryPoints.web = {
@@ -58,24 +69,24 @@ in
         };
 
         # Run everything SSL
-        # entryPoints.websecure = {
-        #   address = ":444";
-        #   http = {
-        #     tls = {
-        #       certresolver = "letsencrypt";
-        #       domains.main = "${config.networking.domain}";
-        #       domains.sans = "*.${config.networking.domain}";
-        #     };
-        #   };
-        #   http3 = { };
-        # };
+        entryPoints.websecure = {
+          address = ":443";
+          http = {
+            tls = {
+              certresolver = "letsencrypt";
+              domains.main = "${config.networking.domain}";
+              domains.sans = "*.${config.networking.domain}";
+            };
+          };
+          http3 = { };
+        };
 
-        #   certificatesResolvers.letsencrypt.acme = {
-        #     dnsChallenge.provider = "cloudflare";
-        #     email = "${hostName}@${domain}";
-        #     keyType = "EC256";
-        #     storage = "${config.services.traefik.dataDir}/acme.json";
-        #   };
+        certificatesResolvers.letsencrypt.acme = {
+          dnsChallenge.provider = "cloudflare";
+          email = "${config.networking.hostName}@${config.networking.domain}";
+          keyType = "EC256";
+          storage = "${config.services.traefik.dataDir}/acme.json";
+        };
         # };
       };
       # Dynamic configuration
@@ -138,20 +149,20 @@ in
         };
 
         # Set up wildcard domain certificates for both *.hostname.domain and *.local.domain
-        # http.routers = {
-        #   traefik = {
-        #     entrypoints = "websecure";
-        #     rule = "Host(`traefik.${domain}`)";
-        #     tls.certresolver = "letsencrypt";
-        #     tls.domains = [{
-        #       main = "${domain}";
-        #       sans = "*.${domain}";
-        #     }];
-        #     middlewares = "authelia@file";
-        #     service = "api@internal";
-        #   };
+        http.routers = {
+          traefik = {
+            entrypoints = "websecure";
+            rule = "Host(`traefik.${config.networking.domain}`)";
+            tls.certresolver = "letsencrypt";
+            tls.domains = [{
+              main = "${config.networking.domain}";
+              sans = "*.${config.networking.domain}";
+            }];
+            middlewares = "authelia@file";
+            service = "api@internal";
+          };
 
-        # };
+        };
 
       };
     };
