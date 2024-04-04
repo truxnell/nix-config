@@ -9,5 +9,6 @@
     ./podman
     ./traefik
     ./nfs
+    ./nix-serve
   ];
 }

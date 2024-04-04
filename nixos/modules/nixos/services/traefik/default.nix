@@ -43,13 +43,13 @@ in
         # Allow backend services to have self-signed certs
         serversTransport.insecureSkipVerify = true; # TODO should this be per service?
 
-        providers.docker = {
-          # endpoint = "unix:///var/run/docker.sock";
-          endpoint = "tcp://127.0.0.1:2375";
-          exposedByDefault = false;
-          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
-          # network = "proxy";
-        };
+        # providers.docker = {
+        #   # endpoint = "unix:///var/run/docker.sock";
+        #   endpoint = "tcp://127.0.0.1:2375";
+        #   exposedByDefault = false;
+        #   defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
+        #   # network = "proxy";
+        # };
 
         # Listen on port 80 and redirect to port 443
         entryPoints.web = {
@@ -91,33 +91,33 @@ in
             "100.64.0.0/10" # Tailscale network
           ];
 
-          authelia = {
-            # Forward requests w/ middlewares=authelia@file to authelia.
-            forwardAuth = {
-              # address = cfg.autheliaUrl;
-              address = "http://localhost:9092/api/verify?rd=https://auth.dhupar.xyz:444/";
-              trustForwardHeader = true;
-              authResponseHeaders = [
-                "Remote-User"
-                "Remote-Name"
-                "Remote-Email"
-                "Remote-Groups"
-              ];
-            };
-          };
-          authelia-basic = {
-            # Forward requests w/ middlewares=authelia-basic@file to authelia.
-            forwardAuth = {
-              address = "http://localhost:9092/api/verify?auth=basic";
-              trustForwardHeader = true;
-              authResponseHeaders = [
-                "Remote-User"
-                "Remote-Name"
-                "Remote-Email"
-                "Remote-Groups"
-              ];
-            };
-          };
+          # authelia = {
+          #   # Forward requests w/ middlewares=authelia@file to authelia.
+          #   forwardAuth = {
+          #     # address = cfg.autheliaUrl;
+          #     address = "http://localhost:9092/api/verify?rd=https://auth.dhupar.xyz:444/";
+          #     trustForwardHeader = true;
+          #     authResponseHeaders = [
+          #       "Remote-User"
+          #       "Remote-Name"
+          #       "Remote-Email"
+          #       "Remote-Groups"
+          #     ];
+          #   };
+          # };
+          # authelia-basic = {
+          #   # Forward requests w/ middlewares=authelia-basic@file to authelia.
+          #   forwardAuth = {
+          #     address = "http://localhost:9092/api/verify?auth=basic";
+          #     trustForwardHeader = true;
+          #     authResponseHeaders = [
+          #       "Remote-User"
+          #       "Remote-Name"
+          #       "Remote-Email"
+          #       "Remote-Groups"
+          #     ];
+          #   };
+          # };
           # https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview/#forwardauth-with-static-upstreams-configuration
           # auth-headers = {
           #   browserXssFilter = true;
@@ -132,7 +132,6 @@ in
           # };
         };
 
-        middlewares.compress.compress = { };
         tls.options.default = {
           minVersion = "VersionTLS13";
           sniStrict = true;

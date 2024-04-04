@@ -1,6 +1,5 @@
-{ lib, config, pkgs, nixpkgs, ... }:
+{ lib, config, pkgs, nixpkgs, self, ... }:
 {
-
   ## Below is to align shell/system to flake's nixpkgs
   ## ref: https://nixos-and-flakes.thiscute.world/best-practices/nix-path-and-flake-registry
 

@@ -39,6 +39,13 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # nix-index database
+    # https://github.com/nix-community/nix-index-database
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     { self
@@ -93,6 +100,7 @@
                     extraSpecialArgs = {
                       inherit inputs hostname system;
                     };
+
                   };
                 }
               ]
