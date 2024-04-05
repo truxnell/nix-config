@@ -12,6 +12,8 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      services.dnsmasq.enable = true;
+
       time.hwClockLocalTime = true; # due to windows dualboot
     };
 
