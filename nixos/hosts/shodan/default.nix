@@ -17,7 +17,9 @@
     podman.enable = true;
     traefik.enable = true;
     sonarr.enable = true;
+
   };
+  mySystem.nfs.nas.enable = true;
 
   boot = {
 
