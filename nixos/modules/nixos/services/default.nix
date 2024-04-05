@@ -10,5 +10,6 @@
     ./traefik
     ./nfs
     ./nix-serve
+    ./dnsmasq
   ];
 }
