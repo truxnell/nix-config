@@ -13,7 +13,6 @@
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
       time.hwClockLocalTime = true; # due to windows dualboot
-      services.dnsmasq.enable = true;
     };
 
     boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];

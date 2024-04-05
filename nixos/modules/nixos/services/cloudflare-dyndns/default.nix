@@ -25,7 +25,7 @@ in
     sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".sopsFile = ./cloudflare-dyndns.sops.yaml;
 
     # Restart when secret changes
-    sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns" ];
+    sops.secrets."system/networking/cloudflare-dyndns/apiTokenFile".restartUnits = [ "cloudflare-dyndns.service" ];
 
     networking.firewall = {
       allowedUDPPorts = [ 53 ];

@@ -27,7 +27,7 @@ in
     sops.secrets."system/services/traefik/apiTokenFile".sopsFile = ./secrets.sops.yaml;
 
     # Restart when secret changes
-    sops.secrets."system/services/traefik/apiTokenFile".restartUnits = [ "traefik" ];
+    sops.secrets."system/services/traefik/apiTokenFile".restartUnits = [ "traefik.service" ];
 
     systemd.services.traefik = {
       serviceConfig.EnvironmentFile = [
@@ -37,7 +37,7 @@ in
 
     services.traefik = {
       enable = true;
-
+      dataDir = "${config.mySystem.persistentFolder}/nixos/traefik/";
       # Required so traefik is permitted to watch docker events
       # group = "docker";
 
@@ -52,13 +52,13 @@ in
         log.level = "DEBUG";
 
         # Allow backend services to have self-signed certs
-        serversTransport.insecureSkipVerify = true; # TODO should this be per service?
+        serversTransport.insecureSkipVerify = true;
 
         providers.docker = {
           # endpoint = "unix:///var/run/docker.sock";
           endpoint = "tcp://127.0.0.1:2375";
           exposedByDefault = false;
-          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
+          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}/`)";
           # network = "proxy";
         };
 
@@ -83,7 +83,6 @@ in
 
         certificatesResolvers.letsencrypt.acme = {
           dnsChallenge.provider = "cloudflare";
-          email = "${config.networking.hostName}@${config.networking.domain}";
           keyType = "EC256";
           storage = "${config.services.traefik.dataDir}/acme.json";
         };
@@ -158,7 +157,7 @@ in
               main = "${config.networking.domain}";
               sans = "*.${config.networking.domain}";
             }];
-            middlewares = "authelia@file";
+            # middlewares = "authelia@file";
             service = "api@internal";
           };
 

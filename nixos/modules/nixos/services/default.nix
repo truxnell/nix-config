@@ -11,5 +11,6 @@
     ./nfs
     ./nix-serve
     ./dnsmasq
+    ./arr
   ];
 }

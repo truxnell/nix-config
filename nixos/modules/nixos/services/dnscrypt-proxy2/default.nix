@@ -30,7 +30,7 @@ in
       "system/networking/dnscrypt-proxy2/forwarding-rules".mode = "0444"; # This is world-readable but theres nothing security related in the file
 
       # Restart dnscrypt when secret changes
-      "system/networking/dnscrypt-proxy2/forwarding-rules".restartUnits = [ "dnscrypt-proxy2" ];
+      "system/networking/dnscrypt-proxy2/forwarding-rules".restartUnits = [ "dnscrypt-proxy2.service" ];
     };
 
     services.dnscrypt-proxy2 = {

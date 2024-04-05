@@ -20,7 +20,7 @@ in
       "system/networking/bind/trux.dev".mode = "0444"; # This is world-readable but theres nothing security related in the file
 
       # Restart dnscrypt when secret changes
-      "system/networking/bind/trux.dev".restartUnits = [ "bind" ];
+      "system/networking/bind/trux.dev".restartUnits = [ "bind.service" ];
     };
 
 

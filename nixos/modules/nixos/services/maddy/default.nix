@@ -18,7 +18,7 @@ in
       group = "maddy";
     };
 
-    sops.secrets."system/mail/maddy/envFile".restartUnits = [ "maddy" ];
+    sops.secrets."system/mail/maddy/envFile".restartUnits = [ "maddy.service" ];
 
     services.maddy = {
       enable = true;

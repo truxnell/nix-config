@@ -16,6 +16,7 @@
     cockpit.enable = true;
     podman.enable = true;
     traefik.enable = true;
+    sonarr.enable = true;
   };
 
   boot = {

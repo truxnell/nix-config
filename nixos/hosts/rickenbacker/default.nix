@@ -10,6 +10,8 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      services.dnsmasq.enable = true;
+
     };
     mySystem.services.traefik.enable = true;
 
