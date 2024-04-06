@@ -5,11 +5,11 @@
 
 with lib;
 let
-  cfg = config.mySystem.services.dnsmasq;
+  cfg = config.mySystem.services.bind;
   domain = config.networking.domain;
 in
 {
-  options.mySystem.services.dnsmasq.enable = mkEnableOption "dnsmasq";
+  options.mySystem.services.bind.enable = mkEnableOption "bind";
 
   config = mkIf cfg.enable {
 
@@ -36,6 +36,7 @@ in
         }
       ];
       extraOptions = ''
+        listen-on port 5353 { any; };
         recursion yes;
         dnssec-validation auto;
       '';

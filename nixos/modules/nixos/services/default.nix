@@ -10,7 +10,8 @@
     ./traefik
     ./nfs
     ./nix-serve
-    ./dnsmasq
+    ./bind
     ./arr
+    ./homepage
   ];
 }

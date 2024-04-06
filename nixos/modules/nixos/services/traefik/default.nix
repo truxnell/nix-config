@@ -37,7 +37,9 @@ in
 
     services.traefik = {
       enable = true;
-      dataDir = "${config.mySystem.persistentFolder}/nixos/traefik/";
+      group = "podman"; # podman backend, required to access socket
+
+      dataDir = "${config.mySystem.persistentFolder}/traefik/";
       # Required so traefik is permitted to watch docker events
       # group = "docker";
 
@@ -55,10 +57,10 @@ in
         serversTransport.insecureSkipVerify = true;
 
         providers.docker = {
-          # endpoint = "unix:///var/run/docker.sock";
-          endpoint = "tcp://127.0.0.1:2375";
+          endpoint = "unix:///var/run/podman/podman.sock";
+          # endpoint = "tcp://127.0.0.1:2375";
           exposedByDefault = false;
-          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}/`)";
+          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
           # network = "proxy";
         };
 
@@ -98,7 +100,6 @@ in
             "192.168.0.0/16" # RFC1918
             "10.0.0.0/8" # RFC1918
             "172.16.0.0/12" # RFC1918 (docker network)
-            "100.64.0.0/10" # Tailscale network
           ];
 
           # authelia = {
@@ -157,7 +158,7 @@ in
               main = "${config.networking.domain}";
               sans = "*.${config.networking.domain}";
             }];
-            # middlewares = "authelia@file";
+            middlewares = "local-only@file";
             service = "api@internal";
           };
 

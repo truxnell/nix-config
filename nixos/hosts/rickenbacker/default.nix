@@ -10,16 +10,10 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
-
     };
-    mySystem.services.traefik.enable = true;
 
     # TODO build this in from flake host names
     networking.hostName = "rickenbacker";
-    networking.extraHosts =
-      ''
-        10.8.20.33 traefik.trux.dev
-      '';
 
 
     fileSystems."/" =

@@ -29,6 +29,12 @@ with lib;
     # But wont enable plugins globally, leave them for workstations
   };
 
+  environment.systemPackages = with pkgs; [
+    curl
+    wget
+    dnsutils
+  ];
+
 
 
   networking.useDHCP = lib.mkDefault true;
