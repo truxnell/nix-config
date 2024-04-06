@@ -17,7 +17,7 @@
     maddy.enable = true;
     dnscrypt-proxy.enable = true;
     cfDdns.enable = true;
-    dnsmasq.enable = true;
+    bind.enable = true;
 
   };
 
