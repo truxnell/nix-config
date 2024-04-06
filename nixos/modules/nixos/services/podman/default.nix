@@ -15,7 +15,6 @@ in
     {
       virtualisation.podman = {
         enable = true;
-
         dockerCompat = true;
         extraPackages = [ pkgs.zfs ];
         defaultNetwork.settings = {
@@ -27,7 +26,14 @@ in
       };
       networking.firewall.interfaces.podman0.allowedUDPPorts = [ 53 ];
 
+      # extra user for containers
+      users.users.kah = {
 
+        uid = 568;
+        group = "kah";
+
+      };
+      users.groups.kah = { };
     };
 
 }

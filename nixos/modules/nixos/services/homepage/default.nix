@@ -13,9 +13,79 @@ let
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 
   cfg = config.mySystem.services.homepage;
+
+  settings = {
+    # title = "Hades";
+    # theme = "dark";
+    # color = "slate";
+    showStats = true;
+  };
+  settingsFile = builtins.toFile "homepage-settings.yaml" (builtins.toJSON settings);
+
+  bookmarks = [
+    {
+      Administration = [
+        { Source = [{ icon = "github.png"; href = "https://github.com/truxnell/nix-config"; }]; }
+        { Cloudflare = [{ icon = "cloudflare.png"; href = "https://dash.cloudflare.com/"; }]; }
+      ];
+    }
+    {
+      Development = [
+        { CyberChef = [{ icon = "cyberchef.png"; href = "https://gchq.github.io/CyberChef/"; }]; }
+        { "Nix Options Search" = [{ abbr = "NS"; href = "https://search.nixos.org/packages"; }]; }
+        { "Doppler Secrets" = [{ abbr = "DP"; href = "https://dashboard.doppler.com"; }]; }
+      ];
+    }
+  ];
+  bookmarksFile = builtins.toFile "homepage-bookmarks.yaml" (builtins.toJSON bookmarks);
+
+  widgets = [
+    {
+      resources = {
+        cpu = true;
+        memory = true;
+        cputemp = true;
+        uptime = true;
+        disk = "/";
+        units = "metric";
+        # label = "system";
+      };
+    }
+    {
+      search = {
+        provider = "duckduckgo";
+        target = "_blank";
+      };
+    }
+  ];
+  widgetsFile = builtins.toFile "homepage-widgets.yaml" (builtins.toJSON widgets);
+
+  services = [
+    { Infrastructure = cfg.infrastructure-services; }
+    { Home = cfg.home-services; }
+    { Media = cfg.media-services; }
+  ];
+  servicesFile = builtins.toFile "homepage-services.yaml" (builtins.toJSON services);
 in
 {
-  options.mySystem.services.homepage.enable = mkEnableOption "Homepage dashboard";
+  options.mySystem.services.homepage = {
+    enable = mkEnableOption "Homepage dashboard";
+    infrastructure-services = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Services to add to the infrastructure column";
+      default = [ ];
+    };
+    home-services = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Services to add to the infrastructure column";
+      default = [ ];
+    };
+    media-services = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Services to add to the infrastructure column";
+      default = [ ];
+    };
+  };
 
   config = mkIf cfg.enable {
 
@@ -38,10 +108,18 @@ in
         "traefik.http.routers.${app}.middlewares" = "local-only@file";
         "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
       };
-      # mount socket for service discovery.
+      # not using docker socket for discovery, just
+      # building up the apps from a shared key
+      # this is a bit more tedious, but more secure
+      # from not exposing docker socet and makes it 
+      # easier to have/move services between hosts
       volumes = [
+        "/etc/localtime:/etc/localtime:ro"
         "${persistentFolder}:/app/config:rw"
-        "/var/run/podman/podman.sock:/var/run/docker.sock:ro" # TODO abstract out podman/docker socket
+        "${settingsFile}:/app/config/settings.yaml"
+        "${servicesFile}:/app/config/services.yaml"
+        "${bookmarksFile}:/app/config/bookmarks.yaml"
+        "${widgetsFile}:/app/config/widgets.yaml"
       ];
 
     };
