@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.mySystem.services.bind;
-  domain = config.networking.domain;
+  inherit (config.networking) domain;
 in
 {
   options.mySystem.services.bind.enable = mkEnableOption "bind";

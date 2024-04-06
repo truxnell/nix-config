@@ -51,7 +51,7 @@ with config;
     };
   };
 
- 
+
 
   home = {
     # Install these packages for my user

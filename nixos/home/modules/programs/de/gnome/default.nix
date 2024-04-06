@@ -27,7 +27,7 @@ with lib.hm.gvariant; {
       "org/gnome/shell" = {
         disabled-extensions = [ "apps-menu@gnome-shell-extensions.gcampax.github.com" "light-style@gnome-shell-extensions.gcampax.github.com" "places-menu@gnome-shell-extensions.gcampax.github.com" "drive-menu@gnome-shell-extensions.gcampax.github.com" "window-list@gnome-shell-extensions.gcampax.github.com" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" ];
         enabled-extensions = [ "appindicatorsupport@rgcjonas.gmail.com" "caffeine@patapon.info" "dash-to-dock@micxgx.gmail.com" "gsconnect@andyholmes.github.io" "Vitals@CoreCoding.com" "sp-tray@sp-tray.esenliyim.github.com" ];
-        favorite-apps = [ "org.gnome.Nautilus.desktop" "firefox.desktop" "org.wezfurlong.wezterm.desktop" "PrusaGcodeviewer.desktop" "spotify.desktop" "org.gnome.Console.desktop" "codium.desktop" "discord.desktop"];
+        favorite-apps = [ "org.gnome.Nautilus.desktop" "firefox.desktop" "org.wezfurlong.wezterm.desktop" "PrusaGcodeviewer.desktop" "spotify.desktop" "org.gnome.Console.desktop" "codium.desktop" "discord.desktop" ];
       };
       "org/gnome/nautilus/preferences" = {
         default-folder-viewer = "icon-view";
