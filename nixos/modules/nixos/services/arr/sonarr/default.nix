@@ -35,6 +35,15 @@ in
         "traefik.http.routers.sonarr.entrypoints" = "websecure";
         "traefik.http.routers.sonarr.middlewares" = "local-only@file";
         "traefik.http.services.sonarr.loadbalancer.server.port" = "${toString port}";
+
+        "homepage.group" = "Media";
+        "homepage.name" = "Sonarr";
+        "homepage.icon" = "sonarr.png";
+        "homepage.href" = "https://sonarr.${config.networking.domain}";
+        "homepage.description" = "Series manager";
+        # "homepage.weight" = -70000;
+        "homepage.widget.type" = "sonarr";
+        "homepage.widget.url" = "https://sonarr.${config.networking.domain}";
       };
     };
   };
