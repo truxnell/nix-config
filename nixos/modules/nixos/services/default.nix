@@ -9,5 +9,9 @@
     ./podman
     ./traefik
     ./nfs
+    ./nix-serve
+    ./bind
+    ./arr
+    ./homepage
   ];
 }

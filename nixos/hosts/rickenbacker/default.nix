@@ -11,11 +11,9 @@
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
     };
-    mySystem.services.traefik.enable = true;
 
     # TODO build this in from flake host names
     networking.hostName = "rickenbacker";
-
 
 
     fileSystems."/" =

@@ -19,7 +19,6 @@ creation_rules:
   - path_regex: .*\.sops\.yaml$
     key_groups:
       - age:
-
           - *dns01
           - *dns02
           - *citadel

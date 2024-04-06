@@ -1,6 +1,5 @@
-{ lib, config, pkgs, nixpkgs, ... }:
+{ lib, config, pkgs, nixpkgs, self, ... }:
 {
-
   ## Below is to align shell/system to flake's nixpkgs
   ## ref: https://nixos-and-flakes.thiscute.world/best-practices/nix-path-and-flake-registry
 
@@ -31,12 +30,14 @@
         "https://cache.garnix.io"
         "https://nix-community.cachix.org"
         "https://numtide.cachix.org"
+        "https://deploy-rs.cachix.org"
       ];
 
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
         "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+        "deploy-rs.cachix.org-1:xfNobmiwF/vzvK1gpfediPwpdIP0rpDV2rYqx40zdSI="
       ];
 
       # Fallback quickly if substituters are not available.

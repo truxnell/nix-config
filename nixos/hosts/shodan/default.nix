@@ -15,7 +15,11 @@
     openssh.enable = true;
     cockpit.enable = true;
     podman.enable = true;
+    traefik.enable = true;
+    sonarr.enable = true;
+    homepage.enable = true;
   };
+  mySystem.nfs.nas.enable = true;
 
   boot = {
 

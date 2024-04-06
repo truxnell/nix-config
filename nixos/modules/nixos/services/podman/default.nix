@@ -15,6 +15,7 @@ in
     {
       virtualisation.podman = {
         enable = true;
+
         dockerCompat = true;
         extraPackages = [ pkgs.zfs ];
         defaultNetwork.settings = {
@@ -25,6 +26,8 @@ in
         backend = "podman";
       };
       networking.firewall.interfaces.podman0.allowedUDPPorts = [ 53 ];
+
+
     };
 
 }

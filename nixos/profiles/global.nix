@@ -29,12 +29,17 @@ with lib;
     # But wont enable plugins globally, leave them for workstations
   };
 
-  # required for yubico
-  services.udev.packages = [ pkgs.yubikey-personalization ];
-  services.pcscd.enable = true;
+  environment.systemPackages = with pkgs; [
+    curl
+    wget
+    dnsutils
+  ];
+
 
 
   networking.useDHCP = lib.mkDefault true;
+  networking.domain = "trux.dev"; # TODO make variable
+
 
 
 

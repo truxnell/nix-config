@@ -1,4 +1,4 @@
-{ lib, pkgs, self, config, ... }:
+{ lib, pkgs, self, config, inputs, ... }:
 with config;
 {
   imports = [
@@ -51,29 +51,32 @@ with config;
     };
   };
 
+
+
   home = {
     # Install these packages for my user
-    packages = with pkgs; [
-      discord
-      steam
-      spotify
-      brightnessctl
-      prusa-slicer
-      bitwarden
-      yubioath-flutter
-      yubikey-manager-qt
+    packages = with pkgs;
+      [
+        discord
+        steam
+        spotify
+        brightnessctl
+        prusa-slicer
+        bitwarden
+        yubioath-flutter
+        yubikey-manager-qt
 
-      bat
-      dbus
-      direnv
-      git
-      nix-index
-      python3
-      fzf
-      ripgrep
-      flyctl # fly.io control line
+        bat
+        dbus
+        direnv
+        git
+        nix-index
+        python3
+        fzf
+        ripgrep
+        flyctl # fly.io control line
 
-    ];
+      ];
 
   };
 }

@@ -23,6 +23,7 @@ with config;
 
     binfmt.emulatedSystems = [ "aarch64-linux" ]; # Enabled for raspi4 compilation
     plymouth.enable = true; # hide console with splash screen
+
   };
 
   nix.settings = {
@@ -34,6 +35,24 @@ with config;
 
   # set xserver videodrivers if used
   services.xserver.enable = true;
+
+  services = {
+    fwupd.enable = config.boot.loader.systemd-boot.enable; # fwupd does not work in BIOS mode
+    thermald.enable = true;
+    smartd.enable = true;
+
+    # required for yubikey
+    udev.packages = [ pkgs.yubikey-personalization ];
+    pcscd.enable = true;
+  };
+
+  hardware = {
+    enableAllFirmware = true;
+    sensor.hddtemp = {
+      enable = true;
+      drives = [ "/dev/disk/by-id/*" ];
+    };
+  };
 
 
 
@@ -47,12 +66,19 @@ with config;
     dnsutils
     nix
 
+    # Sensors etc
+    lm_sensors
+    cpufrequtils
+    cpupower-gui
+
     # TODO Move
     nil
     nixpkgs-fmt
     statix
     nvd
     gh
+
+    bind # for dns utils like named-checkconf
   ];
 
   i18n = {

@@ -16,6 +16,7 @@
     openssh.enable = true;
     dnscrypt-proxy.enable = true;
     cfDdns.enable = true;
+    bind.enable = true;
   };
 
   networking.hostName = "dns02"; # Define your hostname.
