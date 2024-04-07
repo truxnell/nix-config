@@ -13,11 +13,14 @@
 
   mySystem.services = {
     openssh.enable = true;
-    cockpit.enable = true;
     podman.enable = true;
     traefik.enable = true;
-    sonarr.enable = true;
     homepage.enable = true;
+    sonarr.enable = true;
+    radarr.enable = true;
+    lidarr.enable = true;
+    readarr.enable = true;
+
   };
   mySystem.nfs.nas.enable = true;
 
@@ -40,7 +43,7 @@
     };
   };
 
-  networking.hostName = "shodan"; # Define your hostname.
+  networking.hostName = "shodan1"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
 
   fileSystems."/" =

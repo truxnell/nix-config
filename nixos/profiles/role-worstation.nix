@@ -15,6 +15,7 @@ with config;
     # Lets see if fish everywhere is OK on the pi's
     # TODO decide if i drop to bash on pis?
     shell.fish.enable = true;
+    services.cockpit.enable = true;
 
     nfs.nas.enable = true;
   };

@@ -5,14 +5,13 @@
 }:
 with lib;
 let
-  app = "sonarr";
-  image = "ghcr.io/onedr0p/sonarr@sha256:04d8e198752b67df3f95c46144b507f437e7669f0088e7d2bbedf0e762606655";
+  app = "readarr";
+  image = "ghcr.io/onedr0p/readarr-nightly@sha256:dd429811956178223ca7db1699f4ce03641edfa39ea8a1436a33272618278ade";
   user = "568"; #string
   group = "568"; #string
-  port = 8989; #int
-  cfg = config.mySystem.services.${app};
+  port = 8787; #int
+  cfg = config.mySystem.services.sonarr;
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
-  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =
@@ -40,15 +39,13 @@ in
       image = "${image}";
       user = "${user}:${group}";
       environment = {
-        PUSHOVER_DEBUG = "false";
-        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
-        SONARR__INSTANCE_NAME = "Radarr";
-        SONARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        SONARR__LOG_LEVEL = "info";
+        READARR__INSTANCE_NAME = "Lidarr";
+        READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        READARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:${containerPersistentFolder}:rw"
+        "${persistentFolder}:/config:rw"
         "/mnt/nas/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
@@ -63,15 +60,15 @@ in
 
     mySystem.services.homepage.media-services = [
       {
-        Sonarr = {
+        Readar = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "TV show management";
+          description = "Book management";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
           };
         };
       }

@@ -36,8 +36,8 @@
       definedAliases = [ "@nhmo" ];
     };
     "NixOS Wiki" = {
-      urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
-      iconUpdateURL = "https://nixos.wiki/favicon.png";
+      urls = [{ template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; }];
+      iconUpdateURL = "https://wiki.nixos.org/favicon.ico";
       updateInterval = 24 * 60 * 60 * 1000; # every day
       definedAliases = [ "@nw" ];
     };
@@ -46,6 +46,12 @@
       iconUpdateURL = "https://kubernetes.io/images/wheel.svg";
       updateInterval = 24 * 60 * 60 * 1000; # every day
       definedAliases = [ "@ks" ];
+    };
+    "Github Code Search" = {
+      urls = [{ template = "https://github.com/search?type=code&q={searchTerms}"; }];
+      iconUpdateURL = "https://github.githubassets.com/favicons/favicon-dark.svg";
+      updateInterval = 24 * 60 * 60 * 1000; # every day
+      definedAliases = [ "@gs" ];
     };
 
     # "Searx" = {

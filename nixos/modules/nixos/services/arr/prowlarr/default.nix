@@ -5,14 +5,13 @@
 }:
 with lib;
 let
-  app = "sonarr";
-  image = "ghcr.io/onedr0p/sonarr@sha256:04d8e198752b67df3f95c46144b507f437e7669f0088e7d2bbedf0e762606655";
+  app = "prowlarr";
+  image = "ghcr.io/onedr0p/prowlarr@sha256:7f90035619b4dbff6bff985181275300cd999be5d4f03fcaf359ef7068fc5e5e";
   user = "568"; #string
   group = "568"; #string
-  port = 8989; #int
-  cfg = config.mySystem.services.${app};
+  port = 9696; #int
+  cfg = config.mySystem.services.sonarr;
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
-  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =
@@ -42,14 +41,13 @@ in
       environment = {
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
-        SONARR__INSTANCE_NAME = "Radarr";
-        SONARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        SONARR__LOG_LEVEL = "info";
+        PROWLARR__INSTANCE_NAME = "Prowlarr";
+        PROWLARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        PROWLARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:${containerPersistentFolder}:rw"
-        "/mnt/nas/natflix:/media:rw"
+        "${persistentFolder}:/config:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = {
@@ -63,15 +61,15 @@ in
 
     mySystem.services.homepage.media-services = [
       {
-        Sonarr = {
+        Prowlarr = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "TV show management";
+          description = "Content locator";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_PROWLARR__API_KEY}}";
           };
         };
       }

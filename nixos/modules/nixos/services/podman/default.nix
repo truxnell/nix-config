@@ -18,6 +18,12 @@ in
 
         dockerCompat = true;
         extraPackages = [ pkgs.zfs ];
+
+        # regular cleanup
+        autoPrune.enable = true;
+        autoPrune.dates = "weekly";
+
+        # and add dns
         defaultNetwork.settings = {
           dns_enabled = true;
         };
@@ -27,7 +33,14 @@ in
       };
       networking.firewall.interfaces.podman0.allowedUDPPorts = [ 53 ];
 
+      # extra user for containers
+      users.users.kah = {
 
+        uid = 568;
+        group = "kah";
+
+      };
+      users.groups.kah = { };
     };
 
 }

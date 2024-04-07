@@ -14,6 +14,7 @@ with lib;
     mySystem.services.promMonitoring.enable = true;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
+    mySystem.services.cockpit.enable = true;
 
     nix.settings = {
       # TODO factor out into mySystem

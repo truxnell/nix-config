@@ -1,0 +1,17 @@
+{
+  packageRules: [
+    // auto update all up to major
+    {
+      matchDatasources: ['docker'],
+      automerge: "true",
+      matchUpdateTypes: [ 'minor', 'patch', 'digest'],
+      matchPackageNames: [
+        'onedr0p/sonarr',
+        'onedr0p/readarr',
+        'onedr0p/radarr',
+        'onedr0p/lidarr',
+        'onedr0p/prowlarr',
+      ],
+    },
+  ],
+}
