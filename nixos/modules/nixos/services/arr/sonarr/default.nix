@@ -32,7 +32,7 @@ in
       # configure secret for forwarding rules
       sopsFile = ./secrets.sops.yaml;
       owner = config.users.users.kah.name;
-      group = config.users.users.kah.group;
+      inherit (config.users.users.kah) group;
       restartUnits = [ "podman-${app}.service" ];
     };
 
