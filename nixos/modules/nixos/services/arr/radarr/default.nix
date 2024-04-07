@@ -5,14 +5,13 @@
 }:
 with lib;
 let
-  app = "sonarr";
-  image = "ghcr.io/onedr0p/sonarr@sha256:04d8e198752b67df3f95c46144b507f437e7669f0088e7d2bbedf0e762606655";
+  app = "radarr";
+  image = "ghcr.io/onedr0p/radarr@sha256:2de39930de91ae698f9461bb959d93b9d59610f88e0c026e96bc5d9c99aeea89";
   user = "568"; #string
   group = "568"; #string
-  port = 8989; #int
-  cfg = config.mySystem.services.${app};
+  port = 7878; #int
+  cfg = config.mySystem.services.sonarr;
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
-  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =
@@ -42,14 +41,14 @@ in
       environment = {
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
-        SONARR__INSTANCE_NAME = "Radarr";
-        SONARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        SONARR__LOG_LEVEL = "info";
+        RADARR__INSTANCE_NAME = "Radarr";
+        RADARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        RADARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:${containerPersistentFolder}:rw"
-        "/mnt/nas/natflix:/media:rw"
+        "${persistentFolder}:/config:rw"
+        "/mnt/nas/natflix/series:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = {
@@ -63,15 +62,15 @@ in
 
     mySystem.services.homepage.media-services = [
       {
-        Sonarr = {
+        Radarr = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "TV show management";
+          description = "Movie management";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_RADARR__API_KEY}}";
           };
         };
       }

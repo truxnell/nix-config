@@ -15,8 +15,15 @@ in
     {
       virtualisation.podman = {
         enable = true;
+
         dockerCompat = true;
         extraPackages = [ pkgs.zfs ];
+
+        # regular cleanup
+        autoPrune.enable = true;
+        autoPrune.dates = "weekly";
+
+        # and add dns
         defaultNetwork.settings = {
           dns_enabled = true;
         };
