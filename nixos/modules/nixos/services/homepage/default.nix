@@ -14,12 +14,30 @@ let
 
   cfg = config.mySystem.services.homepage;
 
-  settings = {
-    # title = "Hades";
-    # theme = "dark";
-    # color = "slate";
-    showStats = true;
-  };
+  settings =
+    {
+      title = "NatFlix";
+      theme = "dark";
+      color = "slate";
+      showStats = true;
+      disableCollape = true;
+      cardBlur = "md";
+      statusStyle = "dot";
+
+      datetime = {
+        text_size = "l";
+        format = {
+          timeStyle = "short";
+          dateStyle = "short";
+          hourCycle = "h23";
+        };
+      };
+
+      providers = {
+        openweathermap = "{{HOMEPAGE_VAR_OPENWEATHERMAP_API_KEY}}";
+      };
+    };
+
   settingsFile = builtins.toFile "homepage-settings.yaml" (builtins.toJSON settings);
 
   bookmarks = [
@@ -55,20 +73,71 @@ let
       };
     }
     {
-      search = {
-        provider = "duckduckgo";
-        target = "_blank";
+      datetime = {
+        text_size = "l";
+        locale = "au";
+        format = {
+          timeStyle = "short";
+          dateStyle = "short";
+          hourCycle = "h23";
+        };
+      };
+    }
+    {
+      openmeteo = {
+        label = "Melbourne";
+        latitude = "-37.8136";
+        longitude = "144.9631";
+        timezone = config.time.timeZone;
+        units = "metric";
+        cache = 5;
       };
     }
   ];
   widgetsFile = builtins.toFile "homepage-widgets.yaml" (builtins.toJSON widgets);
 
+  extraInfrastructure = [{
+    "UDMP" = {
+      href = "https://10.8.10.1";
+      description = "Unifi Dream Machine Pro";
+      icon = "ubiquiti";
+      widget = {
+        url = "https://10.8.10.1:443";
+        username = "unifi_read_only";
+        password = "Uk!5x&VriWWh@5";
+        type = "unifi";
+      };
+    };
+    "Nextdns" = {
+      href = "https://my.nextdns.io/";
+      description = "Adblocking DNS";
+      icon = "nextdns";
+      widget = {
+        profile = "{{HOMEPAGE_VAR_NEXTDNS_TRUSTED_PROFILE}}";
+        key = "{{HOMEPAGE_VAR_NEXTDNS_API_KEY}}";
+        type = "nextdns";
+      };
+    };
+    "Cloudflare" = {
+      href = "https://dash.cloudflare.com";
+      description = "DNS and security provider";
+      icon = "cloudflare";
+      widget = {
+        key = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API}}";
+        accountid = "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}";
+        tunnelid = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}";
+        type = "cloudflared";
+      };
+    };
+  }];
   services = [
-    { Infrastructure = cfg.infrastructure-services; }
+    { Infrastructure = cfg.infrastructure-services ++ extraInfrastructure; }
     { Home = cfg.home-services; }
     { Media = cfg.media-services; }
   ];
   servicesFile = builtins.toFile "homepage-config.yaml" (builtins.toJSON services);
+  emptyFile = builtins.toFile "docker.yaml" (builtins.toJSON [{ }]);
+
 in
 {
   options.mySystem.services.homepage = {
@@ -92,6 +161,16 @@ in
 
   config = mkIf cfg.enable {
 
+    # homepage secrets
+    sops.secrets."services/homepage/env" = {
+      # configure secret for forwarding rules
+      sopsFile = ./secrets.sops.yaml;
+      owner = "kah";
+      group = "kah";
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
+    # api secrets from other apps
     sops.secrets."services/sonarr/env" = {
       # configure secret for forwarding rules
       sopsFile = ../arr/sonarr/secrets.sops.yaml;
@@ -128,11 +207,6 @@ in
       restartUnits = [ "podman-${app}.service" ];
     };
 
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
-
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
@@ -141,9 +215,13 @@ in
         UMASK = "002";
         PUID = "${user}";
         PGID = "${group}";
+        LOG_TARGETS = "stdout";
       };
 
+      # secrets
       environmentFiles = [
+        config.sops.secrets."services/homepage/env".path
+
         config.sops.secrets."services/sonarr/env".path
         config.sops.secrets."services/radarr/env".path
         config.sops.secrets."services/readarr/env".path
@@ -164,15 +242,17 @@ in
       # easier to have/move services between hosts
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
-        "${persistentFolder}:/app/config/logs:rw"
         "${settingsFile}:/app/config/settings.yaml"
         "${servicesFile}:/app/config/services.yaml"
         "${bookmarksFile}:/app/config/bookmarks.yaml"
         "${widgetsFile}:/app/config/widgets.yaml"
-
+        "${emptyFile}:/app/config/docker.yaml"
+        "${emptyFile}:/app/config/kubernetes.yaml"
       ];
 
     };
+
+
 
   };
 }

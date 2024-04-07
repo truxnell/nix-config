@@ -166,5 +166,20 @@ in
 
       };
     };
+
+    mySystem.services.homepage.infrastructure-services = [
+      {
+        Traefik = {
+          icon = "traefik.png";
+          href = "https://traefik.${config.networking.domain}/dashboard";
+          description = "Reverse Proxy";
+          widget = {
+            type = "traefik";
+            url = "https://traefik.${config.networking.domain}";
+          };
+        };
+      }
+    ];
+
   };
 }
