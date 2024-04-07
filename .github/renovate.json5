@@ -19,7 +19,6 @@
         "enabled": "true"
     },
    
-    {
     "regexManagers": [
     {
       fileMatch: ["^.*\\.nix$"],
