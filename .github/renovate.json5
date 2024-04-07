@@ -3,6 +3,7 @@
     "extends": [
       "github>truxnell/renovate-config",
       "github>truxnell/renovate-config:automerge-github-actions",
+      "github>truxnell/nix-config//.github/renovate/autoMerge.json5",
     ],
 
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
@@ -13,7 +14,19 @@
     "nix": {
         "enabled": "true"
     },
+   
     "lockFileMaintenance": {
         "enabled": "true"
-      },
-  }
+    },
+   
+    {
+    "regexManagers": [
+    {
+      fileMatch: ["^.*\\.nix$"],
+      matchStrings: [
+        'image *= *"(?<depName>[^"]+):(?<currentValue>[^"]+)(@(?<currentDigest>sha256:[a-f0-9]+))?";',
+      ],
+      datasourceTemplate: "docker",
+    }
+  ],
+}
