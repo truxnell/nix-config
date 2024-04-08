@@ -83,11 +83,11 @@ in
           type master;
           file "${config.sops.secrets."system/networking/bind/trux.dev".path}";
           allow-transfer {
-  
+
         };
 
           allow-query { any; };
-  
+
         };
 
       '';
@@ -96,4 +96,3 @@ in
 
   };
 }
-

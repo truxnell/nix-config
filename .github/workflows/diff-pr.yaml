@@ -1,3 +1,4 @@
+---
 name: Pull Request
 permissions:
   pull-requests: write
@@ -83,7 +84,7 @@ jobs:
 
       - name: Diff profile
         id: diff
-        run: | 
+        run: |
           nix profile diff-closures --profile ./profile
           delimiter="$(openssl rand -hex 16)"
           echo "diff<<${delimiter}" >> "${GITHUB_OUTPUT}"
@@ -92,7 +93,7 @@ jobs:
 
       - name: Scan for security issues
         id: security
-        run: | 
+        run: |
           nix run nixpkgs/nixos-unstable#vulnix -- -w https://raw.githubusercontent.com/ckauhaus/nixos-vulnerability-roundup/master/whitelists/nixos-unstable.toml ./profile | tee /tmp/security.txt
           OUTPUT_SECURITY="$(cat /tmp/security.txt)"
           OUTPUT_SECURITY="${OUTPUT_SECURITY//'%'/'%25'}"
