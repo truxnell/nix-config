@@ -11,8 +11,8 @@
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
-        "enabled": "true"
-        "autoMerge": "true"
+        "enabled": "true",
+        "autoMerge": "true",
     },
 
     "lockFileMaintenance": {
