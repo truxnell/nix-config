@@ -54,6 +54,7 @@ in
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+
     ];
 
     virtualisation.oci-containers.containers.${app} = {
@@ -63,7 +64,7 @@ in
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
         "${persistentFolder}:/config:rw"
-        "${configFile}:/config/config.yaml:ro"
+        # "${configFile}:/config/config.yaml:ro"
       ];
       labels = {
         "traefik.enable" = "true";
