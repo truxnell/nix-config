@@ -12,12 +12,12 @@
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
         "enabled": "true",
-        "autoMerge": "true",
+        "automerge": "true",
     },
 
     "lockFileMaintenance": {
         "enabled": "true",
-        "autoMerge": "true",
+        "automerge": "true",
     },
 
     "regexManagers": [
