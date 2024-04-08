@@ -32,7 +32,7 @@ in
             left = '2cell',
             right = '2cell',
             top = '1cell',
-            bottom = '0cell',            
+            bottom = '0cell',
           },
         }
       '';

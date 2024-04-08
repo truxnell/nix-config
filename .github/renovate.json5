@@ -5,20 +5,22 @@
       "github>truxnell/renovate-config:automerge-github-actions",
       "github>truxnell/nix-config//.github/renovate/autoMerge.json5",
     ],
-    "autoMerge": "true",
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
     "ignoreTests": "false",
+    "automerge": "true",
 
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
-        "enabled": "true"
+        "enabled": "true",
+        "automerge": "true",
     },
-   
+
     "lockFileMaintenance": {
-        "enabled": "true"
+        "enabled": "true",
+        "automerge": "true",
     },
-   
+
     "regexManagers": [
     {
       fileMatch: ["^.*\\.nix$"],
