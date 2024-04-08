@@ -11,17 +11,20 @@
   in
   import nixpkgs { inherit system overlays; }
 , ...
-}: pkgs.mkShell {
-  # Enable experimental features without having to specify the argument
-  NIX_CONFIG = "experimental-features = nix-command flakes";
-  nativeBuildInputs = with pkgs; [
-    nix
-    home-manager
-    git
-    nil
-    nixpkgs-fmt
-    go-task
-    sops
-    pre-commit
-  ];
+}: {
+  default = pkgs.mkShell {
+    # Enable experimental features without having to specify the argument
+    NIX_CONFIG = "experimental-features = nix-command flakes";
+    nativeBuildInputs = with pkgs; [
+      nix
+      home-manager
+      git
+      nil
+      nixpkgs-fmt
+      go-task
+      sops
+      pre-commit
+      gitleaks
+    ];
+  };
 }
