@@ -3,6 +3,7 @@ ignore: |
   .direnv/
   .private/
   .vscode/
+  **/*.sops.yaml
 
 extends: default
 

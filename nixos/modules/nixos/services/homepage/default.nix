@@ -160,7 +160,7 @@ in
       # not using docker socket for discovery, just
       # building up the apps from a shared key
       # this is a bit more tedious, but more secure
-      # from not exposing docker socet and makes it 
+      # from not exposing docker socet and makes it
       # easier to have/move services between hosts
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
