@@ -69,6 +69,10 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
+      # setup devshells against shell.nix
+      devShells = forAllSystems (pkgs: import ./shell.nix { inherit pkgs; });
+
+
       nixosConfigurations =
         # with self.lib;
         let

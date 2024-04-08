@@ -129,10 +129,21 @@ let
         type = "cloudflared";
       };
     };
+    "Prusa Octoprint" = {
+      href = "http://prusa:5000"; # TODO fix with better hostname
+      description = "Prusa MK3s 3D printer";
+      icon = "octoprint";
+      widget = {
+        type = "octoprint";
+        url = "http://octoprint.host.or.ip:port";
+        key = "{{HOMEPAGE_VAR_PRUSA_OCTOPRINT_API}}";
+      };
+    };
+    extraHome = [ ];
   }];
   services = [
     { Infrastructure = cfg.infrastructure-services ++ extraInfrastructure; }
-    { Home = cfg.home-services; }
+    { Home = cfg.home-services ++ extraHome; }
     { Media = cfg.media-services; }
   ];
   servicesFile = builtins.toFile "homepage-config.yaml" (builtins.toJSON services);
@@ -162,6 +173,8 @@ in
   config = mkIf cfg.enable {
 
     # homepage secrets
+    # ensure you dont have whitespace around your ='s!
+    # ex: HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API="supersecretlol"
     sops.secrets."services/homepage/env" = {
       # configure secret for forwarding rules
       sopsFile = ./secrets.sops.yaml;
@@ -242,14 +255,18 @@ in
       # easier to have/move services between hosts
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
-        "${settingsFile}:/app/config/settings.yaml"
-        "${servicesFile}:/app/config/services.yaml"
-        "${bookmarksFile}:/app/config/bookmarks.yaml"
-        "${widgetsFile}:/app/config/widgets.yaml"
-        "${emptyFile}:/app/config/docker.yaml"
-        "${emptyFile}:/app/config/kubernetes.yaml"
+        "${settingsFile}:/app/config/settings.yaml:ro"
+        "${servicesFile}:/app/config/services.yaml:ro"
+        "${bookmarksFile}:/app/config/bookmarks.yaml:ro"
+        "${widgetsFile}:/app/config/widgets.yaml:ro"
+        "${emptyFile}:/app/config/docker.yaml:ro"
+        "${emptyFile}:/app/config/kubernetes.yaml:ro"
       ];
 
+      extraOptions = [
+        "--read-only"
+        "--tmpfs=/app/config"
+      ];
     };
 
 
