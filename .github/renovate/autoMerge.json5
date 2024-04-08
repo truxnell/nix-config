@@ -14,7 +14,7 @@
         'onedr0p/lidarr',
         'onedr0p/prowlarr'
       ]
-    }
+    },
     {
       "matchDatasources": ['docker'],
       "automerge": "true",
