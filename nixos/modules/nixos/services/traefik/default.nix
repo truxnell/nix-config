@@ -11,15 +11,6 @@ in
 {
   options.mySystem.services.traefik.enable = mkEnableOption "Traefik reverse proxy";
 
-  # TODO add to homepage
-  # modules.homepage.infrastructure-services = [{
-  #   Traefik = {
-  #     icon = "traefik.svg";
-  #     description = "Reverse proxy";
-  #     href = "https://traefik.dhupar.xyz:444";
-  #   };
-  # }];
-
   config = mkIf cfg.enable {
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];

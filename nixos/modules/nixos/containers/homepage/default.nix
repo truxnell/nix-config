@@ -14,6 +14,7 @@ let
 
   cfg = config.mySystem.services.homepage;
 
+  # TODO refactor out this sht
   settings =
     {
       title = "NatFlix";
@@ -96,51 +97,62 @@ let
   ];
   widgetsFile = builtins.toFile "homepage-widgets.yaml" (builtins.toJSON widgets);
 
-  extraInfrastructure = [{
-    "UDMP" = {
-      href = "https://10.8.10.1";
-      description = "Unifi Dream Machine Pro";
-      icon = "ubiquiti";
-      widget = {
-        url = "https://10.8.10.1:443";
-        username = "unifi_read_only";
-        password = "Uk!5x&VriWWh@5";
-        type = "unifi";
+  extraInfrastructure = [
+    {
+      "UDMP" = {
+        href = "https://10.8.10.1";
+        description = "Unifi Dream Machine Pro";
+        icon = "ubiquiti";
+        widget = {
+          url = "https://10.8.10.1:443";
+          username = "unifi_read_only";
+          password = "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}";
+          type = "unifi";
+        };
       };
-    };
-    "Nextdns" = {
-      href = "https://my.nextdns.io/";
-      description = "Adblocking DNS";
-      icon = "nextdns";
-      widget = {
-        profile = "{{HOMEPAGE_VAR_NEXTDNS_TRUSTED_PROFILE}}";
-        key = "{{HOMEPAGE_VAR_NEXTDNS_API_KEY}}";
-        type = "nextdns";
+    }
+    {
+      "Nextdns" = {
+        href = "https://my.nextdns.io/";
+        description = "Adblocking DNS";
+        icon = "nextdns";
+        widget = {
+          profile = "{{HOMEPAGE_VAR_NEXTDNS_TRUSTED_PROFILE}}";
+          key = "{{HOMEPAGE_VAR_NEXTDNS_API_KEY}}";
+          type = "nextdns";
+        };
       };
-    };
-    "Cloudflare" = {
-      href = "https://dash.cloudflare.com";
-      description = "DNS and security provider";
-      icon = "cloudflare";
-      widget = {
-        key = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API}}";
-        accountid = "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}";
-        tunnelid = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}";
-        type = "cloudflared";
+    }
+    {
+      "Cloudflare" = {
+        href = "https://dash.cloudflare.com";
+        description = "DNS and security provider";
+        icon = "cloudflare";
+        widget = {
+          key = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API}}";
+          accountid = "{{HOMEPAGE_VAR_CLOUDFLARE_ACCOUNT_ID}}";
+          tunnelid = "{{HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_ID}}";
+          type = "cloudflared";
+        };
       };
-    };
-    "Prusa Octoprint" = {
-      href = "http://prusa:5000"; # TODO fix with better hostname
-      description = "Prusa MK3s 3D printer";
-      icon = "octoprint";
-      widget = {
-        type = "octoprint";
-        url = "http://octoprint.host.or.ip:port";
-        key = "{{HOMEPAGE_VAR_PRUSA_OCTOPRINT_API}}";
+    }
+
+  ];
+
+  extraHome = [
+    {
+      "Prusa Octoprint" = {
+        href = "http://prusa:5000"; # TODO fix with better hostname
+        description = "Prusa MK3s 3D printer";
+        icon = "octoprint";
+        widget = {
+          type = "octoprint";
+          url = "http://prusa:5000";
+          key = "{{HOMEPAGE_VAR_PRUSA_OCTOPRINT_API}}";
+        };
       };
-    };
-    extraHome = [ ];
-  }];
+    }
+  ];
   services = [
     { Infrastructure = cfg.infrastructure-services ++ extraInfrastructure; }
     { Home = cfg.home-services ++ extraHome; }

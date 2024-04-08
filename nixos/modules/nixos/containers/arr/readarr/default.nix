@@ -39,6 +39,7 @@ in
       image = "${image}";
       user = "${user}:${group}";
       environment = {
+        TZ = "${config.time.timeZone}";
         READARR__INSTANCE_NAME = "Lidarr";
         READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
         READARR__LOG_LEVEL = "info";
@@ -58,7 +59,7 @@ in
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Readar = {
           icon = "${app}.png";
