@@ -152,9 +152,7 @@ in
             middlewares = "local-only@file";
             service = "api@internal";
           };
-
         };
-
       };
     };
 
@@ -162,7 +160,7 @@ in
       {
         Traefik = {
           icon = "traefik.png";
-          href = "https://traefik.${config.networking.domain}/dashboard";
+          href = "https://traefik.${config.networking.domain}/dashboard/";
           description = "Reverse Proxy";
           widget = {
             type = "traefik";
