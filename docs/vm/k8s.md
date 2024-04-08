@@ -7,4 +7,3 @@ Removed complexity
 - Database permissions operator -> why even??
 - secrets reloader -> sops restart_unit
 - easier managment, all services run through systemd for consistency, cockpit makes viewing logs/pod console etc easy.
-
