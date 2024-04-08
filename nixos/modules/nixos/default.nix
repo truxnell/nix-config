@@ -8,6 +8,7 @@
     ./de
     ./editor
     ./hardware
+    ./containers
   ];
 
   options.mySystem.persistentFolder = lib.mkOption {

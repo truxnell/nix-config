@@ -20,7 +20,7 @@
     radarr.enable = true;
     lidarr.enable = true;
     readarr.enable = true;
-
+    gatus.enable = true;
   };
   mySystem.nfs.nas.enable = true;
 

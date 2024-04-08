@@ -60,7 +60,7 @@ in
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Radarr = {
           icon = "${app}.png";

@@ -59,7 +59,7 @@ in
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Prowlarr = {
           icon = "${app}.png";
