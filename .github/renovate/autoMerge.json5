@@ -12,20 +12,18 @@
         'onedr0p/readarr',
         'onedr0p/radarr',
         'onedr0p/lidarr',
-        'onedr0p/prowlarr',
-      ],
-
-  // auto update up to minor
-  "packageRules": [
+        'onedr0p/prowlarr'
+      ]
+    }
     {
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
-        "gethomepage/homepage",
-      ],
+        "gethomepage/homepage"
+      ]
 
-    },
-  ],
+    }
+  ]
 }
