@@ -2,3 +2,4 @@
 **/*.tmp.sops.yaml
 result
 .direnv
+**/*.sops.tmp.yaml
