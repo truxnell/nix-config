@@ -6,7 +6,7 @@
 with lib;
 let
   app = "homepage";
-  image = "ghcr.io/gethomepage/homepage:v0.8.10";
+  image = "ghcr.io/gethomepage/homepage:v0.8.11";
   user = "568"; #string
   group = "568"; #string
   port = 3000; #int
@@ -23,7 +23,7 @@ let
       showStats = true;
       disableCollape = true;
       cardBlur = "md";
-      statusStyle = "dot";
+      statusStyle = "none";
 
       datetime = {
         text_size = "l";
