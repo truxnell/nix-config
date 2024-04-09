@@ -38,6 +38,7 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn=["prowlarr"];
       environment = {
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.networking.domain}";

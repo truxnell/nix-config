@@ -192,10 +192,10 @@
             ];
           };
 
-          "shodan" = mkNixosConfig {
-            # Rpi for DNS and misc services
+          "durandal" = mkNixosConfig {
+            # test lenovo tiny
 
-            hostname = "shodan";
+            hostname = "durandal";
             system = "x86_64-linux";
             hardwareModules = [
               ./nixos/profiles/hw-generic-x86.nix

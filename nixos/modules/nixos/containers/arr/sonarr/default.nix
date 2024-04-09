@@ -39,6 +39,7 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn = [ "prowlarr" ];
       environment = {
         TZ = "${config.time.timeZone}";
         PUSHOVER_DEBUG = "false";
