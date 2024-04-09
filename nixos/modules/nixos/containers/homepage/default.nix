@@ -254,11 +254,15 @@ in
         config.sops.secrets."services/prowlarr/env".path
       ];
 
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
+      # labels = {
+      #   "traefik.enable" = "true";
+      #   "traefik.http.routers.${app}.entrypoints" = "websecure";
+      #   "traefik.http.routers.${app}.middlewares" = "local-ip-only@file";
+      #   "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
+      # };
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        port = port;
       };
       # not using docker socket for discovery, just
       # building up the apps from a shared key
@@ -281,7 +285,7 @@ in
       ];
     };
 
-    mySystem.services.gatus.monitors = [{
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
       name = app;
       group = "infrastructure";
       url = "https://${app}.${config.networking.domain}";

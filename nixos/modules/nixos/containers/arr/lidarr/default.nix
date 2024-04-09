@@ -52,12 +52,9 @@ in
         "/mnt/nas/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
-
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        port = port;
       };
     };
 
@@ -77,7 +74,8 @@ in
       }
     ];
 
-    mySystem.services.gatus.monitors = [{
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
       name = app;
       group = "arr";
       url = "https://${app}.${config.networking.domain}";

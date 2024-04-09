@@ -15,7 +15,8 @@ with lib;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
     mySystem.services.cockpit.enable = true;
-    mySystem.services.gatus.monitors = [{
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
       name = config.networking.hostName;
       group = "servers";
       url = "icmp://${config.networking.hostName}.l.trux.dev";

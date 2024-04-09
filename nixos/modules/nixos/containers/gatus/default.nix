@@ -95,12 +95,12 @@ in
         "${persistentFolder}:/config:rw"
         "${configFile}:/config/config.yaml:ro"
       ];
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
+
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        port = port;
       };
+
       extraOptions = [ "--cap-add=NET_RAW" ];
     };
 
