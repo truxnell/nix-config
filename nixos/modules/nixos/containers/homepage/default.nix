@@ -23,7 +23,7 @@ let
       showStats = true;
       disableCollape = true;
       cardBlur = "md";
-      statusStyle = "dot";
+      statusStyle = "none";
 
       datetime = {
         text_size = "l";

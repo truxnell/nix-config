@@ -27,7 +27,7 @@ in
     };
 
     # add user to group to view files/storage
-    users.user.truxnell.extraGroups = [ config.services.traefik.group ];
+    users.users.truxnell.extraGroups = [ config.services.traefik.group ];
 
     services.traefik = {
       enable = true;

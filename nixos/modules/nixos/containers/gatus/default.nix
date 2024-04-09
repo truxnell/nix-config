@@ -59,15 +59,9 @@ let
           interval = "30s";
           conditions = [ "[CONNECTED] == true" ];
         }
-        {
-          name = "helios";
-          group = "k8s";
-          url = "icmp://helios.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
+
       ];
-    };
+    } ++ config.mySystem.services.gatus.monitors;
   configFile = builtins.toFile "config.yaml" (builtins.toJSON configVar);
 
 in
