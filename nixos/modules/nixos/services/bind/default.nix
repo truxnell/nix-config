@@ -42,13 +42,13 @@ in
 
         options {
           listen-on port 5353 { any; };
+          listen-on-v6 port 5353 { ::1; };
           allow-query { cachenetworks; };
           blackhole { badnetworks; };
           forward first;
           forwarders {  10.8.10.1;  };
           directory "/run/named";
           pid-file "/run/named/named.pid";
-          listen-on port 5353 { any; };
         recursion yes;
         dnssec-validation auto;
 

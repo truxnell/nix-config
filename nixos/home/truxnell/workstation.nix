@@ -12,6 +12,7 @@ with config;
 
   myHome.security = {
     ssh = {
+      #TODO make this dynamic
       enable = true;
       matchBlocks = {
         citadel = {
@@ -40,6 +41,12 @@ with config;
           user = "root";
           identityFile = "~/.ssh/id_ed25519";
         };
+        durandal = {
+          hostname = "durandal";
+          port = 22;
+          identityFile = "~/.ssh/id_ed25519";
+        };
+
         helios = {
           hostname = "helios";
           user = "nat";

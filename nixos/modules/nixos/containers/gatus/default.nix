@@ -15,23 +15,57 @@ let
   containerPersistentFolder = "/config";
   configVar =
     {
-      metrics = "true";
+      metrics = true;
       endpoints = [
         {
           name = "firewall";
           group = "servers";
-          url = "icmp://10.8.10.1";
+          url = "icmp://unifi.l.trux.dev";
           interval = "30s";
           conditions = [ "[CONNECTED] == true" ];
         }
         {
           name = "pikvm";
           group = "servers";
-          url = "icmp://10.8.20.60";
+          url = "icmp://pikvm.l.trux.dev";
           interval = "30s";
           conditions = [ "[CONNECTED] == true" ];
         }
-
+        {
+          name = "octoprint";
+          group = "servers";
+          url = "icmp://prusa.l.trux.dev";
+          interval = "30s";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+        {
+          name = "shodan";
+          group = "k8s";
+          url = "icmp://shodan.l.trux.dev";
+          interval = "30s";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+        {
+          name = "icarus";
+          group = "k8s";
+          url = "icmp://icarus.l.trux.dev";
+          interval = "30s";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+        {
+          name = "xerxes";
+          group = "k8s";
+          url = "icmp://xerxes.l.trux.dev";
+          interval = "30s";
+          conditions = [ "[CONNECTED] == true" ];
+        }
+        {
+          name = "helios";
+          group = "k8s";
+          url = "icmp://helios.l.trux.dev";
+          interval = "30s";
+          conditions = [ "[CONNECTED] == true" ];
+        }
       ];
     };
   configFile = builtins.toFile "config.yaml" (builtins.toJSON configVar);
@@ -64,7 +98,7 @@ in
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
         "${persistentFolder}:/config:rw"
-        # "${configFile}:/config/config.yaml:ro"
+        "${configFile}:/config/config.yaml:ro"
       ];
       labels = {
         "traefik.enable" = "true";
@@ -72,6 +106,7 @@ in
         "traefik.http.routers.${app}.middlewares" = "local-only@file";
         "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
       };
+      extraOptions = [ "--cap-add=NET_RAW" ];
     };
 
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [

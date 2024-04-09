@@ -38,6 +38,7 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn=["prowlarr"];
       environment = {
         TZ = "${config.time.timeZone}";
         READARR__INSTANCE_NAME = "Lidarr";

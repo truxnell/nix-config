@@ -43,7 +43,7 @@
     };
   };
 
-  networking.hostName = "shodan1"; # Define your hostname.
+  networking.hostName = "durandal"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
 
   fileSystems."/" =
