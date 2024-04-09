@@ -170,5 +170,13 @@ in
       }
     ];
 
+    mySystem.services.gatus.monitors = [{
+      name = "traefik";
+      group = "infrastructure";
+      url = "https://traefik.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

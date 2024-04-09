@@ -38,7 +38,7 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      dependsOn=["prowlarr"];
+      dependsOn = [ "prowlarr" ];
       environment = {
         TZ = "${config.time.timeZone}";
         READARR__INSTANCE_NAME = "Lidarr";
@@ -75,5 +75,14 @@ in
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = [{
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

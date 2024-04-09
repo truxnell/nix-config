@@ -6,12 +6,8 @@ cd /home/andreas/.nixos
 
 hosts=($(echo $(nix eval .#nixosConfigurations --apply 'pkgs: builtins.concatStringsSep " " (builtins.attrNames pkgs)') | xargs))
 skip=(
-    "desktop-vm"
-    "gwyn"
-    "loki-test"
-    "mobile"
-    "staubfinger"
-    "test-raspi"
+    "citadel"
+    "rickenbacker"
 )
 
 rsa_key="$HOME/.nixos/secrets/ssh_keys/ansible/ansible.key"

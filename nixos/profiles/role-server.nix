@@ -15,6 +15,13 @@ with lib;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
     mySystem.services.cockpit.enable = true;
+    mySystem.services.gatus.monitors = [{
+      name = config.networking.hostName;
+      group = "servers";
+      url = "icmp://${config.networking.hostName}.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
 
     nix.settings = {
       # TODO factor out into mySystem

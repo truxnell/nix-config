@@ -78,5 +78,14 @@ in
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = [{
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

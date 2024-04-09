@@ -38,7 +38,7 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      dependsOn=["prowlarr"];
+      dependsOn = [ "prowlarr" ];
       environment = {
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
@@ -76,5 +76,14 @@ in
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = [{
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

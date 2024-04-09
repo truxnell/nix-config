@@ -13,61 +13,56 @@ let
   cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
   containerPersistentFolder = "/config";
+  extraEndpoints = [
+    {
+      name = "firewall";
+      group = "servers";
+      url = "icmp://unifi.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "pikvm";
+      group = "servers";
+      url = "icmp://pikvm.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "octoprint";
+      group = "servers";
+      url = "icmp://prusa.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "icarus";
+      group = "k8s";
+      url = "icmp://icarus.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "xerxes";
+      group = "k8s";
+      url = "icmp://xerxes.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "helios";
+      group = "k8s";
+      url = "icmp://helios.l.trux.dev";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }
+  ] ++ config.mySystem.services.gatus.monitors;
   configVar =
     {
       metrics = true;
-      endpoints = [
-        {
-          name = "firewall";
-          group = "servers";
-          url = "icmp://unifi.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "pikvm";
-          group = "servers";
-          url = "icmp://pikvm.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "octoprint";
-          group = "servers";
-          url = "icmp://prusa.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "shodan";
-          group = "k8s";
-          url = "icmp://shodan.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "icarus";
-          group = "k8s";
-          url = "icmp://icarus.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "xerxes";
-          group = "k8s";
-          url = "icmp://xerxes.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-        {
-          name = "helios";
-          group = "k8s";
-          url = "icmp://helios.l.trux.dev";
-          interval = "30s";
-          conditions = [ "[CONNECTED] == true" ];
-        }
-      ];
+      endpoints = extraEndpoints;
     };
+
   configFile = builtins.toFile "config.yaml" (builtins.toJSON configVar);
 
 in
