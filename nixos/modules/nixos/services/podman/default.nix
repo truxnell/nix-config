@@ -35,12 +35,11 @@ in
 
       # extra user for containers
       users.users.kah = {
-
         uid = 568;
         group = "kah";
-
       };
       users.groups.kah = { };
+      users.users.truxnell.extraGroups = [ "kah" ];
     };
 
 }

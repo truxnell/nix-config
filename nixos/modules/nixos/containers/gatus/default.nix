@@ -86,18 +86,20 @@ in
 
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+    # systemd.tmpfiles.rules = [
+    #   "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
 
-    ];
+    # ];
 
+    # Note there is no storage listed here, its a impermanent container
+    # more for instant alerting than long-term storage/viewing.
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
       # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
-        "${persistentFolder}:/config:rw"
+        # "${persistentFolder}:/config:rw" # I dont *really* need persistent results, more instant alterting
         "${configFile}:/config/config.yaml:ro"
       ];
       labels = {
@@ -106,7 +108,10 @@ in
         "traefik.http.routers.${app}.middlewares" = "local-only@file";
         "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
       };
-      extraOptions = [ "--cap-add=NET_RAW" ];
+      extraOptions = [
+        "--read-only"
+        "--cap-add=NET_RAW"
+      ];
     };
 
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [

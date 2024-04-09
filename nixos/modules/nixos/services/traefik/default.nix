@@ -26,6 +26,9 @@ in
       ];
     };
 
+    # add user to group to view files/storage
+    users.user.truxnell.extraGroups = [ config.services.traefik.group ];
+
     services.traefik = {
       enable = true;
       group = "podman"; # podman backend, required to access socket
