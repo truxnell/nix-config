@@ -5,12 +5,12 @@
 }:
 with lib;
 let
-  app = "readarr";
-  image = "ghcr.io/onedr0p/readarr-nightly:0.3.23.2500";
+  app = "sabnzbd";
+  image = "ghcr.io/onedr0p/sabnzbd:4.2.3@sha256:bb20d3940ff32c672111ad7169ce4156f1c4c08bb653241f1b14f6d00f93b3cc";
   user = "568"; #string
   group = "568"; #string
-  port = 8787; #int
-  cfg = config.mySystem.services.sonarr;
+  port = 8080; #int
+  cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
 {
@@ -26,26 +26,12 @@ in
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
-    sops.secrets."services/${app}/env" = {
-
-      # configure secret for forwarding rules
-      sopsFile = ./secrets.sops.yaml;
-      owner = config.users.users.kah.name;
-      inherit (config.users.users.kah) group;
-      restartUnits = [ "podman-${app}.service" ];
-    };
-
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      dependsOn = [ "prowlarr" ];
       environment = {
-        TZ = "${config.time.timeZone}";
-        READARR__INSTANCE_NAME = "Lidarr";
-        READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        READARR__LOG_LEVEL = "info";
+        SABNZBD__HOST_WHITELIST_ENTRIES = "sabnzbd, sabnzbd.trux.dev";
       };
-      environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
         "/mnt/nas/natflix:/media:rw"
@@ -59,15 +45,15 @@ in
 
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Readar = {
+        Sabnzbd = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "Book management";
+          description = "Usenet Downloader";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "https://${app}.${config.networking.domain}";
-            key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_SABNZBD__API_KEY}}";
           };
         };
       }

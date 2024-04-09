@@ -21,6 +21,7 @@
     lidarr.enable = true;
     readarr.enable = true;
     gatus.enable = true;
+    sabnzbd.enable = true;
   };
   mySystem.nfs.nas.enable = true;
 

@@ -113,7 +113,7 @@ in
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "http://${app}:${toString port}";
+            url = "https://${app}.${config.networking.domain}";
           };
         };
       }

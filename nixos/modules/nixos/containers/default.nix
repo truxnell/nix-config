@@ -3,5 +3,6 @@
     ./arr
     ./homepage
     ./gatus
+    ./sabnzbd
   ];
 }

@@ -65,7 +65,7 @@ in
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "http://${app}:${toString port}";
+            url = "https://${app}.${config.networking.domain}";
             key = "{{HOMEPAGE_VAR_PROWLARR__API_KEY}}";
           };
         };
