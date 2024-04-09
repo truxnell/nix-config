@@ -258,9 +258,8 @@
           };
         in
         {
-          dns01 = mkDeployConfig "10.8.10.11" self.nixosConfigurations.dns01;
-          dns02 = mkDeployConfig "10.8.10.10" self.nixosConfigurations.dns02;
-          shodan = mkDeployConfig "10.8.20.33" self.nixosConfigurations.shodan;
+          dns01 = mkDeployConfig "dns01" self.nixosConfigurations.dns01;
+          dns02 = mkDeployConfig "dns02" self.nixosConfigurations.dns02;
 
           # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
         };

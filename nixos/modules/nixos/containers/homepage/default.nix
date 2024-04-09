@@ -100,11 +100,11 @@ let
   extraInfrastructure = [
     {
       "UDMP" = {
-        href = "https://10.8.10.1";
+        href = "https://unifi.l.trux.dev";
         description = "Unifi Dream Machine Pro";
         icon = "ubiquiti";
         widget = {
-          url = "https://10.8.10.1:443";
+          url = "https://unifi.l.trux.dev:443";
           username = "unifi_read_only";
           password = "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}";
           type = "unifi";
