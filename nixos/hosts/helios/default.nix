@@ -26,6 +26,7 @@
     sabnzbd.enable = true;
     qbittorrent.enable = true;
   };
+  mySystem.nasFolder = "/tank/";
 
   mySystem.system = {
     zfs.enable = true;
@@ -66,7 +67,7 @@
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/4D87-0642";
+      device = "/dev/disk/by-uuid/F42E-1E48";
       fsType = "vfat";
     };
 
@@ -83,7 +84,7 @@
     };
 
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/4939bb1a-221c-455a-9011-a633f81490da"; }];
+    [{ device = "/dev/disk/by-uuid/c2f716ef-9e8c-466b-bcb0-699397cb2dc0"; }];
 
 
 

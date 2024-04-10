@@ -17,5 +17,10 @@
     default = "/persist/nixos/";
   };
 
+  options.mySystem.nasFolder = lib.mkOption {
+    type = lib.types.str;
+    description = "folder where nas mounts reside";
+    default = "/mnt/nas";
+  };
 
 }

@@ -49,7 +49,7 @@ in
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
-        "/mnt/nas/natflix:/media:rw"
+        "${config.mySystem.nasFolder}natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
