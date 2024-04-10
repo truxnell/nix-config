@@ -2,16 +2,12 @@
 
 set -e
 
-cd /home/andreas/.nixos
-
 hosts=($(echo $(nix eval .#nixosConfigurations --apply 'pkgs: builtins.concatStringsSep " " (builtins.attrNames pkgs)') | xargs))
 skip=(
     "citadel"
     "rickenbacker"
 )
 
-rsa_key="$HOME/.nixos/secrets/ssh_keys/ansible/ansible.key"
-export NIX_SSHOPTS="-t -i $rsa_key"
 reboot=0
 
 while getopts ":r" option; do
@@ -27,7 +23,7 @@ for host in "${hosts[@]}"; do
     if [[ " ${skip[*]} " =~ " ${host} " ]]; then
         continue
     fi
-    fqdn="$host.2li.local"
+    fqdn="$host.l.trux.dev"
     if [ $reboot -eq 0 ]; then
         echo $fqdn
         nixos-rebuild switch -j auto --use-remote-sudo --target-host $fqdn --flake ".#$host"

@@ -4,5 +4,6 @@
     ./homepage
     ./gatus
     ./sabnzbd
+    ./qbittorrent
   ];
 }

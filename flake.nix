@@ -206,6 +206,21 @@
             ];
           };
 
+          "helios" = mkNixosConfig {
+            # lenovo tiny NAS
+
+            hostname = "helios";
+            system = "x86_64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-generic-x86.nix
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+            ];
+          };
+
+
 
         };
 

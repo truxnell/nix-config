@@ -22,6 +22,16 @@ in
       # Restart dnscrypt when secret changes
       "system/networking/bind/trux.dev".restartUnits = [ "bind.service" ];
     };
+    sops.secrets = {
+
+      # configure secret for forwarding rules
+      "system/networking/bind/natallan.com".sopsFile = ./secrets.sops.yaml;
+      "system/networking/bind/natallan.com".mode = "0444"; # This is world-readable but theres nothing security related in the file
+
+      # Restart dnscrypt when secret changes
+      "system/networking/bind/natallan.com".restartUnits = [ "bind.service" ];
+    };
+
 
     networking.resolvconf.useLocalResolver = mkForce false;
 
@@ -89,6 +99,17 @@ in
           allow-query { any; };
 
         };
+        zone "natallan.com." {
+          type master;
+          file "${config.sops.secrets."system/networking/bind/natallan.com".path}";
+          allow-transfer {
+
+        };
+
+          allow-query { any; };
+
+        };
+
 
       '';
 
