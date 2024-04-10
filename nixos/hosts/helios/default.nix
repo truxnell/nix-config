@@ -64,6 +64,12 @@
       fsType = "zfs";
     };
 
+  fileSystems."/boot" =
+    {
+      device = "/dev/disk/by-uuid/4D87-0642";
+      fsType = "vfat";
+    };
+
   fileSystems."/nix" =
     {
       device = "rpool/local/nix";
@@ -75,11 +81,10 @@
       device = "rpool/safe/persist";
       fsType = "zfs";
     };
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/B19B-8223";
-      fsType = "vfat";
-    };
+
+  swapDevices =
+    [{ device = "/dev/disk/by-uuid/4939bb1a-221c-455a-9011-a633f81490da"; }];
+
 
 
   swapDevices =
