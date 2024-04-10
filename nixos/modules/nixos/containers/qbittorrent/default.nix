@@ -6,7 +6,7 @@
 with lib;
 let
   app = "qbittorrent";
-  image = "ghcr.io/onedr0p/qbittorrent:4.6.3@sha256:f2895e632fe66299d8ccc68265cc11aea92a232b7d0844de9961864b3e504026";
+  image = "ghcr.io/onedr0p/qbittorrent:4.6.4@sha256:cb8a7df4e63bf410834af7846b6d5eee4f10748d03819ee7218015c5b0332a29";
   user = "568"; #string
   group = "568"; #string
   port = 8080; #int
