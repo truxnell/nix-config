@@ -7,13 +7,11 @@
     ],
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
     "ignoreTests": "false",
-    "automerge": "true",
 
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
     "nix": {
         "enabled": "true",
-        "automerge": "true",
     },
 
     "lockFileMaintenance": {
