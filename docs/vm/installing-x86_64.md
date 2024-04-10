@@ -72,7 +72,7 @@ cat /etc/ssh/ssh_host_ed25519_key.pub | ssh-to-age
 
 then run task
 
-Login as user, copy nix git
+Login as user, copy nix git OR for remote machines/servers just `nixos-install --impure --flake github:truxnell/nix-config#<MACHINE_ID>`
 
 ```sh
 mkdir .local

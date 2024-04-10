@@ -51,3 +51,5 @@ mkdir /mnt/persist
 mount -t zfs rpool/safe/persist /mnt/persist
 
 Set ` networking.hostid`` in the nixos config to  `head -c 8 /etc/machine-id`
+
+nixos-install --impure --flake github:truxnell/nix-config#<MACHINE_ID>
