@@ -206,7 +206,7 @@ in
 
       labels = config.lib.mySystem.mkTraefikLabels {
         name = app;
-        port = port;
+        inherit port;
       };
 
       extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring

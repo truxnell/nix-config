@@ -54,7 +54,7 @@ in
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
         name = app;
-        port = port;
+        inherit port;
       };
     };
 

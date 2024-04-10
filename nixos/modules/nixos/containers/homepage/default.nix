@@ -262,7 +262,7 @@ in
       # };
       labels = config.lib.mySystem.mkTraefikLabels {
         name = app;
-        port = port;
+        inherit port;
       };
       # not using docker socket for discovery, just
       # building up the apps from a shared key

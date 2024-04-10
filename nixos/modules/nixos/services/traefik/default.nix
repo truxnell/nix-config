@@ -17,7 +17,7 @@ in
 
     lib.mySystem.mkTraefikLabels = options: (
       let
-        name = options.name;
+        inherit (options) name;
         subdomain = if builtins.hasAttr "subdomain" options then options.subdomain else options.name;
         # created if port is specified
         service = if builtins.hasAttr "service" options then options.service else options.name;
