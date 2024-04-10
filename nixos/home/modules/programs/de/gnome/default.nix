@@ -30,7 +30,7 @@ with lib.hm.gvariant; {
         favorite-apps = [ "org.gnome.Nautilus.desktop" "firefox.desktop" "org.wezfurlong.wezterm.desktop" "PrusaGcodeviewer.desktop" "spotify.desktop" "org.gnome.Console.desktop" "codium.desktop" "discord.desktop" ];
       };
       "org/gnome/nautilus/preferences" = {
-        default-folder-viewer = "icon-view";
+        default-folder-viewer = "list-view";
       };
       "org/gnome/nautilus/icon-view" = {
         default-zoom-level = "small";

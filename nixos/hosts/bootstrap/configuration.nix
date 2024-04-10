@@ -16,6 +16,7 @@
 
   networking = {
     hostName = "nixos-bootstrap";
+    hostId = ""; # set to `head -c 8 /etc/machine-id`
     dhcpcd.enable = true;
   };
   # Pick only one of the below networking options.

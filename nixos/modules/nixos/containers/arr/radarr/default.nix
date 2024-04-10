@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "readarr";
-  image = "ghcr.io/onedr0p/readarr-nightly:0.3.23.2506";
+  app = "radarr";
+  image = "ghcr.io/onedr0p/radarr:5.3.6.8612@sha256:4dcf3bb47fb83ca2fc8cfb7a35b3130aabf51e5042a68915e4182ebed203e1bf";
   user = "568"; #string
   group = "568"; #string
-  port = 8787; #int
+  port = 7878; #int
   cfg = config.mySystem.services.sonarr;
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
@@ -38,40 +38,50 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn = [ "prowlarr" ];
       environment = {
-        READARR__INSTANCE_NAME = "Lidarr";
-        READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        READARR__LOG_LEVEL = "info";
+        PUSHOVER_DEBUG = "false";
+        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
+        RADARR__INSTANCE_NAME = "Radarr";
+        RADARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        RADARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
-        "/mnt/nas/natflix:/media:rw"
+        "/mnt/nas/natflix/series:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
-
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        inherit port;
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Readar = {
+        Radarr = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "Book management";
+          description = "Movie management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
+            url = "https://${app}.${config.networking.domain}";
+            key = "{{HOMEPAGE_VAR_RADARR__API_KEY}}";
           };
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

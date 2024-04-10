@@ -13,6 +13,8 @@
 
   mySystem.services = {
     openssh.enable = true;
+
+    #containers
     podman.enable = true;
     traefik.enable = true;
     homepage.enable = true;
@@ -20,15 +22,22 @@
     radarr.enable = true;
     lidarr.enable = true;
     readarr.enable = true;
-
+    gatus.enable = true;
+    sabnzbd.enable = true;
+    qbittorrent.enable = true;
   };
-  mySystem.nfs.nas.enable = true;
+
+  mySystem.system = {
+    zfs.enable = true;
+    zfs.mountPoolsAtBoot = [ "tank" ];
+    zfs.impermanenceRollback = true;
+  };
 
   boot = {
 
-    initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+    initrd.availableKernelModules = [ "xhci_pci" "ahci" "mpt3sas" "nvme" "usbhid" "usb_storage" "sd_mod" ];
     initrd.kernelModules = [ ];
-    kernelModules = [ ];
+    kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
 
     # for managing/mounting ntfs
@@ -43,23 +52,36 @@
     };
   };
 
-  networking.hostName = "shodan1"; # Define your hostname.
+  networking.hostName = "helios"; # Define your hostname.
+  networking.hostId = "fae0e831"; # for zfs, helps stop importing to wrong machine
   networking.useDHCP = lib.mkDefault true;
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/2e843998-f409-4ccc-bc7c-07099ee0e936";
-      fsType = "ext4";
+      device = "rpool/local/root";
+      fsType = "zfs";
     };
 
+  fileSystems."/nix" =
+    {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/persist" =
+    {
+      device = "rpool/safe/persist";
+      fsType = "zfs";
+    };
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/12CE-A600";
+      device = "/dev/disk/by-uuid/B19B-8223";
       fsType = "vfat";
     };
 
+
   swapDevices =
-    [{ device = "/dev/disk/by-uuid/0ae2765b-f3f4-4b1a-8ea6-599f37504d70"; }];
+    [{ device = "/dev/disk/by-uuid/1d7b6e4a-aa76-4217-af18-44378c2d93d9"; }];
 
 
 

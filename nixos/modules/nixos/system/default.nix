@@ -5,5 +5,6 @@
     ./security.nix
     ./systempackages.nix
     ./nix.nix
+    ./zfs.nix
   ];
 }

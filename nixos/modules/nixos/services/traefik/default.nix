@@ -11,16 +11,33 @@ in
 {
   options.mySystem.services.traefik.enable = mkEnableOption "Traefik reverse proxy";
 
-  # TODO add to homepage
-  # modules.homepage.infrastructure-services = [{
-  #   Traefik = {
-  #     icon = "traefik.svg";
-  #     description = "Reverse proxy";
-  #     href = "https://traefik.dhupar.xyz:444";
-  #   };
-  # }];
+
 
   config = mkIf cfg.enable {
+
+    lib.mySystem.mkTraefikLabels = options: (
+      let
+        inherit (options) name;
+        subdomain = if builtins.hasAttr "subdomain" options then options.subdomain else options.name;
+        # created if port is specified
+        service = if builtins.hasAttr "service" options then options.service else options.name;
+        middleware = if builtins.hasAttr "middleware" options then options.middleware else "local-ip-only@file";
+      in
+      {
+        "traefik.enable" = "true";
+        "traefik.http.routers.${name}.rule" = "Host(`${options.name}.${config.networking.domain}`)";
+        "traefik.http.routers.${name}.entrypoints" = "websecure";
+        "traefik.http.routers.${name}.middlewares" = "${middleware}";
+      } // lib.attrsets.optionalAttrs (builtins.hasAttr "port" options) {
+        "traefik.http.routers.${name}.service" = service;
+        "traefik.http.services.${service}.loadbalancer.server.port" = "${builtins.toString options.port}";
+      } // lib.attrsets.optionalAttrs (builtins.hasAttr "scheme" options) {
+        "traefik.http.routers.${name}.service" = service;
+        "traefik.http.services.${service}.loadbalancer.server.scheme" = "${options.scheme}";
+      } // lib.attrsets.optionalAttrs (builtins.hasAttr "service" options) {
+        "traefik.http.routers.${name}.service" = service;
+      }
+    );
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -34,6 +51,9 @@ in
         config.sops.secrets."system/services/traefik/apiTokenFile".path
       ];
     };
+
+    # add user to group to view files/storage
+    users.users.truxnell.extraGroups = [ config.services.traefik.group ];
 
     services.traefik = {
       enable = true;
@@ -95,7 +115,7 @@ in
 
         http.middlewares = {
           # Whitelist local network and VPN addresses
-          local-only.ipWhiteList.sourceRange = [
+          local-ip-only.ipWhiteList.sourceRange = [
             "127.0.0.1/32" # localhost
             "192.168.0.0/16" # RFC1918
             "10.0.0.0/8" # RFC1918
@@ -158,13 +178,35 @@ in
               main = "${config.networking.domain}";
               sans = "*.${config.networking.domain}";
             }];
-            middlewares = "local-only@file";
+            middlewares = "local-ip-only@file";
             service = "api@internal";
           };
-
         };
-
       };
     };
+
+    mySystem.services.homepage.infrastructure-services = [
+      {
+        Traefik = {
+          icon = "traefik.png";
+          href = "https://traefik.${config.networking.domain}/dashboard/";
+          description = "Reverse Proxy";
+          widget = {
+            type = "traefik";
+            url = "https://traefik.${config.networking.domain}";
+          };
+        };
+      }
+    ];
+
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
+      name = "traefik";
+      group = "infrastructure";
+      url = "https://traefik.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

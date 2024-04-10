@@ -5,13 +5,14 @@
 }:
 with lib;
 let
-  app = "prowlarr";
-  image = "ghcr.io/onedr0p/prowlarr:1.15.0.4361@sha256:32a758a73d12a6a6d76cfa029784fa963a4f5b0ff6c34e985498ea099674560d";
+  app = "sonarr";
+  image = "ghcr.io/onedr0p/sonarr:4.0.3@sha256:4284def4b9fd2d3de2898ae3a6adc7aa84b9cd7f4407a35e7c61472519038396";
   user = "568"; #string
   group = "568"; #string
-  port = 9696; #int
-  cfg = config.mySystem.services.sonarr;
+  port = 8989; #int
+  cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =
@@ -38,41 +39,51 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn = [ "prowlarr" ];
       environment = {
+        TZ = "${config.time.timeZone}";
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
-        PROWLARR__INSTANCE_NAME = "Prowlarr";
-        PROWLARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        PROWLARR__LOG_LEVEL = "info";
+        SONARR__INSTANCE_NAME = "Radarr";
+        SONARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        SONARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:/config:rw"
+        "${persistentFolder}:${containerPersistentFolder}:rw"
+        "/mnt/nas/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
-
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        inherit port;
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Prowlarr = {
+        Sonarr = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "Content locator";
+          description = "TV show management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_PROWLARR__API_KEY}}";
+            url = "https://${app}.${config.networking.domain}";
+            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
           };
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

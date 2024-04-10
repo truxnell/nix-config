@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "lidarr";
-  image = "ghcr.io/onedr0p/lidarr:2.1.7";
+  app = "readarr";
+  image = "ghcr.io/onedr0p/readarr-nightly:0.3.23.2506";
   user = "568"; #string
   group = "568"; #string
-  port = 8686; #int
+  port = 8787; #int
   cfg = config.mySystem.services.sonarr;
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
@@ -38,12 +38,12 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
+      dependsOn = [ "prowlarr" ];
       environment = {
-        PUSHOVER_DEBUG = "false";
-        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
-        LIDARR__INSTANCE_NAME = "Lidarr";
-        LIDARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
-        LIDARR__LOG_LEVEL = "info";
+        TZ = "${config.time.timeZone}";
+        READARR__INSTANCE_NAME = "Lidarr";
+        READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        READARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
@@ -51,29 +51,36 @@ in
         "/mnt/nas/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${app}.entrypoints" = "websecure";
-        "traefik.http.routers.${app}.middlewares" = "local-only@file";
-        "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
-
+      labels = config.lib.mySystem.mkTraefikLabels {
+        name = app;
+        inherit port;
       };
     };
 
-    mySystem.services.homepage.media-services = [
+    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Lidarr = {
+        Readar = {
           icon = "${app}.png";
           href = "https://${app}.${config.networking.domain}";
-          description = "Music management";
+          description = "Book management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "http://${app}:${toString port}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
+            url = "https://${app}.${config.networking.domain}";
+            key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
           };
         };
       }
     ];
+
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
+      name = app;
+      group = "arr";
+      url = "https://${app}.${config.networking.domain}";
+      interval = "30s";
+      conditions = [ "[CONNECTED] == true" ];
+    }];
+
   };
 }

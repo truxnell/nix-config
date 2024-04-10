@@ -58,6 +58,7 @@ nixos-rebuild switch
 ```
 
 Set the password for the user that was created.
+Might need to use su?
 
 ```sh
 passwd truxnell
