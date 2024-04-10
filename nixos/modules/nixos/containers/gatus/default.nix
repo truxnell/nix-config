@@ -19,6 +19,7 @@ let
       group = "servers";
       url = "icmp://unifi.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -26,6 +27,7 @@ let
       group = "servers";
       url = "icmp://pikvm.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -33,6 +35,7 @@ let
       group = "servers";
       url = "icmp://prusa.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -40,6 +43,7 @@ let
       group = "k8s";
       url = "icmp://icarus.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -47,20 +51,123 @@ let
       group = "k8s";
       url = "icmp://xerxes.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
-      name = "helios";
+      name = "shodan";
       group = "k8s";
-      url = "icmp://helios.l.trux.dev";
+      url = "icmp://shodan.l.trux.dev";
       interval = "30s";
+      alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
+
+    {
+      name = "helios";
+      group = "servers";
+      url = "icmp://helios.l.trux.dev";
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "dns01 external dns";
+      group = "dns";
+      url = "dns01.l.trux.dev";
+      dns = {
+        query-name = "cloudflare.com";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+    {
+      name = "dns02 external dns";
+      group = "dns";
+      url = "dns02.l.trux.dev";
+      dns = {
+        query-name = "cloudflare.com";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+    {
+      name = "dns01 internal dns";
+      group = "dns";
+      url = "dns01.l.trux.dev";
+      dns = {
+        query-name = "unifi.l.trux.dev";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+    {
+      name = "dns02 internal dns";
+      group = "dns";
+      url = "dns02.l.trux.dev";
+      dns = {
+        query-name = "unifi.l.trux.dev";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+    {
+      name = "dns01 split DNS";
+      group = "dns";
+      url = "dns01.l.trux.dev";
+      dns = {
+        query-name = "${app}.trux.dev";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+    {
+      name = "dns02 split DNS";
+      group = "dns";
+      url = "dns02.l.trux.dev";
+      dns = {
+        query-name = "${app}.trux.dev";
+        query-type = "A";
+      };
+      interval = "30s";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[DNS_RCODE] == NOERROR" ];
+    }
+
+
   ] ++ config.mySystem.services.gatus.monitors;
+
+  configAlerting = {
+    pushover = {
+      title = "${app} Internal";
+      application-token = "$PUSHOVER_APP_TOKEN";
+      user-key = "$PUSHOVER_USER_KEY";
+      default-alert = {
+        failure-threshold = 5;
+        success-threshold = 2;
+        send-on-resolved = true;
+      };
+    };
+  };
   configVar =
     {
       metrics = true;
       endpoints = extraEndpoints;
+      alerting = configAlerting;
+      ui = {
+        title = "Home Status | Gatus";
+        header = "Home Status";
+      };
     };
 
   configFile = builtins.toFile "config.yaml" (builtins.toJSON configVar);
@@ -80,19 +187,20 @@ in
     };
 
   config = mkIf cfg.enable {
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+    sops.secrets."services/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = config.users.users.kah.name;
+      inherit (config.users.users.kah) group;
+      restartUnits = [ "podman-${app}.service" ];
+    };
 
-    ];
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
+      environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
-        "${persistentFolder}:/config:rw"
         "${configFile}:/config/config.yaml:ro"
       ];
 
@@ -101,7 +209,7 @@ in
         port = port;
       };
 
-      extraOptions = [ "--cap-add=NET_RAW" ];
+      extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
     };
 
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
