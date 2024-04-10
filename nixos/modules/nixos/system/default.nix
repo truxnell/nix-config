@@ -6,5 +6,6 @@
     ./systempackages.nix
     ./nix.nix
     ./zfs.nix
+    ./nfs
   ];
 }

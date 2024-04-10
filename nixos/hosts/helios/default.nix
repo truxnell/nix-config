@@ -33,6 +33,8 @@
     zfs.impermanenceRollback = true;
   };
 
+  mySystem.services.nfs.enable = true;
+
   boot = {
 
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "mpt3sas" "nvme" "usbhid" "usb_storage" "sd_mod" ];
