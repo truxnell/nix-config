@@ -8,16 +8,16 @@ in
 with lib;
 {
   options.mySystem.system.zfs = {
-    enable = mkEnableOption "zfs";
-    mountPoolsAtBoot = mkOption {
-      type = types.listOf types.str;
+    enable = lib.mkEnableOption "zfs";
+    mountPoolsAtBoot = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
     };
-    impermanenceRollback = mkEnableOption "Rollback root on boot for impermance";
+    impermanenceRollback = lib.mkEnableOption "Rollback root on boot for impermance";
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot = {
       supportedFilesystems = [
         "zfs"
@@ -27,9 +27,9 @@ with lib;
         extraPools = cfg.mountPoolsAtBoot;
       };
 
-      initrd.postDeviceCommands = mkIf cfg.impermanenceRollback mkAfter ''
+      initrd.postDeviceCommands = lib.mkIf cfg.impermanenceRollback (lib.mkAfter ''
         zfs rollback -r rpool/local/root@blank
-      '';
+      '');
 
     };
 
