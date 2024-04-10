@@ -55,7 +55,7 @@
   };
 
   networking.hostName = "helios"; # Define your hostname.
-  networking.hostId = "fae0e831"; # for zfs, helps stop importing to wrong machine
+  networking.hostId = "847817ba"; # for zfs, helps stop importing to wrong machine
   networking.useDHCP = lib.mkDefault true;
 
   fileSystems."/" =
