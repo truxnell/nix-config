@@ -64,9 +64,9 @@ let
     }
 
     {
-      name = "helios";
+      name = "daedalus";
       group = "servers";
-      url = "icmp://helios.l.trux.dev";
+      url = "icmp://daedalus.l.trux.dev";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];

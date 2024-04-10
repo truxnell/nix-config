@@ -78,7 +78,7 @@ in
       group = "arr";
       url = "https://${app}.${config.networking.domain}";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" ];
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
   };

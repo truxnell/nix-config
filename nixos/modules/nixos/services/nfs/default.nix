@@ -22,7 +22,7 @@ in
         mountConfig = {
           Options = "noatime";
         };
-        what = "helios:/tank";
+        what = "daedalus:/tank";
         where = "/mnt/nas";
       }];
 

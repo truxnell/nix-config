@@ -59,7 +59,7 @@ in
       enable = true;
       group = "podman"; # podman backend, required to access socket
 
-      dataDir = "${config.mySystem.persistentFolder}/traefik/";
+      dataDir = "${config.mySystem.persistentFolder}/traefik";
       # Required so traefik is permitted to watch docker events
       # group = "docker";
 
@@ -105,6 +105,7 @@ in
 
         certificatesResolvers.letsencrypt.acme = {
           dnsChallenge.provider = "cloudflare";
+          dnsChallenge.resolvers = [ "1.1.1.1:53" ];
           keyType = "EC256";
           storage = "${config.services.traefik.dataDir}/acme.json";
         };
@@ -205,7 +206,7 @@ in
       group = "infrastructure";
       url = "https://traefik.${config.networking.domain}";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" ];
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
   };

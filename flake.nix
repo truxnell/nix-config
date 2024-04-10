@@ -206,10 +206,10 @@
             ];
           };
 
-          "helios" = mkNixosConfig {
+          "daedalus" = mkNixosConfig {
             # lenovo tiny NAS
 
-            hostname = "helios";
+            hostname = "daedalus";
             system = "x86_64-linux";
             hardwareModules = [
               ./nixos/profiles/hw-generic-x86.nix

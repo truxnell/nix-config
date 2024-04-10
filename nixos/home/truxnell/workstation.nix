@@ -47,8 +47,8 @@ with config;
           identityFile = "~/.ssh/id_ed25519";
         };
 
-        helios = {
-          hostname = "helios";
+        daedalus = {
+          hostname = "daedalus";
           user = "nat";
           port = 22;
           identityFile = "~/.ssh/id_ed25519";
