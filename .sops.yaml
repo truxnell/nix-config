@@ -14,7 +14,7 @@ keys:
   - &citadel age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
   - &rickenbacker age1cp6vegrmqfkuj8nmt2u3z0sur7n0f7e9x9zmdv4zygp8j2pnucpsdkgagc
   - &shodan age1j2r8mypw44uvqhfs53424h6fu2rkr5m7asl7rl3zn3xzva9m3dcqpa97gw
-  - &daedalus age1w4ctvdenfrc7ew4wkvwkekmlemup4g9g0jmfwxd62ccu2edsx4vqj5yvt8
+  - &daedalus age1jpeh4s553taxkyxhzlshzqjfrtvmmp5lw0hmpgn3mdnmgzku332qe082dl
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$

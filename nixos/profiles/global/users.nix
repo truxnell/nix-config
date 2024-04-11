@@ -6,11 +6,18 @@ let
   ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
+
+  sops.secrets = {
+    truxnell-password = {
+      sopsFile = ./secret.sops.yaml;
+      neededForUsers = true;
+    };
+  };
+
   users.users.truxnell = {
     isNormalUser = true;
     shell = pkgs.fish;
-    # passwordFile = config.sops.secrets.taylor-password.path;
-    # initialHashedPassword = ""; # TODO add key
+    passwordFile = config.sops.secrets.truxnell-password.path;
     extraGroups =
       [
         "wheel"

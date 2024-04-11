@@ -21,7 +21,7 @@ with lib;
       group = "servers";
       url = "icmp://${config.networking.hostName}.l.trux.dev";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" ];
     }];
 
     nix.settings = {

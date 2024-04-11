@@ -30,6 +30,7 @@ To Install
 - [ ] Replace existing ubuntu-based 'NAS'
 - [ ] Expand usage to other shell environments such as WSL, etc
 - [ ] handle secrets - decide between sweet and simple SOPS or re-use my doppler setup.
+- [ ] keep it simple, use trusted boring tools
 
 ## TODO
 
@@ -55,6 +56,19 @@ TBC
 ## Hardware
 
 TBC
+
+## Manifesto
+
+Taking lead from the zen of python:
+
+- Minimise dependencies, where required, explicitly define dependencies
+- Use plain nix to solve problems over additional tooling
+- Stable channel for stable machines. Unstable only where features are important.
+- Modules for a specific service - Profiles for broad configuration of state.
+- Write readable code - descriptive variable names and modules
+- Keep functions/dependencies within the relevant module where possible
+- Errors should never pass silently - use assert etc for misconfigurations
+- Flat is better than nested - use built-in functions like map, filter, and fold to operate on lists or sets
 
 ## Checklist
 

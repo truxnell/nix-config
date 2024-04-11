@@ -13,7 +13,6 @@ with lib;
       type = lib.types.listOf lib.types.str;
       default = [ ];
     };
-    impermanenceRollback = lib.mkEnableOption "Rollback root on boot for impermance";
 
   };
 
@@ -27,9 +26,6 @@ with lib;
         extraPools = cfg.mountPoolsAtBoot;
       };
 
-      initrd.postDeviceCommands = lib.mkIf cfg.impermanenceRollback (lib.mkAfter ''
-        zfs rollback -r rpool/local/root@blank
-      '');
 
     };
 
