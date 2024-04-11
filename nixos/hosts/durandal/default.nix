@@ -14,15 +14,7 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
-    # traefik.enable = true;
-    # homepage.enable = true;
-    # sonarr.enable = true;
-    # radarr.enable = true;
-    # lidarr.enable = true;
-    # readarr.enable = true;
-    # gatus.enable = true;
-    # sabnzbd.enable = true;
-    # qbittorrent.enable = true;
+
   };
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent/nixos";

@@ -11,6 +11,6 @@
     ./nfs
     ./nix-serve
     ./bind
-
+    ./glances
   ];
 }
