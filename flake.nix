@@ -26,12 +26,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # deploy-rs - Remote deployment
-    # https://github.com/serokell/deploy-rs
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     # VSCode community extensions
     # https://github.com/nix-community/nix-vscode-extensions
@@ -51,7 +45,6 @@
     { self
     , nixpkgs
     , sops-nix
-    , deploy-rs
     , home-manager
     , nix-vscode-extensions
     , ...
@@ -216,6 +209,7 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              ./nixos/profiles/impermanence.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
@@ -252,35 +246,6 @@
       # > nix build .#images.rpi4
       # images.rpi4 = nixosConfigurations.rpi4.config.system.build.sdImage;
       # images.iso = nixosConfigurations.iso.config.system.build.isoImage;
-
-      # deploy-rs
-      deploy.nodes =
-        let
-          mkDeployConfig = hostname: configuration: {
-            inherit hostname;
-            profiles.system =
-              let
-                inherit (configuration.config.nixpkgs.hostPlatform) system;
-              in
-              {
-                path = inputs.deploy-rs.lib."${system}".activate.nixos configuration;
-                sshUser = "truxnell";
-                user = "root";
-                sshOpts = [ "-t" ];
-                autoRollback = false;
-                magicRollback = true;
-              };
-          };
-        in
-        {
-          dns01 = mkDeployConfig "dns01" self.nixosConfigurations.dns01;
-          dns02 = mkDeployConfig "dns02" self.nixosConfigurations.dns02;
-
-          # dns02 = mkDeployConfig "dns02.natallan.com" self.nixosConfigurations.dns02;
-        };
-
-      # deploy-rs: This is highly advised, and will prevent many possible mistakes
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
 
       # Convenience output that aggregates the outputs for home, nixos.
       # Also used in ci to build targets generally.

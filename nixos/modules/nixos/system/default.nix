@@ -7,7 +7,5 @@
     ./nix.nix
     ./zfs.nix
     ./nfs
-    ./impermanence
-
   ];
 }

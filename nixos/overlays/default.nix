@@ -2,8 +2,6 @@
 , ...
 }:
 {
-  # deploy-rs overlay
-  deploy-rs = inputs.deploy-rs.overlays.default;
 
   nur = inputs.nur.overlay;
 

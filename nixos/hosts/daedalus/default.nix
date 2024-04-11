@@ -31,9 +31,6 @@
   mySystem.system = {
     zfs.enable = true;
     zfs.mountPoolsAtBoot = [ "tank" ];
-
-    # run impermanence
-    impermanence.enable = true;
   };
 
   mySystem.services.nfs.enable = true;

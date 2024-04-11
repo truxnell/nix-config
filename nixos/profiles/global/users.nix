@@ -9,7 +9,7 @@ in
 
   sops.secrets = {
     truxnell-password = {
-      sopsFile = ./secret.sops.yaml;
+      sopsFile = ./secrets.sops.yaml;
       neededForUsers = true;
     };
   };
@@ -17,7 +17,7 @@ in
   users.users.truxnell = {
     isNormalUser = true;
     shell = pkgs.fish;
-    passwordFile = config.sops.secrets.truxnell-password.path;
+    hashedPasswordFile = config.sops.secrets.truxnell-password.path;
     extraGroups =
       [
         "wheel"
@@ -26,7 +26,9 @@ in
         "network"
         "samba-users"
         "docker"
+        "podman"
         "audio" # pulseaudio
+        "libvirtd"
       ];
 
     openssh.authorizedKeys.keys = [
