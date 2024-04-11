@@ -52,6 +52,11 @@ with lib;
       "d ${cfg.persistPath}/nixos/ssh/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
+    # set machine id for log continuity
+    environment.etc.machine-id.source = "${cfg.persistPath}/nixos/etc/machine-id";
+
+    # keep hardware clock adjustment data
+    environment.etc.adjtime.source = "${cfg.persistPath}/nixos/etc/adjtime";
 
   };
 

@@ -27,6 +27,8 @@ in
     {
       security = {
         sudo.wheelNeedsPassword = cfg.wheelNeedsSudoPassword;
+        # Don't bother with the lecture or the need to keep state about who's been lectured
+        security.sudo.extraConfig = "Defaults lecture=\"never\"";
 
         pam.enableSSHAgentAuth = cfg.sshAgentAuth.enable;
 
