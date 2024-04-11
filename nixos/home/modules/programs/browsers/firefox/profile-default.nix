@@ -4,7 +4,7 @@
   name = "default";
   isDefault = true;
   settings = {
-    "browser.startup.homepage" = "https://search.trux.dev";
+    "browser.startup.homepage" = "https://homepage.trux.dev";
     "browser.search.defaultenginename" = "whoogle";
     "browser.search.order.1" = "whoogle";
     "browser.search.suggest.enabled.private" = false;
