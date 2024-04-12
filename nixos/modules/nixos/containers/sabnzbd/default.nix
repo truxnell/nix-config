@@ -34,7 +34,7 @@ in
       };
       volumes = [
         "${persistentFolder}:/config:rw"
-        "${config.mySystem.nasFolder}natflix:/media:rw"
+        "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -47,12 +47,12 @@ in
       {
         Sabnzbd = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
           description = "Usenet Downloader";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
             key = "{{HOMEPAGE_VAR_SABNZBD__API_KEY}}";
           };
         };
@@ -62,8 +62,9 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
-      group = "arr";
-      url = "https://${app}.${config.networking.domain}";
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
+      ping = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

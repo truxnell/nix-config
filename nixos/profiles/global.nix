@@ -25,8 +25,6 @@ with lib;
     };
   };
 
-
-
   config = {
     mySystem = {
 
@@ -34,9 +32,9 @@ with lib;
       time.timeZone = "Australia/Melbourne";
       security.increaseWheelLoginLimits = true;
       system.packages = [ pkgs.bat ];
+      domain = "trux.dev";
+      internalDomain = "l.voltaicforge.com";
 
-      # Lets see if fish everywhere is OK on the pi's
-      # TODO decide if i drop to bash on pis?
       shell.fish.enable = true;
       # But wont enable plugins globally, leave them for workstations
     };
@@ -47,10 +45,8 @@ with lib;
       dnsutils
     ];
 
-
-
     networking.useDHCP = lib.mkDefault true;
-    networking.domain = "trux.dev"; # TODO make variable
+    networking.domain = config.mySystem.domain;
   };
 
 }

@@ -19,7 +19,7 @@ with lib;
 
       name = config.networking.hostName;
       group = "servers";
-      url = "icmp://${config.networking.hostName}.l.trux.dev";
+      url = "icmp://${config.networking.hostName}.${config.mySystem.internalDomain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" ];
     }];

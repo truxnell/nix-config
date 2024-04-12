@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "qbittorrent";
-  image = "ghcr.io/onedr0p/qbittorrent:4.6.4@sha256:cb8a7df4e63bf410834af7846b6d5eee4f10748d03819ee7218015c5b0332a29";
+  app = "tautulli";
+  image = "ghcr.io/onedr0p/tautulli:2.13.4@sha256:809bccf944ee56c33af99993841e797e18dc85243639788de3c9d668c291b215";
   user = "568"; #string
   group = "568"; #string
-  port = 8080; #int
+  port = 8181; #int
   cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
@@ -29,12 +29,10 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      environment = {
-        QBITTORRENT__BT_PORT = "32189";
-      };
       volumes = [
         "${persistentFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
+        "${config.mySystem.nasFolder}/backup/kubernetes/apps/tautulli:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -45,15 +43,16 @@ in
 
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Qbittorrent = {
+        Tautulli = {
           icon = "${app}.png";
           href = "https://${app}.${config.mySystem.domain}";
           ping = "https://${app}.${config.mySystem.domain}";
-          description = "Torrent Downloader";
+          description = "Plex Monitoring & Stats";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "https://${app}.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
           };
         };
       }

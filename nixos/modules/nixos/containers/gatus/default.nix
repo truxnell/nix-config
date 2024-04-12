@@ -17,7 +17,7 @@ let
     {
       name = "firewall";
       group = "servers";
-      url = "icmp://unifi.l.trux.dev";
+      url = "icmp://unifi.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -25,7 +25,7 @@ let
     {
       name = "pikvm";
       group = "servers";
-      url = "icmp://pikvm.l.trux.dev";
+      url = "icmp://pikvm.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -33,7 +33,7 @@ let
     {
       name = "octoprint";
       group = "servers";
-      url = "icmp://prusa.l.trux.dev";
+      url = "icmp://prusa.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -41,7 +41,7 @@ let
     {
       name = "icarus";
       group = "k8s";
-      url = "icmp://icarus.l.trux.dev";
+      url = "icmp://icarus.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -49,7 +49,7 @@ let
     {
       name = "xerxes";
       group = "k8s";
-      url = "icmp://xerxes.l.trux.dev";
+      url = "icmp://xerxes.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -57,7 +57,7 @@ let
     {
       name = "shodan";
       group = "k8s";
-      url = "icmp://shodan.l.trux.dev";
+      url = "icmp://shodan.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -66,7 +66,7 @@ let
     {
       name = "daedalus";
       group = "servers";
-      url = "icmp://daedalus.l.trux.dev";
+      url = "icmp://daedalus.${config.mySystem.internalDomain}";
       interval = "30s";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -74,7 +74,7 @@ let
     {
       name = "dns01 external dns";
       group = "dns";
-      url = "dns01.l.trux.dev";
+      url = "dns01.${config.mySystem.internalDomain}";
       dns = {
         query-name = "cloudflare.com";
         query-type = "A";
@@ -86,7 +86,7 @@ let
     {
       name = "dns02 external dns";
       group = "dns";
-      url = "dns02.l.trux.dev";
+      url = "dns02.${config.mySystem.internalDomain}";
       dns = {
         query-name = "cloudflare.com";
         query-type = "A";
@@ -98,9 +98,9 @@ let
     {
       name = "dns01 internal dns";
       group = "dns";
-      url = "dns01.l.trux.dev";
+      url = "dns01.${config.mySystem.internalDomain}";
       dns = {
-        query-name = "unifi.l.trux.dev";
+        query-name = "unifi.${config.mySystem.internalDomain}";
         query-type = "A";
       };
       interval = "30s";
@@ -110,9 +110,9 @@ let
     {
       name = "dns02 internal dns";
       group = "dns";
-      url = "dns02.l.trux.dev";
+      url = "dns02.${config.mySystem.internalDomain}";
       dns = {
-        query-name = "unifi.l.trux.dev";
+        query-name = "unifi.${config.mySystem.internalDomain}";
         query-type = "A";
       };
       interval = "30s";
@@ -122,7 +122,7 @@ let
     {
       name = "dns01 split DNS";
       group = "dns";
-      url = "dns01.l.trux.dev";
+      url = "dns01.${config.mySystem.internalDomain}";
       dns = {
         query-name = "${app}.trux.dev";
         query-type = "A";
@@ -134,7 +134,7 @@ let
     {
       name = "dns02 split DNS";
       group = "dns";
-      url = "dns02.l.trux.dev";
+      url = "dns02.${config.mySystem.internalDomain}";
       dns = {
         query-name = "${app}.trux.dev";
         query-type = "A";
@@ -216,12 +216,12 @@ in
       {
         "Gatus Internal" = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
           description = "Internal Infrastructure Monitoring";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
           };
         };
       }

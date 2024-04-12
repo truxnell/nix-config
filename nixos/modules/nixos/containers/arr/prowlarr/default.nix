@@ -10,7 +10,7 @@ let
   user = "568"; #string
   group = "568"; #string
   port = 9696; #int
-  cfg = config.mySystem.services.sonarr;
+  cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
 {
@@ -40,9 +40,9 @@ in
       user = "${user}:${group}";
       environment = {
         PUSHOVER_DEBUG = "false";
-        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
+        PUSHOVER_APP_URL = "${app}.${config.mySystem.domain}";
         PROWLARR__INSTANCE_NAME = "Prowlarr";
-        PROWLARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        PROWLARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
         PROWLARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
@@ -61,12 +61,13 @@ in
       {
         Prowlarr = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
+          ping = "https://${app}.${config.mySystem.domain}";
           description = "Content locator";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
             key = "{{HOMEPAGE_VAR_PROWLARR__API_KEY}}";
           };
         };
@@ -76,8 +77,8 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
-      group = "arr";
-      url = "https://${app}.${config.networking.domain}";
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

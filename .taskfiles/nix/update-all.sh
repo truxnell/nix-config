@@ -23,7 +23,7 @@ for host in "${hosts[@]}"; do
     if [[ " ${skip[*]} " =~ " ${host} " ]]; then
         continue
     fi
-    fqdn="$host.l.trux.dev"
+    fqdn="$host.l.voltaicforge.com"
     if [ $reboot -eq 0 ]; then
         echo $fqdn
         nixos-rebuild switch -j auto --use-remote-sudo --target-host $fqdn --flake ".#$host"

@@ -27,7 +27,6 @@ with lib;
 
         };
 
-
     };
   config = {
 
@@ -61,6 +60,7 @@ with lib;
 
         [containers]
         disable=False
+        podman_sock=unix:///var/run/podman/podman.sock
 
         [connections]
         disable=True
@@ -74,7 +74,8 @@ with lib;
 
       name = "${app} ${config.networking.hostName}";
       group = "${app}";
-      url = "http://${config.networking.hostName}:61208";
+      url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
+      ping = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
@@ -83,7 +84,7 @@ with lib;
       {
         "Glances ${config.networking.hostName}" = {
           icon = "${app}.png";
-          href = "http://${config.networking.hostName}:61208";
+          href = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
           description = "System Monitoring";
           container = "Infrastructure";
         };

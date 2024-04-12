@@ -5,5 +5,7 @@
     ./gatus
     ./sabnzbd
     ./qbittorrent
+    ./plex
+    ./tautulli
   ];
 }

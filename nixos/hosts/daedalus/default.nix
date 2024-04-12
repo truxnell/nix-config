@@ -26,7 +26,7 @@
     sabnzbd.enable = true;
     qbittorrent.enable = true;
   };
-  mySystem.nasFolder = "/tank/";
+  mySystem.nasFolder = "/tank";
 
   mySystem.system = {
     zfs.enable = true;

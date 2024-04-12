@@ -6,14 +6,14 @@
 , pkgs
 , ...
 }: {
-  imports = [
-
-
-  ];
 
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
+    traefik.enable = true;
+
+    plex.enable = true;
+    tautulli.enable = true;
 
   };
   mySystem.nfs.nas.enable = true;
@@ -33,6 +33,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       # why not ensure we can memtest workstatons easily?
+      # TODO check whether this is actually working, cant see it in grub?
       grub.memtest86.enable = true;
 
     };
@@ -55,7 +56,5 @@
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/0ae2765b-f3f4-4b1a-8ea6-599f37504d70"; }];
-
-
 
 }
