@@ -17,11 +17,12 @@ in
       enable = true;
       group = "users";
       guiAddress = "0.0.0.0:8384";
-      urAccepted = -1; # decline telemetry
+      settings.options.urAccepted = -1; # decline telemetry
       openDefaultPorts = cfg.openFirewall;
 
     };
-    mySystem.services.traefik = [{
+
+    mySystem.services.traefik.routers = [{
       http.routers.syncthing = {
         rule = "Host(`syncthing.${config.mySystem.domain}`)";
         entrypoints = "websecure";
@@ -32,5 +33,7 @@ in
         port = "8384";
       };
     }];
+
+
   };
 }

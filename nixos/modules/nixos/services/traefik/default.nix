@@ -7,7 +7,7 @@
 with lib;
 let
   cfg = config.mySystem.services.traefik;
-  routersFile = builtins.toFile "routers.yaml" (builtins.toJSON routers);
+  routersFile = builtins.toFile "routers.yaml" (builtins.toJSON cfg.routers);
 
 in
 {
@@ -64,13 +64,12 @@ in
         providers = {
           docker = {
             endpoint = "unix:///var/run/podman/podman.sock";
-            # endpoint = "tcp://127.0.0.1:2375";
             exposedByDefault = false;
             defaultRule = "Host(`{{ normalize .Name }}.${config.mySystem.domain}`)";
             # network = "proxy";
           };
           file = {
-            filename = "a";
+            filename = routersFile;
             watch = true;
           };
 
@@ -165,7 +164,7 @@ in
         http.routers = {
           traefik = {
             entrypoints = "websecure";
-            rule = "Host(`traefik.${config.mySystem.domain}`)";
+            rule = "Host(`traefik-${config.networking.hostName}.${config.mySystem.domain}`)";
             tls.certresolver = "letsencrypt";
             tls.domains = [{
               main = "${config.mySystem.domain}";
