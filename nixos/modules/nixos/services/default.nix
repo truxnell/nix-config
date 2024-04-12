@@ -12,5 +12,6 @@
     ./nix-serve
     ./bind
     ./glances
+    ./syncthing
   ];
 }

@@ -7,10 +7,18 @@
 with lib;
 let
   cfg = config.mySystem.services.traefik;
+  routersFile = builtins.toFile "routers.yaml" (builtins.toJSON routers);
+
 in
 {
-  options.mySystem.services.traefik.enable = mkEnableOption "Traefik reverse proxy";
-
+  options.mySystem.services.traefik = {
+    enable = mkEnableOption "Traefik reverse proxy";
+    routers = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Routers to add to traefik";
+      default = [ ];
+    };
+  };
 
 
   config = mkIf cfg.enable {
@@ -53,12 +61,19 @@ in
         # Allow backend services to have self-signed certs
         serversTransport.insecureSkipVerify = true;
 
-        providers.docker = {
-          endpoint = "unix:///var/run/podman/podman.sock";
-          # endpoint = "tcp://127.0.0.1:2375";
-          exposedByDefault = false;
-          defaultRule = "Host(`{{ normalize .Name }}.${config.mySystem.domain}`)";
-          # network = "proxy";
+        providers = {
+          docker = {
+            endpoint = "unix:///var/run/podman/podman.sock";
+            # endpoint = "tcp://127.0.0.1:2375";
+            exposedByDefault = false;
+            defaultRule = "Host(`{{ normalize .Name }}.${config.mySystem.domain}`)";
+            # network = "proxy";
+          };
+          file = {
+            filename = "a";
+            watch = true;
+          };
+
         };
 
         # Listen on port 80 and redirect to port 443
