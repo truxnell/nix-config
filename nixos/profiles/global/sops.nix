@@ -1,6 +1,6 @@
 { config, ... }:
 {
 
-  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.age.sshKeyPaths = [ "${config.mySystem.system.impermanence.sshPath}/ssh_host_ed25519_key" ];
 
 }

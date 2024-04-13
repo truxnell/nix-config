@@ -3,5 +3,6 @@
     ./fish
     ./starship
     ./wezterm
+    ./git
   ];
 }

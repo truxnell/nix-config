@@ -31,6 +31,11 @@ in
       virtualisation.oci-containers = {
         backend = "podman";
       };
+
+      environment.systemPackages = with pkgs; [
+        podman-tui # status of containers in the terminal
+      ];
+
       networking.firewall.interfaces.podman0.allowedUDPPorts = [ 53 ];
 
       # extra user for containers

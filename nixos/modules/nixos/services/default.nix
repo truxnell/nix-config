@@ -11,6 +11,7 @@
     ./nfs
     ./nix-serve
     ./bind
-
+    ./glances
+    ./syncthing
   ];
 }

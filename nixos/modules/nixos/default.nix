@@ -4,16 +4,16 @@
     ./system
     ./programs
     ./services
-    ./browser
     ./de
     ./editor
     ./hardware
     ./containers
+    ./lib.nix
   ];
 
   options.mySystem.persistentFolder = lib.mkOption {
     type = lib.types.str;
-    description = "persistent folter for mutable files";
+    description = "persistent folder for nixos mutable files";
     default = "/persist/nixos";
   };
 
@@ -21,6 +21,16 @@
     type = lib.types.str;
     description = "folder where nas mounts reside";
     default = "/mnt/nas";
+  };
+  options.mySystem.domain = lib.mkOption {
+    type = lib.types.str;
+    description = "domain for hosted services";
+    default = "";
+  };
+  options.mySystem.internalDomain = lib.mkOption {
+    type = lib.types.str;
+    description = "domain for local devices";
+    default = "";
   };
 
   config = {

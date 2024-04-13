@@ -22,7 +22,7 @@ in
         mountConfig = {
           Options = "noatime";
         };
-        what = "daedalus:/tank";
+        what = "daedalus.${config.mySystem.internalDomain}:/tank";
         where = "/mnt/nas";
       }];
 

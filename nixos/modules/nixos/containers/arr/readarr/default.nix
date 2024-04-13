@@ -10,7 +10,7 @@ let
   user = "568"; #string
   group = "568"; #string
   port = 8787; #int
-  cfg = config.mySystem.services.sonarr;
+  cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
 {
@@ -42,13 +42,13 @@ in
       environment = {
         TZ = "${config.time.timeZone}";
         READARR__INSTANCE_NAME = "Lidarr";
-        READARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        READARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
         READARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
-        "${config.mySystem.nasFolder}natflix:/media:rw"
+        "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -61,12 +61,13 @@ in
       {
         Readar = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
+          ping = "https://${app}.${config.mySystem.domain}";
           description = "Book management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
             key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
           };
         };
@@ -76,8 +77,8 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
-      group = "arr";
-      url = "https://${app}.${config.networking.domain}";
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

@@ -23,7 +23,7 @@ let
       showStats = true;
       disableCollape = true;
       cardBlur = "md";
-      statusStyle = "none";
+      statusStyle = "dot";
 
       datetime = {
         text_size = "l";
@@ -100,11 +100,12 @@ let
   extraInfrastructure = [
     {
       "UDMP" = {
-        href = "https://10.8.10.1";
+        href = "https://unifi.${config.mySystem.internalDomain}";
+        ping = "https://unifi.${config.mySystem.internalDomain}";
         description = "Unifi Dream Machine Pro";
         icon = "ubiquiti";
         widget = {
-          url = "https://10.8.10.1:443";
+          url = "https://unifi.${config.mySystem.internalDomain}";
           username = "unifi_read_only";
           password = "{{HOMEPAGE_VAR_UNIFI_PASSWORD}}";
           type = "unifi";
@@ -142,7 +143,8 @@ let
   extraHome = [
     {
       "Prusa Octoprint" = {
-        href = "http://prusa:5000"; # TODO fix with better hostname
+        href = "http://prusa.${config.mySystem.internalDomain}:5000";
+        ping = "http://prusa.${config.mySystem.internalDomain}:5000";
         description = "Prusa MK3s 3D printer";
         icon = "octoprint";
         widget = {
@@ -288,7 +290,7 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
       name = app;
       group = "infrastructure";
-      url = "https://${app}.${config.networking.domain}";
+      url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

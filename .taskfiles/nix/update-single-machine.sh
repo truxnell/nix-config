@@ -14,7 +14,7 @@ while getopts ":r" option; do
     r)
         reboot=1
         host=$2
-        fqdn="$host.l.trux.dev"
+        fqdn="$host.l.voltaicforge.com"
         echo "$fqdn with reboot"
         nixos-rebuild boot -j auto --use-remote-sudo --target-host $fqdn --flake ".#$host"
         # ssh -i $rsa_key $fqdn 'sudo reboot'
@@ -25,7 +25,7 @@ done
 
 if [ $reboot -eq 0 ]; then
     host=$1
-    fqdn="$host.l.trux.dev"
+    fqdn="$host.l.voltaicforge.com"
     echo "$fqdn"
     nixos-rebuild switch -j auto --use-remote-sudo --target-host $fqdn --flake ".#$host"
 fi

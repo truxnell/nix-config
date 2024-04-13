@@ -6,9 +6,6 @@ with config;
   ];
 
   myHome.programs.firefox.enable = true;
-  myHome.shell.starship.enable = true;
-  myHome.shell.fish.enable = true;
-  myHome.shell.wezterm.enable = true;
 
   myHome.security = {
     ssh = {
@@ -49,7 +46,6 @@ with config;
 
         daedalus = {
           hostname = "daedalus";
-          user = "nat";
           port = 22;
           identityFile = "~/.ssh/id_ed25519";
         };
@@ -57,6 +53,23 @@ with config;
       };
     };
   };
+
+  myHome.shell = {
+
+    starship.enable = true;
+    fish.enable = true;
+    wezterm.enable = true;
+
+    git = {
+      enable = true;
+      username = "truxnell";
+      email = "19149206+truxnell@users.noreply.github.com";
+      # signingKey = ""; # TODO setup signing keys n shit
+    };
+
+  };
+
+
 
 
 

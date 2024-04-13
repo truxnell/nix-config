@@ -62,7 +62,6 @@ with config;
     yq
     btop
     vim
-    unstable.deploy-rs
     git
     dnsutils
     nix

@@ -43,15 +43,15 @@ in
       environment = {
         TZ = "${config.time.timeZone}";
         PUSHOVER_DEBUG = "false";
-        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
+        PUSHOVER_APP_URL = "${app}.${config.mySystem.domain}";
         SONARR__INSTANCE_NAME = "Radarr";
-        SONARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        SONARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
         SONARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:${containerPersistentFolder}:rw"
-        "${config.mySystem.nasFolder}natflix:/media:rw"
+        "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -64,12 +64,13 @@ in
       {
         Sonarr = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
+          ping = "https://${app}.${config.mySystem.domain}";
           description = "TV show management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
             key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
           };
         };
@@ -79,8 +80,8 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
-      group = "arr";
-      url = "https://${app}.${config.networking.domain}";
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

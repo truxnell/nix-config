@@ -7,37 +7,21 @@
 with lib;
 let
   cfg = config.mySystem.services.traefik;
+  routersFile = builtins.toFile "routers.yaml" (builtins.toJSON cfg.routers);
+
 in
 {
-  options.mySystem.services.traefik.enable = mkEnableOption "Traefik reverse proxy";
-
+  options.mySystem.services.traefik = {
+    enable = mkEnableOption "Traefik reverse proxy";
+    routers = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Routers to add to traefik";
+      default = [ ];
+    };
+  };
 
 
   config = mkIf cfg.enable {
-
-    lib.mySystem.mkTraefikLabels = options: (
-      let
-        inherit (options) name;
-        subdomain = if builtins.hasAttr "subdomain" options then options.subdomain else options.name;
-        # created if port is specified
-        service = if builtins.hasAttr "service" options then options.service else options.name;
-        middleware = if builtins.hasAttr "middleware" options then options.middleware else "local-ip-only@file";
-      in
-      {
-        "traefik.enable" = "true";
-        "traefik.http.routers.${name}.rule" = "Host(`${options.name}.${config.networking.domain}`)";
-        "traefik.http.routers.${name}.entrypoints" = "websecure";
-        "traefik.http.routers.${name}.middlewares" = "${middleware}";
-      } // lib.attrsets.optionalAttrs (builtins.hasAttr "port" options) {
-        "traefik.http.routers.${name}.service" = service;
-        "traefik.http.services.${service}.loadbalancer.server.port" = "${builtins.toString options.port}";
-      } // lib.attrsets.optionalAttrs (builtins.hasAttr "scheme" options) {
-        "traefik.http.routers.${name}.service" = service;
-        "traefik.http.services.${service}.loadbalancer.server.scheme" = "${options.scheme}";
-      } // lib.attrsets.optionalAttrs (builtins.hasAttr "service" options) {
-        "traefik.http.routers.${name}.service" = service;
-      }
-    );
 
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
@@ -56,6 +40,7 @@ in
     users.users.truxnell.extraGroups = [ config.services.traefik.group ];
 
     services.traefik = {
+      # TODO refactor into subfiles
       enable = true;
       group = "podman"; # podman backend, required to access socket
 
@@ -76,12 +61,18 @@ in
         # Allow backend services to have self-signed certs
         serversTransport.insecureSkipVerify = true;
 
-        providers.docker = {
-          endpoint = "unix:///var/run/podman/podman.sock";
-          # endpoint = "tcp://127.0.0.1:2375";
-          exposedByDefault = false;
-          defaultRule = "Host(`{{ normalize .Name }}.${config.networking.domain}`)";
-          # network = "proxy";
+        providers = {
+          docker = {
+            endpoint = "unix:///var/run/podman/podman.sock";
+            exposedByDefault = false;
+            defaultRule = "Host(`{{ normalize .Name }}.${config.mySystem.domain}`)";
+            # network = "proxy";
+          };
+          file = {
+            filename = routersFile;
+            watch = true;
+          };
+
         };
 
         # Listen on port 80 and redirect to port 443
@@ -96,8 +87,8 @@ in
           http = {
             tls = {
               certresolver = "letsencrypt";
-              domains.main = "${config.networking.domain}";
-              domains.sans = "*.${config.networking.domain}";
+              domains.main = "${config.mySystem.domain}";
+              domains.sans = "*.${config.mySystem.domain}";
             };
           };
           http3 = { };
@@ -173,11 +164,11 @@ in
         http.routers = {
           traefik = {
             entrypoints = "websecure";
-            rule = "Host(`traefik.${config.networking.domain}`)";
+            rule = "Host(`traefik-${config.networking.hostName}.${config.mySystem.domain}`)";
             tls.certresolver = "letsencrypt";
             tls.domains = [{
-              main = "${config.networking.domain}";
-              sans = "*.${config.networking.domain}";
+              main = "${config.mySystem.domain}";
+              sans = "*.${config.mySystem.domain}";
             }];
             middlewares = "local-ip-only@file";
             service = "api@internal";
@@ -190,11 +181,12 @@ in
       {
         Traefik = {
           icon = "traefik.png";
-          href = "https://traefik.${config.networking.domain}/dashboard/";
+          href = "https://traefik.${config.mySystem.domain}/dashboard/";
+          ping = "https://traefik.${config.mySystem.domain}/dashboard/";
           description = "Reverse Proxy";
           widget = {
             type = "traefik";
-            url = "https://traefik.${config.networking.domain}";
+            url = "https://traefik.${config.mySystem.domain}";
           };
         };
       }
@@ -204,7 +196,7 @@ in
 
       name = "traefik";
       group = "infrastructure";
-      url = "https://traefik.${config.networking.domain}";
+      url = "https://traefik.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

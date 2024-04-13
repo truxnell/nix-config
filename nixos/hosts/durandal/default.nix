@@ -6,24 +6,18 @@
 , pkgs
 , ...
 }: {
-  imports = [
-
-
-  ];
 
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
-    # traefik.enable = true;
-    # homepage.enable = true;
-    # sonarr.enable = true;
-    # radarr.enable = true;
-    # lidarr.enable = true;
-    # readarr.enable = true;
-    # gatus.enable = true;
-    # sabnzbd.enable = true;
-    # qbittorrent.enable = true;
+    traefik.enable = true;
+
+    plex.enable = true;
+    tautulli.enable = true;
+    syncthing.enable = true;
+
   };
+
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent/nixos";
 
@@ -41,6 +35,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       # why not ensure we can memtest workstatons easily?
+      # TODO check whether this is actually working, cant see it in grub?
       grub.memtest86.enable = true;
 
     };
@@ -63,7 +58,5 @@
 
   swapDevices =
     [{ device = "/dev/disk/by-uuid/0ae2765b-f3f4-4b1a-8ea6-599f37504d70"; }];
-
-
 
 }

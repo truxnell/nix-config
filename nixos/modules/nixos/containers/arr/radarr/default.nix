@@ -10,7 +10,7 @@ let
   user = "568"; #string
   group = "568"; #string
   port = 7878; #int
-  cfg = config.mySystem.services.sonarr;
+  cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
 {
@@ -41,15 +41,15 @@ in
       dependsOn = [ "prowlarr" ];
       environment = {
         PUSHOVER_DEBUG = "false";
-        PUSHOVER_APP_URL = "${app}.${config.networking.domain}";
+        PUSHOVER_APP_URL = "${app}.${config.mySystem.domain}";
         RADARR__INSTANCE_NAME = "Radarr";
-        RADARR__APPLICATION_URL = "https://${app}.${config.networking.domain}";
+        RADARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
         RADARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
-        "${config.mySystem.nasFolder}natflix:/media:rw"
+        "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -62,12 +62,13 @@ in
       {
         Radarr = {
           icon = "${app}.png";
-          href = "https://${app}.${config.networking.domain}";
+          href = "https://${app}.${config.mySystem.domain}";
+          ping = "https://${app}.${config.mySystem.domain}";
           description = "Movie management";
           container = "${app}";
           widget = {
             type = "${app}";
-            url = "https://${app}.${config.networking.domain}";
+            url = "https://${app}.${config.mySystem.domain}";
             key = "{{HOMEPAGE_VAR_RADARR__API_KEY}}";
           };
         };
@@ -77,8 +78,8 @@ in
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
-      group = "arr";
-      url = "https://${app}.${config.networking.domain}";
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];

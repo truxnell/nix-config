@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "qbittorrent";
-  image = "ghcr.io/onedr0p/qbittorrent:4.6.4@sha256:cb8a7df4e63bf410834af7846b6d5eee4f10748d03819ee7218015c5b0332a29";
+  app = "plex";
+  image = "ghcr.io/onedr0p/plex:1.40.1.8227-c0dd5a73e@sha256:c8d74539a40530fa9770c6d67f37aef8f3a7b3f30ee353c2cb5685b84ed5b04c";
   user = "568"; #string
   group = "568"; #string
-  port = 8080; #int
+  port = 32400; #int
   cfg = config.mySystem.services.${app};
   persistentFolder = "${config.mySystem.persistentFolder}/${app}";
 in
@@ -18,6 +18,9 @@ in
     {
       enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      openFirewall = mkEnableOption "Open firewall for ${app}" // {
+        default = true;
+      };
     };
 
   config = mkIf cfg.enable {
@@ -29,31 +32,37 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      environment = {
-        QBITTORRENT__BT_PORT = "32189";
-      };
       volumes = [
         "${persistentFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
+        "${config.mySystem.nasFolder}/backup/kubernetes/apps/plex:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
+      ports = [ (builtins.toString port) ]; # expose port
       labels = config.lib.mySystem.mkTraefikLabels {
         name = app;
         inherit port;
       };
     };
+    networking.firewall = mkIf cfg.openFirewall {
+
+      allowedTCPPorts = [ 53 ];
+      allowedUDPPorts = [ 53 ];
+    };
+
 
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Qbittorrent = {
+        Plex = {
           icon = "${app}.png";
           href = "https://${app}.${config.mySystem.domain}";
           ping = "https://${app}.${config.mySystem.domain}";
-          description = "Torrent Downloader";
+          description = "Media streaming service";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "https://${app}.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
           };
         };
       }
