@@ -30,9 +30,9 @@ with lib;
     mySystem.system.impermanence.enable = true;
 
     # bind a initrd command to rollback to blank root after boot
-    boot.initrd.postDeviceCommands = (lib.mkAfter ''
+    boot.initrd.postDeviceCommands = lib.mkAfter ''
       zfs rollback -r ${cfg.rootPoolName}@${cfg.rootBlankSnapshotName}
-    '');
+    '';
 
     # move ssh keys to persist folder
     services.openssh.hostKeys = mkIf config.services.openssh.enable [
