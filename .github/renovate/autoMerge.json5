@@ -8,11 +8,12 @@
       "automergeType": "branch",
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
-        'onedr0p/sonarr',
-        'onedr0p/readarr',
-        'onedr0p/radarr',
-        'onedr0p/lidarr',
-        'onedr0p/prowlarr'
+        'ghcr.io/onedr0p/sonarr',
+        'ghcr.io/onedr0p/readarr',
+        'ghcr.io/onedr0p/radarr',
+        'ghcr.io/onedr0p/lidarr',
+        'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/twin/gatus',
       ]
     },
     {
@@ -21,7 +22,7 @@
       "automergeType": "branch",
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
-        "gethomepage/homepage"
+        "ghcr.io/gethomepage/homepage"
       ]
 
     }
