@@ -6,7 +6,7 @@
 with lib;
 let
   app = "lidarr";
-  image = "ghcr.io/onedr0p/lidarr:2.1.7";
+  image = "ghcr.io/onedr0p/lidarr:2.2.5";
   user = "568"; #string
   group = "568"; #string
   port = 8686; #int
