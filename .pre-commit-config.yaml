@@ -31,7 +31,7 @@ repos:
     hooks:
       - id: gitleaks
   - repo: https://github.com/yuvipanda/pre-commit-hook-ensure-sops
-    rev: v1.0
+    rev: v1.1
     hooks:
       - id: sops-encryption
         # Uncomment to exclude all markdown files from encryption
