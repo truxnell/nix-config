@@ -39,7 +39,7 @@
       user = "nah";
       repository = "/tank/backup/nixos/nixos/${options.app}";
       exclude = options.excludePaths;
-      paths = options.paths;
+      inherit (options) paths;
       timerConfig = {
         OnCalendar = "01:05";
         Persistent = true;
