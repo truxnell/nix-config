@@ -7,5 +7,7 @@
     ./nix.nix
     ./zfs.nix
     ./nfs
+    ./motd
+    ./pushover
   ];
 }

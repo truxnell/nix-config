@@ -1,4 +1,5 @@
 { lib, config, ... }:
+with lib;
 {
   imports = [
     ./system
@@ -11,31 +12,33 @@
     ./lib.nix
   ];
 
-  options.mySystem.persistentFolder = lib.mkOption {
-    type = lib.types.str;
+  options.mySystem.persistentFolder = mkOption {
+    type = types.str;
     description = "persistent folder for nixos mutable files";
     default = "/persist/nixos";
   };
 
-  options.mySystem.nasFolder = lib.mkOption {
-    type = lib.types.str;
+  options.mySystem.nasFolder = mkOption {
+    type = types.str;
     description = "folder where nas mounts reside";
     default = "/mnt/nas";
   };
-  options.mySystem.domain = lib.mkOption {
-    type = lib.types.str;
+  options.mySystem.domain = mkOption {
+    type = types.str;
     description = "domain for hosted services";
     default = "";
   };
-  options.mySystem.internalDomain = lib.mkOption {
-    type = lib.types.str;
+  options.mySystem.internalDomain = mkOption {
+    type = types.str;
     description = "domain for local devices";
     default = "";
   };
+
 
   config = {
     systemd.tmpfiles.rules = [
       "d ${config.mySystem.persistentFolder} 777 - - -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
+
   };
 }

@@ -13,6 +13,7 @@
         'ghcr.io/onedr0p/radarr',
         'ghcr.io/onedr0p/lidarr',
         'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/twin/gatus',
       ]
     },
     {

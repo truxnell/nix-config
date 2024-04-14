@@ -25,6 +25,9 @@
     gatus.enable = true;
     sabnzbd.enable = true;
     qbittorrent.enable = true;
+    prowlarr.enable = true;
+
+    backrest.enable = true;
   };
   mySystem.nasFolder = "/tank";
 
@@ -34,6 +37,9 @@
   };
 
   mySystem.services.nfs.enable = true;
+  mySystem.system.motd.networkInterfaces = [ "eno1" ];
+
+
 
   boot = {
 
