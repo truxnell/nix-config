@@ -1,5 +1,6 @@
 { lib
 , config
+, pkgs
 , ...
 }:
 let
@@ -17,12 +18,14 @@ with lib;
   };
 
   config = lib.mkIf cfg.enable {
+
+    # setup boot
     boot = {
       supportedFilesystems = [
         "zfs"
       ];
       zfs = {
-        forceImportRoot = false;
+        forceImportRoot = false; # if stuck on boot, modify grub options , force importing isnt secure
         extraPools = cfg.mountPoolsAtBoot;
       };
 
@@ -34,6 +37,15 @@ with lib;
       trim.enable = true;
     };
 
+    # Pushover notifications
+    environment.systemPackages = with pkgs; [
+      busybox
+    ];
+
+    services.zfs.zed.settings = {
+      ZED_PUSHOVER_TOKEN = "$(${pkgs.busybox}/bin/cat ${config.sops.secrets.pushover-api-key.path})";
+      ZED_PUSHOVER_USER = "$(${pkgs.busybox}/bin/cat ${config.sops.secrets.pushover-user-key.path})";
+    };
 
   };
 }

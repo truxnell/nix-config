@@ -9,5 +9,6 @@
     ./nfs
     ./motd
     ./pushover
+    ./technitium-dns
   ];
 }

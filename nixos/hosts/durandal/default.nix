@@ -12,10 +12,17 @@
     podman.enable = true;
     traefik.enable = true;
 
+    gatus.enable = true;
+    homepage.enable = true;
+    backrest.enable = true;
+
     plex.enable = true;
     tautulli.enable = true;
     syncthing.enable = true;
+
+
   };
+  mySystem.services.bind.enable = true;
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent/nixos";

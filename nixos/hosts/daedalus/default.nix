@@ -17,17 +17,15 @@
     #containers
     podman.enable = true;
     traefik.enable = true;
-    homepage.enable = true;
     sonarr.enable = true;
     radarr.enable = true;
     lidarr.enable = true;
     readarr.enable = true;
-    gatus.enable = true;
     sabnzbd.enable = true;
     qbittorrent.enable = true;
     prowlarr.enable = true;
 
-    backrest.enable = true;
+
   };
   mySystem.nasFolder = "/tank";
 
