@@ -15,11 +15,11 @@
     plex.enable = true;
     tautulli.enable = true;
     syncthing.enable = true;
-
   };
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent/nixos";
+  mySystem.system.motd.networkInterfaces = [ "eno1" ];
 
   boot = {
 

@@ -58,6 +58,7 @@ in
       };
     };
 
+
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Lidarr = {
@@ -84,5 +85,11 @@ in
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
+    services.restic.backups."${app}-local" = config.lib.mySystem.mkRestic
+      {
+        inherit app;
+        excludePaths = [ "Backups" ];
+        paths = [ persistentFolder ];
+      };
   };
 }

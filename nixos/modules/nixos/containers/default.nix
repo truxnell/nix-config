@@ -7,5 +7,6 @@
     ./qbittorrent
     ./plex
     ./tautulli
+    ./backrest
   ];
 }
