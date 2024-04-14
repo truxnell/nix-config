@@ -40,6 +40,9 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-inspect = {
+      url = "github:bluskript/nix-inspect";
+    };
   };
   outputs =
     { self

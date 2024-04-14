@@ -1,7 +1,7 @@
 { lib, config, ... }:
 {
 
-
+  # build up traefik docker labesl
   lib.mySystem.mkTraefikLabels = options: (
     let
       inherit (options) name;
@@ -24,6 +24,33 @@
       "traefik.http.services.${service}.loadbalancer.server.scheme" = "${options.scheme}";
     } // lib.attrsets.optionalAttrs (builtins.hasAttr "service" options) {
       "traefik.http.routers.${name}.service" = service;
+    }
+  );
+
+  # build a restic restore set
+  lib.mySystem.mkRestic = options: (
+    let
+      excludePath = if builtins.hasAttr "excludePath" options then options.excludePath else [ ];
+
+    in
+    {
+      passwordFile = config.sops.secrets."services/restic/password".path;
+      initialize = true;
+      user = "nah";
+      repository = "/tank/backup/nixos/nixos/${options.app}";
+      exclude = options.excludePaths;
+      paths = options.paths;
+      timerConfig = {
+        OnCalendar = "01:05";
+        Persistent = true;
+        RandomizedDelaySec = "4h";
+      };
+      pruneOpts = [
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+
     }
   );
 

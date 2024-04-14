@@ -13,5 +13,6 @@
     ./bind
     ./glances
     ./syncthing
+    ./restic
   ];
 }

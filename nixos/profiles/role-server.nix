@@ -15,7 +15,9 @@ with lib;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
     mySystem.services.cockpit.enable = true;
+    mySystem.system.motd.enable = true;
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+
 
       name = config.networking.hostName;
       group = "servers";

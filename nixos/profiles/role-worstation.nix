@@ -1,4 +1,4 @@
-{ config, lib, pkgs, imports, boot, self, ... }:
+{ config, lib, pkgs, imports, boot, self, inputs, ... }:
 # Role for workstations
 # Covers desktops/laptops, expected to have a GUI and do worloads
 # Will have home-manager installs
@@ -79,6 +79,7 @@ with config;
     gh
 
     bind # for dns utils like named-checkconf
+    inputs.nix-inspect.packages.${pkgs.system}.default
   ];
 
   i18n = {
