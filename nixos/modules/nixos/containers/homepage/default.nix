@@ -10,9 +10,9 @@ let
   user = "568"; #string
   group = "568"; #string
   port = 3000; #int
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
-
-  cfg = config.mySystem.services.homepage;
+  cfg = config.mySystem.services.${app};
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 
   # TODO refactor out this sht
   settings =

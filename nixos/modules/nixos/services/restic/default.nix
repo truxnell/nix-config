@@ -31,18 +31,26 @@ in
   };
 
 
-  config = mkIf (cfg.local.enable || cfg.remote.enable) {
+  config = {
 
-    sops.secrets."services/restic/password" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = "kah";
-      group = "kah";
-    };
+    # Warn if backups are disable and machine isnt a dev box
+    warnings = [
+      (mkIf (!cfg.local.enable && config.mySystem.purpose != "Development") "WARNING: Local backups are disabled!")
+      (mkIf (!cfg.remote.enable && config.mySystem.purpose != "Development") "WARNING: Remote backups are disabled!")
+    ];
 
-    sops.secrets."services/restic/env" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = "kah";
-      group = "kah";
+    sops.secrets = mkIf (cfg.local.enable || cfg.remote.enable) {
+      "services/restic/password" = {
+        sopsFile = ./secrets.sops.yaml;
+        owner = "kah";
+        group = "kah";
+      };
+
+      "services/restic/env" = {
+        sopsFile = ./secrets.sops.yaml;
+        owner = "kah";
+        group = "kah";
+      };
     };
 
     # useful commands:
@@ -58,7 +66,7 @@ in
     # (backing up a in-use file can and will cause corruption)
 
     # ref: https://cyounkins.medium.com/correct-backups-require-filesystem-snapshots-23062e2e7a15
-    systemd = {
+    systemd = mkIf (cfg.local.enable || cfg.remote.enable) {
 
       timers.restic_nightly_snapshot = {
         description = "Nightly ZFS snapshot timer";

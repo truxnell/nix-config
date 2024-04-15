@@ -11,6 +11,7 @@
 
   ];
 
+  mySystem.purpose = "Network Attached Storage";
   mySystem.services = {
     openssh.enable = true;
 

@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 9898; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -23,9 +24,9 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder}/nixos/config 0755 ${user} ${group} -"
-      "d ${persistentFolder}/nixos/data 0755 ${user} ${group} -"
-      "d ${persistentFolder}/nixos/cache 0755 ${user} ${group} -"
+      "d ${persistentFolder}/config 0755 ${user} ${group} -"
+      "d ${persistentFolder}/data 0755 ${user} ${group} -"
+      "d ${persistentFolder}/cache 0755 ${user} ${group} -"
     ];
 
     virtualisation.oci-containers.containers.${app} = {

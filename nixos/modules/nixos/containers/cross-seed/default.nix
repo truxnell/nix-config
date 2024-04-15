@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   configFile = builtins.toFile "config.js" (builtins.toJSON configVar);
 
 in
@@ -24,7 +25,7 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder}/nixos 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     virtualisation.oci-containers.containers.${app} = {

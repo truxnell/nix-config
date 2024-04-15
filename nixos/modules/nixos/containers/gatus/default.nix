@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
     {

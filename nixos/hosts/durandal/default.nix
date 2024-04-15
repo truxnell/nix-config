@@ -6,7 +6,7 @@
 , pkgs
 , ...
 }: {
-
+  mySystem.purpose = "Development";
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
@@ -22,17 +22,16 @@
 
 
   };
-  mySystem.services.bind.enable = true;
 
   mySystem.nfs.nas.enable = true;
-  mySystem.persistentFolder = "/persistent/nixos";
+  mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
 
   # Dev machine
-  mySystem.mySystem.system.resticBackup =
+  mySystem.system.resticBackup =
     {
-      local.enabled = false;
-      remote.enabled = false;
+      local.enable = false;
+      remote.enable = false;
     };
 
   boot = {

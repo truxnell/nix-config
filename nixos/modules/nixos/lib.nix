@@ -49,35 +49,30 @@ with lib;
         ${pkgs.restic}/bin/restic unlock || true
       '';
     in
-    if config.mySystem.system.resticBackup.local.enable -> config.mySystem.system.resticBackup.local.location == "" then
-      abort "If local backups are enabled a local.location must be defined"
-    else if config.mySystem.system.resticBackup.remote.enable -> config.mySystem.system.resticBackup.remote.location == "" then
-      abort "If remote backups are enabled a remote.location must be defined"
-    else
-      {
-        # local backup
-        "${options.app}-local" = mkIf config.mySystem.system.resticBackup.local.enable {
-          inherit pruneOpts timerConfig initialize backupPrepareCommand;
-          # Move the path to the zfs snapshot path
-          paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
-          passwordFile = config.sops.secrets."services/restic/password".path;
-          exclude = options.excludePaths;
-          repository = "${config.mySystem.system.resticBackup.local.location}/${options.app}";
-        };
+    {
+      # local backup
+      "${options.app}-local" = mkIf config.mySystem.system.resticBackup.local.enable {
+        inherit pruneOpts timerConfig initialize backupPrepareCommand;
+        # Move the path to the zfs snapshot path
+        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        passwordFile = config.sops.secrets."services/restic/password".path;
+        exclude = options.excludePaths;
+        repository = "${config.mySystem.system.resticBackup.local.location}/${options.app}";
+      };
 
-        # remote backup
-        "${options.app}-remote" = mkIf config.mySystem.system.resticBackup.remote.enable {
-          inherit pruneOpts timerConfig initialize backupPrepareCommand;
-          # Move the path to the zfs snapshot path
-          paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
-          environmentFile = config.sops.secrets."services/restic/env".path;
-          passwordFile = config.sops.secrets."services/restic/password".path;
-          repository = "${config.mySystem.system.resticBackup.remote.location}/${options.app}";
-          exclude = options.excludePaths;
-        };
+      # remote backup
+      "${options.app}-remote" = mkIf config.mySystem.system.resticBackup.remote.enable {
+        inherit pruneOpts timerConfig initialize backupPrepareCommand;
+        # Move the path to the zfs snapshot path
+        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        environmentFile = config.sops.secrets."services/restic/env".path;
+        passwordFile = config.sops.secrets."services/restic/password".path;
+        repository = "${config.mySystem.system.resticBackup.remote.location}/${options.app}";
+        exclude = options.excludePaths;
+      };
 
 
-      }
+    }
   );
 
 }

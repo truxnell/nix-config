@@ -33,6 +33,11 @@ with lib;
     description = "domain for local devices";
     default = "";
   };
+  options.mySystem.purpose = mkOption {
+    type = types.str;
+    description = "System purpose";
+    default = "Production";
+  };
 
 
   config = {

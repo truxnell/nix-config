@@ -2,6 +2,4 @@
 
   mySystem = import ./nixos;
 
-
-
 }

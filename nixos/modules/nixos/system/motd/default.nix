@@ -33,6 +33,7 @@ let
       upSecs=$((uptime%60))
 
       figlet "$(hostname)" | lolcat -f
+      printf "$BOLD    %-20s$ENDCOLOR %s\n" "Role:" "${config.mySystem.purpose}"
       printf "\n"
       ${lib.strings.concatStrings (lib.lists.forEach cfg.networkInterfaces (x: "printf \"$BOLD  * %-20s$ENDCOLOR %s\\n\" \"IPv4 ${x}\" \"$(ip -4 addr show ${x} | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')\"\n"))}
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "Release" "$PRETTY_NAME"
