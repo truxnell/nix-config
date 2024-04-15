@@ -28,6 +28,7 @@
 
   };
   mySystem.nasFolder = "/tank";
+  mySystem.system.resticBackup.local.location = "/tank/backup/nixos/nixos";
 
   mySystem.system = {
     zfs.enable = true;

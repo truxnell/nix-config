@@ -28,6 +28,13 @@
   mySystem.persistentFolder = "/persistent/nixos";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
 
+  # Dev machine
+  mySystem.mySystem.system.resticBackup =
+    {
+      local.enabled = false;
+      remote.enabled = false;
+    };
+
   boot = {
 
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];

@@ -15,7 +15,7 @@ with lib;
   options.mySystem.persistentFolder = mkOption {
     type = types.str;
     description = "persistent folder for nixos mutable files";
-    default = "/persist/nixos";
+    default = "/persist";
   };
 
   options.mySystem.nasFolder = mkOption {

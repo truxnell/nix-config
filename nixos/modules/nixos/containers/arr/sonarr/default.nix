@@ -11,7 +11,7 @@ let
   group = "568"; #string
   port = 8989; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
   containerPersistentFolder = "/config";
 in
 {
@@ -24,7 +24,7 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${persistentFolder}/nixos 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     sops.secrets."services/${app}/env" = {
@@ -50,7 +50,7 @@ in
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:${containerPersistentFolder}:rw"
+        "${persistentFolder}/nixos:${containerPersistentFolder}:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
@@ -85,6 +85,14 @@ in
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ persistentFolder ];
+      };
+
 
   };
 }

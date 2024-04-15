@@ -11,7 +11,7 @@ let
   group = "568"; #string
   port = 7878; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
 in
 {
   options.mySystem.services.${app} =
@@ -23,7 +23,7 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${persistentFolder}/nixos 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     sops.secrets."services/${app}/env" = {
@@ -83,6 +83,14 @@ in
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ persistentFolder ];
+      };
+
 
   };
 }

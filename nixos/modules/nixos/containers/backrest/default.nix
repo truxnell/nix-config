@@ -11,7 +11,7 @@ let
   group = "568"; #string
   port = 9898; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/containers/${app}";
 in
 {
   options.mySystem.services.${app} =
@@ -23,9 +23,9 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder}/config 0755 ${user} ${group} -"
-      "d ${persistentFolder}/data 0755 ${user} ${group} -"
-      "d ${persistentFolder}/cache 0755 ${user} ${group} -"
+      "d ${persistentFolder}/nixos/config 0755 ${user} ${group} -"
+      "d ${persistentFolder}/nixos/data 0755 ${user} ${group} -"
+      "d ${persistentFolder}/nixos/cache 0755 ${user} ${group} -"
     ];
 
     virtualisation.oci-containers.containers.${app} = {
@@ -38,9 +38,9 @@ in
         XDG_CACHE_HOME = "/cache";
       };
       volumes = [
-        "${persistentFolder}/config:/config:rw"
-        "${persistentFolder}/data:/data:rw"
-        "${persistentFolder}/cache:/cache:rw"
+        "${persistentFolder}/nixos/config:/config:rw"
+        "${persistentFolder}/nixos/data:/data:rw"
+        "${persistentFolder}/nixos/cache:/cache:rw"
         "${config.mySystem.nasFolder}/backup/nixos/nixos:/repos:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
