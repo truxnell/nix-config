@@ -32,7 +32,6 @@ with lib;
   lib.mySystem.mkRestic = options: (
     let
       excludePath = if builtins.hasAttr "excludePath" options then options.excludePath else [ ];
-      user = options.user ? "kah";
       timerConfig = {
         OnCalendar = "02:05";
         Persistent = true;
@@ -57,7 +56,8 @@ with lib;
         paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
         passwordFile = config.sops.secrets."services/restic/password".path;
         exclude = options.excludePaths;
-        repository = "${config.mySystem.system.resticBackup.local.location}/${options.app}";
+        repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
+        user = options.user;
       };
 
       # remote backup
@@ -67,10 +67,10 @@ with lib;
         paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
         environmentFile = config.sops.secrets."services/restic/env".path;
         passwordFile = config.sops.secrets."services/restic/password".path;
-        repository = "${config.mySystem.system.resticBackup.remote.location}/${options.app}";
+        repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
         exclude = options.excludePaths;
+        user = options.user;
       };
-
 
     }
   );

@@ -44,12 +44,12 @@ let
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "Memory" "$MEMORY"
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "System uptime" "$upDays days $upHours hours $upMins minutes $upSecs seconds"
       printf "\n"
-      if [ command -v zpool >/dev/null 2>&1 ]; then
-        printf "$BOLDZpool status:$ENDCOLOR\n"
+      if ! type "$zpool" &> /dev/null; then
+        printf "$BOLD Zpool status: $ENDCOLOR\n"
         zpool status -x | sed -e 's/^/  /'
       fi
-      if [ command -v zpool >/dev/null 2>&1 ]; then
-        printf "$BOLDZpool usage:$ENDCOLOR\n"
+      if ! type "$zpool" &> /dev/null; then
+        printf "$BOLD Zpool usage: $ENDCOLOR\n"
         zpool list -Ho name,cap,size | awk '{ printf("%-10s%+3s used out of %+5s\n", $1, $2, $3); }' | sed -e 's/^/  /'
       fi
       printf "\n"
