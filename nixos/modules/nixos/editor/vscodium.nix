@@ -23,6 +23,8 @@ in
           [
             bbenoist.nix
             mkhl.direnv
+            streetsidesoftware.code-spell-checker
+            oderwat.indent-rainbow
 
           ]
           ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [

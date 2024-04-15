@@ -18,6 +18,9 @@ with config;
     services.cockpit.enable = true;
 
     nfs.nas.enable = true;
+    system.resticBackup.local.enable = false;
+    system.resticBackup.remote.enable = false;
+
   };
 
   boot = {

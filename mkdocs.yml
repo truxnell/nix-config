@@ -42,7 +42,10 @@ plugins:
 # Extensions
 markdown_extensions:
   - admonition
-  - pymdownx.emoji
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -57,4 +60,10 @@ markdown_extensions:
 
 nav:
   - index.md
-  - motd.md
+  - Overview:
+      - Goals: overview/goals.md
+      - Features: overview/features.md
+  - Maintenance:
+      - Software Updates: maintenance/software_updates.md
+      - Backups: maintenance/backups.md
+  - MOTD: motd.md

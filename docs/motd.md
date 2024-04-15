@@ -2,7 +2,7 @@
 
 Why not include a nice message of the day for each server I log into?
 
-The below gives some insight into what the servers runing, status of zpools, usage, etc.
+The below gives some insight into what the servers running, status of zpools, usage, etc.
 This is also nice in that if there IS a zpool error, it will print the output in the MOTD with is very eye-catching...
 
 ![Alt text](motd.png)
@@ -28,7 +28,8 @@ in
 This gets us a shells script we can then directly call into systemPackages - and after that its just a short hop to make this part of the shell init.
 
 !!! note
-Replace with your prefered shell!
+
+    Replace with your preferred shell!
 
 ```nix
 environment.systemPackages = [

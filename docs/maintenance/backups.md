@@ -1,6 +1,11 @@
-Nightly Backups are facilitated by nixos restic module & a helper module ive written.
 
-These run to my NAS 'local' and cloudflare R2 'remote'
+# Backups
+## Overview
+Nightly Backups are facilitated by nixos [restic](https://search.nixos.org/options?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=services.restic.) module & a helper module ive written.
+
+This does a nightly ZFS snapshot, in which apps and other mutable data is restic backedup to both a local folder on my NAS and also to Cloudflare R2.
+
+## Taking a backup
 
 They are a systemd timer/service so you can query or trigger a manual run with
 
@@ -50,3 +55,5 @@ repository a2847581 opened (version 2, compression level auto)
 restoring <Snapshot b96f4b94 of [/persist/nixos/lidarr] at 2024-04-14 04:19:41.533770692 +1000 AEST by root@daedalus> to /tmp/lidarr/
 Summary: Restored 52581 files/dirs (11.025 GiB) in 1:37
 ```
+
+## Restoring a backup
