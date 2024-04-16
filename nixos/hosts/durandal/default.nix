@@ -14,7 +14,7 @@
 
     gatus.enable = true;
     homepage.enable = true;
-    backrest.enable = true;
+    # backrest.enable = true;
 
     plex.enable = true;
     tautulli.enable = true;
@@ -22,6 +22,7 @@
 
 
   };
+  mySystem.system.systemd.pushover-alerts.enable = false;
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";

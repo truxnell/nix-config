@@ -88,19 +88,14 @@ in
           10.5.0.0/24;    # CONTAINERS
         };
 
-        key "tsig-key" {
-                algorithm hmac-sha512;
-                secret "iZhi4kaPJBvqxyW73aKYRnNy5e7N2A+7WczxAMcCvDl8QpAc0HFjfI1Q+0g1SBUQBZXqAvGFViegPsK9lZ3bkA==";
-        };
-
         zone "trux.dev." {
           type master;
           file "${config.sops.secrets."system/networking/bind/trux.dev".path}";
           allow-transfer {
-          tsig-key;
+
         };
           update-policy {
-            grant tsig-key zonesub ANY;
+
           };
           allow-query { any; };
 

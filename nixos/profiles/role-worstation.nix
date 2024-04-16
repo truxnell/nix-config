@@ -69,6 +69,9 @@ with config;
     dnsutils
     nix
 
+    # nix dev
+    dnscontrol # for updating internal DNS servers with homelab services
+
     # Sensors etc
     lm_sensors
     cpufrequtils

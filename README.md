@@ -10,6 +10,8 @@
 
 Leveraging nix, nix-os and other funny magic man words to apply machine and home configurations
 
+[Repository Documentation](https://truxnell.github.io/nix-config/)
+
 ## Background
 
 Having used a variety of infracture as code solutions - and having found them lacking in some areas, it is time to give nix a go.

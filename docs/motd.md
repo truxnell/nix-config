@@ -11,7 +11,7 @@ Code TLDR
 
 :simple-github:[/nixos/modules/nixos/system/motd](https://github.com/truxnell/nix-config/blob/462144babe7e7b2a49a985afe87c4b2f1fa8c3f9/nixos/modules/nixos/system/motd/default.nix])
 
-Write a shell script using nix with a bash motd
+Write a shell script using nix with a bash motd of your choosing.
 
 ```nix
 let
