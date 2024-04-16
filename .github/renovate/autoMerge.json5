@@ -29,6 +29,13 @@
         "ghcr.io/gethomepage/homepage",
       ]
 
-    }
-  ]
+    },
+        {
+      "matchDatasources": ['docker'],
+      "automerge": "true",
+      "automergeType": "branch",
+      "matchUpdateTypes": [ 'digest'],
+    },
+
+  ],
 }
