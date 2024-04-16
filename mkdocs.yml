@@ -1,5 +1,6 @@
 site_name: Truxnell's NixOS homelab
 site_author: truxnell
+site_url: https://truxnell.github.io/nix-config/
 
 # Repository
 repo_name: truxnell/nix-config
