@@ -14,5 +14,6 @@
     ./glances
     ./syncthing
     ./restic
+    ./powerdns
   ];
 }

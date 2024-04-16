@@ -17,21 +17,18 @@ in
 
       # configure secret for forwarding rules
       "system/networking/bind/trux.dev".sopsFile = ./secrets.sops.yaml;
-      "system/networking/bind/trux.dev".mode = "0444"; # This is world-readable but theres nothing security related in the file
-
-      # Restart dnscrypt when secret changes
+      "system/networking/bind/trux.dev".mode = "0444";
       "system/networking/bind/trux.dev".restartUnits = [ "bind.service" ];
-    };
-    sops.secrets = {
 
-      # configure secret for forwarding rules
       "system/networking/bind/natallan.com".sopsFile = ./secrets.sops.yaml;
-      "system/networking/bind/natallan.com".mode = "0444"; # This is world-readable but theres nothing security related in the file
-
-      # Restart dnscrypt when secret changes
+      "system/networking/bind/natallan.com".mode = "0444";
       "system/networking/bind/natallan.com".restartUnits = [ "bind.service" ];
-    };
 
+      # Generate with tsig-keygen trux.dev. > key.conf
+      "system/networking/bind/key".sopsFile = ./secrets.sops.yaml;
+      "system/networking/bind/key".mode = "0444";
+      "system/networking/bind/key".restartUnits = [ "bind.service" ];
+    };
 
     networking.resolvconf.useLocalResolver = mkForce false;
 
@@ -39,12 +36,13 @@ in
 
       enable = true;
 
+
       # Ended up having to do the cfg manually
       # to bind the port 5353
       configFile = builtins.toFile "bind.cfg" ''
-        include "/etc/bind/rndc.key";
+        include "${config.sops.secrets."system/networking/bind/key".path}";
         controls {
-          inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+          inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
         };
 
         acl cachenetworks {  10.8.10.0/24;  10.8.20.0/24;  10.8.30.0/24;  10.8.40.0/24;  };
@@ -88,20 +86,11 @@ in
           10.5.0.0/24;    # CONTAINERS
         };
 
-        key "tsig-key" {
-                algorithm hmac-sha512;
-                secret "iZhi4kaPJBvqxyW73aKYRnNy5e7N2A+7WczxAMcCvDl8QpAc0HFjfI1Q+0g1SBUQBZXqAvGFViegPsK9lZ3bkA==";
-        };
-
         zone "trux.dev." {
           type master;
           file "${config.sops.secrets."system/networking/bind/trux.dev".path}";
-          allow-transfer {
-          tsig-key;
-        };
-          update-policy {
-            grant tsig-key zonesub ANY;
-          };
+          allow-transfer { };
+          update-policy { };
           allow-query { any; };
 
         };

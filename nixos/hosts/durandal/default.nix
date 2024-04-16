@@ -14,7 +14,7 @@
 
     gatus.enable = true;
     homepage.enable = true;
-    backrest.enable = true;
+    # backrest.enable = true;
 
     plex.enable = true;
     tautulli.enable = true;
@@ -22,11 +22,12 @@
 
 
   };
+  mySystem.system.systemd.pushover-alerts.enable = false;
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
-
+  mySystem.services.powerdns.enable = true;
   # Dev machine
   mySystem.system.resticBackup =
     {
