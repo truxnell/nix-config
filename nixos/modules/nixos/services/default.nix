@@ -15,5 +15,6 @@
     ./syncthing
     ./restic
     ./powerdns
+    ./adguardhome
   ];
 }

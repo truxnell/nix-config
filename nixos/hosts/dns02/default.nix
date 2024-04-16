@@ -14,10 +14,21 @@
   mySystem.services = {
 
     openssh.enable = true;
-    dnscrypt-proxy.enable = true;
     cfDdns.enable = true;
-    bind.enable = true;
+    powerdns = {
+      enable = true;
+      admin-ui = false;
+    };
+    adguardhome.enable = true;
   };
+
+  # no mutable state I care about
+  mySystem.system.resticBackup =
+    {
+      local.enable = false;
+      remote.enable = false;
+    };
+
 
   networking.hostName = "dns02"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;

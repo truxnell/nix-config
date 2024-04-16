@@ -27,7 +27,7 @@
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
-  mySystem.services.powerdns.enable = true;
+
   # Dev machine
   mySystem.system.resticBackup =
     {

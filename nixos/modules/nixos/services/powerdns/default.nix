@@ -10,6 +10,8 @@ let
   user = "pdns";
   group = "pdns";
   configDir = pkgs.writeTextDir "pdns.conf" "${pdnsConfig}";
+
+  # $APIKEY is replaced via envsubst in the pdns module
   pdnsConfig = ''
     expand-alias=yes
     resolver=9.9.9.9:53
@@ -19,7 +21,8 @@ let
     webserver=yes
     webserver-address=0.0.0.0:8081
     webserver-allow-from=10.8.10.0/20
-
+    api=yes
+    api-key=$APIKEY
   '';
 in
 {
@@ -29,6 +32,7 @@ in
       openFirewall = mkEnableOption "Open firewall for ${app}" // {
         default = true;
       };
+      admin-ui = mkEnableOption "Powerdns-admin UI";
     };
 
   config = mkIf cfg.enable {
@@ -38,60 +42,47 @@ in
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
-    # wget https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gsqlite3backend/schema.sqlite3.sql
-    # sqlite3 /persistent/nixos/pdns/pdns.sqlite3 < schema.sqlite3.sql
-    # rm schema.sqlite3.sql
-
-    environment.systemPackages = with pkgs;
-      [ sqlite wget ];
-
-    environment.etc.pdns.source = configDir;
-
-    systemd.packages = [ pkgs.pdns ];
-
-    systemd.services.pdns = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "mysql.service" "postgresql.service" "openldap.service" ];
-
-      serviceConfig = {
-        ExecStartPre = (pkgs.writeScript
-          "pdns-sqlite-init.sh"
-          ''
-            #!${pkgs.bash}/bin/bash
-
-            pdns_folder="${persistentFolder}"
-            echo "INIT: Checking if pdns sqlite exists"
-            # Check if the pdns.sqlite3 file exists in the pdns folder
-            if [ ! -f "${persistentFolder}/pdns.sqlite3" ]; then
-                echo "INIT: No sqlite db found, initializing from pdns github schema..."
-
-                ${pkgs.wget}/bin/wget -O "${persistentFolder}/schema.sqlite3.sql" https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gsqlite3backend/schema.sqlite3.sql
-                ${pkgs.sqlite}/bin/sqlite3 "${persistentFolder}/pdns.sqlite3" < "${persistentFolder}/schema.sqlite3.sql"
-                ${pkgs.busybox}/bin/chown pdns:pdns ${persistentFolder}/pdns.sqlite3
-                ${pkgs.busybox}/bin/rm "${persistentFolder}/schema.sqlite3.sql"
-            fi
-
-            # Exit successfully
-            exit 0
-
-          ''
-        );
-        ExecStart = [ "" "${pkgs.pdns}/bin/pdns_server --config-dir=${configDir} --guardian=no --daemon=no --disable-syslog --log-timestamp=no --write-pid=no" ];
-      };
+    services.powerdns = {
+      enable = true;
+      extraConfig = pdnsConfig;
+      secretFile = config.sops.secrets."system/services/powerdns/apiKey".path;
+    };
+    sops.secrets."system/services/powerdns/apiKey" = {
+      sopsFile = ./secrets.sops.yaml;
+      restartUnits = [ "pdns.service" ];
     };
 
-    users.users.pdns = {
-      isSystemUser = true;
-      group = "pdns";
-      description = "PowerDNS";
-    };
+    # powerdns doesnt create the sqlite database for us
+    # so we gotta either do it manually once-off or do the below to ensure its created
+    # if the file is missing before service start
+    systemd.services.pdns.serviceConfig.ExecStartPre = lib.mkBefore [
+      (pkgs.writeScript "pdns-sqlite-init.sh"
+        ''
+          #!${pkgs.bash}/bin/bash
 
-    users.groups.pdns = { };
+          pdns_folder="${persistentFolder}"
+          echo "INIT: Checking if pdns sqlite exists"
+          # Check if the pdns.sqlite3 file exists in the pdns folder
+          if [ ! -f "${persistentFolder}/pdns.sqlite3" ]; then
+              echo "INIT: No sqlite db found, initializing from pdns github schema..."
+
+              ${pkgs.wget}/bin/wget -O "${persistentFolder}/schema.sqlite3.sql" https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gsqlite3backend/schema.sqlite3.sql
+              ${pkgs.sqlite}/bin/sqlite3 "${persistentFolder}/pdns.sqlite3" < "${persistentFolder}/schema.sqlite3.sql"
+              ${pkgs.busybox}/bin/chown pdns:pdns ${persistentFolder}/pdns.sqlite3
+              ${pkgs.busybox}/bin/rm "${persistentFolder}/schema.sqlite3.sql"
+          fi
+
+          # Exit successfully
+          exit 0
+
+        ''
+      )
+    ];
 
     networking.firewall = mkIf cfg.openFirewall {
 
       allowedTCPPorts = [ 8081 5353 ];
-
+      allowedUDPPorts = [ 8081 5353 ];
 
     };
 
