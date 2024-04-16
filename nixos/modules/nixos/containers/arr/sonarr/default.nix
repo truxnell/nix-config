@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 8989; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   containerPersistentFolder = "/config";
 in
 {
@@ -50,7 +51,7 @@ in
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
-        "${persistentFolder}:${containerPersistentFolder}:rw"
+        "${persistentFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
@@ -85,6 +86,15 @@ in
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ appFolder ];
+        inherit appFolder;
+      };
+
 
   };
 }

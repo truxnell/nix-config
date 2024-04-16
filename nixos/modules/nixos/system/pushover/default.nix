@@ -17,9 +17,13 @@ in
     );
   };
 
-  config = mkIf cfg.enable {
+  config = {
+    # Warn if backups are disable and machine isnt a dev box
+    warnings = [
+      (mkIf (!cfg.enable && config.mySystem.purpose != "Development") "WARNING: Pushover SystemD notifications are disabled!")
+    ];
 
-    systemd.services."notify-pushover@" = {
+    systemd.services."notify-pushover@" = mkIf cfg.enable {
       enable = true;
       onFailure = lib.mkForce [ ]; # cant refer to itself on failure
       description = "Notify on failed unit %i";
@@ -32,6 +36,7 @@ in
       # Script calls pushover with some deets.
       # Here im using the systemd specifier %i passed into the script,
       # which I can reference with bash $1.
+      scriptArgs = "%i %H";
       script = ''
         ${pkgs.curl}/bin/curl --fail -s -o /dev/null \
           --form-string "token=$PUSHOVER_API_KEY" \
@@ -46,7 +51,6 @@ in
           https://api.pushover.net/1/messages.json 2&>1
 
       '';
-      scriptArgs = "%i %H";
     };
 
   };

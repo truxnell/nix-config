@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 9696; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -48,7 +49,6 @@ in
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "${persistentFolder}:/config:rw"
-        "${persistentFolder}:/config:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       labels = config.lib.mySystem.mkTraefikLabels {
@@ -82,6 +82,14 @@ in
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ appFolder ];
+        inherit appFolder;
+      };
 
   };
 }

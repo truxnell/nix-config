@@ -8,23 +8,44 @@
     };
     system = builtins.currentSystem;
     overlays = [ ]; # Explicit blank overlay to avoid interference
+
+
   in
   import nixpkgs { inherit system overlays; }
 , ...
-}: {
-  default = pkgs.mkShell {
-    # Enable experimental features without having to specify the argument
-    NIX_CONFIG = "experimental-features = nix-command flakes";
-    nativeBuildInputs = with pkgs; [
-      nix
-      home-manager
-      git
-      nil
-      nixpkgs-fmt
-      go-task
-      sops
-      pre-commit
-      gitleaks
-    ];
-  };
+}:
+let
+  # setup the ssssnaaake
+  my-python = pkgs.python311;
+  python-with-my-packages = my-python.withPackages
+    (p: with p; [
+      mkdocs-material
+      mkdocs-minify
+      pygments
+    ]);
+in
+pkgs.mkShell {
+  # Enable experimental features without having to specify the argument
+  NIX_CONFIG = "experimental-features = nix-command flakes";
+
+  buildInputs = [
+    python-with-my-packages
+  ];
+  shellHook = ''
+    PYTHONPATH=${python-with-my-packages}/${python-with-my-packages.sitePackages}
+  '';
+
+  nativeBuildInputs = with pkgs; [
+    nix
+    home-manager
+    git
+    nil
+    nixpkgs-fmt
+    go-task
+    sops
+    pre-commit
+    gitleaks
+    mkdocs
+
+  ];
 }

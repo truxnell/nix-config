@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 8181; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -66,6 +67,15 @@ in
       interval = "30s";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ appFolder ];
+        inherit appFolder;
+      };
+
 
   };
 }

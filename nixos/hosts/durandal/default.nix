@@ -6,20 +6,33 @@
 , pkgs
 , ...
 }: {
-
+  mySystem.purpose = "Development";
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
     traefik.enable = true;
 
+    gatus.enable = true;
+    homepage.enable = true;
+    backrest.enable = true;
+
     plex.enable = true;
     tautulli.enable = true;
     syncthing.enable = true;
+
+
   };
 
   mySystem.nfs.nas.enable = true;
-  mySystem.persistentFolder = "/persistent/nixos";
+  mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
+
+  # Dev machine
+  mySystem.system.resticBackup =
+    {
+      local.enable = false;
+      remote.enable = false;
+    };
 
   boot = {
 

@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   configFile = builtins.toFile "config.js" (builtins.toJSON configVar);
 
 in

@@ -11,7 +11,8 @@ let
   group = "568"; #string
   port = 9898; #int
   cfg = config.mySystem.services.${app};
-  persistentFolder = "${config.mySystem.persistentFolder}/${app}";
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -38,9 +39,9 @@ in
         XDG_CACHE_HOME = "/cache";
       };
       volumes = [
-        "${persistentFolder}/config:/config:rw"
-        "${persistentFolder}/data:/data:rw"
-        "${persistentFolder}/cache:/cache:rw"
+        "${persistentFolder}/nixos/config:/config:rw"
+        "${persistentFolder}/nixos/data:/data:rw"
+        "${persistentFolder}/nixos/cache:/cache:rw"
         "${config.mySystem.nasFolder}/backup/nixos/nixos:/repos:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];

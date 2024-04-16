@@ -11,25 +11,25 @@
 
   ];
 
+  mySystem.purpose = "Network Attached Storage";
   mySystem.services = {
     openssh.enable = true;
 
     #containers
     podman.enable = true;
     traefik.enable = true;
-    homepage.enable = true;
     sonarr.enable = true;
     radarr.enable = true;
     lidarr.enable = true;
     readarr.enable = true;
-    gatus.enable = true;
     sabnzbd.enable = true;
     qbittorrent.enable = true;
     prowlarr.enable = true;
 
-    backrest.enable = true;
+
   };
   mySystem.nasFolder = "/tank";
+  mySystem.system.resticBackup.local.location = "/tank/backup/nixos/nixos";
 
   mySystem.system = {
     zfs.enable = true;

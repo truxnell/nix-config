@@ -32,16 +32,26 @@ let
       upMins=$((uptime/60%60))
       upSecs=$((uptime%60))
 
-      printf "$BOLD Welcome to $(hostname)!$ENDCOLOR\n"
+      figlet "$(hostname)" | lolcat -f
+      printf "$BOLD    %-20s$ENDCOLOR %s\n" "Role:" "${config.mySystem.purpose}"
       printf "\n"
       ${lib.strings.concatStrings (lib.lists.forEach cfg.networkInterfaces (x: "printf \"$BOLD  * %-20s$ENDCOLOR %s\\n\" \"IPv4 ${x}\" \"$(ip -4 addr show ${x} | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')\"\n"))}
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "Release" "$PRETTY_NAME"
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "Kernel" "$(uname -rs)"
+      [ -f /var/run/reboot-required ] && printf "$RED  * %-20s$ENDCOLOR %s\n" "A reboot is required"
       printf "\n"
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "CPU usage" "$LOAD1, $LOAD5, $LOAD15 (1, 5, 15 min)"
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "Memory" "$MEMORY"
       printf "$BOLD  * %-20s$ENDCOLOR %s\n" "System uptime" "$upDays days $upHours hours $upMins minutes $upSecs seconds"
-
+      printf "\n"
+      if ! type "$zpool" &> /dev/null; then
+        printf "$BOLD Zpool status: $ENDCOLOR\n"
+        zpool status -x | sed -e 's/^/  /'
+      fi
+      if ! type "$zpool" &> /dev/null; then
+        printf "$BOLD Zpool usage: $ENDCOLOR\n"
+        zpool list -Ho name,cap,size | awk '{ printf("%-10s%+3s used out of %+5s\n", $1, $2, $3); }' | sed -e 's/^/  /'
+      fi
       printf "\n"
       printf "$BOLDService status$ENDCOLOR\n"
 
@@ -76,6 +86,8 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       motd
+      pkgs.lolcat
+      pkgs.figlet
     ];
     programs.fish.interactiveShellInit = lib.mkIf config.programs.fish.enable ''
       motd
