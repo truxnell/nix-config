@@ -3,13 +3,15 @@
 Why not include a nice message of the day for each server I log into?
 
 The below gives some insight into what the servers running, status of zpools, usage, etc.
-This is also nice in that if there IS a zpool error, it will print the output in the MOTD with is very eye-catching...
+While not show below - thankfully - If a zpool error is found the status gives a full `zpool status -x` debrief which is particulary eye-catching upon login.
 
 ![Alt text](motd.png)
 
 Code TLDR
 
-[/nixos/modules/nixos/system/motd/default.nix](https://github.com/truxnell/nix-config/blob/462144babe7e7b2a49a985afe87c4b2f1fa8c3f9/nixos/modules/nixos/system/motd/default.nix#L3])
+:simple-github:[/nixos/modules/nixos/system/motd](https://github.com/truxnell/nix-config/blob/462144babe7e7b2a49a985afe87c4b2f1fa8c3f9/nixos/modules/nixos/system/motd/default.nix])
+
+Write a shell script using nix with a bash motd
 
 ```nix
 let
@@ -19,7 +21,7 @@ let
       source /etc/os-release
       service_status=$(systemctl list-units | grep podman-)
 
-      ...
+      <- SNIP ->
       printf "$BOLDService status$ENDCOLOR\n"
     '';
 in

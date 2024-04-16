@@ -1,11 +1,12 @@
 {
 
-  // auto update up to major
   "packageRules": [
     {
+  // auto update up to major
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
+      "schedule": [ "before 4am on Sunday" ],
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
         'ghcr.io/onedr0p/sonarr',
@@ -13,16 +14,19 @@
         'ghcr.io/onedr0p/radarr',
         'ghcr.io/onedr0p/lidarr',
         'ghcr.io/onedr0p/prowlarr'
-        'ghcr.io/twin/gatus',
-      ]
+      ],
+
     },
+    // auto update up to minor
     {
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
+      "schedule": [ "before 4am on Sunday" ],
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
-        "ghcr.io/gethomepage/homepage"
+        'ghcr.io/twin/gatus',
+        "ghcr.io/gethomepage/homepage",
       ]
 
     }

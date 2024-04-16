@@ -8,6 +8,8 @@ repo_url: https://github.com/truxnell/nix-config
 docs_dir: ./docs
 site_dir: ./site
 
+copyright: Copyright &copy; 2024 Nat Allan
+
 theme:
   name: material
   # custom_dir: ../../docs/overrides
@@ -18,19 +20,30 @@ theme:
     - navigation.expand
     - navigation.indexes
     - navigation.path
-    - navigation.sections
+    # - navigation.sections
+    - navigation.footer
     # - navigation.tabs
     - navigation.top
     - search.suggest
   palette:
-    scheme: slate
-    primary: black
-    accent: indigo
+    - scheme: slate
+      media: "(prefers-color-scheme: light)"
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      media: "(prefers-color-scheme: dark)"
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   font:
     text: Roboto
     code: Roboto Mono
   icon:
     logo: simple/nixos
+    annotations: material/chat-question
 
 # Plugins
 plugins:
@@ -42,7 +55,9 @@ plugins:
 # Extensions
 markdown_extensions:
   - admonition
+  - abbr
   - attr_list
+  - md_in_html
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
@@ -51,19 +66,29 @@ markdown_extensions:
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
+  - pymdownx.caret
+  - pymdownx.tilde
   - pymdownx.snippets:
       check_paths: true
+      auto_append:
+        - ./docs/includes/abbreviations.md
   - pymdownx.superfences
   - toc:
       permalink: true
       toc_depth: 3
 
 nav:
-  - index.md
+  - readme.md: index.md
   - Overview:
       - Goals: overview/goals.md
       - Features: overview/features.md
+      - Design Principals: overview/design.md
+      - Structure: overview/structure.md
   - Maintenance:
       - Software Updates: maintenance/software_updates.md
       - Backups: maintenance/backups.md
-  - MOTD: motd.md
+  - Monitoring:
+      - SystemD failures: monitoring/systemd.md
+      - Nix Warnings: monitoring/warnings.md
+  - Other Features:
+      - MOTD: motd.md

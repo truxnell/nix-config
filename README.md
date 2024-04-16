@@ -38,37 +38,16 @@ To Install
 - [ ] Bring over hosts
   - [x] DNS01 Raspi4
   - [x] DNS02 Raspi4
-  - [ ] NAS
+  - [x] NAS
   - [x] Latop
   - [x] Gaming desktop
   - [ ] WSL
   - [ ] JJY emulator Raspi4
-- [ ] Documentation!
-- [ ] ssh_config build from computers?
-- [ ] Modularise host to allow vm builds and hw builds
-- [ ] Add license
-- [ ] Add taskfiles
-
-## Network map
-
-TBC
-
-## Hardware
-
-TBC
-
-## Manifesto
-
-Taking lead from the zen of python:
-
-- Minimise dependencies, where required, explicitly define dependencies
-- Use plain nix to solve problems over additional tooling
-- Stable channel for stable machines. Unstable only where features are important.
-- Modules for a specific service - Profiles for broad configuration of state.
-- Write readable code - descriptive variable names and modules
-- Keep functions/dependencies within the relevant module where possible
-- Errors should never pass silently - use assert etc for misconfigurations
-- Flat is better than nested - use built-in functions like map, filter, and fold to operate on lists or sets
+- [x] Documentation!
+- [x] ssh_config build from computers?
+- [x] Modularise host to allow vm builds and hw builds
+- [x] Add license
+- [x] Add taskfiles
 
 ## Checklist
 
