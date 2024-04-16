@@ -12,9 +12,9 @@
         'ghcr.io/onedr0p/readarr',
         'ghcr.io/onedr0p/radarr',
         'ghcr.io/onedr0p/lidarr',
-        'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/onedr0p/prowlarr',
         'ghcr.io/twin/gatus',
-      ]
+      ],
     },
     {
       "matchDatasources": ['docker'],
@@ -22,9 +22,16 @@
       "automergeType": "branch",
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
-        "ghcr.io/gethomepage/homepage"
-      ]
+        "ghcr.io/gethomepage/homepage",
+      ],
 
-    }
-  ]
+    },
+        {
+      "matchDatasources": ['docker'],
+      "automerge": "true",
+      "automergeType": "branch",
+      "matchUpdateTypes": [ 'digest'],
+    },
+
+  ],
 }
