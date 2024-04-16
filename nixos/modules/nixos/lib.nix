@@ -57,7 +57,7 @@ with lib;
         passwordFile = config.sops.secrets."services/restic/password".path;
         exclude = options.excludePaths;
         repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
-        user = options.user;
+        inherit (options) user;
       };
 
       # remote backup
@@ -69,7 +69,7 @@ with lib;
         passwordFile = config.sops.secrets."services/restic/password".path;
         repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
         exclude = options.excludePaths;
-        user = options.user;
+        inherit (options) user;
       };
 
     }

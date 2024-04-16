@@ -92,7 +92,7 @@ in
         inherit app user;
         excludePaths = [ "Backups" ];
         paths = [ appFolder ];
-        appFolder = appFolder;
+        inherit appFolder;
       };
 
 

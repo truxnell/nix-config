@@ -92,7 +92,7 @@ in
         user = builtins.toString user;
         excludePaths = [ "Backups" ];
         paths = [ appFolder ];
-        appFolder = appFolder;
+        inherit appFolder;
       };
   };
 }
