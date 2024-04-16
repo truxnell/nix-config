@@ -32,11 +32,38 @@ Backups are created per-service in each services module. This is largely done wi
 NixOS will create a service + timer for each job - below shows the output for a prowlarr local/remote backup.
 
 ```bash
-truxnell@daedalus ~> systemctl list-unit-files | grep restic-backups-prowlarr
-restic-backups-prowlarr-local.service                                         linked          enabled
-restic-backups-prowlarr-remote.service                                        linked          enabled
-restic-backups-prowlarr-local.timer                                           enabled         enabled
-restic-backups-prowlarr-remote.timer                                          enabled         enabled
+# Confirming snapshot taken overnight - we can see 2AM
+truxnell@daedalus ~> systemctl status restic_nightly_snapshot.service
+○ restic_nightly_snapshot.service - Nightly ZFS snapshot for Restic
+     Loaded: loaded (/etc/systemd/system/restic_nightly_snapshot.service; linked; preset: enabled)
+     Active: inactive (dead) since Wed 2024-04-17 02:00:02 AEST; 5h 34min ago
+   Duration: 61ms
+TriggeredBy: ● restic_nightly_snapshot.timer
+    Process: 606080 ExecStart=/nix/store/vd0pr3la91pi0qhmcn7c80rwrn7jkpx9-unit-script-restic_nightly_snapshot-start/bin/restic_nightly_snapshot-start (code=exited, status=0/SUCCESS)
+   Main PID: 606080 (code=exited, status=0/SUCCESS)
+         IP: 0B in, 0B out
+        CPU: 21ms
+# confirming local snapshot occured - we can see 05:05AM
+truxnell@daedalus ~ [1]> sudo restic-prowlarr-local snapshots
+repository 9d9bf357 opened (version 2, compression level auto)
+ID        Time                 Host        Tags        Paths
+---------------------------------------------------------------------------------------------------------------------
+293dad23  2024-04-15 19:24:37  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+24938fe8  2024-04-16 12:42:50  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+442d4de3  2024-04-17 05:05:04  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+---------------------------------------------------------------------------------------------------------------------
+3 snapshots
+
+# confirming remote snapshot occured - we can see 4:52AM
+truxnell@daedalus ~> sudo restic-prowlarr-remote snapshots
+repository 30b7eef0 opened (version 2, compression level auto)
+ID        Time                 Host        Tags        Paths
+---------------------------------------------------------------------------------------------------------------------
+e7d933c4  2024-04-15 22:07:09  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+aa605c6b  2024-04-16 02:39:47  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+68f91a20  2024-04-17 04:52:59  daedalus                /persist/.zfs/snapshot/restic_nightly_snap/containers/prowlarr
+---------------------------------------------------------------------------------------------------------------------
+3 snapshots
 ```
 
 NixOS (as of 23.05 IIRC) now provides shims to enable easy access to the restic commands with the correct env vars mounted same as the service.
