@@ -57,7 +57,7 @@ in
         Plex = {
           icon = "${app}.png";
           href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
+
           description = "Media streaming service";
           container = "${app}";
           widget = {
@@ -69,12 +69,12 @@ in
       }
     ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
 
       name = app;
       group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
+      url = "https://${app}.${config.mySystem.domain}/web/";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 

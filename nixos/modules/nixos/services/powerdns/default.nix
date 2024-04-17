@@ -9,17 +9,19 @@ let
   persistentFolder = "${config.mySystem.persistentFolder}/nixos/pdns";
   user = "pdns";
   group = "pdns";
+  portDns = 5353; # avoiding conflict with adguardhome
+  portWebUI = 8081;
   configDir = pkgs.writeTextDir "pdns.conf" "${pdnsConfig}";
 
   # $APIKEY is replaced via envsubst in the pdns module
   pdnsConfig = ''
     expand-alias=yes
     resolver=9.9.9.9:53
-    local-address=0.0.0.0:5353
+    local-address=0.0.0.0:${builtins.toString portDns}
     launch=gsqlite3
     gsqlite3-database=${persistentFolder}/pdns.sqlite3
     webserver=yes
-    webserver-address=0.0.0.0:8081
+    webserver-address=0.0.0.0:${builtins.toString portWebUI}
     webserver-allow-from=10.8.10.0/20
     api=yes
     api-key=$APIKEY
@@ -81,10 +83,27 @@ in
 
     networking.firewall = mkIf cfg.openFirewall {
 
-      allowedTCPPorts = [ 8081 5353 ];
-      allowedUDPPorts = [ 8081 5353 ];
+      allowedTCPPorts = [ portWebUI portDns ];
+      allowedUDPPorts = [ portDns ];
 
     };
+
+    mySystem.services.gatus.monitors = [
+
+      {
+        name = "${config.networking.hostName} split DNS";
+        group = "dns";
+        url = "${config.networking.hostName}.${config.mySystem.internalDomain}:${builtins.toString portDns}";
+        dns = {
+          query-name = "canary.trux.dev"; # special domain always present for testing
+          query-type = "A";
+        };
+        interval = "1m";
+        alerts = [{ type = "pushover"; }];
+        conditions = [ "[DNS_RCODE] == NOERROR" ];
+      }
+    ];
+
 
 
   };

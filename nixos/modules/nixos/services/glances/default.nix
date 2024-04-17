@@ -28,7 +28,7 @@ with lib;
         };
 
     };
-  config = {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = with pkgs;
       [ glances python310Packages.psutil hddtemp ];
@@ -74,9 +74,9 @@ with lib;
 
       name = "${app} ${config.networking.hostName}";
       group = "${app}";
-      url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
-      ping = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
-      interval = "30s";
+      url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208:/api/3/status";
+
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
