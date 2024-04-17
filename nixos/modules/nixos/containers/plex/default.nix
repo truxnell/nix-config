@@ -61,9 +61,9 @@ in
           description = "Media streaming service";
           container = "${app}";
           widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
+            type = "tautulli";
+            url = "https://tautulli.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_TAUTULLI__API_KEY}}";
           };
         };
       }

@@ -6,19 +6,30 @@
 with lib;
 let
   cfg = config.mySystem.services.adguardhome;
+  app = "adguard-home";
+  yaml_schema_version=23;
   port = 53;
   port_webui = 3000;
 in
 {
   options.mySystem.services.adguardhome = {
     enable = mkEnableOption "Adguard Home";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
     openFirewall = mkEnableOption "Open firewall for ${app}" // {
       default = true;
     };
   };
 
-  config = mkIf cfg.enable
-    {
+  config = mkIf cfg.enable  {
+
+
+        # Warn if backups are disable and machine isnt a dev box
+    warnings = mkIf (yaml_schema_version != pkgs.adguardhome.schema_version) [ "WARNING: Adguard upstream YAML schema is version ${builtins.toString pkgs.adguardhome.schema_version}, this config is set to ${builtins.toString config.services.adguardhome.settings.schema_version}"];
+
+    sops.secrets = {
+      "system/networking/bind/trux.dev".sopsFile = ./secrets.sops.yaml;
+      "system/networking/bind/trux.dev".restartUnits = [ "bind.service" ];
+    };
 
       services.adguardhome = {
         enable = true;
@@ -27,6 +38,7 @@ in
         settings = {
           bind_host = "0.0.0.0";
           bind_port = port_webui;
+          schema_version=yaml_schema_version; # Just to be cautious, defualt is pkgs.adguardhome.schema_version.
 
           auth_attempts = 3;
           block_auth_min = 3600;
@@ -170,14 +182,14 @@ in
       mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
         {
           "Adguard ${config.networking.hostName}" = {
-            icon = "${app}.png";
-            href = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
+            icon = "${app}.svg";
+            href = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:${builtins.toString port_webui}";
             description = "DNS Ad blocking";
             container = "Infrastructure";
             widget =
               {
                 type = "adguard";
-                url = "http://adguard.host.or.ip";
+                url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:${builtins.toString port_webui}";
                 # username = "";
                 # password = "";
               };
@@ -187,4 +199,5 @@ in
 
 
     };
+
 }

@@ -45,16 +45,11 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Tautulli = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Plex Monitoring & Stats";
           container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
-          };
         };
       }
     ];

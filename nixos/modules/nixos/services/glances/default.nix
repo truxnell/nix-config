@@ -83,7 +83,7 @@ with lib;
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
       {
         "Glances ${config.networking.hostName}" = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
           description = "System Monitoring";
           container = "Infrastructure";
