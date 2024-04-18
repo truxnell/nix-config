@@ -1,6 +1,7 @@
 { lib
 , config
 , pkgs
+, self
 , ...
 }:
 with lib;
@@ -15,11 +16,12 @@ let
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
+    # TODO refactor these out into their own file or fake host?
     {
       name = "firewall";
       group = "servers";
       url = "icmp://unifi.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
@@ -27,7 +29,7 @@ let
       name = "pikvm";
       group = "servers";
       url = "icmp://pikvm.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
@@ -35,7 +37,7 @@ let
       name = "octoprint";
       group = "servers";
       url = "icmp://prusa.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
@@ -43,7 +45,7 @@ let
       name = "icarus";
       group = "k8s";
       url = "icmp://icarus.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
@@ -51,7 +53,7 @@ let
       name = "xerxes";
       group = "k8s";
       url = "icmp://xerxes.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
@@ -59,96 +61,18 @@ let
       name = "shodan";
       group = "k8s";
       url = "icmp://shodan.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
 
-    {
-      name = "daedalus";
-      group = "servers";
-      url = "icmp://daedalus.${config.mySystem.internalDomain}";
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[CONNECTED] == true" ];
-    }
-    {
-      name = "dns01 external dns";
-      group = "dns";
-      url = "dns01.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "cloudflare.com";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
-    {
-      name = "dns02 external dns";
-      group = "dns";
-      url = "dns02.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "cloudflare.com";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
-    {
-      name = "dns01 internal dns";
-      group = "dns";
-      url = "dns01.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "unifi.${config.mySystem.internalDomain}";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
-    {
-      name = "dns02 internal dns";
-      group = "dns";
-      url = "dns02.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "unifi.${config.mySystem.internalDomain}";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
-    {
-      name = "dns01 split DNS";
-      group = "dns";
-      url = "dns01.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "${app}.trux.dev";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
-    {
-      name = "dns02 split DNS";
-      group = "dns";
-      url = "dns02.${config.mySystem.internalDomain}";
-      dns = {
-        query-name = "${app}.trux.dev";
-        query-type = "A";
-      };
-      interval = "30s";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[DNS_RCODE] == NOERROR" ];
-    }
 
 
-  ] ++ config.mySystem.services.gatus.monitors;
+  ] ++ builtins.concatMap (cfg: (cfg.config.mySystem.services.gatus.monitors))
+    (builtins.attrValues self.nixosConfigurations);
 
   configAlerting = {
+    # TODO really should make this libdefault and let modules overwrite failure-threshold etc.
     pushover = {
       title = "${app} Internal";
       application-token = "$PUSHOVER_APP_TOKEN";

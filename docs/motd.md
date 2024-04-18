@@ -5,7 +5,12 @@ Why not include a nice message of the day for each server I log into?
 The below gives some insight into what the servers running, status of zpools, usage, etc.
 While not show below - thankfully - If a zpool error is found the status gives a full `zpool status -x` debrief which is particulary eye-catching upon login.
 
-![Alt text](motd.png)
+I've also squeezed in a 'reboot required' flag for when the server had detected its running kernel/init/systemd is a different version to what it booted with - useful to know when long running servers require a reboot to pick up new kernel/etc versions.
+
+<figure markdown="span">
+![Screenshot of message of the day prompt on login to server](../includes/assets/motd.png)
+  <figcaption>Message of the day</figcaption>
+</figure>
 
 Code TLDR
 
