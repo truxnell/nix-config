@@ -19,6 +19,7 @@
     plex.enable = true;
     tautulli.enable = true;
     syncthing.enable = true;
+    searxng.enable=true;
 
 
   };

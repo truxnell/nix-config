@@ -8,5 +8,6 @@
     ./plex
     ./tautulli
     ./backrest
+    ./searxng
   ];
 }
