@@ -159,15 +159,15 @@ let
 
   services = [
     {
-      Infrastructure = builtins.concatMap (cfg: (cfg.config.mySystem.services.homepage.infrastructure-services))
+      Infrastructure = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.infrastructure-services)
         (builtins.attrValues self.nixosConfigurations) ++ extraInfrastructure;
     }
     {
-      Home = builtins.concatMap (cfg: (cfg.config.mySystem.services.homepage.home-services))
+      Home = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.home-services)
         (builtins.attrValues self.nixosConfigurations) ++ extraHome;
     }
     {
-      Media = builtins.concatMap (cfg: (cfg.config.mySystem.services.homepage.media-services))
+      Media = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.media-services)
         (builtins.attrValues self.nixosConfigurations);
     }
   ];

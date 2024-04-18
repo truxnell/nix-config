@@ -53,7 +53,7 @@ in
         dns = {
           # dns server bind deets
           bind_host = "127.0.0.1";
-          port = port;
+          inherit port;
 
           # bootstrap DNS - used for resolving upstream dns deets
           bootstrap_dns = [

@@ -68,7 +68,7 @@ let
 
 
 
-  ] ++ builtins.concatMap (cfg: (cfg.config.mySystem.services.gatus.monitors))
+  ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
     (builtins.attrValues self.nixosConfigurations);
 
   configAlerting = {
