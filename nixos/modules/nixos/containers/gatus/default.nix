@@ -68,7 +68,7 @@ let
 
 
 
-  ] ++ builtins.concatMap (cfg: (cfg.config.mySystem.services.gatus.monitors))
+  ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
     (builtins.attrValues self.nixosConfigurations);
 
   configAlerting = {
@@ -140,7 +140,7 @@ in
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
       {
         "Gatus Internal" = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
           description = "Internal Infrastructure Monitoring";
           container = "${app}";

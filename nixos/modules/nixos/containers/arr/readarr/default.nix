@@ -61,7 +61,7 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Readar = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Book management";

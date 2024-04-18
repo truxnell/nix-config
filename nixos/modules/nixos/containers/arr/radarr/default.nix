@@ -62,7 +62,7 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Radarr = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Movie management";

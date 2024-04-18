@@ -60,7 +60,7 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Qbittorrent = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Torrent Downloader";
