@@ -199,7 +199,7 @@ in
 
     # homepage secrets
     # ensure you dont have whitespace around your ='s!
-    # ex: HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API="supersecretlol"
+    # ex: HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API=supersecretlol
     sops.secrets."services/homepage/env" = {
       # configure secret for forwarding rules
       sopsFile = ./secrets.sops.yaml;
@@ -244,6 +244,13 @@ in
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
+    sops.secrets."services/adguardhome/env" = {
+      sopsFile = ../../services/adguardhome/secrets.sops.yaml;
+      owner = "kah";
+      group = "kah";
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
@@ -265,6 +272,8 @@ in
         config.sops.secrets."services/readarr/env".path
         config.sops.secrets."services/lidarr/env".path
         config.sops.secrets."services/prowlarr/env".path
+        config.sops.secrets."services/adguardhome/env".path
+
       ];
 
       # labels = {

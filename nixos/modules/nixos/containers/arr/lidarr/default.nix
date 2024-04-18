@@ -63,7 +63,7 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Lidarr = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Music management";

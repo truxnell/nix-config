@@ -54,7 +54,7 @@ in
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
       {
         Backrest = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "Local restic backup browser";

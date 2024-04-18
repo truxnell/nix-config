@@ -64,7 +64,7 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Sonarr = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
           description = "TV show management";
