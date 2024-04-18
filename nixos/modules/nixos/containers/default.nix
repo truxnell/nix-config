@@ -9,5 +9,6 @@
     ./tautulli
     ./backrest
     ./searxng
+    ./factorio
   ];
 }

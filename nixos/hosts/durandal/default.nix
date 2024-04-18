@@ -20,6 +20,7 @@
     tautulli.enable = true;
     syncthing.enable = true;
     searxng.enable=true;
+    factorio.enable=true;
 
 
   };
