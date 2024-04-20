@@ -19,8 +19,8 @@
     plex.enable = true;
     tautulli.enable = true;
     syncthing.enable = true;
-    searxng.enable=true;
-    factorio.enable=true;
+    searxng.enable = true;
+    factorio.freight-forwarding.enable = true;
 
 
   };
@@ -31,11 +31,11 @@
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
 
   # Dev machine
-  mySystem.system.resticBackup =
-    {
-      local.enable = false;
-      remote.enable = false;
-    };
+  # mySystem.system.resticBackup =
+  #   {
+  #     local.enable = false;
+  #     remote.enable = false;
+  #   };
 
   boot = {
 

@@ -6,39 +6,38 @@
 with lib;
 let
   app = "factorio";
-  atom = "freight-forwarding";
+  instance = "freight-forwarding";
   image = "factoriotools/factorio:stable@sha256:e2e42bb597e5785ce99996c0ee074e009c79dd44dcb5dea01f4640288d7e5290";
-  user = "568"; #string
-  group = "568"; #string
+  user = "845"; #string
+  group = "845"; #string
   port = 34203; #int
   port_rcon = 27019; #int
-  cfg = config.mySystem.services.${app}.${atom};
-  appFolder = "containers/${app}/${atom}";
+  cfg = config.mySystem.services.${app}.${instance};
+  appFolder = "containers/${app}/${instance}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
-in
 {
-  options.mySystem.services.${app}.${atom} =
+  options.mySystem.services.${app}.${instance} =
     {
-      enable = mkEnableOption "${app} - ${atom}";
-      addToHomepage = mkEnableOption "Add ${app} - ${atom} to homepage" // { default = true; };
-      openFirewall = mkEnableOption "Open firewall for ${app} - ${atom}" // {
+      enable = mkEnableOption "${app} - ${instance}";
+      addToHomepage = mkEnableOption "Add ${app} - ${instance} to homepage" // { default = true; };
+      openFirewall = mkEnableOption "Open firewall for ${app} - ${instance}" // {
         default = true;
       };
     };
 
   config = mkIf cfg.enable {
 
-   # ensure folder exist and has correct owner/group
+    # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
-    virtualisation.oci-containers.containers.${app} = {
+    virtualisation.oci-containers.containers."${app}-${instance}" = {
       image = "${image}";
       user = "${user}:${group}";
       volumes = [
-        "${persistentFolder}:/config:rw"
+        "${persistentFolder}:/factorio:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
       ports = [ (builtins.toString port) ]; # expose port
@@ -49,41 +48,23 @@ in
     };
     networking.firewall = mkIf cfg.openFirewall {
 
-      allowedTCPPorts = [ 53 ];
-      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ port ]; # I dont use rcon so not opening that too.
     };
 
 
-    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
-      {
-        Plex = {
-          icon = "${app}.png";
-          href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
-          description = "Media streaming service";
-          container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
-          };
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
       name = app;
       group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
+      url = "udp://${config.networking.hostName}:${builtins.toString port}";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" "[RESPONSE_TIME] < 50" ];
     }];
 
     services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
-        excludePaths = [ "Backups" ];
         paths = [ appFolder ];
         inherit appFolder;
       };
