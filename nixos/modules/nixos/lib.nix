@@ -45,7 +45,8 @@ with lib;
       initialize = true;
       backupPrepareCommand = ''
         # remove stale locks - this avoids some annoyance
-        ${pkgs.restic}/bin/restic unlock || true
+        #
+        ${pkgs.restic}/bin/restic unlock --remove-all || true
       '';
     in
     {
@@ -55,7 +56,7 @@ with lib;
         # Move the path to the zfs snapshot path
         paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
         passwordFile = config.sops.secrets."services/restic/password".path;
-        exclude = options.excludePaths;
+        exclude = excludePath;
         repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
         inherit (options) user;
       };
@@ -68,7 +69,7 @@ with lib;
         environmentFile = config.sops.secrets."services/restic/env".path;
         passwordFile = config.sops.secrets."services/restic/password".path;
         repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
-        exclude = options.excludePaths;
+        exclude = excludePath;
         inherit (options) user;
       };
 

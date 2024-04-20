@@ -61,6 +61,7 @@ in
       url = "https://${app}.${config.mySystem.domain}";
       interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+
     }];
 
     services.restic.backups = config.lib.mySystem.mkRestic
