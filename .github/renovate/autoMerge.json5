@@ -11,9 +11,10 @@
       "matchPackageNames": [
         'ghcr.io/onedr0p/sonarr',
         'ghcr.io/onedr0p/readarr',
-        'ghcr.io/onedr0p/radarr',
+        'ghcr.io/onedr0p/radarr-nightly',
         'ghcr.io/onedr0p/lidarr',
         'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/twin/gatus',
       ],
 
     },
@@ -25,7 +26,6 @@
       "schedule": [ "before 4am on Sunday" ],
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
-        'ghcr.io/twin/gatus',
         "ghcr.io/gethomepage/homepage",
       ]
 
