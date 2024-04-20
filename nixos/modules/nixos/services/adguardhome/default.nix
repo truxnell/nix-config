@@ -55,6 +55,10 @@ in
           bind_host = "127.0.0.1";
           inherit port;
 
+          # enable filtering
+          protection_enabled = true;
+          filtering_enabled = true;
+
           # bootstrap DNS - used for resolving upstream dns deets
           bootstrap_dns = [
             # quad9
@@ -94,8 +98,8 @@ in
           ];
 
           # resolving local addresses
-          local_ptr_upstreams = [ "10.8.10.1" ]; # UDMP router
-          use_private_ptr_resolvers = true;
+          # local_ptr_upstreams = [ "10.8.10.1" ]; # UDMP router
+          # use_private_ptr_resolvers = true;
           hostsfile_enabled = false; # if hostfiles is allowed, AGH will return 127.0.0.2 for local device
 
           # security
@@ -108,10 +112,7 @@ in
 
           theme = "auto";
         };
-        filtering = {
-          protection_enabled = true;
-          filtering_enabled = true;
-        };
+
 
         filters = [
           {
@@ -145,7 +146,7 @@ in
           {
             # HAGEZI Multi Pro
             enabled = true;
-            id = 4;
+            id = 5;
             name = "hagezi multi pro";
             url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt";
           }
