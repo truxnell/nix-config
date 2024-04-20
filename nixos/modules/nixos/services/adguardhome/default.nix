@@ -96,6 +96,7 @@ in
           # resolving local addresses
           local_ptr_upstreams = [ "10.8.10.1" ]; # UDMP router
           use_private_ptr_resolvers = true;
+          hostsfile_enabled = false; # if hostfiles is allowed, AGH will return 127.0.0.2 for local device
 
           # security
           enable_dnssec = true;
@@ -107,7 +108,10 @@ in
 
           theme = "auto";
         };
-
+        filtering = {
+          protection_enabled = true;
+          filtering_enabled = true;
+        };
 
         filters = [
           {
