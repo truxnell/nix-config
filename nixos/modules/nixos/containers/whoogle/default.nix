@@ -7,8 +7,8 @@ with lib;
 let
   app = "whoogle";
   image = "ghcr.io/benbusby/whoogle-search:0.8.4@sha256:93977c3aec8a039df94745a6e960d1b590a897e451b874c90ce484fbdbc3630f";
-  user = "927"; #string
-  group = "927"; #string
+  user = "568"; #string
+  group = "568"; #string
   port = 5000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "containers/${app}";
@@ -31,27 +31,6 @@ in
         name = app;
         inherit port;
       };
-      environment =
-        {
-
-          # WHOOGLE_ALT_TW = nitter.${config.mySystem.domain};
-          WHOOGLE_ALT_YT = "invidious.${config.mySystem.domain}";
-          WHOOGLE_ALT_IG = "imginn.com";
-          WHOOGLE_ALT_RD = "libreddit.${config.mySystem.domain}";
-          WHOOGLE_ALT_MD = "scribe.${config.mySystem.domain}";
-          WHOOGLE_ALT_TL = "";
-          # WHOOGLE_ALT_IMG = bibliogram.art;
-          WHOOGLE_ALT_IMDB = "";
-          WHOOGLE_ALT_WIKI = "";
-          WHOOGLE_ALT_QUORA = "";
-          WHOOGLE_CONFIG_ALTS = "1";
-          WHOOGLE_CONFIG_THEME = "system";
-          WHOOGLE_CONFIG_URL = "https://search.${config.mySystem.domain}";
-          WHOOGLE_CONFIG_GET_ONLY = "1";
-          WHOOGLE_CONFIG_COUNTRY = "AU";
-          WHOOGLE_CONFIG_VIEW_IMAGE = "1";
-          WHOOGLE_CONFIG_DISABLE = "1";
-        };
     };
 
     mySystem.services.homepage.home-services = mkIf cfg.addToHomepage [

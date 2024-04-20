@@ -81,7 +81,7 @@ in
     services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
-        excludePaths = [ "Backups" ];
+        # excludePaths = [ "Backups" ];
         paths = [ appFolder ];
         inherit appFolder;
       };

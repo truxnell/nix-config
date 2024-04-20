@@ -8,6 +8,8 @@
     ./plex
     ./tautulli
     ./backrest
+    ./searxng
+    ./factorio
     ./whoogle
   ];
 }

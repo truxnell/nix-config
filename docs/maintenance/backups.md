@@ -2,7 +2,7 @@
 
 Nightly Backups are facilitated by NixOS's module for [restic](https://search.nixos.org/options?channel=23.11&from=0&size=50&sort=relevance&type=packages&query=services.restic.) module and a helper module ive written.
 
-This does a nightly ZFS snapshot, in which apps and other mutable data is restic backed up to both a local folder on my NAS and also to Cloudflare R2 :octicons-info-16:{ title="R2 mainly due to the cheap cost and low egrees fees" }). Backing up from a ZFS snapshot ensures that the restic backup is consistent, as backing up files in use (especially a sqlite database) will cause corruption. Here, all restic jobs are backing up as per the 2.05 snapshot, regardless of when they run that night.
+This does a nightly ZFS snapshot, in which apps and other mutable data is restic backed up to both a local folder on my NAS and also to Cloudflare R2 :octicons-info-16:{ title="R2 mainly due to the cheap cost and low egrees fees" }. Backing up from a ZFS snapshot ensures that the restic backup is consistent, as backing up files in use (especially a sqlite database) will cause corruption. Here, all restic jobs are backing up as per the 2.05 snapshot, regardless of when they run that night.
 
 Another benefit of this approach is that it is service agnostic - containers, nixos services, qemu, whatever all have files in the same place on the filesystem (in the persistant folder) so they can all be backed up in the same fashion.
 
