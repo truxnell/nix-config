@@ -34,6 +34,8 @@ with lib;
 
     services.zfs = {
       autoScrub.enable = true;
+      # Defaults to weekly and is a bit too regular for my NAS
+      autoScrub.interval = "monthly";
       trim.enable = true;
     };
 

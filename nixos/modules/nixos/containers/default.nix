@@ -10,5 +10,6 @@
     ./backrest
     ./searxng
     ./factorio
+    ./whoogle
   ];
 }

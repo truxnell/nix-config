@@ -55,26 +55,26 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Plex = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
+
           description = "Media streaming service";
           container = "${app}";
           widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
+            type = "tautulli";
+            url = "https://tautulli.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_TAUTULLI__API_KEY}}";
           };
         };
       }
     ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
 
       name = app;
       group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
+      url = "https://${app}.${config.mySystem.domain}/web/";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 

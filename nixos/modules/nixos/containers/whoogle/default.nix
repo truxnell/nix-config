@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "tautulli";
-  image = "ghcr.io/onedr0p/tautulli:2.13.4@sha256:633a57b2f8634feb67811064ec3fa52f40a70641be927fdfda6f5d91ebbd5d73";
+  app = "whoogle";
+  image = "ghcr.io/benbusby/whoogle-search:0.8.4@sha256:93977c3aec8a039df94745a6e960d1b590a897e451b874c90ce484fbdbc3630f";
   user = "568"; #string
   group = "568"; #string
-  port = 8181; #int
+  port = 5000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "containers/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
@@ -22,33 +22,24 @@ in
     };
 
   config = mkIf cfg.enable {
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
-      volumes = [
-        "${persistentFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix:/media:rw"
-        "${config.mySystem.nasFolder}/backup/kubernetes/apps/tautulli:/config/backup:rw"
-        "/etc/localtime:/etc/localtime:ro"
-      ];
+      ports = [ (builtins.toString port) ]; # expose port
       labels = config.lib.mySystem.mkTraefikLabels {
         name = app;
         inherit port;
       };
     };
 
-    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.home-services = mkIf cfg.addToHomepage [
       {
-        Tautulli = {
-          icon = "${app}.svg";
+        Whoogle = {
+          icon = "whooglesearch.png";
           href = "https://${app}.${config.mySystem.domain}";
 
-          description = "Plex Monitoring & Stats";
+          description = "Google frontend";
           container = "${app}";
         };
       }
@@ -61,16 +52,7 @@ in
       url = "https://${app}.${config.mySystem.domain}";
       interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-
     }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
 
 
   };

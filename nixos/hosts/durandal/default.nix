@@ -21,6 +21,7 @@
     syncthing.enable = true;
     searxng.enable = true;
     factorio.freight-forwarding.enable = true;
+    whoogle.enable = true;
 
 
   };

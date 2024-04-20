@@ -16,13 +16,11 @@ with lib;
     mySystem.security.wheelNeedsSudoPassword = false;
     mySystem.services.cockpit.enable = true;
     mySystem.system.motd.enable = true;
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
-
-
+    mySystem.services.gatus.monitors = [{
       name = config.networking.hostName;
       group = "servers";
       url = "icmp://${config.networking.hostName}.${config.mySystem.internalDomain}";
-      interval = "30s";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" ];
     }];
 

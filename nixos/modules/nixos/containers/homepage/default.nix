@@ -1,6 +1,7 @@
 { lib
 , config
 , pkgs
+, self
 , ...
 }:
 with lib;
@@ -23,7 +24,7 @@ let
       showStats = true;
       disableCollape = true;
       cardBlur = "md";
-      statusStyle = "dot";
+      statusStyle = "none";
 
       datetime = {
         text_size = "l";
@@ -101,7 +102,7 @@ let
     {
       "UDMP" = {
         href = "https://unifi.${config.mySystem.internalDomain}";
-        ping = "https://unifi.${config.mySystem.internalDomain}";
+
         description = "Unifi Dream Machine Pro";
         icon = "ubiquiti";
         widget = {
@@ -144,7 +145,7 @@ let
     {
       "Prusa Octoprint" = {
         href = "http://prusa.${config.mySystem.internalDomain}:5000";
-        ping = "http://prusa.${config.mySystem.internalDomain}:5000";
+
         description = "Prusa MK3s 3D printer";
         icon = "octoprint";
         widget = {
@@ -155,10 +156,20 @@ let
       };
     }
   ];
+
   services = [
-    { Infrastructure = cfg.infrastructure-services ++ extraInfrastructure; }
-    { Home = cfg.home-services ++ extraHome; }
-    { Media = cfg.media-services; }
+    {
+      Infrastructure = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.infrastructure-services)
+        (builtins.attrValues self.nixosConfigurations) ++ extraInfrastructure;
+    }
+    {
+      Home = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.home-services)
+        (builtins.attrValues self.nixosConfigurations) ++ extraHome;
+    }
+    {
+      Media = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.media-services)
+        (builtins.attrValues self.nixosConfigurations);
+    }
   ];
   servicesFile = builtins.toFile "homepage-config.yaml" (builtins.toJSON services);
   emptyFile = builtins.toFile "docker.yaml" (builtins.toJSON [{ }]);
@@ -188,7 +199,7 @@ in
 
     # homepage secrets
     # ensure you dont have whitespace around your ='s!
-    # ex: HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API="supersecretlol"
+    # ex: HOMEPAGE_VAR_CLOUDFLARE_TUNNEL_API=supersecretlol
     sops.secrets."services/homepage/env" = {
       # configure secret for forwarding rules
       sopsFile = ./secrets.sops.yaml;
@@ -233,6 +244,13 @@ in
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
+    sops.secrets."services/adguardhome/env" = {
+      sopsFile = ../../services/adguardhome/secrets.sops.yaml;
+      owner = "kah";
+      group = "kah";
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
@@ -254,6 +272,8 @@ in
         config.sops.secrets."services/readarr/env".path
         config.sops.secrets."services/lidarr/env".path
         config.sops.secrets."services/prowlarr/env".path
+        config.sops.secrets."services/adguardhome/env".path
+
       ];
 
       # labels = {
@@ -287,11 +307,11 @@ in
       ];
     };
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
       name = app;
       group = "infrastructure";
       url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 

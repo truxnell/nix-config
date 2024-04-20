@@ -54,21 +54,21 @@ in
     mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
       {
         Backrest = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
+
           description = "Local restic backup browser";
           container = "${app}";
         };
       }
     ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
 
       name = app;
       group = "infrastructure";
       url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 

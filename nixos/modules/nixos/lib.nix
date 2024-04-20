@@ -76,4 +76,25 @@ with lib;
     }
   );
 
+  # Will be v. useful when i grok
+  # https://github.com/ahbk/my-nixos/blob/5fe1521b11422c66fd823b442393b3b044a5a5b8/lib.nix#L5
+  # pick a list of attributes from an attrSet
+  lib.mySystem.pick = attrNames: attrSet: lib.filterAttrs (name: value: lib.elem name attrNames) attrSet;
+
+  # create an env-file (package) that can be sourced to set environment variables
+  lib.mySystem.mkEnv = name: value: pkgs.writeText "${name}-env" (concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") value));
+
+  # loop over an attrSet and merge the attrSets returned from f into one (latter override the former in case of conflict)
+  lib.mySystem.mergeAttrs = f: attrs: foldlAttrs (acc: name: value: (recursiveUpdate acc (f name value))) { } attrs;
+
+  # Iterate all attrs in base and return
+  # the merged set from all iterated keys in base from
+  # return path
+  # lib.mySystem.mkMergeMap = base: return: builtins.concatMap (cfg: (cfg.return)) (builtins.attrValues base);
+
 }
+
+# # useful?
+# foldlAttrs
+# # attrbypath?
+# let

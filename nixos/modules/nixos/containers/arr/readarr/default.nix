@@ -61,9 +61,9 @@ in
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
         Readar = {
-          icon = "${app}.png";
+          icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
+
           description = "Book management";
           container = "${app}";
           widget = {
@@ -75,12 +75,12 @@ in
       }
     ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
 
       name = app;
       group = "media";
       url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 

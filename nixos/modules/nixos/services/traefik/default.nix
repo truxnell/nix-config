@@ -181,23 +181,23 @@ in
       {
         Traefik = {
           icon = "traefik.png";
-          href = "https://traefik.${config.mySystem.domain}/dashboard/";
-          ping = "https://traefik.${config.mySystem.domain}/dashboard/";
+          href = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}/dashboard/";
+
           description = "Reverse Proxy";
           widget = {
             type = "traefik";
-            url = "https://traefik.${config.mySystem.domain}";
+            url = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}";
           };
         };
       }
     ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
+    mySystem.services.gatus.monitors = [{
 
-      name = "traefik";
+      name = "Traefik ${config.networking.hostName}";
       group = "infrastructure";
-      url = "https://traefik.${config.mySystem.domain}";
-      interval = "30s";
+      url = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}";
+      interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
