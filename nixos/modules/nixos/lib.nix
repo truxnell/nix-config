@@ -88,29 +88,34 @@ with lib;
   lib.mySystem.mergeAttrs = f: attrs: foldlAttrs (acc: name: value: (recursiveUpdate acc (f name value))) { } attrs;
 
   # main service builder
-  lib.mkService = options:
+  lib.mySystem.mkService = options: (
     let
-      user = if builtins.hasAttr "user" options then options.user else 568;
-      group = if builtins.hasAttr "group" options then options.group else 568;
-
+      # user = if builtins.hasAttr "user" options then options.user else 568;
+      # group = if builtins.hasAttr "group" options then options.group else 568;
+      a = 1;
     in
     {
-      virtualisation.oci-containers.containers.${options.app} = {
-        image = "${options.image}";
-        user = "${user}:${group}";
-        # environmentFiles = [ config.sops.secrets."services/${options.app}/env".path ];
-        # volumes = [
-        #   "/etc/localtime:/etc/localtime:ro"
-        #   "${configFile}:/config/config.yaml:ro"
-        # ];
+      # virtualisation.oci-containers.containers.${options.app} = {
+      #   image = "${options.image}";
+      #   user = "${user}:${group}";
+      #   environment = {
+      #     TZ = config.time.timeZone;
+      #   } ++ container.env;
+      #   environmentFiles = [ ] ++ container.envFiles;
+      #   volumes = [
+      #     "/etc/localtime:/etc/localtime:ro"
+      #     "${configFile}:/config/config.yaml:ro"
+      #   ];
 
-        labels = config.lib.mySystem.mkTraefikLabels {
-          name = options.app;
-          inherit port;
-        };
+      #   labels = config.lib.mySystem.mkTraefikLabels {
+      #     name = options.app;
+      #     inherit port;
+      #   };
 
-        # extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
-      };
-
+      #   # extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
+      # };
     }
-    }
+  );
+
+
+}
