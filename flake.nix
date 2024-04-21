@@ -68,6 +68,24 @@
       # setup devshells against shell.nix
       devShells = forAllSystems (pkgs: import ./shell.nix { inherit pkgs; });
 
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = builtins.attrValues overlays;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = _: true;
+        };
+      };
+
+      lib = nixpkgs.lib.extend (
+        self: super: {
+          my = import ./nixos/lib {
+            inherit pkgs inputs;
+            lib = self;
+          };
+        }
+      );
+
 
       nixosConfigurations =
         # with self.lib;
@@ -112,14 +130,6 @@
               specialArgs = { inherit self inputs nixpkgs; };
               # Add our overlays
 
-              pkgs = import nixpkgs {
-                inherit system;
-                overlays = builtins.attrValues overlays;
-                config = {
-                  allowUnfree = true;
-                  allowUnfreePredicate = _: true;
-                };
-              };
 
             };
         in

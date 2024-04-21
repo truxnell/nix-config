@@ -12,7 +12,7 @@ in
 
   # fuck /u/spez
   config =
-    config.lib.mySystem.mkService
+    lib.myLib.mkService
       {
         app = "redlib";
         image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";

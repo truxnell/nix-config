@@ -2,7 +2,11 @@
 with lib;
 {
 
-  # build up traefik docker labesl
+  firstOrDefault = first: default: if !isNull first then first else default;
+
+  existsOrDefault = x: set: default: if hasAttr x set then getAttr x set else default;
+
+  # build up traefik docker labels
   lib.mySystem.mkTraefikLabels = options: (
     let
       inherit (options) name;
@@ -87,35 +91,6 @@ with lib;
   # loop over an attrSet and merge the attrSets returned from f into one (latter override the former in case of conflict)
   lib.mySystem.mergeAttrs = f: attrs: foldlAttrs (acc: name: value: (recursiveUpdate acc (f name value))) { } attrs;
 
-  # main service builder
-  lib.mySystem.mkService = options: (
-    let
-      # user = if builtins.hasAttr "user" options then options.user else 568;
-      # group = if builtins.hasAttr "group" options then options.group else 568;
-      a = 1;
-    in
-    {
-      # virtualisation.oci-containers.containers.${options.app} = {
-      #   image = "${options.image}";
-      #   user = "${user}:${group}";
-      #   environment = {
-      #     TZ = config.time.timeZone;
-      #   } ++ container.env;
-      #   environmentFiles = [ ] ++ container.envFiles;
-      #   volumes = [
-      #     "/etc/localtime:/etc/localtime:ro"
-      #     "${configFile}:/config/config.yaml:ro"
-      #   ];
-
-      #   labels = config.lib.mySystem.mkTraefikLabels {
-      #     name = options.app;
-      #     inherit port;
-      #   };
-
-      #   # extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
-      # };
-    }
-  );
 
 
 }
