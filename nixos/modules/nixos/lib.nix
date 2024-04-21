@@ -87,14 +87,30 @@ with lib;
   # loop over an attrSet and merge the attrSets returned from f into one (latter override the former in case of conflict)
   lib.mySystem.mergeAttrs = f: attrs: foldlAttrs (acc: name: value: (recursiveUpdate acc (f name value))) { } attrs;
 
-  # Iterate all attrs in base and return
-  # the merged set from all iterated keys in base from
-  # return path
-  # lib.mySystem.mkMergeMap = base: return: builtins.concatMap (cfg: (cfg.return)) (builtins.attrValues base);
+  # main service builder
+  lib.mkService = options:
+    let
+      user = if builtins.hasAttr "user" options then options.user else 568;
+      group = if builtins.hasAttr "group" options then options.group else 568;
 
-}
+    in
+    {
+      virtualisation.oci-containers.containers.${options.app} = {
+        image = "${options.image}";
+        user = "${user}:${group}";
+        # environmentFiles = [ config.sops.secrets."services/${options.app}/env".path ];
+        # volumes = [
+        #   "/etc/localtime:/etc/localtime:ro"
+        #   "${configFile}:/config/config.yaml:ro"
+        # ];
 
-# # useful?
-# foldlAttrs
-# # attrbypath?
-# let
+        labels = config.lib.mySystem.mkTraefikLabels {
+          name = options.app;
+          inherit port;
+        };
+
+        # extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
+      };
+
+    }
+    }
