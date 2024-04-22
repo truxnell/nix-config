@@ -18,9 +18,12 @@ in
         description = "Reddit alternate frontend";
         image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
         port = 8080;
+        user = "nobody";
+        group = "nobody";
         timeZone = config.time.timeZone;
         domain = config.networking.domain;
         addToHomepage = true;
+        homepage.icon = "libreddit.svg";
         container = {
           env = {
             REDLIB_DEFAULT_SHOW_NSFW = "on";
@@ -28,6 +31,11 @@ in
             REDLIB_DEFAULT_HIDE_HLS_NOTIFICATION = "on";
           };
           addTraefikLabels = true;
+          caps = {
+            readOnly = true;
+            noNewPrivileges = true;
+            dropAll = true;
+          };
         };
       };
   # mkService
@@ -49,6 +57,8 @@ in
   ## CONTAINER
   # container.env, env vars for container, attrset, default { }
   # container.addTraefikLabels, flag for adding traefik exposing labels, default true
+  # caps.privileged: privileged pod, grant pod high privs, defualt SUPER false.  SUPER DOOPER FALSE
+  # caps.readOnly: readonly pod (outside mounted paths etc).  default false
   #
 
 

@@ -179,7 +179,7 @@ in
 
     mySystem.services.homepage.infrastructure-services = [
       {
-        Traefik = {
+        "Traefik  ${config.networking.hostName}" = {
           icon = "traefik.png";
           href = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}/dashboard/";
 
