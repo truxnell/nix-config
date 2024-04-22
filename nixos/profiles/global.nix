@@ -25,9 +25,11 @@ with lib;
     };
   };
 
-  boot.tmp.cleanOnBoot = true;
 
   config = {
+
+    boot.tmp.cleanOnBoot = true;
+
     mySystem = {
 
       # basics for all devices

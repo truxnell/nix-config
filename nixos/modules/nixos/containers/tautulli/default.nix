@@ -36,8 +36,10 @@ in
         "${config.mySystem.nasFolder}/backup/kubernetes/apps/tautulli:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = config.lib.mySystem.mkTraefikLabels {
+      labels = lib.myLib.mkTraefikLabels {
         name = app;
+        domain = config.networking.domain;
+
         inherit port;
       };
     };

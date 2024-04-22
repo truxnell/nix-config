@@ -282,8 +282,10 @@ in
       #   "traefik.http.routers.${app}.middlewares" = "local-ip-only@file";
       #   "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
       # };
-      labels = config.lib.mySystem.mkTraefikLabels {
+      labels = lib.myLib.mkTraefikLabels {
         name = app;
+        domain = config.networking.domain;
+
         inherit port;
       };
       # not using docker socket for discovery, just

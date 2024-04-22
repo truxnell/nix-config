@@ -23,7 +23,7 @@
     factorio.freight-forwarding.enable = true; # the factory must grow
     whoogle.enable = true;
 
-    # redlib.enable = true;
+    redlib.enable = true;
 
 
   };

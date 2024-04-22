@@ -129,8 +129,10 @@ in
         "${configFile}:/config/config.yaml:ro"
       ];
 
-      labels = config.lib.mySystem.mkTraefikLabels {
+      labels = lib.myLib.mkTraefikLabels {
         name = app;
+        domain = config.networking.domain;
+
         inherit port;
       };
 

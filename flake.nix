@@ -61,34 +61,23 @@
       ];
 
     in
-    {
+    rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
       # setup devshells against shell.nix
       devShells = forAllSystems (pkgs: import ./shell.nix { inherit pkgs; });
 
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = builtins.attrValues overlays;
-        config = {
-          allowUnfree = true;
-          allowUnfreePredicate = _: true;
-        };
-      };
-
+      # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
-        self: super: {
-          my = import ./nixos/lib {
-            inherit pkgs inputs;
-            lib = self;
-          };
+        final: prev: {
+          inherit inputs;
+          myLib = import ./nixos/lib { inherit inputs; lib = final; };
         }
       );
 
-
       nixosConfigurations =
-        # with self.lib;
+        with self.lib;
         let
           specialArgs = {
             inherit inputs outputs;
@@ -125,11 +114,19 @@
             , profileModules ? [ ]
             }:
             nixpkgs.lib.nixosSystem {
-              inherit system;
+              inherit system lib;
               modules = baseModules ++ hardwareModules ++ profileModules;
               specialArgs = { inherit self inputs nixpkgs; };
               # Add our overlays
 
+              pkgs = import nixpkgs {
+                inherit system;
+                overlays = builtins.attrValues overlays;
+                config = {
+                  allowUnfree = true;
+                  allowUnfreePredicate = _: true;
+                };
+              };
 
             };
         in
