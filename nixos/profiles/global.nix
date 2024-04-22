@@ -25,6 +25,8 @@ with lib;
     };
   };
 
+  boot.tmp.cleanOnBoot = true;
+
   config = {
     mySystem = {
 
