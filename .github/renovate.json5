@@ -22,7 +22,7 @@
 
     "regexManagers": [
     {
-      fileMatch: ["^.*\\.nix$"],
+      fileMatch: ["^.*\\.nix$", "^.*\\.toml$"],
       matchStrings: [
         'image *= *"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?";',
       ],
