@@ -2,7 +2,7 @@
 
   "packageRules": [
     {
-  // auto update up to major
+  // automerge minor, patch, digest
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
@@ -19,7 +19,7 @@
       ],
 
     },
-    // auto update up to minor
+    // automerge patch and digest
     {
       "matchDatasources": ['docker'],
       "automerge": "true",
@@ -28,10 +28,12 @@
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
         "ghcr.io/gethomepage/homepage",
+        "garethgeorge/backrest",
       ]
 
     },
-        {
+    {
+      // automerge all digests
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
