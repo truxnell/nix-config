@@ -7,7 +7,7 @@ kill_timeout = "5s"
   auto_rollback = true
 
 [build]
-  image = "vaultwarden/server:1.28.1@sha256:c56cba7d646584e73a17604f4d4e5aba95ee4198bbed6c919c9514d2ada97d04"
+  image = "vaultwarden/server:1.30.5@sha256:edb8e2bab9cbca22e555638294db9b3657ffbb6e5d149a29d7ccdb243e3c71e0"
 
 [env]
   DATABASE_URL = "data/db.sqlite3"
