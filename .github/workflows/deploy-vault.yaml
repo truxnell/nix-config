@@ -1,0 +1,26 @@
+name: Deploy Vaultwarden to Fly.io
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/deploy-vault.yaml
+      - "flyio/vaultwarden/fly.toml"
+
+jobs:
+  build-deploy:
+    if: ${{ github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: setup flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Publish
+        run: flyctl deploy --config fly/vaultwarden/fly.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP: ${{ secrets.FLY_APP_VAULTWARDEN }}
