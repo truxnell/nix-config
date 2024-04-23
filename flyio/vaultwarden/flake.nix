@@ -1,30 +1,26 @@
 {
-  description = "My nixos homelab";
-
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-};
-outputs ={
-    self
-    , nixpkgs
-    , sops-nix
-    , home-manager
-    , nix-vscode-extensions
-, ...
-} @ inputs:
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    systems.url = "github:nix-systems/default";
+  };
 
-let
-    inherit (self) outputs;
-    forAllSystems = nixpkgs.lib.genAttrs [
-    "aarch64-linux"
-    "x86_64-linux"
-    ];
-
-in
-{
-devShells.default = pkgs.mkShell {
-        packages = [
-        pkgs.flyctl
+  outputs = {
+    systems,
+    nixpkgs,
+    ...
+  } @ inputs: let
+    eachSystem = f:
+      nixpkgs.lib.genAttrs (import systems) (
+        system:
+          f nixpkgs.legacyPackages.${system}
+      );
+  in {
+    devShells = eachSystem (pkgs: {
+      default = pkgs.mkShell {
+        packages =[
+            pkgs.flyctl
         ];
-    };
-};
+      };
+    });
+  };
+}
