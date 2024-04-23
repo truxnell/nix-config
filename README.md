@@ -83,7 +83,7 @@ nix eval .#nixosConfigurations.rickenbacker.config.security.sudo.WheelNeedsPassw
 nix eval .#nixosConfigurations.rickenbacker.config.mySystem.security.wheelNeedsPassword
 ```
 
-And browsing whats at a certain level in options.
+And browsing whats at a certain level in options - or just use [nix-inspect](https://github.com/bluskript/nix-inspect) TUI 
 
 ```bash
 nix eval .#nixosConfigurations.rickenbacker.config.home-manager.users.truxnell --apply builtins.attrNames --json
