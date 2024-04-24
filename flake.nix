@@ -61,16 +61,23 @@
       ];
 
     in
-    {
+    rec {
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
       # setup devshells against shell.nix
       devShells = forAllSystems (pkgs: import ./shell.nix { inherit pkgs; });
 
+      # extend lib with my custom functions
+      lib = nixpkgs.lib.extend (
+        final: prev: {
+          inherit inputs;
+          myLib = import ./nixos/lib { inherit inputs; lib = final; };
+        }
+      );
 
       nixosConfigurations =
-        # with self.lib;
+        with self.lib;
         let
           specialArgs = {
             inherit inputs outputs;
@@ -107,7 +114,7 @@
             , profileModules ? [ ]
             }:
             nixpkgs.lib.nixosSystem {
-              inherit system;
+              inherit system lib;
               modules = baseModules ++ hardwareModules ++ profileModules;
               specialArgs = { inherit self inputs nixpkgs; };
               # Add our overlays
@@ -216,6 +223,22 @@
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
+
+          "shodan" = mkNixosConfig {
+            # lenovo tiny NAS
+
+            hostname = "shodan";
+            system = "x86_64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-generic-x86.nix
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+              ./nixos/profiles/impermanence.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+            ];
+          };
+
 
 
 

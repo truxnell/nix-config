@@ -11,5 +11,6 @@
     ./searxng
     ./factorio
     ./whoogle
+    ./redlib
   ];
 }

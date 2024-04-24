@@ -41,8 +41,10 @@ in
         "/etc/localtime:/etc/localtime:ro"
       ];
       ports = [ (builtins.toString port) ]; # expose port
-      labels = config.lib.mySystem.mkTraefikLabels {
+      labels = lib.myLib.mkTraefikLabels {
         name = app;
+        domain = config.networking.domain;
+
         inherit port;
       };
     };

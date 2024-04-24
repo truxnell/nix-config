@@ -6,7 +6,7 @@
 , pkgs
 , ...
 }: {
-  mySystem.purpose = "Development";
+  mySystem.purpose = "Homelab";
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
@@ -27,24 +27,16 @@
 
 
   };
-  mySystem.system.systemd.pushover-alerts.enable = false;
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";
-  mySystem.system.motd.networkInterfaces = [ "eno1" ];
-
-  # Dev machine
-  mySystem.system.resticBackup =
-    {
-      local.enable = false;
-      remote.enable = false;
-    };
+  mySystem.system.motd.networkInterfaces = [ "enp1s0" ];
 
   boot = {
 
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
     initrd.kernelModules = [ ];
-    kernelModules = [ ];
+    kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
 
     # for managing/mounting ntfs
@@ -61,6 +53,7 @@
   };
 
   networking.hostName = "durandal"; # Define your hostname.
+  networking.hostId = "0a90730f";
   networking.useDHCP = lib.mkDefault true;
 
   fileSystems."/" =

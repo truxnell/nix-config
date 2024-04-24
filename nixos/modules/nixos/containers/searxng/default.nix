@@ -37,8 +37,10 @@ in
         SEARXNG_BASE_URL = "https://searxng.${config.mySystem.domain}/";
         SEARXNG_URL = "https://searxng.${config.mySystem.domain}";
       };
-      labels = config.lib.mySystem.mkTraefikLabels {
+      labels = lib.myLib.mkTraefikLabels {
         name = app;
+        domain = config.networking.domain;
+
         inherit port;
       };
       extraOptions = [
@@ -54,7 +56,7 @@ in
 
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Tautulli = {
+        Searxng = {
           icon = "${app}.png";
           href = "https://${app}.${config.mySystem.domain}";
           ping = "https://${app}.${config.mySystem.domain}";
