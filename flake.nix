@@ -224,6 +224,22 @@
             ];
           };
 
+          "shodan" = mkNixosConfig {
+            # lenovo tiny NAS
+
+            hostname = "shodan";
+            system = "x86_64-linux";
+            hardwareModules = [
+              ./nixos/profiles/hw-generic-x86.nix
+            ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+              ./nixos/profiles/impermanence.nix
+              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+            ];
+          };
+
+
 
 
         };
