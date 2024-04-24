@@ -6,7 +6,7 @@
 with lib;
 let
   app = "backrest";
-  image = "garethgeorge/backrest:v0.17.1@sha256:c2cf1897f5a6972516d7f9ce3adbbbb258fde79c9101d3d01edfaeca0a30ea6c";
+  image = "garethgeorge/backrest:v0.17.2@sha256:8517210483be734ef89587e085e8860e071d6a6871cd773aa790f263346cbfb8";
   user = "568"; #string
   group = "568"; #string
   port = 9898; #int

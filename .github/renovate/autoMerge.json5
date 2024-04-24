@@ -2,7 +2,7 @@
 
   "packageRules": [
     {
-  // auto update up to major
+  // automerge minor, patch, digest
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
@@ -10,15 +10,16 @@
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
         'ghcr.io/onedr0p/sonarr',
-        'ghcr.io/onedr0p/readarr',
-        'ghcr.io/onedr0p/radarr-nightly',
+        'ghcr.io/onedr0p/readarr-nightly',
+        'ghcr.io/onedr0p/radarr',
         'ghcr.io/onedr0p/lidarr',
-        'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/onedr0p/prowlarr',
         'ghcr.io/twin/gatus',
+        'vaultwarden/server',
       ],
 
     },
-    // auto update up to minor
+    // automerge patch and digest
     {
       "matchDatasources": ['docker'],
       "automerge": "true",
@@ -27,10 +28,12 @@
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
         "ghcr.io/gethomepage/homepage",
+        "garethgeorge/backrest",
       ]
 
     },
-        {
+    {
+      // automerge all digests
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",

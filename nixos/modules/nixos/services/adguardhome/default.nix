@@ -55,6 +55,9 @@ in
           bind_host = "127.0.0.1";
           inherit port;
 
+          protection_enabled = true;
+          filtering_enabled = true;
+
           # bootstrap DNS - used for resolving upstream dns deets
           bootstrap_dns = [
             # quad9
@@ -141,7 +144,7 @@ in
           {
             # HAGEZI Multi Pro
             enabled = true;
-            id = 4;
+            id = 5;
             name = "hagezi multi pro";
             url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt";
           }
