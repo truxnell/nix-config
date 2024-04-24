@@ -49,6 +49,11 @@ with config;
           port = 22;
           identityFile = "~/.ssh/id_ed25519";
         };
+        shodan = {
+          hostname = "shodan";
+          port = 22;
+          identityFile = "~/.ssh/id_ed25519";
+        };
 
       };
     };

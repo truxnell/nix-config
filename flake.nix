@@ -210,7 +210,7 @@
           };
 
           "daedalus" = mkNixosConfig {
-            # lenovo tiny NAS
+            # lenovo tiny 720q NAS
 
             hostname = "daedalus";
             system = "x86_64-linux";
@@ -225,7 +225,7 @@
           };
 
           "shodan" = mkNixosConfig {
-            # lenovo tiny NAS
+            # nuc11i7beh (?) homelab
 
             hostname = "shodan";
             system = "x86_64-linux";

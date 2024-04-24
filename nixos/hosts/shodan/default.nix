@@ -31,6 +31,10 @@
   mySystem.persistentFolder = "/persist";
   mySystem.system.motd.networkInterfaces = [ "enp1s0" ];
 
+  mySystem.nasFolder = "/mnt/nas";
+  mySystem.system.resticBackup.local.location = "/tank/backup/nixos/nixos";
+
+
   boot = {
 
     initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
@@ -51,7 +55,7 @@
     };
   };
 
-  networking.hostName = "durandal"; # Define your hostname.
+  networking.hostName = "shodan"; # Define your hostname.
   networking.hostId = "0a90730f";
   networking.useDHCP = lib.mkDefault true;
 
