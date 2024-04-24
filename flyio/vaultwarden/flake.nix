@@ -19,9 +19,10 @@
     {
       devShells = eachSystem (pkgs: {
         default = pkgs.mkShell {
-          packages = [
-            pkgs.flyctl
-            pkgs.doppler
+          packages = with pkgs; [
+            flyctl
+            doppler
+            go-task
           ];
         };
       });
