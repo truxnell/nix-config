@@ -56,7 +56,7 @@ in
 
     mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
       {
-        Tautulli = {
+        Searxng = {
           icon = "${app}.png";
           href = "https://${app}.${config.mySystem.domain}";
           ping = "https://${app}.${config.mySystem.domain}";
