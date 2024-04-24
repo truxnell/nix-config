@@ -41,7 +41,7 @@ in
         "/etc/localtime:/etc/localtime:ro"
       ];
       environment = {
-        PLEX_ADVERTISE_URL = "https://10.8.20.44:32400,https://${app}.${config.mySystem.domain}:443"; # TODO var ip
+        PLEX_ADVERTISE_URL = "https://10.8.20.42:32400,https://${app}.${config.mySystem.domain}:443"; # TODO var ip
       };
       ports = [ "${builtins.toString port}:${builtins.toString port}" ]; # expose port
       labels = lib.myLib.mkTraefikLabels {

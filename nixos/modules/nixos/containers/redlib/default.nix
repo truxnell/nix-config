@@ -12,7 +12,7 @@ in
 
   # fuck /u/spez
   config =
-    myLib.mkService
+    mkIf cfg.enable (myLib.mkService
       {
         app = "Redlib";
         description = "Reddit alternate frontend";
@@ -37,7 +37,7 @@ in
             dropAll = true;
           };
         };
-      };
+      });
   # mkService
   # app: App Name, string, required
   # appUrl: App url, string, default "https://APP.DOMAIN"

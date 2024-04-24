@@ -12,18 +12,6 @@
     podman.enable = true;
     traefik.enable = true;
 
-    gatus.enable = true;
-    homepage.enable = true;
-    # backrest.enable = true;
-
-    plex.enable = true;
-    tautulli.enable = true;
-    syncthing.enable = true;
-    searxng.enable = true;
-    factorio.freight-forwarding.enable = true; # the factory must grow
-    whoogle.enable = true;
-
-    redlib.enable = true;
 
 
   };

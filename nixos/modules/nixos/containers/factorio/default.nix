@@ -33,6 +33,14 @@ in
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
+    sops.secrets."services/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
+
     virtualisation.oci-containers.containers."${app}-${instance}" = {
       image = "${image}";
       user = "${user}:${group}";
@@ -40,6 +48,13 @@ in
         "${persistentFolder}:/factorio:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
+      environment =
+        {
+          UPDATE_MODS_ON_START = "false";
+          PORT = "34203";
+          RCON_PORT = "27019";
+        };
+      environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       ports = [ (builtins.toString port) ]; # expose port
       labels = lib.myLib.mkTraefikLabels {
         name = app;
