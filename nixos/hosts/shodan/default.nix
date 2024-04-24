@@ -18,7 +18,6 @@
 
     plex.enable = true;
     tautulli.enable = true;
-    syncthing.enable = true;
     searxng.enable = true;
     factorio.freight-forwarding.enable = true; # the factory must grow
     whoogle.enable = true;
@@ -29,7 +28,7 @@
   };
 
   mySystem.nfs.nas.enable = true;
-  mySystem.persistentFolder = "/persistent";
+  mySystem.persistentFolder = "/persist";
   mySystem.system.motd.networkInterfaces = [ "enp1s0" ];
 
   boot = {

@@ -35,11 +35,15 @@ in
       user = "${user}:${group}";
       volumes = [
         "${persistentFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix:/media:rw"
+        "${config.mySystem.nasFolder}/natflix:/data:rw"
         "${config.mySystem.nasFolder}/backup/kubernetes/apps/plex:/config/backup:rw"
+        "/dev/dri:/dev/dri" # for hardware transcoding
         "/etc/localtime:/etc/localtime:ro"
       ];
-      ports = [ (builtins.toString port) ]; # expose port
+      environment = {
+        PLEX_ADVERTISE_URL = "https://10.8.20.44:32400,https://${app}.${config.mySystem.domain}:443"; # TODO var ip
+      };
+      ports = [ "${builtins.toString port}:${builtins.toString port}" ]; # expose port
       labels = lib.myLib.mkTraefikLabels {
         name = app;
         domain = config.networking.domain;
@@ -49,8 +53,8 @@ in
     };
     networking.firewall = mkIf cfg.openFirewall {
 
-      allowedTCPPorts = [ 53 ];
-      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ port ];
+      allowedUDPPorts = [ port ];
     };
 
 

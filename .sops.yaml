@@ -13,7 +13,7 @@ keys:
   - &dns02 age17edew3aahg3t5nte5g0a505sn96vnj8g8gqse8q06ccrrn2n3uysyshu2c
   - &citadel age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
   - &rickenbacker age1cp6vegrmqfkuj8nmt2u3z0sur7n0f7e9x9zmdv4zygp8j2pnucpsdkgagc
-  - &shodan age1j2r8mypw44uvqhfs53424h6fu2rkr5m7asl7rl3zn3xzva9m3dcqpa97gw
+  - &shodan age1ekt5xz7u2xgdzgsrffhd9x22n80cn4thxd8zxjy2ey5vq3ca7gnqz25g5r
   - &daedalus age1jpeh4s553taxkyxhzlshzqjfrtvmmp5lw0hmpgn3mdnmgzku332qe082dl
 
 creation_rules:
