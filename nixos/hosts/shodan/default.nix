@@ -58,17 +58,27 @@
 
   fileSystems."/" =
     {
-      device = "/dev/disk/by-uuid/2e843998-f409-4ccc-bc7c-07099ee0e936";
-      fsType = "ext4";
+      device = "rpool/local/root";
+      fsType = "zfs";
+    };
+
+  fileSystems."/nix" =
+    {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+    };
+
+  fileSystems."/persist" =
+    {
+      device = "rpool/safe/persist";
+      fsType = "zfs";
     };
 
   fileSystems."/boot" =
     {
-      device = "/dev/disk/by-uuid/12CE-A600";
+      device = "/dev/disk/by-uuid/76FA-78DF";
       fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
     };
-
-  swapDevices =
-    [{ device = "/dev/disk/by-uuid/0ae2765b-f3f4-4b1a-8ea6-599f37504d70"; }];
 
 }
