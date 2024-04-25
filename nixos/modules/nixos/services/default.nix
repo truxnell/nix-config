@@ -16,5 +16,6 @@
     ./powerdns
     ./adguardhome
     ./mosquitto
+    ./zigbee2mqtt
   ];
 }

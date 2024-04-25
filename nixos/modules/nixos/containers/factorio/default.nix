@@ -70,12 +70,6 @@ in
         };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       ports = [ (builtins.toString port) ]; # expose port
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        domain = config.networking.domain;
-
-        inherit port;
-      };
     };
     networking.firewall = mkIf cfg.openFirewall {
 

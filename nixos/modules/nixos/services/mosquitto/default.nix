@@ -18,7 +18,8 @@ in
 
     sops.secrets."services/mosquitto/mq/hashedPassword" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = config.users.users.mosquitto.name;
+      owner = "mosquitto";
+      group = "mosquitto";
       restartUnits = [ "${app}.service" ];
     };
 
