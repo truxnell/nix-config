@@ -46,6 +46,7 @@ pkgs.mkShell {
     pre-commit
     gitleaks
     mkdocs
+    mqttui
 
   ];
 }

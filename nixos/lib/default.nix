@@ -65,11 +65,11 @@ rec {
         extraOptions = containerExtraOptions;
       };
 
-      mySystem.services.homepage.media-services = mkIf options.addToHomepage [
+      mySystem.services.homepage.${options.homepage.category} = mkIf options.addToHomepage [
         {
           ${options.app} = {
             icon = homepageIcon;
-            href = host;
+            href = "https://${host}";
             host = host;
             description = options.description;
           };

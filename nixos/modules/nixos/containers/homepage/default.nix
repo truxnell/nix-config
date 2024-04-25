@@ -159,15 +159,15 @@ let
 
   services = [
     {
-      Infrastructure = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.infrastructure-services)
+      Infrastructure = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.infrastructure)
         (builtins.attrValues self.nixosConfigurations) ++ extraInfrastructure;
     }
     {
-      Home = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.home-services)
+      Home = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.home)
         (builtins.attrValues self.nixosConfigurations) ++ extraHome;
     }
     {
-      Media = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.media-services)
+      Media = builtins.concatMap (cfg: cfg.config.mySystem.services.homepage.media)
         (builtins.attrValues self.nixosConfigurations);
     }
   ];
@@ -178,17 +178,17 @@ in
 {
   options.mySystem.services.homepage = {
     enable = mkEnableOption "Homepage dashboard";
-    infrastructure-services = lib.mkOption {
+    infrastructure = lib.mkOption {
       type = lib.types.listOf lib.types.attrs;
       description = "Services to add to the infrastructure column";
       default = [ ];
     };
-    home-services = lib.mkOption {
+    home = lib.mkOption {
       type = lib.types.listOf lib.types.attrs;
       description = "Services to add to the infrastructure column";
       default = [ ];
     };
-    media-services = lib.mkOption {
+    media = lib.mkOption {
       type = lib.types.listOf lib.types.attrs;
       description = "Services to add to the infrastructure column";
       default = [ ];

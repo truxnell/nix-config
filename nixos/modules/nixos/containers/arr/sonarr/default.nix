@@ -63,7 +63,7 @@ in
       };
     };
 
-    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
         Sonarr = {
           icon = "${app}.svg";

@@ -53,7 +53,7 @@ in
       };
     };
 
-    mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         Backrest = {
           icon = "${app}.svg";

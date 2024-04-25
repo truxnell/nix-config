@@ -208,7 +208,7 @@ in
       }
     ];
 
-    mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         "Adguard ${config.networking.hostName}" = {
           icon = "${app}.svg";

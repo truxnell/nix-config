@@ -80,7 +80,7 @@ with lib;
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
     }];
 
-    mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         "Glances ${config.networking.hostName}" = {
           icon = "${app}.svg";

@@ -54,7 +54,7 @@ in
 
     };
 
-    mySystem.services.homepage.media-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {
         Searxng = {
           icon = "${app}.png";

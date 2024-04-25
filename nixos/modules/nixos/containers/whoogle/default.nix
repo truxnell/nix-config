@@ -56,7 +56,7 @@ in
       };
     };
 
-    mySystem.services.homepage.home-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {
         Whoogle = {
           icon = "whooglesearch.png";

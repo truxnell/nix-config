@@ -10,11 +10,11 @@
     ./traefik
     ./nfs
     ./nix-serve
-    ./bind
     ./glances
     ./syncthing
     ./restic
     ./powerdns
     ./adguardhome
+    ./mosquitto
   ];
 }

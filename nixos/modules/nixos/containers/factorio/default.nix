@@ -32,12 +32,26 @@ in
     systemd.tmpfiles.rules = [
       "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
+    # make user for container
+    users = {
+      users.${app} = {
+        name = app;
+        uid = lib.strings.toInt user;
+        group = app;
+        isSystemUser = true;
+      };
+      groups.${app} = {
+        gid = lib.strings.toInt group;
+      };
+    };
+    # add user to group to view files/storage
+    users.users.truxnell.extraGroups = [ "${app}" ];
 
     sops.secrets."services/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      group = group;
-      restartUnits = [ "podman-${app}.service" ];
+      owner = app;
+      group = app;
+      restartUnits = [ "podman-${app}-${instance}.service" ];
     };
 
 

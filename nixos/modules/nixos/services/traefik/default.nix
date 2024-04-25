@@ -37,7 +37,7 @@ in
     };
 
     # add user to group to view files/storage
-    users.users.truxnell.extraGroups = [ config.services.traefik.group ];
+    users.users.truxnell.extraGroups = [ "traefik" ];
 
     services.traefik = {
       # TODO refactor into subfiles
@@ -177,7 +177,7 @@ in
       };
     };
 
-    mySystem.services.homepage.infrastructure-services = [
+    mySystem.services.homepage.infrastructure = [
       {
         "Traefik  ${config.networking.hostName}" = {
           icon = "traefik.png";

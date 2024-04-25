@@ -18,11 +18,13 @@
 
     plex.enable = true;
     tautulli.enable = true;
-    searxng.enable = true;
     factorio.freight-forwarding.enable = true; # the factory must grow
-    whoogle.enable = true;
 
+    searxng.enable = true;
+    whoogle.enable = true;
     redlib.enable = true;
+
+    mosquitto.enable = true;
 
 
   };

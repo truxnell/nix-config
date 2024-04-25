@@ -41,32 +41,6 @@ let
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
-    {
-      name = "icarus";
-      group = "k8s";
-      url = "icmp://icarus.${config.mySystem.internalDomain}";
-      interval = "1m";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[CONNECTED] == true" ];
-    }
-    {
-      name = "xerxes";
-      group = "k8s";
-      url = "icmp://xerxes.${config.mySystem.internalDomain}";
-      interval = "1m";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[CONNECTED] == true" ];
-    }
-    {
-      name = "shodan";
-      group = "k8s";
-      url = "icmp://shodan.${config.mySystem.internalDomain}";
-      interval = "1m";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[CONNECTED] == true" ];
-    }
-
-
 
   ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
     (builtins.attrValues self.nixosConfigurations);
@@ -139,7 +113,7 @@ in
       extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
     };
 
-    mySystem.services.homepage.infrastructure-services = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         "Gatus Internal" = {
           icon = "${app}.svg";
