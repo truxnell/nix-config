@@ -26,6 +26,7 @@
 
     mosquitto.enable = true;
     zigbee2mqtt.enable = true;
+    home-assistant.enable = true;
 
 
   };

@@ -12,5 +12,6 @@
     ./factorio
     ./whoogle
     ./redlib
+    ./home-assistant
   ];
 }
