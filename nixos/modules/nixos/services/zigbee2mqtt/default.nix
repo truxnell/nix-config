@@ -79,7 +79,7 @@ in
     }];
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";

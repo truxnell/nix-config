@@ -11,7 +11,7 @@
     openssh.enable = true;
     podman.enable = true;
     traefik.enable = true;
-
+    postgresql.enable = true;
 
 
   };

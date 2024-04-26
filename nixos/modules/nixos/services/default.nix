@@ -17,5 +17,6 @@
     ./adguardhome
     ./mosquitto
     ./zigbee2mqtt
+    ./postgresql
   ];
 }
