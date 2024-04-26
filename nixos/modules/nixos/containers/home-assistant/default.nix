@@ -9,7 +9,8 @@ let
   app = "Home-assistant";
   user = "kah";
   group = "kah";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "home-assistant";
+  persistentFolder = "${config.mySystem.persistentFolder}/containers/${appFolder}";
 
 in
 {
@@ -38,6 +39,10 @@ in
           timeZone = config.time.timeZone;
           subdomainOverride = "hass";
           domain = config.networking.domain;
+          persistence = {
+            folder = persistentFolder;
+            backup = true;
+          };
           homepage = {
             icon = "home-assistant.svg";
             category = "home";
@@ -49,10 +54,7 @@ in
               HASS_IP = "10.8.20.42";
             };
             envFiles = [ config.sops.secrets."services/${app}/env".path ];
-            volumes = [
-              "${persistentFolder}:/config:rw"
-
-            ];
+            persistentFolderMount = "/config";
             addTraefikLabels = true;
             caps = {
               # readOnly = true;
