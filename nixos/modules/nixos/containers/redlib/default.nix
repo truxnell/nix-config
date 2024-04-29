@@ -20,8 +20,8 @@ in
           port = 8080;
           user = "nobody";
           group = "nobody";
-          timeZone = config.time.timeZone;
-          domain = config.networking.domain;
+          inherit (config.time) timeZone;
+          inherit (config.networking) domain;
           homepage = {
             icon = "libreddit.svg";
             category = "home";

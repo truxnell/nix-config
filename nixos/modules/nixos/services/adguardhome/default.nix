@@ -126,13 +126,13 @@ in
 
             buildList = id: url: {
               enabled = true;
-              id = id;
-              name = url.name;
-              url = url.url;
+              inherit id;
+              inherit (url) name;
+              inherit (url) url;
             };
           in
 
-          (lib.imap1 buildList urls);
+          lib.imap1 buildList urls;
       };
     };
 

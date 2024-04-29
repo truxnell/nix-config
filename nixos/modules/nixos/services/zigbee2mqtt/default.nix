@@ -29,7 +29,7 @@ in
     sops.secrets."services/mosquitto/mq/plainPassword.yaml" = {
       sopsFile = ../mosquitto/secrets.sops.yaml;
       owner = config.users.users.zigbee2mqtt.name;
-      group = config.users.users.zigbee2mqtt.group;
+      inherit (config.users.users.zigbee2mqtt) group;
       restartUnits = [ "${app}.service" ];
     };
 

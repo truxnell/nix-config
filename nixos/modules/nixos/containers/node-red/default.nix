@@ -9,8 +9,8 @@ let
   app = "node-red";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   appFolder = "apps/${app}";
-  user = config.services.node-red.user;
-  group = config.services.node-red.group;
+  inherit (config.services.node-red) user;
+  inherit (config.services.node-red) group;
   url = "code-${config.networking.hostName}.${config.networking.domain}";
 
 in
