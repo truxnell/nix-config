@@ -7,9 +7,14 @@ with lib;
 let
   cfg = config.mySystem.services.openvscode-server;
   app = "openvscode-server";
+  url = "code-${config.networking.hostName}.${config.networking.domain}";
 in
 {
-  options.mySystem.services.openvscode-server.enable = mkEnableOption "openvscode-server";
+  options.mySystem.services.openvscode-server =
+    {
+      enable = mkEnableOption "openvscode-server";
+      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+    };
 
   config = mkIf cfg.enable {
 
@@ -26,7 +31,7 @@ in
 
     mySystem.services.traefik.routers = [{
       http.routers.${app} = {
-        rule = "Host(`code-d.${config.mySystem.domain}`)";
+        rule = "Host(`${url}`)";
         entrypoints = "websecure";
         middlewares = "local-ip-only@file";
         service = "${app}";
@@ -40,6 +45,28 @@ in
       };
 
     }];
+
+    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+      {
+        code-shodan = {
+          icon = "vscode.svg";
+          href = "https://${url}";
+
+          description = "Code editor";
+          container = "${app}";
+        };
+      }
+    ];
+
+    mySystem.services.gatus.monitors = [{
+
+      name = app;
+      group = "services";
+      url = "https://${url}";
+      interval = "1m";
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+    }];
+
 
   };
 }

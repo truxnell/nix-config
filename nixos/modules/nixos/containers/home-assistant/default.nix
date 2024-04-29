@@ -5,63 +5,85 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.services.home-assistant;
-  app = "Home-assistant";
-  user = "kah";
-  group = "kah";
-  appFolder = "home-assistant";
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${appFolder}";
-
+  app = "home-assistant";
+  image = "ghcr.io/onedr0p/home-assistant:2024.1.5@sha256:64bb3ffa532c3c52563f0e4a4de8d50c889f42a1b0826b35ee1ac728652fb107";
+  user = "568"; #string
+  group = "568"; #string
+  port = 8123; #int
+  cfg = config.mySystem.services.${app};
+  appFolder = "containers/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
 in
 {
-  options.mySystem.services.home-assistant.enable = mkEnableOption "home-assistant";
+  options.mySystem.services.${app} =
+    {
+      enable = mkEnableOption "${app}";
+      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+    };
 
-  # running in a container vs nix module mainly
-  # as I know the container is solid. Bit iffy
-  # over the packaging of HA in nix & arguments
-  # from HA dev on nix packaging
-  config = mkIf cfg.enable
-    (lib.recursiveUpdate
+  config = mkIf cfg.enable {
+    # ensure folder exist and has correct owner/group
+    systemd.tmpfiles.rules = [
+      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+    ];
+
+    sops.secrets."services/${app}/env" = {
+
+      # configure secret for forwarding rules
+      sopsFile = ./secrets.sops.yaml;
+      owner = config.users.users.kah.name;
+      inherit (config.users.users.kah) group;
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
+    virtualisation.oci-containers.containers.${app} = {
+      image = "${image}";
+      user = "${user}:${group}";
+      environment = {
+        HASS_IP = "10.8.20.42";
+      };
+      environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
+      volumes = [
+        "${persistentFolder}:/config:rw"
+        "/etc/localtime:/etc/localtime:ro"
+      ];
+      labels = lib.myLib.mkTraefikLabels {
+        name = app;
+        domain = config.networking.domain;
+
+        inherit port;
+      };
+    };
+
+
+    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        sops.secrets."services/${app}/env" = {
-          sopsFile = ./secrets.sops.yaml;
-          owner = user;
-          group = group;
-          restartUnits = [ "podman-${app}.service" ];
+        Lidarr = {
+          icon = "${app}.svg";
+          href = "https://${app}.${config.mySystem.domain}";
+
+          description = "Home automation";
+          container = "${app}";
         };
       }
+    ];
 
-      (myLib.mkService
-        {
-          inherit app user group;
-          description = "Home Automation";
-          port = 8123;
-          timeZone = config.time.timeZone;
-          # subdomainOverride = "hass";
-          domain = config.networking.domain;
-          persistence = {
-            folder = persistentFolder;
-            backup = true;
-          };
-          homepage = {
-            icon = "home-assistant.svg";
-            category = "home";
-          };
-          container = {
-            enable = true;
-            image = "ghcr.io/onedr0p/home-assistant:2024.1.5@sha256:64bb3ffa532c3c52563f0e4a4de8d50c889f42a1b0826b35ee1ac728652fb107";
-            env = {
-              HASS_IP = "10.8.20.42";
-            };
-            envFiles = [ config.sops.secrets."services/${app}/env".path ];
-            persistentFolderMount = "/config";
-            addTraefikLabels = true;
-            caps = {
-              # readOnly = true;
-              noNewPrivileges = true;
-              # dropAll = true;
-            };
-          };
-        })
-    );
+    mySystem.services.gatus.monitors = [{
+
+      name = app;
+      group = "media";
+      url = "https://${app}.${config.mySystem.domain}";
+      interval = "1m";
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+    }];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app;
+        user = builtins.toString user;
+        excludePaths = [ "Backups" ];
+        paths = [ appFolder ];
+        inherit appFolder;
+      };
+  };
 }
