@@ -105,6 +105,11 @@ in
   config = mkIf cfg.enable
     {
 
+      # ensure folder exist and has correct owner/group
+      systemd.tmpfiles.rules = [
+        "f ${config.services.traefik.dataDir}/acme.json 0600 traefik ${config.services.traefik.group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      ];
+
       # put the dynamic configs in a file
       # i put this in a file instead of piping directly into
       # the traefik module, so that if i update the file

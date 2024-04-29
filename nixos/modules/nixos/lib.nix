@@ -19,7 +19,7 @@ with lib;
       ];
       initialize = true;
       backupPrepareCommand = ''
-        # remove stale locks - this avoids some annoyance
+        # remove stale locks - this avoids some occasional annoyance
         #
         ${pkgs.restic}/bin/restic unlock --remove-all || true
       '';

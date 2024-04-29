@@ -17,5 +17,8 @@
     ./adguardhome
     ./mosquitto
     ./zigbee2mqtt
+    ./postgresql
+    ./blocky
+    ./openvscode-server
   ];
 }

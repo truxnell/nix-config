@@ -23,12 +23,15 @@ rec {
     let
       user = existsOrDefault "user" options "568";
       group = existsOrDefault "group" options "568";
-      envFiles = existsOrDefault "envFiles" options [ ];
-      addTraefikLabels = if (builtins.hasAttr "container" options) && (builtins.hasAttr "addTraefikLabels" options.container) then options.container.addTraefikLabels else false;
+
+      addTraefikLabels = if (builtins.hasAttr "container" options) && (builtins.hasAttr "addTraefikLabels" options.container) then options.container.addTraefikLabels else true;
+      addToHomepage = lib.attrsets.attrByPath [ "homepage" "enable" ] true options;
       homepageIcon = if (builtins.hasAttr "homepage" options) && (builtins.hasAttr "icon" options.homepage) then options.homepage.icon else "${options.app}.svg";
+      subdomain = existsOrDefault "subdomainOverride" options options.app;
+      host = existsOrDefault "host" options "${subdomain}.${options.domain}";
 
-      host = existsOrDefault "host" options "${options.app}.${options.domain}";
-
+      enableBackups = (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options)
+        && (lib.attrsets.attrByPath [ "persistence" "enable" ] true options);
       # nix doesnt have an exhausive list of options for oci
       # so here i try to get a robust list of security options for containers
       # because everyone needs more tinfoild hat right?  RIGHT?
@@ -44,19 +47,23 @@ rec {
 
     in
     {
-      virtualisation.oci-containers.containers.${options.app} = {
-        image = "${options.image}";
+      virtualisation.oci-containers.containers.${options.app} = mkIf options.container.enable {
+        image = "${options.container.image}";
         user = "${user}:${group}";
         environment = {
           TZ = options.timeZone;
         } // options.container.env;
-        environmentFiles = [ ] ++ envFiles;
-        volumes = [
-          "/etc/localtime:/etc/localtime:ro"
-        ];
+        environmentFiles = [ ]
+          ++ lib.attrsets.attrByPath [ "container" "envFiles" ] [ ] options;
+        volumes = [ "/etc/localtime:/etc/localtime:ro" ]
+          ++ lib.optionals (lib.attrsets.hasAttrByPath [ "container" "persistentFolderMount" ] options) [
+          "${options.persistence.folder}:${options.container.persistentFolderMount}:rw"
+        ]
+          ++ lib.attrsets.attrByPath [ "container" "volumes" ] [ ] options;
+
 
         labels = mkIf addTraefikLabels (mkTraefikLabels {
-          name = options.app;
+          name = subdomain;
           port = options.port;
           domain = options.domain;
           url = host;
@@ -65,16 +72,22 @@ rec {
         extraOptions = containerExtraOptions;
       };
 
-      mySystem.services.homepage.${options.homepage.category} = mkIf options.addToHomepage [
+      systemd.tmpfiles.rules = [ ]
+        ++ lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0755 ${user} ${group} -" ]
+      ;
+
+      # built a entry for homepage
+      mySystem.services.homepage.${options.homepage.category} = mkIf addToHomepage [
         {
           ${options.app} = {
             icon = homepageIcon;
-            href = "https://${host}";
+            href = "https://${ host }";
             host = host;
             description = options.description;
           };
         }
       ];
+
     }
 
 
@@ -106,6 +119,5 @@ rec {
       "traefik.http.routers.${name}.service" = service;
     }
   );
-
 
 }

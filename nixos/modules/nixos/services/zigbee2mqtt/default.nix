@@ -37,7 +37,7 @@ in
       enable = true;
       dataDir = persistentFolder;
       settings = {
-        advanced.log_level = "warn";
+        advanced.log_level = "debug";
         homeassistant = true;
         permit_join = false;
         include_device_information = true;
@@ -79,7 +79,7 @@ in
     }];
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";

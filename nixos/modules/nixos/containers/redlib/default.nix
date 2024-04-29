@@ -17,16 +17,18 @@ in
         {
           app = "Redlib";
           description = "Reddit alternate frontend";
-          image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
           port = 8080;
           user = "nobody";
           group = "nobody";
           timeZone = config.time.timeZone;
           domain = config.networking.domain;
-          addToHomepage = true;
-          homepage.icon = "libreddit.svg";
-          homepage.category = "home";
+          homepage = {
+            icon = "libreddit.svg";
+            category = "home";
+          };
           container = {
+            enable = true;
+            image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
             env = {
               REDLIB_DEFAULT_SHOW_NSFW = "on";
               REDLIB_DEFAULT_USE_HLS = "on";
