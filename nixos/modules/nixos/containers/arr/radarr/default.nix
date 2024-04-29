@@ -6,7 +6,7 @@
 with lib;
 let
   app = "radarr";
-  image = "ghcr.io/onedr0p/radarr:5.4.6.8723@sha256:cee5d4a3ba0ef3cd66e37f80434d61fb2dee457d66952a4f030bf1fd9fb10910";
+  image = "ghcr.io/onedr0p/radarr:5.4.6.8723@sha256:3198f09197697a4d57f995650ebf34b57b2fdbb991dac1611ad8356d9e8bda8e";
   user = "568"; #string
   group = "568"; #string
   port = 7878; #int
