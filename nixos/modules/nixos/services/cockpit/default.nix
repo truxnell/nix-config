@@ -29,7 +29,7 @@ in
   config.environment = mkIf cfg.enable {
     systemPackages = with pkgs;
       [
-        (mkIf config.virtualisation.podman.enable nur.repos.procyon.cockpit-podman) # only if server runs pods
+        # (mkIf config.virtualisation.podman.enable nur.repos.procyon.cockpit-podman) # TODO replace only if server runs pods
 
         # nur.repos.dukzcry.cockpit-machines # TODO enable with virtualisation on server
         # nur.repos.dukzcry.libvirt-dbus # TODO enable with virtualisation on server
