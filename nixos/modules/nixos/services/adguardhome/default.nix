@@ -75,7 +75,6 @@ in
           upstream_dns = [
             # split brain dns - forward to local powerdns
             "[/trux.dev/]127.0.0.1:5353"
-            "[/natallan.com/]127.0.0.1:5353"
 
             # resolve fqdn for local ip's
             "[/l.voltaicforge.com/]10.8.10.1"
@@ -111,47 +110,29 @@ in
           theme = "auto";
         };
 
+        filters =
+          let
+            urls = [
+              { name = "AdGuard DNS filter"; url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt"; }
+              { name = "AdAway Default Blocklist"; url = "https://adaway.org/hosts.txt"; }
+              { name = "Big OSID"; url = "https://big.oisd.nl"; }
+              { name = "1Hosts Lite"; url = "https://o0.pages.dev/Lite/adblock.txt"; }
+              { name = "hagezi multi pro"; url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt"; }
+              { name = "osint"; url = "https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt"; }
+              { name = "phishing army"; url = "https://phishing.army/download/phishing_army_blocklist_extended.txt"; }
+              { name = "notrack malware"; url = "https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt"; }
+              { name = "EasyPrivacy"; url = "https://v.firebog.net/hosts/Easyprivacy.txt"; }
+            ];
 
-        filters = [
-          {
-            # AdGuard Base filter, Social media filter, Spyware filter, Mobile ads filter, EasyList and EasyPrivacy
-            enabled = true;
-            id = 1;
-            name = "AdGuard DNS filter";
-            url = "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt";
-          }
-          {
-            # AdAway default blocklist
-            enabled = true;
-            id = 2;
-            name = "AdAway Default Blocklist";
-            url = "https://adaway.org/hosts.txt";
-          }
-          {
-            # Big OSID
-            enabled = true;
-            id = 3;
-            name = "Big OSID";
-            url = "https://big.oisd.nl";
-          }
-          {
-            # 1Hosts Lite
-            enabled = true;
-            id = 4;
-            name = "1Hosts Lite";
-            url = "https://o0.pages.dev/Lite/adblock.txt";
-          }
-          {
-            # HAGEZI Multi Pro
-            enabled = true;
-            id = 5;
-            name = "hagezi multi pro";
-            url = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/adblock/pro.txt";
-          }
+            buildList = id: url: {
+              enabled = true;
+              id = id;
+              name = url.name;
+              url = url.url;
+            };
+          in
 
-
-
-        ];
+          (lib.imap1 buildList urls);
       };
     };
 

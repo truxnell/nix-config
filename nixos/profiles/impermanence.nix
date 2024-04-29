@@ -34,7 +34,13 @@ with lib;
       zfs rollback -r ${cfg.rootPoolName}@${cfg.rootBlankSnapshotName}
     '';
 
-
+    environment.persistence."${cfg.persistPath}/nixos" = {
+      hideMounts = true;
+      directories =
+        [
+          "/var/log"
+        ];
+    };
 
     # move ssh keys to persist folder
     services.openssh.hostKeys = mkIf config.services.openssh.enable [

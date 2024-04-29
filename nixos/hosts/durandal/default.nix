@@ -13,6 +13,10 @@
     traefik.enable = true;
     postgresql.enable = true;
 
+    node-red.enable = true;
+    home-assistant.enable = true;
+    openvscode-server.enable = true;
+
 
   };
   mySystem.system.systemd.pushover-alerts.enable = false;

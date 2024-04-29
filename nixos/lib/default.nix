@@ -30,6 +30,8 @@ rec {
       subdomain = existsOrDefault "subdomainOverride" options options.app;
       host = existsOrDefault "host" options "${subdomain}.${options.domain}";
 
+      enableBackups = (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options)
+        && (lib.attrsets.attrByPath [ "persistence" "enable" ] true options);
       # nix doesnt have an exhausive list of options for oci
       # so here i try to get a robust list of security options for containers
       # because everyone needs more tinfoild hat right?  RIGHT?
@@ -86,17 +88,6 @@ rec {
         }
       ];
 
-      #build backups if required - default super duper true
-      services.restic.backups = config.lib.mySystem.mkRestic
-        {
-          inherit app;
-          user = builtins.toString user;
-          excludePaths = [ ]
-            ++ lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "excludeFolders" ] options) [ options.persistence.excludeFolders ];
-          paths = [ appFolder ];
-          inherit appFolder;
-        };
-
     }
 
 
@@ -126,54 +117,6 @@ rec {
       "traefik.http.services.${service}.loadbalancer.server.scheme" = "${options.scheme}";
     } // attrsets.optionalAttrs (builtins.hasAttr "service" options) {
       "traefik.http.routers.${name}.service" = service;
-    }
-  );
-
-  # build a restic restore set for both local and remote
-  mkRestic = options: (
-    let
-      excludePath = if builtins.hasAttr "excludePath" options then options.excludePath else [ ];
-      timerConfig = {
-        OnCalendar = "02:05";
-        Persistent = true;
-        RandomizedDelaySec = "3h";
-      };
-      pruneOpts = [
-        "--keep-daily 7"
-        "--keep-weekly 5"
-        "--keep-monthly 12"
-      ];
-      initialize = true;
-      backupPrepareCommand = ''
-        # remove stale locks - this avoids some occasional annoyance
-        #
-        ${pkgs.restic}/bin/restic unlock --remove-all || true
-      '';
-    in
-    {
-      # local backup
-      "${options.app}-local" = mkIf config.mySystem.system.resticBackup.local.enable {
-        inherit pruneOpts timerConfig initialize backupPrepareCommand;
-        # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
-        passwordFile = config.sops.secrets."services/restic/password".path;
-        exclude = excludePath;
-        repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
-        # inherit (options) user;
-      };
-
-      # remote backup
-      "${options.app}-remote" = mkIf config.mySystem.system.resticBackup.remote.enable {
-        inherit pruneOpts timerConfig initialize backupPrepareCommand;
-        # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
-        environmentFile = config.sops.secrets."services/restic/env".path;
-        passwordFile = config.sops.secrets."services/restic/password".path;
-        repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
-        exclude = excludePath;
-        # inherit (options) user;
-      };
-
     }
   );
 

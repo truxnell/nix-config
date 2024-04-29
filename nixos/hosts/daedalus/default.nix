@@ -86,6 +86,7 @@
     {
       device = "rpool/safe/persist";
       fsType = "zfs";
+      neededForBoot = true; # for impermanence
     };
 
   swapDevices =

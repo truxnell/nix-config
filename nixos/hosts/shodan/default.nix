@@ -26,7 +26,6 @@
 
     mosquitto.enable = true;
     zigbee2mqtt.enable = true;
-    home-assistant.enable = true;
 
 
   };
@@ -79,6 +78,7 @@
     {
       device = "rpool/safe/persist";
       fsType = "zfs";
+      neededForBoot = true; # for impermanence
     };
 
   fileSystems."/boot" =

@@ -13,5 +13,6 @@
     ./whoogle
     ./redlib
     ./home-assistant
+    ./node-red
   ];
 }

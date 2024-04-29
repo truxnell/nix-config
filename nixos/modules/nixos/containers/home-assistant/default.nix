@@ -17,7 +17,7 @@ in
   options.mySystem.services.home-assistant.enable = mkEnableOption "home-assistant";
 
   # running in a container vs nix module mainly
-  # as I know the container is solid and bit iffy
+  # as I know the container is solid. Bit iffy
   # over the packaging of HA in nix & arguments
   # from HA dev on nix packaging
   config = mkIf cfg.enable
@@ -37,7 +37,7 @@ in
           description = "Home Automation";
           port = 8123;
           timeZone = config.time.timeZone;
-          subdomainOverride = "hass";
+          # subdomainOverride = "hass";
           domain = config.networking.domain;
           persistence = {
             folder = persistentFolder;
@@ -62,5 +62,6 @@ in
               # dropAll = true;
             };
           };
-        }));
+        })
+    );
 }
