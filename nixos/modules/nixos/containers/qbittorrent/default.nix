@@ -46,7 +46,7 @@ in
       ];
       labels = lib.myLib.mkTraefikLabels {
         name = app;
-        domain = config.networking.domain;
+        inherit (config.networking) domain;
 
         inherit port;
       };

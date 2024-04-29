@@ -26,7 +26,7 @@ in
         sops.secrets."services/${app}/env" = {
           sopsFile = ./secrets.sops.yaml;
           owner = user;
-          group = group;
+          inherit group;
           restartUnits = [ "podman-${app}.service" ];
         };
       }
@@ -36,9 +36,9 @@ in
           inherit app user group;
           description = "Home Automation";
           port = 8123;
-          timeZone = config.time.timeZone;
+          inherit (config.time) timeZone;
           # subdomainOverride = "hass";
-          domain = config.networking.domain;
+          inherit (config.networking) domain;
           persistence = {
             folder = persistentFolder;
             backup = true;

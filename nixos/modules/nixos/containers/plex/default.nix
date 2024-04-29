@@ -46,7 +46,7 @@ in
       ports = [ "${builtins.toString port}:${builtins.toString port}" ]; # expose port
       labels = lib.myLib.mkTraefikLabels {
         name = app;
-        domain = config.networking.domain;
+        inherit (config.networking) domain;
 
         inherit port;
       };

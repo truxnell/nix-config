@@ -3,7 +3,7 @@
 with lib;
 rec {
 
-  firstOrDefault = first: default: if !isNull first then first else default;
+  firstOrDefault = first: default: if first != null then first else default;
 
   existsOrDefault = x: set: default: if builtins.hasAttr x set then builtins.getAttr x set else default;
 
@@ -36,8 +36,7 @@ rec {
       # so here i try to get a robust list of security options for containers
       # because everyone needs more tinfoild hat right?  RIGHT?
 
-      containerExtraOptions = [ ]
-        ++ lib.optionals (lib.attrsets.attrByPath [ "container" "caps" "privileged" ] false options) [ "--privileged" ]
+      containerExtraOptions = lib.optionals (lib.attrsets.attrByPath [ "container" "caps" "privileged" ] false options) [ "--privileged" ]
         ++ lib.optionals (lib.attrsets.attrByPath [ "container" "caps" "readOnly" ] false options) [ "--read-only" ]
         ++ lib.optionals (lib.attrsets.attrByPath [ "container" "caps" "tmpfs" ] false options) [ (map (folders: "--tmpfs=${folders}") tmpfsFolders) ]
         ++ lib.optionals (lib.attrsets.attrByPath [ "container" "caps" "noNewPrivileges" ] false options) [ "--security-opt=no-new-privileges" ]
@@ -53,8 +52,7 @@ rec {
         environment = {
           TZ = options.timeZone;
         } // options.container.env;
-        environmentFiles = [ ]
-          ++ lib.attrsets.attrByPath [ "container" "envFiles" ] [ ] options;
+        environmentFiles = lib.attrsets.attrByPath [ "container" "envFiles" ] [ ] options;
         volumes = [ "/etc/localtime:/etc/localtime:ro" ]
           ++ lib.optionals (lib.attrsets.hasAttrByPath [ "container" "persistentFolderMount" ] options) [
           "${options.persistence.folder}:${options.container.persistentFolderMount}:rw"
@@ -64,16 +62,15 @@ rec {
 
         labels = mkIf addTraefikLabels (mkTraefikLabels {
           name = subdomain;
-          port = options.port;
-          domain = options.domain;
+          inherit (options) port;
+          inherit (options) domain;
           url = host;
         });
 
         extraOptions = containerExtraOptions;
       };
 
-      systemd.tmpfiles.rules = [ ]
-        ++ lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0755 ${user} ${group} -" ]
+      systemd.tmpfiles.rules = lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0755 ${user} ${group} -" ]
       ;
 
       # built a entry for homepage
@@ -82,8 +79,8 @@ rec {
           ${options.app} = {
             icon = homepageIcon;
             href = "https://${ host }";
-            host = host;
-            description = options.description;
+            inherit host;
+            inherit (options) description;
           };
         }
       ];
