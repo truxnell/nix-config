@@ -6,13 +6,12 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}"
-  description ="%{description}"
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
-  port = %{port}; #int
+  app = "prometheus";
+  category = "services"
+  description ="Metric ingestion and storage"
+  user = app; #string
+  group = app; #string
+  port = 9001; #int
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   host="${app}" ++ mkIf cfg.development "-dev";
@@ -27,12 +26,6 @@ in
         {
           type = lib.types.bool;
           description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
           default = true;
         };
       addToDNS = mkOption
@@ -82,9 +75,13 @@ in
     ];
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    # ref: https://github.com/nmasur/dotfiles/blob/aea33592361215356c0fbe5e9d533906f0a023cc/modules/nixos/services/prometheus.nix#L19
+    # https://github.com/ryan4yin/nix-config/blob/bec52f9d60f493d8bb31f298699dfc99eaf18dcc/hosts/12kingdoms-rakushun/grafana/default.nix#L42
+    
+    services.prometheus = {
+        enable = true;
+        port = 9001;
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [

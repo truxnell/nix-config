@@ -5,14 +5,13 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}"
-  description ="%{description}"
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
-  port = %{port}; #int
+  cfg = config.mySystem.services.grafana;
+  app = "grafana";
+  category = "services"
+  description ="Metric visualisation"
+  user = app; #string
+  group = app; #string
+  port = 2342; #int
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   host="${app}" ++ mkIf cfg.development "-dev";
@@ -29,12 +28,12 @@ in
           description = "Enable gatus monitoring";
           default = true;
         };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
+    #   prometheus = mkOption
+    #     {
+    #       type = lib.types.bool;
+    #       description = "Enable prometheus scraping";
+    #       default = true;
+    #     };
       addToDNS = mkOption
         {
           type = lib.types.bool;
@@ -82,9 +81,12 @@ in
     ];
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    services.grafana = {
+        inherit port;
+        enable = true;
+        domain = host;
+        addr = "127.0.0.1";
+     };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
