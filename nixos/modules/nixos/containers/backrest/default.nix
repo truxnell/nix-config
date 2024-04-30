@@ -24,9 +24,9 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder}/config 0755 ${user} ${group} -"
-      "d ${persistentFolder}/data 0755 ${user} ${group} -"
-      "d ${persistentFolder}/cache 0755 ${user} ${group} -"
+      "d ${persistentFolder}/config 0750 ${user} ${group} -"
+      "d ${persistentFolder}/data 0750 ${user} ${group} -"
+      "d ${persistentFolder}/cache 0750 ${user} ${group} -"
     ];
 
     virtualisation.oci-containers.containers.${app} = {

@@ -60,7 +60,7 @@ with lib;
       "d ${cfg.persistPath}/ 777 root root"
       "d ${cfg.persistPath}/nixos 777 root root"
       "d ${cfg.persistPath}/nixos/services 777 root root"
-      "d ${config.mySystem.system.impermanence.sshPath}/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${config.mySystem.system.impermanence.sshPath}/ 0750 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     # set machine id for log continuity

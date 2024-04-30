@@ -25,7 +25,7 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${persistentFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     sops.secrets."services/${app}/env" = {
