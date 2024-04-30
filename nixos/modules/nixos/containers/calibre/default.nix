@@ -6,13 +6,14 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}";
-  description ="%{description}";
-  image = "%{image}";
+  app = "calibre";
+  category = "containers";
+  description ="Ebook manager";
+  image = "ghcr.io/linuxserver/calibre:version-v6.14.1";
   user = "%{user kah}"; #string
   group = "%{group kah}"; #string
-  port = %{port}; #int
+  port = 8080; #int
+  port_webserver = 8081;
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
   host="${app}" ++ mkIf cfg.development "-dev";
@@ -27,12 +28,6 @@ in
         {
           type = lib.types.bool;
           description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
           default = true;
         };
       addToDNS = mkOption
@@ -82,9 +77,19 @@ in
     ];
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkRestic
+      {
+        inherit app user group image;
+        env={
+          DERP="foo";
+        };
+        ## test
+        paths = [ appFolder ];
+        inherit appFolder;
+
+
+      };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [

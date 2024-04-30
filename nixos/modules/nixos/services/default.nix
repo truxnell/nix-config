@@ -23,5 +23,6 @@
     ./grafana
     ./prometheus
     ./radicale
+    ./node-red
   ];
 }
