@@ -10,6 +10,7 @@ with lib;
     ./hardware
     ./containers
     ./lib.nix
+    ./security
   ];
 
   options.mySystem.persistentFolder = mkOption {
