@@ -103,7 +103,7 @@ in
       {
         inherit app;
         user = builtins.toString user;
-        paths = [ persistentFolder ];
+        paths = [ appfolder ];
         appFolder = app;
         inherit persistentFolder;
       };

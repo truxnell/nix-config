@@ -22,6 +22,6 @@
     ./openvscode-server
     ./grafana
     ./prometheus
-    
+    ./radicale
   ];
 }
