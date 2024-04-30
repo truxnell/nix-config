@@ -75,7 +75,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    
+
     # Folder perms
     systemd.tmpfiles.rules = [
       "d ${persistentFolder}/ 0750 ${user} ${group} -"

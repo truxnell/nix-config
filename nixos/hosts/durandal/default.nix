@@ -10,9 +10,12 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
-    traefik.enable = true;
-    postgresql.enable = true;
-
+    nginx.enable = true;
+    radicale = {
+      enable = true;
+      backups = false;
+      development = true;
+    };
 
 
   };

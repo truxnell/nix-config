@@ -40,16 +40,15 @@ in
       config.services.prometheus.exporters.smartctl.port
     ];
 
-    mySystem.monitoring.prometheus.scrapeConfigs=[
+    mySystem.monitoring.prometheus.scrapeConfigs = [
       {
         job_name = "node-exporter-${config.networking.hostName}";
         static_configs = [{
           targets = [ "127.0.0.1:${toString config.services.prometheus.exporters.node.port}" ];
         }];
       }
-    ]
+    ];
 
   };
-
 
 }

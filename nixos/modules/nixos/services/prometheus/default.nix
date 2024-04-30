@@ -7,8 +7,8 @@ with lib;
 let
   cfg = config.mySystem.${category}.${app};
   app = "prometheus";
-  category = "services"
-  description ="Metric ingestion and storage"
+  category = "services";
+  description ="Metric ingestion and storage";
   user = app; #string
   group = app; #string
   port = 9001; #int
@@ -68,7 +68,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    
+
     # Folder perms
     systemd.tmpfiles.rules = [
       "d ${persistentFolder}/ 0750 ${user} ${group} -"
@@ -77,7 +77,7 @@ in
     ## service
     # ref: https://github.com/nmasur/dotfiles/blob/aea33592361215356c0fbe5e9d533906f0a023cc/modules/nixos/services/prometheus.nix#L19
     # https://github.com/ryan4yin/nix-config/blob/bec52f9d60f493d8bb31f298699dfc99eaf18dcc/hosts/12kingdoms-rakushun/grafana/default.nix#L42
-    
+
     services.prometheus = {
         enable = true;
         port = 9001;

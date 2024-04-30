@@ -39,6 +39,11 @@ with lib;
     description = "System purpose";
     default = "Production";
   };
+  options.mySystem.monitoring.prometheus.scrapeConfigs = mkOption {
+    type = lib.types.listOf lib.types.attrs;
+    description = "Prometheus scrape targets";
+    default = [ ];
+  };
 
 
   config = {

@@ -7,8 +7,8 @@ with lib;
 let
   cfg = config.mySystem.services.grafana;
   app = "grafana";
-  category = "services"
-  description ="Metric visualisation"
+  category = "services";
+  description ="Metric visualisation";
   user = app; #string
   group = app; #string
   port = 2342; #int
@@ -74,7 +74,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    
+
     # Folder perms
     systemd.tmpfiles.rules = [
       "d ${persistentFolder}/ 0750 ${user} ${group} -"

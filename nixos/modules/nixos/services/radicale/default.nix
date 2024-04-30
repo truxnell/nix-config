@@ -7,15 +7,15 @@ with lib;
 let
   cfg = config.mySystem.${category}.${app};
   app = "radicale";
-  category = "services"
-  description ="Contact/Calendar managment"
-#   image = "%{image}";
+  category = "services";
+  description = "Contact/Calendar managment";
+  #   image = "%{image}";
   user = app; #string
   group = app; #string
   port = 5232; #int
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  host="${app}" ++ mkIf cfg.development "-dev";
+  host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -47,16 +47,10 @@ in
           description = "Development instance";
           default = false;
         };
-      backupLocal = mkOption
+      backups = mkOption
         {
           type = lib.types.bool;
           description = "Enable local backups";
-          default = true;
-        };
-      backupRemote = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable remote backups";
           default = true;
         };
 
@@ -65,7 +59,7 @@ in
 
   config = mkIf cfg.enable {
 
-    ## Secrets
+    # Secrets
     # sops.secrets."/${category}/${app}/env" = {
     #   sopsFile = ./secrets.sops.yaml;
     #   owner = user;
@@ -75,7 +69,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    
+
     # Folder perms
     systemd.tmpfiles.rules = [
       "d ${persistentFolder}/ 0750 ${user} ${group} -"
@@ -83,18 +77,18 @@ in
 
     ## service
     services.radicale = {
-        enable = true;
-        settings={
-            server.hosts = [ "0.0.0.0:5232" ];
-            auth = {
-                type = "htpasswd";
-                htpasswd_filename = "${persistentFolder}/users";
-                htpasswd_encryption = ";
-                realm = "Radicale - Password Required";
-            };
-            storage.filesystem_folder = "${persistentFolder}/collections"
-
+      enable = true;
+      settings = {
+        server.hosts = [ "0.0.0.0:5232" ];
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = "${persistentFolder}/users";
+          htpasswd_encryption = "plain";
+          realm = "Radicale - Password Required";
         };
+        storage.filesystem_folder = "/var/lib/radicale/collections"; # TODO impermance/move?
+
+      };
     };
 
     # homepage integration
@@ -120,12 +114,12 @@ in
     ];
 
     ### Ingress
-    services.nginx.virtualHosts.${url} = {
-        useACMEHost = host;
-        forceSSL = true;
-        locations."^~ /" = {
+    services.nginx.virtualHosts.${host} = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."^~ /" = {
         proxyPass = "http://[::1]:${builtins.toString port}";
-        };
+      };
     };
 
     ### firewall config
@@ -137,20 +131,17 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backupLocal && config.mySystem.purpose != "Development")
-        "WARNING: Local backups for ${app} are disabled!")
-      (mkIf (!cfg.backupRemote && config.mySystem.purpose != "Development")
-        "WARNING: Remote backups for ${app} are disabled!")
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+        "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backups config.lib.mySystem.mkRestic
+    services.restic.backups = mkIf cfg.backups (config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-        local=cfg.backupLocal;
-        remote=cfg.backupRemote;
-      };
+
+      });
 
 
   };

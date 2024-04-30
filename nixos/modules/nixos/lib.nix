@@ -2,8 +2,8 @@
 with lib;
 {
 
-  # main service builder
-  mkContainer = options: (
+  # container builder
+  lib.mySystem.mkContainer = options: (
     let
       # nix doesnt have an exhausive list of options for oci
       # so here i try to get a robust list of security options for containers
@@ -32,16 +32,11 @@ with lib;
         ]
           ++ lib.attrsets.attrByPath [ "container" "volumes" ] [ ] options;
 
-
-        labels = mkIf addTraefikLabels (mkTraefikLabels {
-          name = subdomain;
-          inherit (options) port;
-          inherit (options) domain;
-          url = host;
-        });
-
         extraOptions = containerExtraOptions;
       };
+    }
+  );
+
 
   # build a restic restore set for both local and remote
   lib.mySystem.mkRestic = options: (
@@ -63,13 +58,11 @@ with lib;
         #
         ${pkgs.restic}/bin/restic unlock --remove-all || true
       '';
-      enableLocal = lib.attrsets.attrByPath [ "local" ] config.mySystem.system.resticBackup.local.enable options;
-      enableRemote = lib.attrsets.attrByPath [ "remote" ] config.mySystem.system.resticBackup.remote.enable options;
 
     in
     {
       # local backup
-      "${options.app}-local" = mkIf enableLocal {
+      "${options.app}-local" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
         paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
@@ -80,7 +73,7 @@ with lib;
       };
 
       # remote backup
-      "${options.app}-remote" = mkIf enableRemote {
+      "${options.app}-remote" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
         paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;

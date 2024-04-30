@@ -8,7 +8,7 @@ let
   cfg = config.mySystem.${category}.${app};
   app = "calibre";
   category = "containers";
-  description ="Ebook manager";
+  description = "Ebook manager";
   image = "ghcr.io/linuxserver/calibre:version-v6.14.1";
   user = "%{user kah}"; #string
   group = "%{group kah}"; #string
@@ -16,7 +16,7 @@ let
   port_webserver = 8081;
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  host="${app}" ++ mkIf cfg.development "-dev";
+  host = "${app}" ++ mkIf cfg.development "-dev";
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -70,7 +70,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    
+
     # Folder perms
     systemd.tmpfiles.rules = [
       "d ${persistentFolder}/ 0750 ${user} ${group} -"
@@ -80,8 +80,8 @@ in
     virtualisation.oci-containers.containers = config.lib.mySystem.mkRestic
       {
         inherit app user group image;
-        env={
-          DERP="foo";
+        env = {
+          DERP = "foo";
         };
         ## test
         paths = [ appFolder ];
@@ -115,11 +115,11 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-        useACMEHost = host;
-        forceSSL = true;
-        locations."^~ /" = {
+      useACMEHost = host;
+      forceSSL = true;
+      locations."^~ /" = {
         proxyPass = "http://[::1]:${builtins.toString port}";
-        };
+      };
     };
 
     ### firewall config
@@ -142,8 +142,8 @@ in
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-        local=cfg.backupLocal;
-        remote=cfg.backupRemote;
+        local = cfg.backupLocal;
+        remote = cfg.backupRemote;
       };
 
 

@@ -24,5 +24,6 @@
     ./prometheus
     ./radicale
     ./node-red
+    ./nginx
   ];
 }
