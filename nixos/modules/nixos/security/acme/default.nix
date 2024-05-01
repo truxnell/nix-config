@@ -27,6 +27,10 @@ in
     #   "d ${persistentFolder}/${config.networking.domain} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
 
     # ];
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+      directories = [ "/var/lib/acme" ];
+    };
+
 
     security.acme = {
       acceptTerms = true;

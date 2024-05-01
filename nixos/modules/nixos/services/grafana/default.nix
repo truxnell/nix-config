@@ -8,13 +8,13 @@ let
   cfg = config.mySystem.services.grafana;
   app = "grafana";
   category = "services";
-  description ="Metric visualisation";
+  description = "Metric visualisation";
   user = app; #string
   group = app; #string
   port = 2342; #int
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  host="${app}" ++ mkIf cfg.development "-dev";
+  host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -28,12 +28,12 @@ in
           description = "Enable gatus monitoring";
           default = true;
         };
-    #   prometheus = mkOption
-    #     {
-    #       type = lib.types.bool;
-    #       description = "Enable prometheus scraping";
-    #       default = true;
-    #     };
+      #   prometheus = mkOption
+      #     {
+      #       type = lib.types.bool;
+      #       description = "Enable prometheus scraping";
+      #       default = true;
+      #     };
       addToDNS = mkOption
         {
           type = lib.types.bool;
@@ -46,16 +46,10 @@ in
           description = "Development instance";
           default = false;
         };
-      backupLocal = mkOption
+      backups = mkOption
         {
           type = lib.types.bool;
           description = "Enable local backups";
-          default = true;
-        };
-      backupRemote = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable remote backups";
           default = true;
         };
 
@@ -65,7 +59,7 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."/${category}/${app}/env" = {
+    # sops.secrets."${category}/${app}/env" = {
     #   sopsFile = ./secrets.sops.yaml;
     #   owner = user;
     #   group = group;
@@ -82,11 +76,11 @@ in
 
     ## service
     services.grafana = {
-        inherit port;
-        enable = true;
-        domain = host;
-        addr = "127.0.0.1";
-     };
+      inherit port;
+      enable = true;
+      domain = host;
+      addr = "127.0.0.1";
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -112,11 +106,11 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-        useACMEHost = host;
-        forceSSL = true;
-        locations."^~ /" = {
-        proxyPass = "http://[::1]:${builtins.toString port}";
-        };
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."^~ /" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+      };
     };
 
     ### firewall config
@@ -128,19 +122,16 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backupLocal && config.mySystem.purpose != "Development")
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
         "WARNING: Local backups for ${app} are disabled!")
-      (mkIf (!cfg.backupRemote && config.mySystem.purpose != "Development")
-        "WARNING: Remote backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backups config.lib.mySystem.mkRestic
+    services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-        local=cfg.backupLocal;
-        remote=cfg.backupRemote;
+
       };
 
 

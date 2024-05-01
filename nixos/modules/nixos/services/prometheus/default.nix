@@ -8,13 +8,13 @@ let
   cfg = config.mySystem.${category}.${app};
   app = "prometheus";
   category = "services";
-  description ="Metric ingestion and storage";
+  description = "Metric ingestion and storage";
   user = app; #string
   group = app; #string
   port = 9001; #int
   appFolder = "${category}/${app}";
   persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  host="${app}" ++ mkIf cfg.development "-dev";
+  host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -40,16 +40,10 @@ in
           description = "Development instance";
           default = false;
         };
-      backupLocal = mkOption
+      backups = mkOption
         {
           type = lib.types.bool;
           description = "Enable local backups";
-          default = true;
-        };
-      backupRemote = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable remote backups";
           default = true;
         };
 
@@ -59,7 +53,7 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."/${category}/${app}/env" = {
+    # sops.secrets."${category}/${app}/env" = {
     #   sopsFile = ./secrets.sops.yaml;
     #   owner = user;
     #   group = group;
@@ -79,8 +73,8 @@ in
     # https://github.com/ryan4yin/nix-config/blob/bec52f9d60f493d8bb31f298699dfc99eaf18dcc/hosts/12kingdoms-rakushun/grafana/default.nix#L42
 
     services.prometheus = {
-        enable = true;
-        port = 9001;
+      enable = true;
+      port = 9001;
     };
 
     # homepage integration
@@ -107,11 +101,11 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-        useACMEHost = host;
-        forceSSL = true;
-        locations."^~ /" = {
-        proxyPass = "http://[::1]:${builtins.toString port}";
-        };
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."^~ /" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+      };
     };
 
     ### firewall config
@@ -123,20 +117,18 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backupLocal && config.mySystem.purpose != "Development")
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
         "WARNING: Local backups for ${app} are disabled!")
-      (mkIf (!cfg.backupRemote && config.mySystem.purpose != "Development")
-        "WARNING: Remote backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backups config.lib.mySystem.mkRestic
+    services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-        local=cfg.backupLocal;
-        remote=cfg.backupRemote;
+
       };
+
 
 
   };

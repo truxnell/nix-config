@@ -11,11 +11,6 @@
     openssh.enable = true;
     podman.enable = true;
     nginx.enable = true;
-    radicale = {
-      enable = true;
-      backups = false;
-      development = true;
-    };
 
 
   };

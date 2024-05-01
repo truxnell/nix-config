@@ -45,13 +45,17 @@ in
         "${config.mySystem.nasFolder}/backup/nixos/nixos:/repos:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
+    };
 
-        inherit port;
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
+
 
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {

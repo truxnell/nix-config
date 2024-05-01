@@ -10,7 +10,8 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
-    traefik.enable = true;
+
+    nginx.enable = true;
 
     gatus.enable = true;
     homepage.enable = true;
@@ -30,8 +31,10 @@
     home-assistant.enable = true;
     openvscode-server.enable = true;
 
-
+    radicale.enable = true;
   };
+
+  mySystem.security.acme.enable = true;
 
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persist";
@@ -81,7 +84,7 @@
     {
       device = "rpool/safe/persist";
       fsType = "zfs";
-      # neededForBoot = true; # for impermanence
+      neededForBoot = true; # for impermanence
     };
 
   fileSystems."/boot" =

@@ -59,30 +59,34 @@ in
 
   config = mkIf cfg.enable {
 
-    # Secrets
-    # sops.secrets."/${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    ## Secrets
+    sops.secrets."${category}/${app}/htpasswd" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
 
     # Folder perms
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder}/ 0750 ${user} ${group} -"
-    ];
+    # systemd.tmpfiles.rules = [
+    #   "d ${persistentFolder}/ 0750 ${user} ${group} -"
+    # ];
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+      hideMounts = true;
+      directories = [ "/var/lib/radicale/" ];
+    };
 
     ## service
     services.radicale = {
       enable = true;
       settings = {
-        server.hosts = [ "0.0.0.0:5232" ];
+        server.hosts = [ "0.0.0.0:${builtins.toString port}" ];
         auth = {
           type = "htpasswd";
-          htpasswd_filename = "${persistentFolder}/users";
+          htpasswd_filename = config.sops.secrets."${category}/${app}/htpasswd".path;
           htpasswd_encryption = "plain";
           realm = "Radicale - Password Required";
         };
@@ -96,7 +100,7 @@ in
       {
         ${app} = {
           icon = "${app}.svg";
-          href = "https://${url}";
+          href = "https://${ url }";
           description = description;
         };
       }
@@ -117,8 +121,8 @@ in
     services.nginx.virtualHosts.${host} = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."^~ /" = {
-        proxyPass = "http://[::1]:${builtins.toString port}";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
 

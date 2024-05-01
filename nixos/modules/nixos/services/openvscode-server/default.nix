@@ -29,22 +29,13 @@ in
       withoutConnectionToken = true;
     };
 
-    mySystem.services.traefik.routers = [{
-      http.routers.${app} = {
-        rule = "Host(`${url}`)";
-        entrypoints = "websecure";
-        middlewares = "local-ip-only@file";
-        service = "${app}";
+    services.nginx.virtualHosts."code-${config.networking.hostName}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString config.services.openvscode-server.port}";
       };
-      http.services.${app} = {
-        loadBalancer = {
-          servers = [{
-            url = "http://localhost:${builtins.toString config.services.openvscode-server.port}";
-          }];
-        };
-      };
-
-    }];
+    };
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {

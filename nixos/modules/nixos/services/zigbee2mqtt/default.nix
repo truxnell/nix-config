@@ -10,7 +10,8 @@ let
   app = "zigbee2mqtt";
   user = app;
   group = app;
-
+  appFolder = "services/${app}";
+  port = 8080;
 in
 {
   options.mySystem.services.zigbee2mqtt = {
@@ -43,7 +44,7 @@ in
         include_device_information = true;
         frontend =
           {
-            port = 8080;
+            port = port;
             url = "https://${app}.${config.networking.domain}";
           };
         client_id = "z2m";
@@ -61,22 +62,13 @@ in
 
     users.users.truxnell.extraGroups = [ app ];
 
-    mySystem.services.traefik.routers = [{
-      http.routers.${app} = {
-        rule = "Host(`${app}.${config.mySystem.domain}`)";
-        entrypoints = "websecure";
-        middlewares = "local-ip-only@file";
-        service = "${app}";
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1${builtins.toString port}";
       };
-      http.services.${app} = {
-        loadBalancer = {
-          servers = [{
-            url = "http://localhost:8080";
-          }];
-        };
-      };
-
-    }];
+    };
 
 
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -103,7 +95,7 @@ in
       {
         inherit app;
         user = builtins.toString user;
-        paths = [ appfolder ];
+        paths = [ "services/${app}" ];
         appFolder = app;
         inherit persistentFolder;
       };

@@ -37,12 +37,6 @@ in
         SEARXNG_BASE_URL = "https://searxng.${config.mySystem.domain}/";
         SEARXNG_URL = "https://searxng.${config.mySystem.domain}";
       };
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
-
-        inherit port;
-      };
       extraOptions = [
         "--read-only"
         "--tmpfs=/etc/searxng/"
@@ -53,6 +47,17 @@ in
       ];
 
     };
+
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+
+      };
+    };
+
 
     mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {

@@ -25,7 +25,7 @@ let
       #   # Forward requests w/ middlewares=authelia@file to authelia.
       #   forwardAuth = {
       #     # address = cfg.autheliaUrl;
-      #     address = "http://localhost:9092/api/verify?rd=https://auth.dhupar.xyz:444/";
+      #     address = "http://127.0.0.1:9092/api/verify?rd=https://auth.dhupar.xyz:444/";
       #     trustForwardHeader = true;
       #     authResponseHeaders = [
       #       "Remote-User"
@@ -38,7 +38,7 @@ let
       # authelia-basic = {
       #   # Forward requests w/ middlewares=authelia-basic@file to authelia.
       #   forwardAuth = {
-      #     address = "http://localhost:9092/api/verify?auth=basic";
+      #     address = "http://127.0.0.1:9092/api/verify?auth=basic";
       #     trustForwardHeader = true;
       #     authResponseHeaders = [
       #       "Remote-User"

@@ -5,65 +5,144 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.services.redlib;
+  cfg = config.mySystem.${category}.${app};
+  app = "redlib";
+  category = "services";
+  description = "reddit alternative frontend";
+  image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
+  user = "nobody"; #string
+  group = "nobody"; #string
+  port = 8080; #int
+  appFolder = "${category}/${app}";
+  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  host = "${app}" + (if cfg.development then "-dev" else "");
+  url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.services.redlib.enable = mkEnableOption "redlib";
-
-  # fuck /u/spez
-  config =
-    mkIf cfg.enable
-      (myLib.mkService
+  options.mySystem.${category}.${app} =
+    {
+      enable = mkEnableOption "${app}";
+      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      monitor = mkOption
         {
-          app = "Redlib";
-          description = "Reddit alternate frontend";
-          port = 8080;
-          user = "nobody";
-          group = "nobody";
-          inherit (config.time) timeZone;
-          inherit (config.networking) domain;
-          homepage = {
-            icon = "libreddit.svg";
-            category = "home";
-          };
-          container = {
-            enable = true;
-            image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
-            env = {
-              REDLIB_DEFAULT_SHOW_NSFW = "on";
-              REDLIB_DEFAULT_USE_HLS = "on";
-              REDLIB_DEFAULT_HIDE_HLS_NOTIFICATION = "on";
-            };
-            addTraefikLabels = true;
-            caps = {
-              readOnly = true;
-              noNewPrivileges = true;
-              dropAll = true;
-            };
-          };
-        });
-  # mkService
-  # app: App Name, string, required
-  # appUrl: App url, string, default "https://APP.DOMAIN"
-  # description: App Description, string, required
-  # image: Container IMage, string, required
-  # port: port, int
-  # timeZone: timezone, required
-  # domain: domain of app, required
-  # addToHomepage: Flag to add to homepage, bool, default false
-  ## HOMEPAGE
-  # homepage.icon: Icon for homepage listing, string, default "app.svg"
-
-  # user: user to run as, string, default 568
-  # group: group to run as, string, default 568
-  # envFiles, files to add as env, list of string, default [ TZ = timeZone ]
-
-  ## CONTAINER
-  # container.env, env vars for container, attrset, default { }
-  # container.addTraefikLabels, flag for adding traefik exposing labels, default true
-  # caps.privileged: privileged pod, grant pod high privs, defualt SUPER false.  SUPER DOOPER FALSE
-  # caps.readOnly: readonly pod (outside mounted paths etc).  default false
-  #
+          type = lib.types.bool;
+          description = "Enable gatus monitoring";
+          default = true;
+        };
+      prometheus = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable prometheus scraping";
+          default = true;
+        };
+      addToDNS = mkOption
+        {
+          type = lib.types.bool;
+          description = "Add to DNS list";
+          default = true;
+        };
+      development = mkOption
+        {
+          type = lib.types.bool;
+          description = "Development instance";
+          default = false;
+        };
+      backups = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable local backups";
+          default = true;
+        };
 
 
+    };
+
+  config = mkIf cfg.enable {
+
+    ## Secrets
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
+
+    users.users.truxnell.extraGroups = [ group ];
+
+
+    # Folder perms
+    # systemd.tmpfiles.rules = [
+    # "d ${persistentFolder}/ 0750 ${user} ${group} -"
+    # ];
+
+    ## service
+    # services.test= {
+    #   enable = true;
+    # };
+
+    ## container
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+      env = {
+        test = "derp";
+      };
+      envFiles = [ ];
+      volumes = [ ];
+    };
+
+    # homepage integration
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
+      {
+        ${app} = {
+          icon = "${app}.svg";
+          href = "https://${url}";
+          description = description;
+        };
+      }
+    ];
+
+    ### gatus integration
+    mySystem.services.gatus.monitors = mkIf cfg.monitor [
+      {
+        name = app;
+        group = "${category}";
+        url = "https://${url}";
+        interval = "1m";
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      }
+    ];
+
+    ### Ingress
+    services.nginx.virtualHosts.${url} = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."^~ /" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+      };
+    };
+
+    ### firewall config
+
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
+
+    ### backups
+    warnings = [
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+        "WARNING: Local backups for ${app} are disabled!")
+    ];
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
+
+      };
+
+
+  };
 }

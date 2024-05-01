@@ -44,18 +44,23 @@ in
         PLEX_ADVERTISE_URL = "https://10.8.20.42:32400,https://${app}.${config.mySystem.domain}:443"; # TODO var ip
       };
       ports = [ "${builtins.toString port}:${builtins.toString port}" ]; # expose port
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
-
-        inherit port;
-      };
     };
     networking.firewall = mkIf cfg.openFirewall {
 
       allowedTCPPorts = [ port ];
       allowedUDPPorts = [ port ];
     };
+
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+
+      };
+    };
+
 
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [

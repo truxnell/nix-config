@@ -11,7 +11,7 @@ let
   appFolder = "apps/${app}";
   inherit (config.services.node-red) user;
   inherit (config.services.node-red) group;
-  url = "code-${config.networking.hostName}.${config.networking.domain}";
+  url = "${app}.${config.networking.domain}";
 
 in
 {
@@ -33,36 +33,24 @@ in
       userDir = persistentFolder;
     };
 
-    mySystem.services.traefik.routers = [{
-      http.routers.${app} = {
-        rule = "Host(`${app}.${config.mySystem.domain}`)";
-        entrypoints = "websecure";
-        middlewares = "local-ip-only@file";
-        service = "${app}";
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString config.services.node-red.port}";
       };
-      http.services.${app} = {
-        loadBalancer = {
-          servers = [{
-            url = "http://localhost:1880";
-          }];
-        };
-      };
+    };
 
-    }];
+
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        code-shodan = {
+        ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
 
-          description = "Music management";
+          description = "Workflow automation";
           container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
-          };
         };
       }
     ];
