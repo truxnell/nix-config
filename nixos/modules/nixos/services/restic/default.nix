@@ -59,8 +59,10 @@ in
       };
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
-      directories = [ "/var/lib/containers" ];
+    environment.persistence = mkIf (cfg.local.enable || cfg.remote.enable) {
+      "${config.mySystem.system.impermanence.persistPath}" = {
+        directories = [ "/var/lib/containers" ];
+      };
     };
 
 

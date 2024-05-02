@@ -101,6 +101,9 @@ with config;
         ripgrep
         flyctl # fly.io control line
 
+        vlc
+
+
       ];
 
   };
