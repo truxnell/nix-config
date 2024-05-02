@@ -12,6 +12,7 @@
     podman.enable = true;
     nginx.enable = true;
 
+    openvscode-server.enable = true;
 
   };
   mySystem.system.systemd.pushover-alerts.enable = false;

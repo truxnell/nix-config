@@ -22,7 +22,7 @@ in
       "security/acme/env".restartUnits = [ "${app}.service" ];
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [ "/var/lib/acme" ];
     };
 

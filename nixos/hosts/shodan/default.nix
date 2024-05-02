@@ -7,6 +7,7 @@
 , ...
 }: {
   mySystem.purpose = "Homelab";
+  mySystem.system.impermanence.enable = true;
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;

@@ -76,7 +76,7 @@ in
       allowedTCPPorts = [ port ]; # I dont use rcon so not opening that too.
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 

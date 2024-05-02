@@ -64,7 +64,7 @@ in
       };
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 

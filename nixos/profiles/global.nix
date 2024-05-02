@@ -15,17 +15,6 @@ with lib;
       ./global
     ];
 
-  options.mySystem.system.impermanence = {
-    enable = mkEnableOption "impermanence";
-    # explicitly specify ssh path key
-    # just so I can track where sops-nix needs to find it
-    sshPath = mkOption {
-      type = types.str;
-      default = "/etc/ssh";
-    };
-  };
-
-
   config = {
 
     boot.tmp.cleanOnBoot = true;

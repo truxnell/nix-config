@@ -69,7 +69,7 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       hideMounts = true;
       directories = [ "/var/lib/radicale/" ];
     };
