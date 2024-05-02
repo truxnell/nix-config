@@ -7,8 +7,8 @@ with lib;
 let
   cfg = config.mySystem.services.node-red;
   app = "node-red";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  appFolder = "apps/${app}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  appFolder = config.services.node-red.userDir;
   inherit (config.services.node-red) user;
   inherit (config.services.node-red) group;
   url = "${app}.${config.networking.domain}";
@@ -23,14 +23,8 @@ in
 
   config = mkIf cfg.enable {
 
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
-
     services.node-red = {
       enable = true;
-      userDir = persistentFolder;
     };
 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
@@ -41,7 +35,9 @@ in
       };
     };
 
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    };
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {

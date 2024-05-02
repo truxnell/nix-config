@@ -6,11 +6,11 @@
 with lib;
 let
   cfg = config.mySystem.services.zigbee2mqtt;
-  persistentFolder = "${config.mySystem.persistentFolder}/nixos/services/${app}/";
+  # persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}/";
   app = "zigbee2mqtt";
   user = app;
   group = app;
-  appFolder = "services/${app}";
+  appFolder = config.services.zigbee2mqtt.dataDir;
   port = 8080;
 in
 {
@@ -22,11 +22,6 @@ in
 
   config = mkIf cfg.enable {
 
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
-
     sops.secrets."services/mosquitto/mq/plainPassword.yaml" = {
       sopsFile = ../mosquitto/secrets.sops.yaml;
       owner = config.users.users.zigbee2mqtt.name;
@@ -36,7 +31,6 @@ in
 
     services.zigbee2mqtt = {
       enable = true;
-      dataDir = persistentFolder;
       settings = {
         advanced.log_level = "debug";
         homeassistant = true;
@@ -58,6 +52,10 @@ in
         };
 
       };
+    };
+
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 
     users.users.truxnell.extraGroups = [ app ];
@@ -93,11 +91,9 @@ in
 
     services.restic.backups = config.lib.mySystem.mkRestic
       {
-        inherit app;
+        inherit app appFolder;
         user = builtins.toString user;
-        paths = [ "services/${app}" ];
-        appFolder = app;
-        inherit persistentFolder;
+        paths = [ appFolder ];
       };
 
 

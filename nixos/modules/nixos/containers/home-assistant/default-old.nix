@@ -6,11 +6,11 @@
 with lib;
 let
   cfg = config.mySystem.services.home-assistant;
-  app = "Home-assistant";
+  app = "home-assistant";
   user = "kah";
   group = "kah";
-  appFolder = "home-assistant";
-  persistentFolder = "${config.mySystem.persistentFolder}/containers/${appFolder}";
+  appFolder = "/var/lib/${app}/";
+  ## persistentFolder = "${config.mySystem.persistentFolder}/containers/${appFolder}";
 
 in
 {

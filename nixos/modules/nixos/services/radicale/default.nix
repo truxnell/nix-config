@@ -13,8 +13,8 @@ let
   user = app; #string
   group = app; #string
   port = 5232; #int
-  appFolder = "${category}/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -69,11 +69,6 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
-    # Folder perms
-    # systemd.tmpfiles.rules = [
-    #   "d ${persistentFolder}/ 0750 ${user} ${group} -"
-    # ];
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
       hideMounts = true;
       directories = [ "/var/lib/radicale/" ];

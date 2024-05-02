@@ -38,7 +38,8 @@ with lib;
       hideMounts = true;
       directories =
         [
-          "/var/log"
+          "/var/log" # persist logs between reboots for debugging.unam
+          "/var/lib/cache" # cache files (restic, nginx, contaienrs)
         ];
     };
 

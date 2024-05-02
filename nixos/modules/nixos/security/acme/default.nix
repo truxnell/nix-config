@@ -7,8 +7,8 @@ with lib;
 let
   cfg = config.mySystem.security.acme;
   app = "acme";
-  appFolder = "apps/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   user = app;
   group = app;
 
@@ -22,11 +22,6 @@ in
       "security/acme/env".restartUnits = [ "${app}.service" ];
     };
 
-    # ensure folder exist and has correct owner/group
-    # systemd.tmpfiles.rules = [
-    #   "d ${persistentFolder}/${config.networking.domain} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-
-    # ];
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
       directories = [ "/var/lib/acme" ];
     };
@@ -44,7 +39,6 @@ in
         dnsProvider = "cloudflare";
         dnsResolver = "1.1.1.1:53";
         credentialsFile = config.sops.secrets."security/acme/env".path;
-        #  directory = "${persistentFolder}/${config.networking.domain}";
       };
     };
 

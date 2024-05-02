@@ -13,8 +13,8 @@ let
   user = "%{user kah}"; #string
   group = "%{group kah}"; #string
   port = %{ port }; #int
-  appFolder = "${category}/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host="${app}" ++ mkIf cfg.development "-dev";
   url = "${host}.${config.networking.domain}";
   in
@@ -76,10 +76,10 @@ let
   users.users.truxnell.extraGroups = [ group ];
 
 
-  # Folder perms
-  systemd.tmpfiles.rules = [
-  "d ${persistentFolder}/ 0750 ${user} ${group} -"
-  ];
+  # Folder perms - only for containers
+  # systemd.tmpfiles.rules = [
+  # "d ${persistentFolder}/ 0750 ${user} ${group} -"
+  # ];
 
   ## service
   # services.test= {

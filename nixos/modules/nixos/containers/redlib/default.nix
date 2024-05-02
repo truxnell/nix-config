@@ -13,8 +13,8 @@ let
   user = "nobody"; #string
   group = "nobody"; #string
   port = 8080; #int
-  appFolder = "${category}/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -72,7 +72,7 @@ in
 
     # Folder perms
     # systemd.tmpfiles.rules = [
-    # "d ${persistentFolder}/ 0750 ${user} ${group} -"
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
     # ];
 
     ## service

@@ -12,8 +12,9 @@ let
   group = "568"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "containers/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
     # TODO refactor these out into their own file or fake host?

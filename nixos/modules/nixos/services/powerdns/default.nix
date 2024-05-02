@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.mySystem.services.powerdns;
-  persistentFolder = "${config.mySystem.persistentFolder}/nixos/pdns";
+  persistentFolder = "${config.mySystem.persistentFolder}/nixos/pdns"; # TODO refactor using bind mounts
   user = "pdns";
   group = "pdns";
   portDns = 5353; # avoiding conflict with adguardhome

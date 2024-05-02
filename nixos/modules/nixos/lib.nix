@@ -60,7 +60,7 @@ with lib;
       "${options.app}-local" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        paths = map (x: "${config.mySystem.system.resticBackup.mountPath}/${x}") options.paths;
         passwordFile = config.sops.secrets."services/restic/password".path;
         exclude = excludePath;
         repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
@@ -71,7 +71,7 @@ with lib;
       "${options.app}-remote" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        paths = map (x: "${config.mySystem.system.resticBackup.mountPath}/${x}") options.paths;
         environmentFile = config.sops.secrets."services/restic/env".path;
         passwordFile = config.sops.secrets."services/restic/password".path;
         repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";

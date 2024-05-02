@@ -13,6 +13,6 @@
     ./whoogle
     ./redlib
     ./home-assistant
-    ./calibre
+    # ./calibre
   ];
 }
