@@ -38,9 +38,9 @@ in
       };
     };
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
-        code-shodan = {
+        "code-${config.networking.hostName}" = {
           icon = "vscode.svg";
           href = "https://${url}";
 

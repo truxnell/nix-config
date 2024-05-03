@@ -40,7 +40,7 @@ in
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";
