@@ -10,6 +10,7 @@ with lib;
     ./hardware
     ./containers
     ./lib.nix
+    ./security
   ];
 
   options.mySystem.persistentFolder = mkOption {
@@ -37,6 +38,11 @@ with lib;
     type = types.str;
     description = "System purpose";
     default = "Production";
+  };
+  options.mySystem.monitoring.prometheus.scrapeConfigs = mkOption {
+    type = lib.types.listOf lib.types.attrs;
+    description = "Prometheus scrape targets";
+    default = [ ];
   };
 
 

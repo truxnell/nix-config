@@ -11,8 +11,8 @@ let
   group = "927"; #string
   port = 5000; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "containers/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -47,14 +47,18 @@ in
         WHOOGLE_CONFIG_VIEW_IMAGE = "1";
         WHOOGLE_CONFIG_DISABLE = "1";
       };
+    };
 
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
 
-        inherit port;
       };
     };
+
 
     mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {

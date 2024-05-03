@@ -6,15 +6,15 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "redlib";
+  app = "radicale";
   category = "services";
-  description = "reddit alternative frontend";
-  image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
-  user = "nobody"; #string
-  group = "nobody"; #string
-  port = 8080; #int
+  description = "Contact/Calendar managment";
+  #   image = "%{image}";
+  user = app; #string
+  group = app; #string
+  port = 5232; #int
   appFolder = "/var/lib/${app}";
-  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -60,34 +60,34 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/htpasswd" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
-
-    # Folder perms
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      hideMounts = true;
+      directories = [ "/var/lib/radicale/" ];
+    };
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    services.radicale = {
+      enable = true;
+      settings = {
+        server.hosts = [ "0.0.0.0:${builtins.toString port}" ];
+        auth = {
+          type = "htpasswd";
+          htpasswd_filename = config.sops.secrets."${category}/${app}/htpasswd".path;
+          htpasswd_encryption = "plain";
+          realm = "Radicale - Password Required";
+        };
+        storage.filesystem_folder = "/var/lib/radicale/collections"; # TODO impermance/move?
 
-    ## container
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
-      env = {
-        test = "derp";
       };
-      envFiles = [ ];
-      volumes = [ ];
     };
 
     # homepage integration
@@ -95,7 +95,7 @@ in
       {
         ${app} = {
           icon = "${app}.svg";
-          href = "https://${url}";
+          href = "https://${ url }";
           description = description;
         };
       }
@@ -106,19 +106,18 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
     ];
 
     ### Ingress
-    services.nginx.virtualHosts.${url} = {
+    services.nginx.virtualHosts.${host} = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."^~ /" = {
-        proxyPass = "http://${app}:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
 
@@ -130,18 +129,18 @@ in
     # };
 
     ### backups
-    # warnings = [
-    #   (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
-    #     "WARNING: Local backups for ${app} are disabled!")
-    # ];
+    warnings = [
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+        "WARNING: Backups for ${app} are disabled!")
+    ];
 
-    # services.restic.backups = config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
+    services.restic.backups = mkIf cfg.backups (config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
 
-    #   };
+      });
 
 
   };

@@ -6,11 +6,12 @@
 with lib;
 let
   cfg = config.mySystem.services.zigbee2mqtt;
-  persistentFolder = "${config.mySystem.persistentFolder}/nixos/services/${app}/";
+  # persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}/";
   app = "zigbee2mqtt";
   user = app;
   group = app;
-
+  appFolder = config.services.zigbee2mqtt.dataDir;
+  port = 8080;
 in
 {
   options.mySystem.services.zigbee2mqtt = {
@@ -21,11 +22,6 @@ in
 
   config = mkIf cfg.enable {
 
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
-
     sops.secrets."services/mosquitto/mq/plainPassword.yaml" = {
       sopsFile = ../mosquitto/secrets.sops.yaml;
       owner = config.users.users.zigbee2mqtt.name;
@@ -35,15 +31,13 @@ in
 
     services.zigbee2mqtt = {
       enable = true;
-      dataDir = persistentFolder;
       settings = {
-        advanced.log_level = "debug";
         homeassistant = true;
         permit_join = false;
         include_device_information = true;
         frontend =
           {
-            port = 8080;
+            port = port;
             url = "https://${app}.${config.networking.domain}";
           };
         client_id = "z2m";
@@ -52,31 +46,42 @@ in
         };
         mqtt = {
           server = "mqtt://mqtt.trux.dev:1883";
+          client_id = "z2m";
+          reject_unauthorized = true;
+          keepalive = 60;
+          version = 4;
           user = "mq";
+          base_topic = "zigbee2mqtt";
           password = "!${config.sops.secrets."services/mosquitto/mq/plainPassword.yaml".path} password";
         };
-
+        availability = {
+          active.timeout = 10;
+          passive.timeout = 1500;
+        };
+        advanced = {
+          log_level = "debug";
+          network_key = [ 42 88 79 94 97 102 54 190 99 52 160 64 224 107 103 40 ];
+          pan_id = 62782;
+          last_seen = "ISO_8601";
+        };
+        experimental.new_api = true;
       };
+    };
+
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 
     users.users.truxnell.extraGroups = [ app ];
 
-    mySystem.services.traefik.routers = [{
-      http.routers.${app} = {
-        rule = "Host(`${app}.${config.mySystem.domain}`)";
-        entrypoints = "websecure";
-        middlewares = "local-ip-only@file";
-        service = "${app}";
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyWebsockets = true;
       };
-      http.services.${app} = {
-        loadBalancer = {
-          servers = [{
-            url = "http://localhost:8080";
-          }];
-        };
-      };
-
-    }];
+    };
 
 
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -101,11 +106,9 @@ in
 
     services.restic.backups = config.lib.mySystem.mkRestic
       {
-        inherit app;
+        inherit app appFolder;
         user = builtins.toString user;
-        paths = [ persistentFolder ];
-        appFolder = app;
-        inherit persistentFolder;
+        paths = [ appFolder ];
       };
 
 

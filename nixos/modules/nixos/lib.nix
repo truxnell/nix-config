@@ -2,6 +2,36 @@
 with lib;
 {
 
+  # container builder
+  lib.mySystem.mkContainer = options: (
+    let
+      # nix doesnt have an exhausive list of options for oci
+      # so here i try to get a robust list of security options for containers
+      # because everyone needs more tinfoild hat right?  RIGHT?
+
+      containerExtraOptions = lib.optionals (lib.attrsets.attrByPath [ "caps" "privileged" ] false options) [ "--privileged" ]
+        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "readOnly" ] false options) [ "--read-only" ]
+        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "tmpfs" ] false options) [ (map (folders: "--tmpfs=${folders}") tmpfsFolders) ]
+        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "noNewPrivileges" ] false options) [ "--security-opt=no-new-privileges" ]
+        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "dropAll" ] false options) [ "--cap-drop=ALL" ];
+
+    in
+    {
+      ${options.app} = {
+        image = "${options.image}";
+        user = "${options.user}:${options.group}";
+        environment = {
+          TZ = config.time.timeZone;
+        } // options.env;
+        environmentFiles = lib.attrsets.attrByPath [ "envFiles" ] [ ] options;
+        volumes = [ "/etc/localtime:/etc/localtime:ro" ]
+          ++ lib.attrsets.attrByPath [ "volumes" ] [ ] options;
+
+        extraOptions = containerExtraOptions;
+      };
+    }
+  );
+
 
   # build a restic restore set for both local and remote
   lib.mySystem.mkRestic = options: (
@@ -23,13 +53,14 @@ with lib;
         #
         ${pkgs.restic}/bin/restic unlock --remove-all || true
       '';
+
     in
     {
       # local backup
-      "${options.app}-local" = mkIf config.mySystem.system.resticBackup.local.enable {
+      "${options.app}-local" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        paths = map (x: "${config.mySystem.system.resticBackup.mountPath}/${x}") options.paths;
         passwordFile = config.sops.secrets."services/restic/password".path;
         exclude = excludePath;
         repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
@@ -37,10 +68,10 @@ with lib;
       };
 
       # remote backup
-      "${options.app}-remote" = mkIf config.mySystem.system.resticBackup.remote.enable {
+      "${options.app}-remote" = {
         inherit pruneOpts timerConfig initialize backupPrepareCommand;
         # Move the path to the zfs snapshot path
-        paths = map (x: "${config.mySystem.persistentFolder}/.zfs/snapshot/restic_nightly_snap/${x}") options.paths;
+        paths = map (x: "${config.mySystem.system.resticBackup.mountPath}/${x}") options.paths;
         environmentFile = config.sops.secrets."services/restic/env".path;
         passwordFile = config.sops.secrets."services/restic/password".path;
         repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
@@ -50,8 +81,5 @@ with lib;
 
     }
   );
-
-
-
 
 }

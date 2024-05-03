@@ -20,5 +20,10 @@
     ./postgresql
     ./blocky
     ./openvscode-server
+    ./grafana
+    ./prometheus
+    ./radicale
+    ./node-red
+    ./nginx
   ];
 }

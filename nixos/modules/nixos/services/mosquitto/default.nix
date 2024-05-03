@@ -6,10 +6,11 @@
 with lib;
 let
   cfg = config.mySystem.services.mosquitto;
-  persistentFolder = "${config.mySystem.persistentFolder}/nixos/services/mosquitto/";
+  # persistentFolder = "${config.mySystem.persistentFolder}/nixos/services/mosquitto/";
   app = "mosquitto";
   user = app;
   group = app;
+  appFolder = config.services.mosquitto.dataDir;
 in
 {
   options.mySystem.services.mosquitto.enable = mkEnableOption "mosquitto MQTT";
@@ -18,15 +19,10 @@ in
 
     sops.secrets."services/mosquitto/mq/hashedPassword" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = "mosquitto";
-      group = "mosquitto";
+      owner = app;
+      group = app;
       restartUnits = [ "${app}.service" ];
     };
-
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
 
 
     services.mosquitto = {
@@ -34,9 +30,8 @@ in
       # persistance for convienience on restarts
       # but not backed up, there is no data
       # that requires keeping in MQTT
-      dataDir = persistentFolder;
       settings = {
-        persistence_location = "${persistentFolder}";
+        persistence_location = appFolder;
         max_keepalive = 300;
       };
 
@@ -51,6 +46,11 @@ in
         }
       ];
     };
+
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    };
+
     users.users.truxnell.extraGroups = [ "mosquitto" ];
     networking.firewall.allowedTCPPorts = [ 1883 ];
 

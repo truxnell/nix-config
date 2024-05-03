@@ -5,16 +5,15 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.${category}.${app};
-  app = "redlib";
+  cfg = config.mySystem.services.grafana;
+  app = "grafana";
   category = "services";
-  description = "reddit alternative frontend";
-  image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
-  user = "nobody"; #string
-  group = "nobody"; #string
-  port = 8080; #int
+  description = "Metric visualisation";
+  user = app; #string
+  group = app; #string
+  port = 2342; #int
   appFolder = "/var/lib/${app}";
-  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -29,12 +28,12 @@ in
           description = "Enable gatus monitoring";
           default = true;
         };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
+      #   prometheus = mkOption
+      #     {
+      #       type = lib.types.bool;
+      #       description = "Enable prometheus scraping";
+      #       default = true;
+      #     };
       addToDNS = mkOption
         {
           type = lib.types.bool;
@@ -69,25 +68,12 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
-    # Folder perms
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
-
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
-
-    ## container
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
-      env = {
-        test = "derp";
-      };
-      envFiles = [ ];
-      volumes = [ ];
+    services.grafana = {
+      inherit port;
+      enable = true;
+      domain = host;
+      addr = "127.0.0.1";
     };
 
     # homepage integration
@@ -106,7 +92,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -117,8 +103,7 @@ in
       useACMEHost = config.networking.domain;
       forceSSL = true;
       locations."^~ /" = {
-        proxyPass = "http://${app}:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
 
@@ -130,18 +115,18 @@ in
     # };
 
     ### backups
-    # warnings = [
-    #   (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
-    #     "WARNING: Local backups for ${app} are disabled!")
-    # ];
+    warnings = [
+      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+        "WARNING: Local backups for ${app} are disabled!")
+    ];
 
-    # services.restic.backups = config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
 
-    #   };
+      };
 
 
   };

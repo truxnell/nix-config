@@ -12,12 +12,13 @@
   ];
 
   mySystem.purpose = "Network Attached Storage";
+  mySystem.system.impermanence.enable = true;
   mySystem.services = {
     openssh.enable = true;
 
     #containers
     podman.enable = true;
-    traefik.enable = true;
+    nginx.enable = true;
     sonarr.enable = true;
     radarr.enable = true;
     lidarr.enable = true;
@@ -28,6 +29,8 @@
 
 
   };
+  mySystem.security.acme.enable = true;
+
   mySystem.nasFolder = "/tank";
   mySystem.system.resticBackup.local.location = "/tank/backup/nixos/nixos";
 
@@ -86,7 +89,7 @@
     {
       device = "rpool/safe/persist";
       fsType = "zfs";
-      # neededForBoot = true; # for impermanence
+      neededForBoot = true; # for impermanence
     };
 
   swapDevices =

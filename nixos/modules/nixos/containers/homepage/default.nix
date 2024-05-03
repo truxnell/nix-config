@@ -12,8 +12,8 @@ let
   group = "568"; #string
   port = 3000; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "containers/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 
   # TODO refactor out this sht
   settings =
@@ -276,22 +276,10 @@ in
 
       ];
 
-      # labels = {
-      #   "traefik.enable" = "true";
-      #   "traefik.http.routers.${app}.entrypoints" = "websecure";
-      #   "traefik.http.routers.${app}.middlewares" = "local-ip-only@file";
-      #   "traefik.http.services.${app}.loadbalancer.server.port" = "${toString port}";
-      # };
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
-
-        inherit port;
-      };
       # not using docker socket for discovery, just
       # building up the apps from a shared key
       # this is a bit more tedious, but more secure
-      # from not exposing docker socet and makes it
+      # from not exposing docker socket and makes it
       # easier to have/move services between hosts
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
@@ -308,6 +296,17 @@ in
         "--tmpfs=/app/config"
       ];
     };
+
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+
+      };
+    };
+
 
     mySystem.services.gatus.monitors = [{
       name = app;

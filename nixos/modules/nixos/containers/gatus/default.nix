@@ -12,8 +12,9 @@ let
   group = "568"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "containers/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+
+ # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
     # TODO refactor these out into their own file or fake host?
@@ -103,15 +104,18 @@ in
         "${configFile}:/config/config.yaml:ro"
       ];
 
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
-
-        inherit port;
-      };
-
       extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring
     };
+
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+      };
+    };
+
 
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {

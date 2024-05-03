@@ -26,8 +26,14 @@ in
           description = "Location for remote backups";
           default = "";
         };
-
     };
+    mountPath = mkOption
+      {
+        type = types.str;
+        description = "Location for  snapshot mount";
+        default = "/mnt/nightly_backup";
+      };
+
   };
 
 
@@ -53,6 +59,14 @@ in
       };
     };
 
+    environment.persistence = mkIf (cfg.local.enable || cfg.remote.enable) {
+      "${config.mySystem.system.impermanence.persistPath}" = {
+        directories = [ "/var/lib/containers" ];
+      };
+    };
+
+
+
     # useful commands:
     # view snapshots - zfs list -t snapshot
 
@@ -76,15 +90,23 @@ in
         timerConfig.Persistent = "true";
       };
 
+      # recreate snapshot and mount, ready for backup
+      # I used mkdir -p over a nix tmpfile, as mkdir -p exits cleanly
+      # if the folder already exists, and tmpfiles complain
+      # if the folder exists and is already mounted.
       services.restic_nightly_snapshot = {
         description = "Nightly ZFS snapshot for Restic";
-        path = with pkgs; [ zfs ];
+        path = with pkgs; [ zfs busybox ];
         serviceConfig.Type = "simple";
         script = ''
+          mkdir -p /mnt/nightly_backup/ && \
+          umount ${cfg.mountPath} || true && \
           zfs destroy rpool/safe/persist@restic_nightly_snap || true && \
-          zfs snapshot rpool/safe/persist@restic_nightly_snap
+          zfs snapshot rpool/safe/persist@restic_nightly_snap && \
+          mount -t zfs rpool/safe/persist@restic_nightly_snap ${cfg.mountPath}
         '';
       };
+
 
     };
   };

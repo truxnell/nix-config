@@ -12,8 +12,8 @@ let
   port = 8080; #int
   qbit_port = 32189;
   cfg = config.mySystem.services.${app};
-  appFolder = "containers/${app}";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
+  appFolder = "/var/lib/${app}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -29,7 +29,7 @@ in
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${appFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     virtualisation.oci-containers.containers.${app} = {
@@ -40,17 +40,27 @@ in
       };
       ports = [ "${builtins.toString qbit_port}:${builtins.toString qbit_port}" ];
       volumes = [
-        "${persistentFolder}:/config:rw"
+        "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
-      labels = lib.myLib.mkTraefikLabels {
-        name = app;
-        inherit (config.networking) domain;
+    };
 
-        inherit port;
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    };
+
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+
       };
     };
+
+
     # gotta open up that firewall
     networking.firewall = mkIf cfg.openFirewall {
 

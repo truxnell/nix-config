@@ -70,7 +70,7 @@ rec {
         extraOptions = containerExtraOptions;
       };
 
-      systemd.tmpfiles.rules = lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0755 ${user} ${group} -" ]
+      systemd.tmpfiles.rules = lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0750 ${user} ${group} -" ]
       ;
 
       # built a entry for homepage

@@ -225,7 +225,6 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
-              ./nixos/profiles/impermanence.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
@@ -240,7 +239,6 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
-              ./nixos/profiles/impermanence.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };

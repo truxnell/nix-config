@@ -10,10 +10,9 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
-    traefik.enable = true;
-    postgresql.enable = true;
+    nginx.enable = true;
 
-
+    openvscode-server.enable = true;
 
   };
   mySystem.system.systemd.pushover-alerts.enable = false;
@@ -21,6 +20,7 @@
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];
+  mySystem.security.acme.enable = true;
 
   # Dev machine
   mySystem.system.resticBackup =

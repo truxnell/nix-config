@@ -7,11 +7,11 @@ with lib;
 let
   cfg = config.mySystem.services.node-red;
   app = "node-red";
-  persistentFolder = "${config.mySystem.persistentFolder}/${appFolder}";
-  appFolder = "apps/${app}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  appFolder = config.services.node-red.userDir;
   inherit (config.services.node-red) user;
   inherit (config.services.node-red) group;
-  url = "code-${config.networking.hostName}.${config.networking.domain}";
+  url = "${app}.${config.networking.domain}";
 
 in
 {
@@ -23,46 +23,30 @@ in
 
   config = mkIf cfg.enable {
 
-    # ensure folder exist and has correct owner/group
-    systemd.tmpfiles.rules = [
-      "d ${persistentFolder} 0755 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
-    ];
-
     services.node-red = {
       enable = true;
-      userDir = persistentFolder;
     };
 
-    mySystem.services.traefik.routers = [{
-      http.routers.${app} = {
-        rule = "Host(`${app}.${config.mySystem.domain}`)";
-        entrypoints = "websecure";
-        middlewares = "local-ip-only@file";
-        service = "${app}";
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString config.services.node-red.port}";
       };
-      http.services.${app} = {
-        loadBalancer = {
-          servers = [{
-            url = "http://localhost:1880";
-          }];
-        };
-      };
+    };
 
-    }];
+     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    };
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        code-shodan = {
+        ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
 
-          description = "Music management";
+          description = "Workflow automation";
           container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
-          };
         };
       }
     ];
