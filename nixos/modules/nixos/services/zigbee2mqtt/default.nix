@@ -32,7 +32,6 @@ in
     services.zigbee2mqtt = {
       enable = true;
       settings = {
-        advanced.log_level = "debug";
         homeassistant = true;
         permit_join = false;
         include_device_information = true;
@@ -47,10 +46,25 @@ in
         };
         mqtt = {
           server = "mqtt://mqtt.trux.dev:1883";
+          client_id = "z2m";
+          reject_unauthorized = true;
+          keepalive = 60;
+          version = 4;
           user = "mq";
+          base_topic = "zigbee2mqtt";
           password = "!${config.sops.secrets."services/mosquitto/mq/plainPassword.yaml".path} password";
         };
-
+        availability = {
+          active.timeout = 10;
+          passive.timeout = 1500;
+        };
+        advanced = {
+          log_level = "debug";
+          network_key = [ 42 88 79 94 97 102 54 190 99 52 160 64 224 107 103 40 ];
+          pan_id = 62782;
+          last_seen = "ISO_8601";
+        };
+        experimental.new_api = true;
       };
     };
 
@@ -65,6 +79,7 @@ in
       forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyWebsockets = true;
       };
     };
 
