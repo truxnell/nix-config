@@ -56,14 +56,14 @@ in
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
 
       };
     };
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 

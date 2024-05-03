@@ -22,7 +22,7 @@ with lib;
         user = "${options.user}:${options.group}";
         environment = {
           TZ = config.time.timeZone;
-        } // options.env;
+        } // lib.attrsets.attrByPath [ "env" ] { } options;
         environmentFiles = lib.attrsets.attrByPath [ "envFiles" ] [ ] options;
         volumes = [ "/etc/localtime:/etc/localtime:ro" ]
           ++ lib.attrsets.attrByPath [ "volumes" ] [ ] options;

@@ -52,7 +52,7 @@ in
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         proxyWebsockets = true;
         extraConfig = "resolver 10.88.0.1;";

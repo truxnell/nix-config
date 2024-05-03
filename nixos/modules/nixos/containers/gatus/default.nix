@@ -14,7 +14,7 @@ let
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
 
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
     # TODO refactor these out into their own file or fake host?
@@ -110,7 +110,7 @@ in
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
       };

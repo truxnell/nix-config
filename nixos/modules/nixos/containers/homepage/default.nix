@@ -13,7 +13,7 @@ let
   port = 3000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 
   # TODO refactor out this sht
   settings =
@@ -300,7 +300,7 @@ in
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
 

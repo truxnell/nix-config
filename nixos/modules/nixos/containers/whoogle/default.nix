@@ -12,7 +12,7 @@ let
   port = 5000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
   options.mySystem.services.${app} =
@@ -52,7 +52,7 @@ in
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
 

@@ -14,5 +14,6 @@
     ./redlib
     ./home-assistant
     # ./calibre
+    ./ecowitt2mqtt
   ];
 }

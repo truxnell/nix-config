@@ -34,6 +34,10 @@
 
     radicale.enable = true;
   };
+  mySystem.containers = {
+    ecowitt2mqtt.enable = true;
+  };
+
 
   mySystem.security.acme.enable = true;
 
