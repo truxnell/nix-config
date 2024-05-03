@@ -82,15 +82,18 @@ with config;
     # Install these packages for my user
     packages = with pkgs;
       [
+        #apps
         discord
         steam
         spotify
-        brightnessctl
         prusa-slicer
         bitwarden
         yubioath-flutter
         yubikey-manager-qt
+        flameshot
+        vlc
 
+        # cli
         bat
         dbus
         direnv
@@ -99,9 +102,9 @@ with config;
         python3
         fzf
         ripgrep
-        flyctl # fly.io control line
 
-        vlc
+        brightnessctl
+
 
 
       ];

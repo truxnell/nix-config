@@ -30,14 +30,6 @@ in
       sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
 
       appendHttpConfig = ''
-        # Add default server as default NGINX behaviour
-        # is to serve the first serverblock if no default is
-        # set
-        server {
-          server_name = _;
-          listen 80 default_server;
-          return 404;
-        }
         # Minimize information leaked to other domains
         add_header 'Referrer-Policy' 'origin-when-cross-origin';
 
@@ -53,6 +45,16 @@ in
       commonHttpConfig = ''
         add_header X-Clacks-Overhead "GNU Terry Pratchett";
       '';
+      # provide default host with returning error
+      # else nginx returns the first server
+      # in the config file... >:S
+      virtualHosts = {
+        "_" = {
+          default = true;
+          rejectSSL = true;
+          extraConfig = "return 444;";
+        };
+      };
 
     };
 

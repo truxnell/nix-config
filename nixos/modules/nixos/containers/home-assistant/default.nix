@@ -7,8 +7,8 @@ with lib;
 let
   app = "home-assistant";
   image = "ghcr.io/onedr0p/home-assistant:2024.1.5@sha256:64bb3ffa532c3c52563f0e4a4de8d50c889f42a1b0826b35ee1ac728652fb107";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8123; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -54,6 +54,7 @@ in
       forceSSL = true;
       locations."/" = {
         proxyPass = "http://${app}:${builtins.toString port}";
+        proxyWebsockets = true;
         extraConfig = "resolver 10.88.0.1;";
       };
     };
@@ -71,8 +72,8 @@ in
       }
     ];
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = "kah"; group = "kah"; mode = "750"; }];
     };
 
     mySystem.services.gatus.monitors = [{

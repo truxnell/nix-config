@@ -54,7 +54,7 @@ in
       };
     };
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 
@@ -64,7 +64,7 @@ in
       useACMEHost = config.networking.domain;
       forceSSL = true;
       locations."/" = {
-        proxyPass = "http://127.0.0.1${builtins.toString port}";
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
 

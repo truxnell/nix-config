@@ -106,7 +106,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}";
+        url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -130,18 +130,18 @@ in
     # };
 
     ### backups
-    warnings = [
-      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
-        "WARNING: Local backups for ${app} are disabled!")
-    ];
+    # warnings = [
+    #   (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+    #     "WARNING: Local backups for ${app} are disabled!")
+    # ];
 
-    services.restic.backups = config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
+    # services.restic.backups = config.lib.mySystem.mkRestic
+    #   {
+    #     inherit app user;
+    #     paths = [ appFolder ];
+    #     inherit appFolder;
 
-      };
+    #   };
 
 
   };
