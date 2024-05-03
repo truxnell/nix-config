@@ -32,10 +32,11 @@ in
       forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${builtins.toString config.services.node-red.port}";
+        proxyWebsockets = true;
       };
     };
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 
