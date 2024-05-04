@@ -14,7 +14,7 @@ let
   group = app; #string
   port = 5232; #int
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -63,13 +63,13 @@ in
     sops.secrets."${category}/${app}/htpasswd" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
     users.users.truxnell.extraGroups = [ group ];
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       hideMounts = true;
       directories = [ "/var/lib/radicale/" ];
     };
@@ -96,7 +96,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${ url }";
-          description = description;
+          inherit description;
         };
       }
     ];
