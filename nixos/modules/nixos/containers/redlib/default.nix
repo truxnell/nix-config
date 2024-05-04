@@ -96,7 +96,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
-          description = description;
+          inherit description;
         };
       }
     ];
