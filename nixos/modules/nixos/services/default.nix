@@ -25,5 +25,6 @@
     ./radicale
     ./node-red
     ./nginx
+    ./miniflux
   ];
 }
