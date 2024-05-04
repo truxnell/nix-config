@@ -12,7 +12,7 @@ let
   port = 5000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
   options.mySystem.services.${app} =

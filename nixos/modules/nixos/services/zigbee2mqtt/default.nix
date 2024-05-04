@@ -37,7 +37,7 @@ in
         include_device_information = true;
         frontend =
           {
-            port = port;
+            inherit port;
             url = "https://${app}.${config.networking.domain}";
           };
         client_id = "z2m";
@@ -69,7 +69,7 @@ in
     };
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
     users.users.truxnell.extraGroups = [ app ];

@@ -27,8 +27,8 @@ in
 
   config = mkIf cfg.enable {
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
     virtualisation.oci-containers.containers.${app} = {

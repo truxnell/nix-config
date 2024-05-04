@@ -13,7 +13,7 @@ let
   group = app; #string
   port = 2342; #int
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.development then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
@@ -82,7 +82,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
-          description = description;
+          inherit description;
         };
       }
     ];

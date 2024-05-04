@@ -14,7 +14,7 @@ let
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
 
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   containerPersistentFolder = "/config";
   extraEndpoints = [
     # TODO refactor these out into their own file or fake host?
