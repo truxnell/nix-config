@@ -6,7 +6,7 @@
 with lib;
 let
   app = "cross-seed";
-  image = "ghcr.io/onedr0p/sabnzbd:4.2.3@sha256:8943148a1ac5d6cc91d2cc2aa0cae4f0ab3af49fb00ca2d599fbf0344798bc37";
+  image = "ghcr.io/onedr0p/sabnzbd:4.3.1@sha256:10aa04902725e2fb8325b71fc6bbdf3399e63d6520028c2571220d54fd928aee";
   user = "568"; #string
   group = "568"; #string
   port = 8080; #int
