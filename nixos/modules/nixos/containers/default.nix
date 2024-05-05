@@ -13,7 +13,7 @@
     ./whoogle
     ./redlib
     ./home-assistant
-    # ./calibre
+    ./calibre
     ./ecowitt2mqtt
   ];
 }

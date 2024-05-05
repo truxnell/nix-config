@@ -38,6 +38,7 @@
 
   };
   mySystem.containers = {
+    calibre.enable = true;
     ecowitt2mqtt.enable = true;
   };
 

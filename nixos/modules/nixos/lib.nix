@@ -26,7 +26,7 @@ with lib;
         environmentFiles = lib.attrsets.attrByPath [ "envFiles" ] [ ] options;
         volumes = [ "/etc/localtime:/etc/localtime:ro" ]
           ++ lib.attrsets.attrByPath [ "volumes" ] [ ] options;
-
+        ports = lib.attrsets.attrByPath [ "ports" ] [ ] options;
         extraOptions = containerExtraOptions;
       };
     }
