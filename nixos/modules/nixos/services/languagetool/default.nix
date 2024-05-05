@@ -76,6 +76,11 @@ in
     # "d ${persistentFolder}/ 0750 ${user} ${group} -"
     # ];
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
+
+
     ## service
     # services.test= {
     #   enable = true;
