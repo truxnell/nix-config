@@ -111,7 +111,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/data/report"; # check the reporting URL for 405 'method not allowed's
+        url = "http://${url}/data/report"; # check https & the reporting URL for 405 'method not allowed's
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 405" "[RESPONSE_TIME] < 50" ];
       }
