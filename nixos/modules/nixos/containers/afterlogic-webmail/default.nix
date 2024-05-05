@@ -6,17 +6,18 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}";
-  description = "%{description}";
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
-  port = 1234; #int
+  app = "webmail";
+  category = "containers";
+  description = "Webmail";
+  image = "afterlogic/docker-webmail-lite:9.7.7";
+  user = "568"; #string
+  group = "568"; #string
+  port = 80; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
+
 in
 {
   options.mySystem.${category}.${app} =
@@ -82,10 +83,21 @@ in
 
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
-
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+      # env = {
+      #   ECOWITT2MQTT_MQTT_BROKER = "mqtt.trux.dev";
+      #   ECOWITT2MQTT_MQTT_PORT = "1883";
+      #   ECOWITT2MQTT_MQTT_TOPIC = "ecowitt2mqtt/pws";
+      #   ECOWITT2MQTT_PORT = "8080";
+      #   ECOWITT2MQTT_HASS_DISCOVERY = "true";
+      #   ECOWITT2MQTT_OUTPUT_UNIT_SYSTEM = "metric"; # Come on guys nobody want to use freedum units"
+      # };
+      # envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
+      volumes = [
+        "/run/postgresql:/run/postgresql:ro"
+      ];
+    };
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {

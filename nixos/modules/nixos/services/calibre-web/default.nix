@@ -69,14 +69,14 @@ in
     users.users.truxnell.extraGroups = [ group ];
 
 
-    # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${persistentFolder}/ 0750 ${user} ${group} -"
-    # ];
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
 
     ## service
     services.calibre-web = {
       enable = true;
+      listen.ip = "0.0.0.0";
       listen.port = port;
       options = {
         calibreLibrary = "${config.mySystem.nasFolder}/natflix/books/";

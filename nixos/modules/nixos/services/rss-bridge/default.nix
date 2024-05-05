@@ -10,8 +10,8 @@ let
   category = "services";
   description = "rss feed for sites without";
   # image = "%{image}";
-  inherit (services.rss-bridge) user;#string
-  inherit (services.rss-bridge) group;#string
+  inherit (config.services.rss-bridge) user;#string
+  inherit (config.services.rss-bridge) group;#string
   port = 1234; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -70,16 +70,12 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
-    # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${persistentFolder}/ 0750 ${user} ${group} -"
-    # ];
-
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    services.rss-bridge = {
+      enable = true;
+      whitelist = [ "*" ];
+      virtualHost = "${url}";
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -107,9 +103,6 @@ in
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
-      };
     };
 
     ### firewall config
@@ -125,12 +118,12 @@ in
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = config.lib.mySystem.mkRestic
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      };
+      });
 
 
     # services.postgresqlBackup = {

@@ -12,11 +12,13 @@
     podman.enable = true;
     nginx.enable = true;
     openvscode-server.enable = true;
-    postgresql =
-      { enable = true; backup = false; };
-    calibre-web = { enable = true; backup = false; dev = true; };
+    postgresql = { enable = true; backup = false; };
+    # calibre-web = { enable = true; backup = false; dev = true; };
+    # rss-bridge = { enable = true; backup = false; dev = true; };
+
   };
-  # mySystem.containers.calibre = { enable = true; backup = false; dev = true; };
+  mySystem.containers.webmail = { enable = true; backup = false; dev = true; };
+
 
   mySystem.system.systemd.pushover-alerts.enable = false;
 

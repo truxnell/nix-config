@@ -35,6 +35,9 @@
 
     radicale.enable = true;
     miniflux.enable = true;
+    calibre-web.enable = true;
+    rss-bridge.enable = true;
+
 
   };
   mySystem.containers = {

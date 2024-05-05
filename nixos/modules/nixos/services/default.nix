@@ -27,5 +27,6 @@
     ./nginx
     ./miniflux
     ./calibre-web
+    ./rss-bridge
   ];
 }
