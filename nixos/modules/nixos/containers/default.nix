@@ -15,6 +15,5 @@
     ./home-assistant
     ./calibre
     ./ecowitt2mqtt
-    ./afterlogic-webmail
   ];
 }
