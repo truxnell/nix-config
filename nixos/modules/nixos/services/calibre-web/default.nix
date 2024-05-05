@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}";
-  description = "%{description}";
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
-  port = 1234; #int
+  app = "calibre-web";
+  category = "services";
+  description = "Calibre web-server";
+  # image = "%{image}";
+  inherit (config.services.calibre-web) user;#string
+  inherit (config.services.calibre-web) group;#string
+  port = 8083; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -54,8 +54,6 @@ in
           default = true;
         };
 
-
-
     };
 
   config = mkIf cfg.enable {
@@ -77,9 +75,13 @@ in
     # ];
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    services.calibre-web = {
+      enable = true;
+      listen.port = port;
+      options = {
+        calibreLibrary = "${config.mySystem.nasFolder}/natflix/books/";
+      };
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -131,13 +133,6 @@ in
         paths = [ appFolder ];
         inherit appFolder;
       });
-
-
-    # services.postgresqlBackup = {
-    #   databases = [ app ];
-    # };
-
-
 
   };
 }

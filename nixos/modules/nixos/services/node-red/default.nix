@@ -32,6 +32,7 @@ in
       forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:${builtins.toString config.services.node-red.port}";
+        proxyWebsockets = true;
       };
     };
 
@@ -39,7 +40,7 @@ in
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";

@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}";
-  description = "%{description}";
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
-  port = 1234; #int
+  app = "calibre";
+  category = "containers";
+  description = "eBook managment";
+  image = "ghcr.io/linuxserver/calibre:version-v7.10.0";
+  user = "0"; #string
+  group = "0"; #string
+  port = 8091; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -72,14 +72,27 @@ in
 
 
     # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${persistentFolder}/ 0750 ${user} ${group} -"
-    # ];
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
 
     ## service
-    # services.test= {
-    #   enable = true;
-    # };
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+
+      env = {
+        PUID = "568";
+        PGID = "568";
+      };
+      volumes = [
+        "${appFolder}:/config:rw"
+        "${config.mySystem.nasFolder}/natflix/:/media:rw"
+      ];
+      ports = [ "${builtins.toString port}:8080" ];
+      caps = {
+        noNewPrivileges = true;
+      };
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -109,6 +122,7 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyWebsockets = true;
       };
     };
 

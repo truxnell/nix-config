@@ -6,12 +6,12 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "%{app}";
-  category = "%{cat}";
-  description = "%{description}";
-  image = "%{image}";
-  user = "%{user kah}"; #string
-  group = "%{group kah}"; #string
+  app = "rss-bridge";
+  category = "services";
+  description = "rss feed for sites without";
+  # image = "%{image}";
+  inherit (services.rss-bridge) user;#string
+  inherit (services.rss-bridge) group;#string
   port = 1234; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -125,12 +125,12 @@ in
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
+    services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      });
+      };
 
 
     # services.postgresqlBackup = {

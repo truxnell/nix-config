@@ -16,7 +16,10 @@ with config;
     # TODO decide if i drop to bash on pis?
     shell.fish.enable = true;
 
-    nfs.nas.enable = true;
+    nfs.nas = {
+      enable = true;
+      lazy = true;
+    };
     system.resticBackup.local.enable = false;
     system.resticBackup.remote.enable = false;
 

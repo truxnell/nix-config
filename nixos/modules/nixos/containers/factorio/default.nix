@@ -69,7 +69,7 @@ in
           RCON_PORT = "27019";
         };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
-      ports = [ (builtins.toString port) ]; # expose port
+      ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" ]; # expose port
     };
     networking.firewall = mkIf cfg.openFirewall {
 

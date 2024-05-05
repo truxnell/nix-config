@@ -25,5 +25,7 @@
     ./radicale
     ./node-red
     ./nginx
+    ./miniflux
+    ./calibre-web
   ];
 }
