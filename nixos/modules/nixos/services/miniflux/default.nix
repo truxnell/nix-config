@@ -63,7 +63,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
@@ -76,7 +76,7 @@ in
     users.groups.miniflux = { };
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
     ## service
@@ -115,7 +115,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
-          description = description;
+          inherit description;
         };
       }
     ];

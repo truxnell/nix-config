@@ -10,8 +10,8 @@ let
   category = "services";
   description = "rss feed for sites without";
   # image = "%{image}";
-  user = services.rss-bridge.user; #string
-  group = services.rss-bridge.group; #string
+  inherit (services.rss-bridge) user;#string
+  inherit (services.rss-bridge) group;#string
   port = 1234; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -87,7 +87,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
-          description = description;
+          inherit description;
         };
       }
     ];

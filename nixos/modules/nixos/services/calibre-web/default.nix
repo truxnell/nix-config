@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Calibre web-server";
   # image = "%{image}";
-  user = config.services.calibre-web.user; #string
-  group = config.services.calibre-web.group; #string
+  inherit (config.services.calibre-web) user;#string
+  inherit (config.services.calibre-web) group;#string
   port = 8083; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -89,7 +89,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
-          description = description;
+          inherit description;
         };
       }
     ];

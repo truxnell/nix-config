@@ -63,7 +63,7 @@ in
     sops.secrets."${category}/${app}/htpasswd" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
@@ -96,7 +96,7 @@ in
         ${app} = {
           icon = "${app}.svg";
           href = "https://${ url }";
-          description = description;
+          inherit description;
         };
       }
     ];
