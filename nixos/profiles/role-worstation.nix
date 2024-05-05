@@ -60,45 +60,19 @@ with config;
     };
   };
 
-
-
   environment.systemPackages = with pkgs; [
-    jq
-    yq
-    btop
-    vim
-    git
-    dnsutils
-    nix
-
-    # nix dev
-    dnscontrol # for updating internal DNS servers with homelab services
 
     # Sensors etc
     lm_sensors
     cpufrequtils
     cpupower-gui
 
-    # TODO Move
-    nil
-    nixpkgs-fmt
-    statix
-    nvd
-    gh
 
-    bind # for dns utils like named-checkconf
-    inputs.nix-inspect.packages.${pkgs.system}.default
   ];
 
   i18n = {
     defaultLocale = lib.mkDefault "en_AU.UTF-8";
   };
 
-
-  programs.direnv = {
-    # TODO move to home-manager
-    enable = true;
-    nix-direnv.enable = true;
-  };
   programs.mtr.enable = true;
 }
