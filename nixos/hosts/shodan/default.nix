@@ -11,6 +11,7 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
+    postgresql.enable = true;
 
     nginx.enable = true;
 
@@ -33,6 +34,8 @@
     openvscode-server.enable = true;
 
     radicale.enable = true;
+    miniflux.enable = true;
+
   };
   mySystem.containers = {
     ecowitt2mqtt.enable = true;

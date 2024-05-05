@@ -13,8 +13,8 @@ let
   group = app; #string
   port = 9001; #int
   appFolder = "/var/lib/${app}";
- # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.development then "-dev" else "");
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -34,7 +34,7 @@ in
           description = "Add to DNS list";
           default = true;
         };
-      development = mkOption
+      dev = mkOption
         {
           type = lib.types.bool;
           description = "Development instance";

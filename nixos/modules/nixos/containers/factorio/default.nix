@@ -69,14 +69,14 @@ in
           RCON_PORT = "27019";
         };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
-      ports = [ (builtins.toString port) ]; # expose port
+      ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" ]; # expose port
     };
     networking.firewall = mkIf cfg.openFirewall {
 
       allowedTCPPorts = [ port ]; # I dont use rcon so not opening that too.
     };
 
-     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
     };
 

@@ -15,7 +15,7 @@ let
   port = 1234; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.development then "-dev" else "");
+  host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
@@ -41,24 +41,19 @@ in
           description = "Add to DNS list";
           default = true;
         };
-      development = mkOption
+      dev = mkOption
         {
           type = lib.types.bool;
           description = "Development instance";
           default = false;
         };
-      backupLocal = mkOption
+      backup = mkOption
         {
           type = lib.types.bool;
-          description = "Enable local backups";
+          description = "Enable backups";
           default = true;
         };
-      backupRemote = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable remote backups";
-          default = true;
-        };
+
 
 
     };
@@ -111,6 +106,7 @@ in
     ### Ingress
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
+      useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
@@ -125,20 +121,22 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backupLocal && config.mySystem.purpose != "Development")
-        "WARNING: Local backups for ${app} are disabled!")
-      (mkIf (!cfg.backupRemote && config.mySystem.purpose != "Development")
-        "WARNING: Remote backups for ${app} are disabled!")
+      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
+        "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backups config.lib.mySystem.mkRestic
+    services.restic.backups = config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-        local = cfg.backupLocal;
-        remote = cfg.backupRemote;
       };
+
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
+
 
 
   };

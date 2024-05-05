@@ -15,6 +15,8 @@
 
     openvscode-server.enable = true;
 
+    postgresql =
+      { enable = true; backup = false; };
   };
   mySystem.system.systemd.pushover-alerts.enable = false;
 

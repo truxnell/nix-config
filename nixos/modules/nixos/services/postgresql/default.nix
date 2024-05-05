@@ -5,26 +5,84 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.services.postgresql;
+  cfg = config.mySystem.${category}.${app};
+  app = "postgresql";
+  category = "services";
+  description = "Postgres RDMS";
+  # user = "%{user kah}"; #string
+  # group = "%{group kah}"; #string
+  # port = 1234; #int
+  appFolder = "/var/lib/${app}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # host = "${app}" + (if cfg.dev then "-dev" else "");
+  # url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.services.postgresql.enable = mkEnableOption "postgresql";
+  options.mySystem.${category}.${app} =
+    {
+      enable = mkEnableOption "${app}";
+      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      prometheus = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable prometheus scraping";
+          default = true;
+        };
+      backup = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable backups";
+          default = true;
+        };
+
+    };
 
   config = mkIf cfg.enable {
 
+    ## Secrets
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
+
     services.postgresql = {
       enable = true;
-      authentication = ''
-        local homeassistant homeassistant ident map=ha
-      '';
       identMap = ''
-        ha root homeassistant
+        # ArbitraryMapName systemUser DBUser
+        superuser_map      root      postgres
+        superuser_map      postgres  postgres
+        # Let other names login as themselves
+        superuser_map      /^(.*)$   \1
       '';
-      ensureDatabases = [ "homeassistant" ];
-      ensureUsers = [
-        { name = "homeassistant"; ensureDBOwnership = true; }
-      ];
+      authentication = ''
+        #type database  DBuser  auth-method optional_ident_map
+        local sameuser  all     peer        map=superuser_map
+      '';
+      settings = {
+        max_connections = 200;
+        random_page_cost = 1.1;
+      };
     };
+
+    # enable backups
+    services.postgresqlBackup = mkIf cfg.backup {
+      enable = lib.mkForce true;
+      location = "${config.mySystem.nasFolder}/backup/nixos/postgresql";
+    };
+
+
+
+    ### firewall config
+
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
+
+
+
 
   };
 }
