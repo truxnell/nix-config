@@ -16,5 +16,6 @@
     ./calibre
     ./ecowitt2mqtt
     ./maloja
+    ./multi-scrobbler
   ];
 }

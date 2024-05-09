@@ -21,7 +21,7 @@ in
 {
   options.mySystem.${category}.${app} =
     {
-      enable = mkEnableOption "app";
+      enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add app to homepage" // { default = true; };
       monitor = mkOption
         {
@@ -61,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."category/app/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "app.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "podman-${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -81,20 +81,18 @@ in
     };
 
 
-    ## service
-    # services.test= {
-    #   enable = true;
-    # };
-
-    ## OR
-
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
       inherit app image;
       user = "0";
       group = "0";
       env = {
+        PUID = user;
+        PGID = group;
         MALOJA_DATA_DIRECTORY = "/config";
       };
+      volumes = [ "${appFolder}:/config:rw" ];
+
+      envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
     };
 
 
@@ -102,7 +100,7 @@ in
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         app = {
-          icon = "app.svg";
+          icon = "${app}.svg";
           href = "https://${url}";
           inherit description;
         };
@@ -113,7 +111,7 @@ in
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
         name = app;
-        group = "category";
+        group = "${category}";
         url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];

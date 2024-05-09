@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "calibre";
+  app = "multi-scrobbler";
   category = "containers";
-  description = "eBook managment";
-  image = "ghcr.io/linuxserver/calibre:version-v7.10.0";
-  user = "0"; #string
-  group = "0"; #string
-  port = 8091; #int
+  description = "Music scrobbler";
+  image = "ghcr.io/foxxmd/multi-scrobbler:0.6.3@sha256:6af2e4ae7aa1e449ea5f342e3cfd104a6bff54bd39a6ce95d12a026e7eb02950";
+  user = "568"; #string
+  group = "568"; #string
+  port = 9078; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -61,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/config.js" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "podman-${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -76,26 +76,26 @@ in
       "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
-    ## service
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
 
+
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image;
+      user = "0"; # :(
+      group = "0"; # :(
       env = {
-        PUID = "568";
-        PGID = "568";
+        PUID = user;
+        PGID = group;
       };
+      dependsOn = [ "maloja" ];
       volumes = [
         "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix/:/media:rw"
+        ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.json:ro''
       ];
-      ports = [
-        "${builtins.toString port}:8080"
-        "8081:8081"
-      ];
-      caps = {
-        noNewPrivileges = true;
-      };
     };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -113,7 +113,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}";
+        url = "https://${url}/health";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -124,17 +124,17 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
     ### firewall config
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8081 ];
-      allowedUDPPorts = [ 8081 ];
-    };
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
 
     ### backups
     warnings = [

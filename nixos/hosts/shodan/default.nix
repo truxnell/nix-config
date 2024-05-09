@@ -43,6 +43,9 @@
   mySystem.containers = {
     calibre.enable = true;
     ecowitt2mqtt.enable = true;
+    maloja.enable = true;
+    multi-scrobbler.enable = true;
+
   };
 
 
