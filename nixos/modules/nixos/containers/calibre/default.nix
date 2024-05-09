@@ -10,8 +10,8 @@ let
   category = "containers";
   description = "eBook managment";
   image = "ghcr.io/linuxserver/calibre:version-v7.10.0";
-  user = "0"; #string
-  group = "0"; #string
+  user = "568"; #string
+  group = "568"; #string
   port = 8091; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -23,6 +23,8 @@ in
     {
       enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      openFirewall = mkEnableOption "Open firewall for ${app} - ${instance}" // { default = true; };
+
       monitor = mkOption
         {
           type = lib.types.bool;
@@ -76,9 +78,16 @@ in
       "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = user; group = group; mode = "750"; }];
+    };
+
+
     ## service
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user = "0"; # :(
+      group = "0"; # :(
 
       env = {
         PUID = "568";

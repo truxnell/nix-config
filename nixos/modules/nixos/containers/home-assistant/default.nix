@@ -7,8 +7,8 @@ with lib;
 let
   app = "home-assistant";
   image = "ghcr.io/onedr0p/home-assistant:2024.5.2@sha256:76e416dd4ab2f14ca9be120617fe69f51ad335c284352c189a0315954bed4b4e";
-  user = "kah"; #string
-  group = "kah"; #string
+  user = "568"; #string
+  group = "568"; #string
   port = 8123; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
