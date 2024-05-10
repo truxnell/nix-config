@@ -20,7 +20,7 @@ Do I have logic in all this mess?  Sort of?
 I have taken the following approach to using modules for different goals:
 
 <figure markdown="span">
-![Screenshot of Cockpit web ui showing various pushover notification units](../includes/assets/host-config.svg)
+![Drawing showing profiles cutting vertically across vertical boxes of hosts](../includes/assets/host-config.svg)
   <figcaption>Daring logic for using profiles and modules</figcaption>
 </figure>
 
