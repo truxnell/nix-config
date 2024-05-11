@@ -61,8 +61,9 @@ in
         local sameuser  all     peer        map=superuser_map
       '';
       settings = {
-        max_connections = 200;
+        max_connections = 2000;
         random_page_cost = 1.1;
+        shared_buffers = "6GB";
       };
     };
 
