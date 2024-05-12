@@ -17,6 +17,8 @@ let
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
+  tikaPort = "33001";
+  gotenbergPort = "33002";
 in
 {
   options.mySystem.${category}.${app} =
@@ -61,17 +63,16 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/passwordFile" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
     # ensure postgresql setup
-
     services.postgresql = {
       ensureDatabases = [ app ];
       ensureUsers = [{
@@ -86,27 +87,53 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }
+        { directory = "/var/lib/redis-paperless"; }];
     };
 
 
     ## service
     services.paperless = {
       enable = true;
+      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
       dataDir = "/var/lib/paperless";
-      mediaDir = "/tank/media/documents/paperless-meta";
-      consumptionDir = "/tank/backup/input/documents";
+      mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
+      consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
       consumptionDirIsPublic = true;
       port = 8000;
       address = "localhost";
+      passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
       extraConfig = {
         PAPERLESS_OCR_LANGUAGE = "eng";
+        PAPERLESS_CONSUMER_POLLING = "60";
+        PAPERLESS_CONSUMER_RECURSIVE = "true";
+        PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
         PAPERLESS_DBENGINE = "postgresql";
         PAPERLESS_DBHOST = "/run/postgresql";
         HOME = "/tmp"; # Prevent GNUPG home dir error
+        PAPERLESS_TIKA_ENABLED = true;
+        PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";
+        PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
       };
     };
 
+    # for word/etc conversions
+    virtualisation.oci-containers.containers = {
+      gotenberg = {
+        user = "gotenberg:gotenberg";
+        image = "gotenberg/gotenberg:7.8.1";
+        cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
+        ports = [
+          "127.0.0.1:${gotenbergPort}:3000"
+        ];
+      };
+      tika = {
+        image = "apache/tika:2.4.0";
+        ports = [
+          "127.0.0.1:${tikaPort}:9998"
+        ];
+      };
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -115,6 +142,11 @@ in
           icon = "${app}.svg";
           href = "https://${url}";
           inherit description;
+          widget = {
+            type = "paperlessngx";
+            url = "https://${url}";
+            key = "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}";
+          };
         };
       }
     ];

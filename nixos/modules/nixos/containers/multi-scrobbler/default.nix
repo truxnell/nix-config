@@ -63,8 +63,8 @@ in
     ## Secrets
     sops.secrets."${category}/${app}/config.js" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      group = group;
+      owner = config.users.users.kah.name;
+      inherit (config.users.users.kah) group;
       restartUnits = [ "podman-${app}.service" ];
     };
 

@@ -37,6 +37,7 @@ with lib;
       curl
       wget
       dnsutils
+      tree
     ];
 
     networking.useDHCP = lib.mkDefault true;

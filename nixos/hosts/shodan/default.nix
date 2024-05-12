@@ -37,7 +37,7 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-
+    paperless.enable = true;
 
   };
   mySystem.containers = {
