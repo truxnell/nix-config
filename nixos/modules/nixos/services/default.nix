@@ -33,5 +33,6 @@
     ./recyclarr
     ./sonarr
     ./radarr
+    ./sabnzbd
   ];
 }
