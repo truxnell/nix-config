@@ -6,19 +6,25 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "paperless";
+  app = "immich";
   category = "services";
-  description = "document managment";
+  description = "Photo managment";
   # image = "";
-  user = config.services.paperless.user; #string
-  group = app; #string
-  port = config.services.paperless.port; #int
+  user = "kah"; #string
+  group = "kah"; #string
+  port = 8080; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  tikaPort = "33001";
-  gotenbergPort = "33002";
+  environment = {
+    DB_DATA_LOCATION = "/run/postgresql";
+    DB_USERNAME = "postgres";
+    DB_PASSWORD = "dummy";
+    DB_DATABASE_NAME = "immich";
+    REDIS_SOCKET = "/run/redis-immich/redis.sock";
+    DB_URL = "socket://immich:@/run/postgresql?db=immich";
+  };
 in
 {
   options.mySystem.${category}.${app} =
@@ -63,76 +69,95 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."${category}/${app}/passwordFile" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      group = group;
-      restartUnits = [ "${app}.service" ];
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
+
+    users = {
+      users = {
+
+        # Create immich user
+        immich = {
+          isSystemUser = true;
+          group = "immich";
+          description = "Immich daemon user";
+          # home = cfg.dataDir;
+          uid = 390;
+        };
+
+        truxnell.extraGroups = [ "immich" ];
+        # Add admins to the immich group
+      };
+
+      # Create immich group
+      groups.immich = {
+        gid = 390;
+      };
+
     };
 
-    users.users.truxnell.extraGroups = [ group ];
-
-    # ensure postgresql setup
-    services.postgresql = {
-      ensureDatabases = [ app ];
-      ensureUsers = [{
-        name = app;
-        ensureDBOwnership = true;
-      }];
-    };
 
     # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }
-        { directory = "/var/lib/redis-paperless"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
+    virtualisation.oci-containers.containers =
+      {
+        immich-server = {
+          image = "ghcr.io/immich-app/immich-server:v1.103.1";
+          cmd = [ "start-server.sh" "immich" ];
+          # autoStart = false;
 
-    ## service
-    services.paperless = {
+          user = "390:390";
+
+          environment = environment;
+
+          volumes = [
+            "/run/postgresql:/run/postgresql"
+            "/run/redis-immich:/run/redis-immich"
+            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+          ];
+
+          # extraOptions =  [ "--network=immich" ];
+
+        };
+
+      };
+
+    services.redis.servers.immich = {
       enable = true;
-      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
-      dataDir = "/var/lib/paperless";
-      mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
-      consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
-      consumptionDirIsPublic = true;
-      port = 8000;
-      address = "localhost";
-      passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
-      extraConfig = {
-        PAPERLESS_OCR_LANGUAGE = "eng";
-        PAPERLESS_CONSUMER_POLLING = "60";
-        PAPERLESS_CONSUMER_RECURSIVE = "true";
-        PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
-        PAPERLESS_DBENGINE = "postgresql";
-        PAPERLESS_DBHOST = "/run/postgresql";
-        HOME = "/tmp"; # Prevent GNUPG home dir error
-        PAPERLESS_TIKA_ENABLED = true;
-        PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";
-        PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
-      };
+      user = "immich";
     };
 
-    # for word/etc conversions
-    virtualisation.oci-containers.containers = {
-      gotenberg = {
-        user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:7.8.1";
-        cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
-        ports = [
-          "127.0.0.1:${gotenbergPort}:3000"
-        ];
-      };
-      tika = {
-        image = "apache/tika:2.4.0";
-        ports = [
-          "127.0.0.1:${tikaPort}:9998"
-        ];
-      };
+    services.postgresql = {
+
+      enable = true;
+      ensureUsers = [{
+        name = "immich";
+        ensureDBOwnership = true;
+      }];
+      ensureDatabases = [ "immich" ];
+
+      # Allow connections from any docker IP addresses
+      authentication = mkBefore "host immich immich 10.88.0.0/12 md5";
+
+      # # Postgres extension pgvecto.rs required since Immich 1.91.0
+      # extraPlugins = [
+      #   (pkgs.pgvecto-rs.override rec {
+      #     postgresql = config.services.postgresql.package;
+      #     stdenv = postgresql.stdenv;
+      #   })
+      # ];
+      # settings.shared_preload_libraries = "vectors.so";
+
     };
 
     # homepage integration
@@ -142,11 +167,6 @@ in
           icon = "${app}.svg";
           href = "https://${url}";
           inherit description;
-          widget = {
-            type = "paperlessngx";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}";
-          };
         };
       }
     ];
@@ -156,7 +176,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/api";
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -183,8 +203,6 @@ in
     warnings = [
       (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
         "WARNING: Backups for ${app} are disabled!")
-      (mkIf (!config.services.postgresql.enable)
-        "WARNING: Postgres is not enabled on host for ${app}!")
     ];
 
     services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic

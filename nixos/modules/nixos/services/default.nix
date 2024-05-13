@@ -30,5 +30,8 @@
     ./rss-bridge
     ./paperless
     ./redis
+    ./recyclarr
+    ./sonarr
+    ./radarr
   ];
 }

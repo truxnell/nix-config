@@ -6,19 +6,16 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "paperless";
+  app = "sonarr";
   category = "services";
-  description = "document managment";
-  # image = "";
-  user = config.services.paperless.user; #string
-  group = app; #string
-  port = config.services.paperless.port; #int
+  description = "TV organisar";
+  user = config.services.sonarr.user; #string
+  group = config.services.sonarr.group; #string
+  port = 8989; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  tikaPort = "33001";
-  gotenbergPort = "33002";
 in
 {
   options.mySystem.${category}.${app} =
@@ -63,7 +60,7 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."${category}/${app}/passwordFile" = {
+    sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
       group = group;
@@ -72,80 +69,33 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    # ensure postgresql setup
-    services.postgresql = {
-      ensureDatabases = [ app ];
-      ensureUsers = [{
-        name = app;
-        ensureDBOwnership = true;
-      }];
-    };
-
-    # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }
-        { directory = "/var/lib/redis-paperless"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
     ## service
-    services.paperless = {
+    services.sonarr = {
       enable = true;
-      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
-      dataDir = "/var/lib/paperless";
-      mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
-      consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
-      consumptionDirIsPublic = true;
-      port = 8000;
-      address = "localhost";
-      passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
-      extraConfig = {
-        PAPERLESS_OCR_LANGUAGE = "eng";
-        PAPERLESS_CONSUMER_POLLING = "60";
-        PAPERLESS_CONSUMER_RECURSIVE = "true";
-        PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
-        PAPERLESS_DBENGINE = "postgresql";
-        PAPERLESS_DBHOST = "/run/postgresql";
-        HOME = "/tmp"; # Prevent GNUPG home dir error
-        PAPERLESS_TIKA_ENABLED = true;
-        PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";
-        PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
-      };
+      dataDir = "/var/lib/sonarr";
+      package = pkgs.unstable.sonarr; #TODO move to stable 24.05
     };
 
-    # for word/etc conversions
-    virtualisation.oci-containers.containers = {
-      gotenberg = {
-        user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:7.8.1";
-        cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
-        ports = [
-          "127.0.0.1:${gotenbergPort}:3000"
-        ];
-      };
-      tika = {
-        image = "apache/tika:2.4.0";
-        ports = [
-          "127.0.0.1:${tikaPort}:9998"
-        ];
-      };
-    };
 
     # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        ${app} = {
+        Sonarr = {
           icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
+          href = "https://${app}.${config.mySystem.domain}";
+
+          description = "TV show management";
+          container = "${app}";
           widget = {
-            type = "paperlessngx";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}";
+            type = "${app}";
+            url = "https://${app}.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
           };
         };
       }
@@ -156,7 +106,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/api";
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -168,7 +118,6 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
@@ -183,8 +132,6 @@ in
     warnings = [
       (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
         "WARNING: Backups for ${app} are disabled!")
-      (mkIf (!config.services.postgresql.enable)
-        "WARNING: Postgres is not enabled on host for ${app}!")
     ];
 
     services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
@@ -195,9 +142,9 @@ in
       });
 
 
-    services.postgresqlBackup = {
-      databases = [ app ];
-    };
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
 
 
 

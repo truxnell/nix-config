@@ -17,5 +17,6 @@
     ./ecowitt2mqtt
     ./maloja
     ./multi-scrobbler
+    ./immich
   ];
 }
