@@ -56,7 +56,6 @@ in
 
         # This installs the extension packages, but
         # dont forget to enable them per-user in dconf settings -> "org/gnome/shell"
-        gnomeExtensions.vitals
         gnomeExtensions.caffeine
         gnomeExtensions.spotify-tray
         gnomeExtensions.dash-to-dock

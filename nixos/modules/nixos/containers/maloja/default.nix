@@ -6,24 +6,23 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "miniflux";
-  category = "services";
-  description = "Minimalist feed reader";
-  # image = "%{image}";
-  user = app; #string
-  group = app; #string
-  port = 8072; #int
+  app = "maloja";
+  category = "containers";
+  description = "Music scrobbler";
+  image = "krateng/maloja:3.2.2@sha256:c76bca4be5b382118df83a8ab6be5b7a2c69622503a24f0948d04ff22caacde2";
+  user = "568"; #string
+  group = "568"; #string
+  port = 42010; #int
   appFolder = "/var/lib/${app}";
-  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/appFolder";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  databaseUrl = "user=miniflux host=/run/postgresql dbname=miniflux";
 in
 {
   options.mySystem.${category}.${app} =
     {
       enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      addToHomepage = mkEnableOption "Add app to homepage" // { default = true; };
       monitor = mkOption
         {
           type = lib.types.bool;
@@ -55,6 +54,8 @@ in
           default = true;
         };
 
+
+
     };
 
   config = mkIf cfg.enable {
@@ -62,57 +63,43 @@ in
     ## Secrets
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
-      restartUnits = [ "${app}.service" ];
+      owner = config.users.users.kah.name;
+      inherit (config.users.users.kah) group;
+      restartUnits = [ "podman-${app}.service" ];
     };
 
     users.users.truxnell.extraGroups = [ group ];
-    users.users.miniflux = {
-      isSystemUser = true;
-      group = "miniflux";
-    };
 
-    users.groups.miniflux = { };
+
+    # Folder perms - only for containers
+    # systemd.tmpfiles.rules = [
+    # "d persistentFolder/ 0750 user group -"
+    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
-    ## service
-    services.miniflux = {
-      enable = true;
-      adminCredentialsFile = config.sops.secrets."${category}/${app}/env".path;
-      config = {
-        LISTEN_ADDR = "localhost:${builtins.toString port}";
-        DATABASE_URL = databaseUrl;
-        RUN_MIGRATIONS = "1";
-        CREATE_ADMIN = "1";
+
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image;
+      user = "0";
+      group = "0";
+      env = {
+        PUID = user;
+        PGID = group;
+        MALOJA_DATA_DIRECTORY = "/config";
       };
+      volumes = [ "${appFolder}:/config:rw" ];
+
+      envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
     };
 
-    # automatically reset feed errors regular
-    # systemd.services.miniflux-reset-feed-errors = {
-    #   description = "Miniflux reset feed errors";
-    #   wantedBy = [ "multi-user.target" ];
-    #   after = [ "network.target" "${app}.service" ];
-    #   environment.DATABASE_URL = databaseUrl;
-    #   startAt = "00/4:00"; # Every four hours.
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     DynamicUser = true;
-    #     RuntimeDirectory = "miniflux"; # Creates /run/miniflux.
-    ##     EnvironmentFile = cfg.envFilePath;
-    #     ExecStart = pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
-    #       ${cfg.package}/bin/miniflux -reset-feed-errors
-    #     '';
-    #   };
-    # };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
-        ${app} = {
+        app = {
           icon = "${app}.svg";
           href = "https://${url}";
           inherit description;
@@ -120,22 +107,12 @@ in
       }
     ];
 
-    # ensure postgresql setup
-
-    services.postgresql = {
-      ensureDatabases = [ app ];
-      ensureUsers = [{
-        name = app;
-        ensureDBOwnership = true;
-      }];
-    };
-
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings";
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -146,7 +123,8 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
@@ -158,27 +136,22 @@ in
     # };
 
     ### backups
-    ### backups
     warnings = [
       (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for ${app} are disabled!")
-      (mkIf (!config.services.postgresql.enable)
-        "WARNING: Postgres is not enabled on host for ${app}!")
+        "WARNING: Backups for app are disabled!")
     ];
 
-
-    # services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
-    #   });
-
-    services.postgresqlBackup = mkIf
-      cfg.backup
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
       {
-        databases = [ app ];
-      };
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
+      });
+
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
 
 
 

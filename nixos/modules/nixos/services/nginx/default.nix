@@ -51,7 +51,8 @@ in
       virtualHosts = {
         "_" = {
           default = true;
-          rejectSSL = true;
+          forceSSL = true;
+          useACMEHost = config.networking.domain;
           extraConfig = "return 444;";
         };
       };

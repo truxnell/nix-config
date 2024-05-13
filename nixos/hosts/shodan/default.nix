@@ -37,12 +37,15 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-
+    paperless.enable = true;
 
   };
   mySystem.containers = {
     calibre.enable = true;
     ecowitt2mqtt.enable = true;
+    maloja.enable = true;
+    multi-scrobbler.enable = true;
+
   };
 
 

@@ -86,6 +86,16 @@ in
     #   enable = true;
     # };
 
+    ## OR
+
+    # virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+    #   inherit app image user group;
+    #   env = [ ];
+    #   ports = [ ];
+    #   environmentFiles = [ ];
+    # };
+
+
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {

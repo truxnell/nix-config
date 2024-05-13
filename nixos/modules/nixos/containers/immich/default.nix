@@ -6,25 +6,31 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "calibre";
-  category = "containers";
-  description = "eBook managment";
-  image = "ghcr.io/linuxserver/calibre:version-v7.10.0";
-  user = "568"; #string
-  group = "568"; #string
-  port = 8091; #int
+  app = "immich";
+  category = "services";
+  description = "Photo managment";
+  # image = "";
+  user = "kah"; #string
+  group = "kah"; #string
+  port = 8080; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
+  environment = {
+    DB_DATA_LOCATION = "/run/postgresql";
+    DB_USERNAME = "postgres";
+    DB_PASSWORD = "dummy";
+    DB_DATABASE_NAME = "immich";
+    REDIS_SOCKET = "/run/redis-immich/redis.sock";
+    DB_URL = "socket://immich:@/run/postgresql?db=immich";
+  };
 in
 {
   options.mySystem.${category}.${app} =
     {
       enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      openFirewall = mkEnableOption "Open firewall for ${app} - ${instance}" // { default = true; };
-
       monitor = mkOption
         {
           type = lib.types.bool;
@@ -70,7 +76,28 @@ in
     #   restartUnits = [ "${app}.service" ];
     # };
 
-    users.users.truxnell.extraGroups = [ group ];
+    users = {
+      users = {
+
+        # Create immich user
+        immich = {
+          isSystemUser = true;
+          group = "immich";
+          description = "Immich daemon user";
+          # home = cfg.dataDir;
+          uid = 390;
+        };
+
+        truxnell.extraGroups = [ "immich" ];
+        # Add admins to the immich group
+      };
+
+      # Create immich group
+      groups.immich = {
+        gid = 390;
+      };
+
+    };
 
 
     # Folder perms - only for containers
@@ -82,28 +109,55 @@ in
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
+    virtualisation.oci-containers.containers =
+      {
+        immich-server = {
+          image = "ghcr.io/immich-app/immich-server:v1.103.1";
+          cmd = [ "start-server.sh" "immich" ];
+          # autoStart = false;
 
-    ## service
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image;
-      user = "0"; # :(
-      group = "0"; # :(
+          user = "390:390";
 
-      env = {
-        PUID = "568";
-        PGID = "568";
+          inherit environment;
+
+          volumes = [
+            "/run/postgresql:/run/postgresql"
+            "/run/redis-immich:/run/redis-immich"
+            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+          ];
+
+          # extraOptions =  [ "--network=immich" ];
+
+        };
+
       };
-      volumes = [
-        "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix/:/media:rw"
-      ];
-      ports = [
-        "${builtins.toString port}:8080"
-        "8081:8081"
-      ];
-      caps = {
-        noNewPrivileges = true;
-      };
+
+    services.redis.servers.immich = {
+      enable = true;
+      user = "immich";
+    };
+
+    services.postgresql = {
+
+      enable = true;
+      ensureUsers = [{
+        name = "immich";
+        ensureDBOwnership = true;
+      }];
+      ensureDatabases = [ "immich" ];
+
+      # Allow connections from any docker IP addresses
+      authentication = mkBefore "host immich immich 10.88.0.0/12 md5";
+
+      # # Postgres extension pgvecto.rs required since Immich 1.91.0
+      # extraPlugins = [
+      #   (pkgs.pgvecto-rs.override rec {
+      #     postgresql = config.services.postgresql.package;
+      #     stdenv = postgresql.stdenv;
+      #   })
+      # ];
+      # settings.shared_preload_libraries = "vectors.so";
+
     };
 
     # homepage integration
@@ -134,16 +188,16 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
     ### firewall config
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8081 ];
-      allowedUDPPorts = [ 8081 ];
-    };
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
 
     ### backups
     warnings = [
@@ -159,9 +213,9 @@ in
       });
 
 
-    # services.postgresqlBackup = {
-    #   databases = [ app ];
-    # };
+    services.postgresqlBackup = {
+      databases = [ app ];
+    };
 
 
 

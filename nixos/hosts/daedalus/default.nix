@@ -15,12 +15,11 @@
     mySystem.system.impermanence.enable = true;
     mySystem.services = {
       openssh.enable = true;
-
-      #containers
       podman.enable = true;
       nginx.enable = true;
       sonarr.enable = true;
       radarr.enable = true;
+      recyclarr.enable = true;
       lidarr.enable = true;
       readarr.enable = true;
       sabnzbd.enable = true;

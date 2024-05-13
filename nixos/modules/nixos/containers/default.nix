@@ -15,5 +15,8 @@
     ./home-assistant
     ./calibre
     ./ecowitt2mqtt
+    ./maloja
+    ./multi-scrobbler
+    ./immich
   ];
 }

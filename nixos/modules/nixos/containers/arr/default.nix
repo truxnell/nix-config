@@ -1,7 +1,7 @@
 {
   imports = [
-    ./sonarr
-    ./radarr
+    # ./sonarr
+    # ./radarr
     ./lidarr
     ./readarr
     ./prowlarr
