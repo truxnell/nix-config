@@ -9,8 +9,8 @@ let
   app = "sonarr";
   category = "services";
   description = "TV organisar";
-  user = config.services.sonarr.user; #string
-  group = config.services.sonarr.group; #string
+  inherit (config.services.sonarr) user;#string
+  inherit (config.services.sonarr) group;#string
   port = 8989; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -63,7 +63,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 

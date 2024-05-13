@@ -63,7 +63,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
@@ -79,8 +79,8 @@ in
     services.radarr = {
       enable = true;
       dataDir = "/var/lib/${app}";
-      user=user;
-      group=group;
+      inherit user;
+      inherit group;
       package = pkgs.unstable.radarr; #TODO move to stable 24.05
     };
 

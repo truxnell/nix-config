@@ -118,7 +118,7 @@ in
 
           user = "390:390";
 
-          environment = environment;
+          inherit environment;
 
           volumes = [
             "/run/postgresql:/run/postgresql"
