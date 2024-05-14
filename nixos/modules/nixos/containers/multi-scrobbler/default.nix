@@ -9,7 +9,7 @@ let
   app = "multi-scrobbler";
   category = "containers";
   description = "Music scrobbler";
-  image = "ghcr.io/foxxmd/multi-scrobbler:0.6.3@sha256:6af2e4ae7aa1e449ea5f342e3cfd104a6bff54bd39a6ce95d12a026e7eb02950";
+  image = "ghcr.io/foxxmd/multi-scrobbler:0.7.1@sha256:5be5c5987cf44a5c00591f6d6cb812be9a52f76f23cab81c134aba4fbc7e9a76";
   user = "568"; #string
   group = "568"; #string
   port = 9078; #int
