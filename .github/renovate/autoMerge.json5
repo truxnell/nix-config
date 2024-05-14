@@ -29,6 +29,7 @@
       "matchPackageNames": [
         "ghcr.io/gethomepage/homepage",
         "garethgeorge/backrest",
+        "ghcr.io/buroa/qbtools",
       ]
 
     },
