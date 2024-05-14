@@ -3,7 +3,7 @@
     ./arr
     ./homepage
     ./gatus
-    ./sabnzbd
+    # ./sabnzbd
     ./qbittorrent
     ./plex
     ./tautulli

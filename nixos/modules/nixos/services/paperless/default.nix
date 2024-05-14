@@ -121,14 +121,14 @@ in
     virtualisation.oci-containers.containers = {
       gotenberg = {
         user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:8.5.0";
+        image = "gotenberg/gotenberg:7.8.1";
         cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
         ports = [
           "127.0.0.1:${gotenbergPort}:3000"
         ];
       };
       tika = {
-        image = "apache/tika:2.5.0";
+        image = "apache/tika:2.4.0";
         ports = [
           "127.0.0.1:${tikaPort}:9998"
         ];

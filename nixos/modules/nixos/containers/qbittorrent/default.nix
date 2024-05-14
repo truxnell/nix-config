@@ -6,7 +6,6 @@
 with lib;
 let
   app = "qbittorrent";
-  image = "ghcr.io/onedr0p/qbittorrent:4.6.4@sha256:b9af0f2173572a69d2c02eab8f701ef7b04f61689efe1c5338b96445d528dec4";
   user = "568"; #string
   group = "568"; #string
   port = 8080; #int
@@ -16,10 +15,16 @@ let
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
+
+  imports = [
+    ./qbtools.nix
+  ];
+
   options.mySystem.services.${app} =
     {
       enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      qbtools = mkEnableOption "qbtools" // { default = true; };
       openFirewall = mkEnableOption "Open firewall for ${app}" // {
         default = true;
       };
@@ -32,19 +37,23 @@ in
       "d ${appFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
-    virtualisation.oci-containers.containers.${app} = {
-      image = "${image}";
-      user = "${user}:${group}";
-      environment = {
-        QBITTORRENT__BT_PORT = builtins.toString qbit_port;
+    virtualisation.oci-containers.containers.${app} =
+      let
+        image = "ghcr.io/onedr0p/qbittorrent:4.6.4@sha256:b9af0f2173572a69d2c02eab8f701ef7b04f61689efe1c5338b96445d528dec4";
+      in
+      {
+        image = "${image}";
+        user = "${user}:${group}";
+        environment = {
+          QBITTORRENT__BT_PORT = builtins.toString qbit_port;
+        };
+        ports = [ "${builtins.toString qbit_port}:${builtins.toString qbit_port}" ];
+        volumes = [
+          "${appFolder}:/config:rw"
+          "${config.mySystem.nasFolder}/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "/etc/localtime:/etc/localtime:ro"
+        ];
       };
-      ports = [ "${builtins.toString qbit_port}:${builtins.toString qbit_port}" ];
-      volumes = [
-        "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix:/media:rw"
-        "/etc/localtime:/etc/localtime:ro"
-      ];
-    };
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
