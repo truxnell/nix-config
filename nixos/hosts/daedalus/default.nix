@@ -15,6 +15,7 @@
     mySystem.system.impermanence.enable = true;
     mySystem.services = {
       openssh.enable = true;
+      minio.enable = true;
       podman.enable = true;
       nginx.enable = true;
       sonarr.enable = true;

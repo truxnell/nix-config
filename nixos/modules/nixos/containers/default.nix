@@ -18,5 +18,7 @@
     ./maloja
     ./multi-scrobbler
     ./immich
+    ./rxresume
+    ./browserless
   ];
 }

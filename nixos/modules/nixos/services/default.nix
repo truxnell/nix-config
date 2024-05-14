@@ -34,5 +34,6 @@
     ./sonarr
     ./radarr
     ./sabnzbd
+    ./minio
   ];
 }

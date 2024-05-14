@@ -89,15 +89,8 @@ in
         Group = group;
         PrivateTmp = "true";
       };
-    };
+      startAt = "weekly";
 
-    systemd.timers.recyclarr = {
-      description = "Recyclarr Sync Timer";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = [ "weekly" ];
-        Persistent = true;
-      };
     };
 
   };

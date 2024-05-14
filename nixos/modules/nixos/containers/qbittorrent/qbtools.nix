@@ -15,15 +15,6 @@ with lib;
       inherit (config.users.users.kah) group;
     };
 
-    systemd.timers."qbtools-tag" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "hourly";
-        OnBootSec = "5m";
-        Unit = "qbtools-tag.service";
-      };
-    };
-
     systemd.services."qbtools-tag" =
 
       {
@@ -42,16 +33,8 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        startAt = "hourly";
       };
-
-    systemd.timers."qbtools-prune-orphaned" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "daily";
-        OnBootSec = "5m";
-        Unit = "qbtools-prune-orphaned.service";
-      };
-    };
 
     systemd.services."qbtools-prune-orphaned" =
 
@@ -72,16 +55,9 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
-      };
+        startAt = "*-*-* 05:20:00";
 
-    systemd.timers."qbtools-prune-expired" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "daily";
-        OnBootSec = "5m";
-        Unit = "qbtools-prune-expired.service";
       };
-    };
 
     systemd.services."qbtools-prune-expired" =
 
@@ -108,6 +84,8 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        startAt = "*-*-* 05:10:00";
+
       };
 
   };
