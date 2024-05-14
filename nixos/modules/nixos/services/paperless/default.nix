@@ -128,7 +128,7 @@ in
         ];
       };
       tika = {
-        image = "apache/tika:2.4.0";
+        image = "apache/tika:2.5.0";
         ports = [
           "127.0.0.1:${tikaPort}:9998"
         ];
