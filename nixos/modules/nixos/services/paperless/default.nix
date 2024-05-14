@@ -10,9 +10,9 @@ let
   category = "services";
   description = "document managment";
   # image = "";
-  user = config.services.paperless.user; #string
+  inherit (config.services.paperless) user;#string
   group = app; #string
-  port = config.services.paperless.port; #int
+  inherit (config.services.paperless) port;#int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -66,7 +66,7 @@ in
     sops.secrets."${category}/${app}/passwordFile" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
