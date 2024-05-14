@@ -112,7 +112,7 @@ in
     virtualisation.oci-containers.containers =
       {
         immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.103.1";
+          image = "ghcr.io/immich-app/immich-server:v1.105.0";
           cmd = [ "start-server.sh" "immich" ];
           # autoStart = false;
 
