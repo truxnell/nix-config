@@ -61,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     # users.users.truxnell.extraGroups = [ group ];
 
@@ -89,15 +89,18 @@ in
     ## OR
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user = "0"; #:()
+      group = "0"; #:()
       env = {
         TIMEOUT = "10000";
         CONCURRENT = "10";
-        TOKEN = "chrome_token";
         EXIT_ON_HEALTH_FAILURE = "true";
         PRE_REQUEST_HEALTH_CHECK = "true";
       };
-      ports = [ "3001:3000" ];
+      envFiles = [
+        config.sops.secrets."${category}/${app}/env".path
+      ];
 
     };
 
