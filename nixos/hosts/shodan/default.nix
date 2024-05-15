@@ -38,6 +38,7 @@
     calibre-web.enable = true;
     rss-bridge.enable = true;
     paperless.enable = true;
+    rxresume.enable = true;
 
   };
   mySystem.containers = {

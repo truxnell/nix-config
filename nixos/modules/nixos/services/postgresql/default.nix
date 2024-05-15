@@ -55,10 +55,12 @@ in
         superuser_map      postgres  postgres
         # Let other names login as themselves
         superuser_map      /^(.*)$   \1
+        superuser_map      root      rxresume
       '';
       authentication = ''
         #type database  DBuser  auth-method optional_ident_map
         local sameuser  all     peer        map=superuser_map
+        local rxresume  root    peer
       '';
       settings = {
         max_connections = 2000;

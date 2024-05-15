@@ -61,28 +61,28 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     # enable browserless container on this system
     mySystem.services.browserless-chrome.enable = true;
 
-    users.users.truxnell.extraGroups = [ users.groups.rxresume.gid ];
+    users.users.truxnell.extraGroups = [ (builtins.toString config.users.groups.rxresume.gid) ];
 
     users.users = {
       rxresume = {
-        group = cfg.group;
-        home = cfg.dataDir;
-        uid = config.ids.uids.sonarr;
+        group = "rxresume";
+        home = "/var/lib/rxresume/";
+        uid = 319;
       };
     };
 
-    users.groups = mkIf (cfg.group == "sonarr") {
-      rxresume.gid = "1024";
+    users.groups = {
+      rxresume.gid = 319;
     };
 
     # Folder perms - only for containers
@@ -95,77 +95,67 @@ in
     };
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user = "0"; # :(
+      group = "0"; # :(
       env = {
-        # -- Environment Variables --
         PORT = "3000";
         NODE_ENV = "production";
-
-        # -- URLs --
-        PUBLIC_URL = "https://localhost:3000";
-        STORAGE_URL = "http://s3.trux.dev:9000/rxresume";
-
-        # -- Printer (Chrome) --
-        CHROME_TOKEN = "MBUwBVo9MLf!$%gKwgKZHf^s&Br&k8$F";
-        CHROME_URL = "ws://127.0.0.1:3001";
-
-        # -- Database (Postgres) --
-        # DATABASE_URL = "postgresql://postgres:postgres@postgres:5432/postgres";
-        DATABASE_URL = "socket://rxresume:@/run/postgresql?db=rxresume";
-
-        # -- Auth --
-        ACCESS_TOKEN_SECRET = "t3r*ve8BAqEPi4$Eh3MwvWfSu!Xz35*@";
-        REFRESH_TOKEN_SECRET = "@@nCvdqY@LBjFWHfk%g6Wonq&Vgm55p5";
-
-        # -- Emails --
+        PUBLIC_URL = "https://rxresume.${config.networking.domain}";
+        STORAGE_URL = "https://s3.${config.networking.domain}/rxresume";
+        CHROME_URL = "ws://browserless-chrome:3000";
+        DATABASE_URL = "postgresql://rxresume@localhost/rxresume?host=/run/postgresql";
         MAIL_FROM = "noreply@localhost";
-        # SMTP_URL = "smtp://user:pass@smtp:587 # Optional";
-
-        # -- Storage (Minio) --
         STORAGE_ENDPOINT = "s3.trux.dev";
-        STORAGE_PORT = "9000";
-        # STORAGE_REGION = "us-east-1";
-        STORAGE_BUCKET = "default";
-        STORAGE_ACCESS_KEY = "KQ4xdrKb472i7^F^*^kpE8VPz%EDie8M";
-        STORAGE_SECRET_KEY = "GdieoKqz5t%D53J$bjhNvtM3VM@JdKoy";
+        STORAGE_PORT = "443";
+        STORAGE_BUCKET = "rxresume";
         STORAGE_USE_SSL = "true";
-
       };
-      ports = [ ];
-      environmentFiles = [ ];
-      dependsOn = [ "podman-browserless-chrome" ];
+      volumes = [
+        "/run/postgresql:/run/postgresql"
+      ];
+
+      envFiles = [
+        config.sops.secrets."${category}/${app}/env".path
+      ];
+      dependsOn = [ "browserless-chrome" ];
     };
 
 
     # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-        };
-      }
-    ];
+    mySystem.services.homepage.infrastructure = mkIf
+      cfg.addToHomepage
+      [
+        {
+          ${app} = {
+            icon = "${app}.svg";
+            href = "https://${url}";
+            inherit description;
+          };
+        }
+      ];
 
     ### gatus integration
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [
-      {
-        name = app;
-        group = "${category}";
-        url = "https://${url}";
-        interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-      }
-    ];
+    mySystem.services.gatus.monitors = mkIf
+      cfg.monitor
+      [
+        {
+          name = app;
+          group = "${category}";
+          url = "https://${url}";
+          interval = "1m";
+          conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        }
+      ];
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
+        proxyWebsockets = true;
       };
     };
 
@@ -182,12 +172,14 @@ in
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
-      });
+    services.restic.backups = mkIf
+      cfg.backup
+      (config.lib.mySystem.mkRestic
+        {
+          inherit app user;
+          paths = [ appFolder ];
+          inherit appFolder;
+        });
 
     # ensure postgresql setup
     services.postgresql = {
