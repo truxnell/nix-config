@@ -9,7 +9,7 @@ let
   app = "browserless-chrome";
   category = "services";
   description = "docker based browsers for automation";
-  image = "ghcr.io/browserless/chromium:v2.8.0@sha256:18ed5b00b6b58fa98d50a72b021f8f1956b3d1255606e07a03cc747f19665f31";
+  image = "ghcr.io/browserless/chromium:v2.11.0@sha256:ffb9406c44f408ac72c5bd6f95e9c09ecc893309a28da4abae20f4018ffe1d0f";
   user = "kah"; #string
   group = "kah"; #string
   port = 3000; #int
@@ -64,7 +64,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
