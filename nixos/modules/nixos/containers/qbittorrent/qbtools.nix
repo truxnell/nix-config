@@ -88,5 +88,23 @@ with lib;
 
       };
 
+    systemd.services."qbtools-reannounce" =
+
+      {
+        script = ''
+          ${pkgs.podman}/bin/podman run --rm \
+          -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
+          ${image} \
+          reannounce \
+          --process-seeding \
+          --server https://qbittorrent.trux.dev  \
+          --port 443  \
+          --config /config/config.yaml
+        '';
+        path = [ pkgs.podman ];
+        startAt = "hourly";
+      };
+
+
   };
 }
