@@ -39,6 +39,7 @@
     rss-bridge.enable = true;
     paperless.enable = true;
     rxresume.enable = true;
+    invidious.enable = true;
 
   };
   mySystem.containers = {
