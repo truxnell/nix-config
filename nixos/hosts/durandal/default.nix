@@ -15,6 +15,7 @@
     postgresql =
       { enable = true; backup = false; };
     # calibre-web = { enable = true; backup = false; dev = true; };
+    invidious = { enable = true; backup = false; dev = true; };
 
 
   };

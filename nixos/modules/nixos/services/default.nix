@@ -35,5 +35,6 @@
     ./radarr
     ./sabnzbd
     ./minio
+    ./invidious
   ];
 }
