@@ -17,7 +17,6 @@
     # calibre-web = { enable = true; backup = false; dev = true; };
     prometheus = { enable = true; backup = false; dev = true; };
 
-
   };
   # mySystem.containers.maloja = { enable = true; backup = false; dev = true; };
   # mySystem.containers.multi-scrobbler = { enable = true; backup = false; dev = true; };

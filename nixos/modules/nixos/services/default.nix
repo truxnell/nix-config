@@ -36,5 +36,6 @@
     ./sabnzbd
     ./minio
     ./invidious
+    ./thelounge
   ];
 }

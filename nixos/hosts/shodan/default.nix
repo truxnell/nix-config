@@ -40,6 +40,7 @@
     paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
+    thelounge.enable = true;
 
   };
   mySystem.containers = {
