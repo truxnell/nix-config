@@ -19,6 +19,7 @@
     homepage.enable = true;
     # backrest.enable = true;
 
+    overseer.enable = true;
     plex.enable = true;
     tautulli.enable = true;
     factorio.freight-forwarding.enable = true; # the factory must grow
@@ -41,6 +42,9 @@
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
+    victoriametrics.enable = true;
+    grafana.enable = true;
+
 
   };
   mySystem.containers = {

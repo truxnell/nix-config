@@ -75,6 +75,13 @@ in
       location = "${config.mySystem.nasFolder}/backup/nixos/postgresql";
     };
 
+    systemd.services.postgresqlBackup = {
+      requires = [ "postgresql.service" ];
+    };
+
+    services.prometheus.exporters.postgres = {
+      enable = true;
+    };
 
 
     ### firewall config

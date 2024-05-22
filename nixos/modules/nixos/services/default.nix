@@ -21,7 +21,6 @@
     ./blocky
     ./openvscode-server
     ./grafana
-    ./prometheus
     ./radicale
     ./node-red
     ./nginx
@@ -37,5 +36,6 @@
     ./minio
     ./invidious
     ./thelounge
+    ./victoriametrics
   ];
 }

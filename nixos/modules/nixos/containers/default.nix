@@ -20,5 +20,6 @@
     ./immich
     ./rxresume
     ./browserless
+    ./overseer
   ];
 }

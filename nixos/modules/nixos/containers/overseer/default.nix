@@ -1,19 +1,18 @@
 { lib
 , config
 , pkgs
-, self
 , ...
 }:
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "prometheus";
+  app = "overseer";
   category = "services";
-  description = "Metrics ingestion and storage";
-  image = "";
-  user = app; #string
-  group = app; #string
-  port = 9001; #int
+  description = "Media requests";
+  image = "ghcr.io/sct/overseerr:1.33.2@sha256:714ea6db2bc007a2262d112bef7eec74972eb33d9c72bddb9cbd98b8742de950";
+  user = "568"; #string
+  group = "568"; #string
+  port = 5055; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -73,24 +72,21 @@ in
 
 
     # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
-    ## service
-    # ref: https://github.com/nmasur/dotfiles/blob/aea33592361215356c0fbe5e9d533906f0a023cc/modules/nixos/services/prometheus.nix#L19
-    # https://github.com/ryan4yin/nix-config/blob/bec52f9d60f493d8bb31f298699dfc99eaf18dcc/hosts/12kingdoms-rakushun/grafana/default.nix#L42
-
-    services.prometheus = {
-      enable = true;
-      inherit port;
-      scrapeConfigs = builtins.concatMap (cfg: cfg.config.mySystem.monitoring.prometheus.scrapeConfigs)
-        (builtins.attrValues self.nixosConfigurations);
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+      env = { LOG_LEVEL = "info"; };
+      volumes = [
+        "${appFolder}:/app/config:rw"
+      ];
     };
 
 

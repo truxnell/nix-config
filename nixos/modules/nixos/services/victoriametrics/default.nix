@@ -1,22 +1,26 @@
 { lib
 , config
 , pkgs
+, self
 , ...
 }:
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "grafana";
+  app = "victoriametrics";
   category = "services";
-  description = "Metrics graphing";
+  description = "Metric storage";
   # image = "";
   user = app; #string
   group = app; #string
-  port = 3090; #int
-  appFolder = "/var/lib/${app}";
+  port = 8428; #int
+  appFolder = "/var/lib/private/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
+  hostVmAgent = "vmagent" + (if cfg.dev then "-dev" else "");
+  urlVmAgent = "${hostVmAgent}.${config.networking.domain}";
+
 in
 {
   options.mySystem.${category}.${app} =
@@ -77,87 +81,16 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [{ directory = appFolder;}];
     };
 
 
     ## service
-    services.grafana = {
-
+    services.victoriametrics = {
       enable = true;
-      settings = {
-        database.wal = true;
-
-        server = {
-          http_port = port;
-          http_addr = "127.0.0.1";
-          enable_gzip = true;
-          domain = config.networking.domain;
-        };
-
-        analytics = {
-          check_for_updates = false;
-          feedback_links_enabled = false;
-          reporting_enabled = false;
-        };
-      };
-      provision = {
-        enable = true;
-        datasources.settings = {
-          datasources = [
-            {
-              uid = "victoria-metrics";
-              name = "VictoriaMetrics";
-              type = "prometheus";
-              access = "proxy";
-              isDefault = true;
-              url = "http://localhost${config.services.victoriametrics.listenAddress}";
-            }
-          ];
-        };
-        dashboards.settings.providers =
-          let
-            makeReadOnly = x: lib.pipe x [
-              builtins.readFile
-              builtins.fromJSON
-              (x: x // { editable = false; })
-              builtins.toJSON
-              (pkgs.writeText (builtins.baseNameOf x))
-            ];
-          in
-          [
-            {
-              name = "PostgreSQL";
-              type = "file";
-              url = "https://grafana.com/api/dashboards/9628/revisions/7/download";
-              options.path = makeReadOnly ./dashboards/postgres.json;
-            }
-            {
-              name = "Node";
-              type = "file";
-              url = "https://raw.githubusercontent.com/rfmoz/grafana-dashboards/master/prometheus/node-exporter-full.json";
-              options.path = makeReadOnly ./dashboards/node.json;
-            }
-            {
-              name = "Nginx";
-              type = "file";
-              url = "https://raw.githubusercontent.com/nginxinc/nginx-prometheus-exporter/main/grafana/dashboard.json";
-              options.path = makeReadOnly ./dashboards/nginx.json;
-            }
-            {
-              name = "Redis";
-              type = "file";
-              url = "https://raw.githubusercontent.com/oliver006/redis_exporter/master/contrib/grafana_prometheus_redis_dashboard.json";
-              options.path = ./dashboards/redis.json;
-            }
-
-          ];
-
-      };
+      retentionPeriod = 12;
 
     };
-
-
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -187,17 +120,16 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
-        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
+
     ### firewall config
 
-    # networking.firewall = mkIf cfg.openFirewall {
-    #   allowedTCPPorts = [ port ];
-    #   allowedUDPPorts = [ port ];
-    # };
+    networking.firewall ={
+      allowedTCPPorts = [ port ];
+      # allowedUDPPorts = [ port ];
+    };
 
     ### backups
     warnings = [
