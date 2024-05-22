@@ -150,6 +150,12 @@ in
               url = "https://raw.githubusercontent.com/oliver006/redis_exporter/master/contrib/grafana_prometheus_redis_dashboard.json";
               options.path = ./dashboards/redis.json;
             }
+            {
+              name = "Gatus";
+              type = "file";
+              url = "https://github.com/TwiN/gatus/blob/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json";
+              options.path = ./dashboards/gatus.json;
+            }
 
           ];
 

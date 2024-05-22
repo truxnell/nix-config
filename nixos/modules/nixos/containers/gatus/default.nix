@@ -94,7 +94,6 @@ in
       restartUnits = [ "podman-${app}.service" ];
     };
 
-
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "${user}:${group}";
@@ -113,6 +112,22 @@ in
       locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
+      };
+    };
+
+    services.vmagent = {
+      prometheusConfig = {
+        scrape_configs = [
+          {
+            job_name = "gatus";
+            # scrape_timeout = "40s";
+            static_configs = [
+              {
+                targets = [ "https://${app}.${config.mySystem.domain}" ];
+              }
+            ];
+          }
+        ];
       };
     };
 
