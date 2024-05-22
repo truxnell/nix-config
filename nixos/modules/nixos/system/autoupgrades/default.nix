@@ -22,7 +22,7 @@ with lib;
     flags = [
       "-L" # print build logs
     ];
-    dates = cfg.dates;
+    inherit (cfg) dates;
   };
 
 }

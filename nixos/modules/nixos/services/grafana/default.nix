@@ -92,7 +92,7 @@ in
           http_port = port;
           http_addr = "127.0.0.1";
           enable_gzip = true;
-          domain = config.networking.domain;
+          inherit (config.networking) domain;
         };
 
         analytics = {

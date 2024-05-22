@@ -81,7 +81,7 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder;}];
+      directories = [{ directory = appFolder; }];
     };
 
 
@@ -126,7 +126,7 @@ in
 
     ### firewall config
 
-    networking.firewall ={
+    networking.firewall = {
       allowedTCPPorts = [ port ];
       # allowedUDPPorts = [ port ];
     };
