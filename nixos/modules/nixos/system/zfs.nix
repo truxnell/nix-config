@@ -39,6 +39,21 @@ with lib;
       trim.enable = true;
     };
 
+    services.prometheus.exporters.zfs.enable = true;
+
+    services.vmagent = {
+      prometheusConfig = {
+        scrape_configs = [{
+          job_name = "zfs";
+          scrape_interval = "10s";
+          static_configs = [
+            { targets = [ "127.0.0.1:${builtins.toString config.services.prometheus.exporters.zfs.port}" ]; }
+          ];
+        }];
+      };
+    };
+
+
     # Pushover notifications
     environment.systemPackages = with pkgs; [
       busybox

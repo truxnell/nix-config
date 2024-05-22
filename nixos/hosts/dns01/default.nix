@@ -28,6 +28,9 @@
       local.enable = false;
       remote.enable = false;
     };
+  mySystem.system.autoUpgrade = {
+    enable = true;
+  };
 
 
   networking.hostName = "dns01"; # Define your hostname.

@@ -6,12 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "prometheus";
+  app = "thelounge";
   category = "services";
-  description = "Metric ingestion and storage";
+  description = "IRC client";
+  # image = "";
   user = app; #string
   group = app; #string
-  port = 9001; #int
+  port = 9000; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -28,6 +29,12 @@ in
           description = "Enable gatus monitoring";
           default = true;
         };
+      prometheus = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable prometheus scraping";
+          default = true;
+        };
       addToDNS = mkOption
         {
           type = lib.types.bool;
@@ -40,12 +47,13 @@ in
           description = "Development instance";
           default = false;
         };
-      backups = mkOption
+      backup = mkOption
         {
           type = lib.types.bool;
-          description = "Enable local backups";
+          description = "Enable backups";
           default = true;
         };
+
 
 
     };
@@ -62,14 +70,51 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-    ## service
-    # ref: https://github.com/nmasur/dotfiles/blob/aea33592361215356c0fbe5e9d533906f0a023cc/modules/nixos/services/prometheus.nix#L19
-    # https://github.com/ryan4yin/nix-config/blob/bec52f9d60f493d8bb31f298699dfc99eaf18dcc/hosts/12kingdoms-rakushun/grafana/default.nix#L42
 
-    services.prometheus = {
-      enable = true;
-      port = 9001;
+    # Folder perms - only for containers
+    # systemd.tmpfiles.rules = [
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
+    # ];
+
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
+
+
+    ## service
+    services.thelounge = {
+      enable = true;
+      plugins = with pkgs.theLoungePlugins; [
+        themes.dracula
+      ];
+      extraConfig = {
+        leaveMessage = "Aight im out";
+        reverseProxy = true;
+        maxHistory = 10000;
+        prefetch = true;
+        defaults = {
+          name = "Libera.Chat";
+          host = "irc.libera.chat";
+          port = 6697;
+          password = "";
+          tls = true;
+          rejectUnauthorized = true;
+          nick = "thelounge%%";
+          username = "thelounge";
+          realname = "";
+          join = "#thelounge";
+          leaveMessage = "";
+        };
+        fileUpload = {
+          enable = false; # TODO see if we can put this folder on s3 or soemthing?
+          maxFileSize = 10240;
+          baseUrl = null;
+        };
+
+      };
+    };
+
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -95,10 +140,11 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-      useACMEHost = config.networking.domain;
       forceSSL = true;
+      useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
@@ -111,17 +157,21 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
-        "WARNING: Local backups for ${app} are disabled!")
+      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
+        "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = config.lib.mySystem.mkRestic
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
+      });
 
-      };
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
 
 
 

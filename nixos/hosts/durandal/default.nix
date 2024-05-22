@@ -15,8 +15,8 @@
     postgresql =
       { enable = true; backup = false; };
     # calibre-web = { enable = true; backup = false; dev = true; };
-    invidious = { enable = true; backup = false; dev = true; };
-
+    # victoriametrics = { enable = true; backup = false; dev = true; };
+    # grafana = { enable = true; backup = false; dev = true; };
 
   };
   # mySystem.containers.maloja = { enable = true; backup = false; dev = true; };

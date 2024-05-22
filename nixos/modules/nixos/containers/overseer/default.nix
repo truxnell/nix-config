@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "grafana";
+  app = "overseer";
   category = "services";
-  description = "Metrics graphing";
-  # image = "";
-  user = app; #string
-  group = app; #string
-  port = 3090; #int
+  description = "Media requests";
+  image = "ghcr.io/sct/overseerr:1.33.2@sha256:714ea6db2bc007a2262d112bef7eec74972eb33d9c72bddb9cbd98b8742de950";
+  user = "568"; #string
+  group = "568"; #string
+  port = 5055; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -72,91 +72,22 @@ in
 
 
     # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
-    ## service
-    services.grafana = {
-
-      enable = true;
-      settings = {
-        database.wal = true;
-
-        server = {
-          http_port = port;
-          http_addr = "127.0.0.1";
-          enable_gzip = true;
-          inherit (config.networking) domain;
-        };
-
-        analytics = {
-          check_for_updates = false;
-          feedback_links_enabled = false;
-          reporting_enabled = false;
-        };
-      };
-      provision = {
-        enable = true;
-        datasources.settings = {
-          datasources = [
-            {
-              uid = "victoria-metrics";
-              name = "VictoriaMetrics";
-              type = "prometheus";
-              access = "proxy";
-              isDefault = true;
-              url = "http://localhost${config.services.victoriametrics.listenAddress}";
-            }
-          ];
-        };
-        dashboards.settings.providers =
-          let
-            makeReadOnly = x: lib.pipe x [
-              builtins.readFile
-              builtins.fromJSON
-              (x: x // { editable = false; })
-              builtins.toJSON
-              (pkgs.writeText (builtins.baseNameOf x))
-            ];
-          in
-          [
-            {
-              name = "PostgreSQL";
-              type = "file";
-              url = "https://grafana.com/api/dashboards/9628/revisions/7/download";
-              options.path = makeReadOnly ./dashboards/postgres.json;
-            }
-            {
-              name = "Node";
-              type = "file";
-              url = "https://raw.githubusercontent.com/rfmoz/grafana-dashboards/master/prometheus/node-exporter-full.json";
-              options.path = makeReadOnly ./dashboards/node.json;
-            }
-            {
-              name = "Nginx";
-              type = "file";
-              url = "https://raw.githubusercontent.com/nginxinc/nginx-prometheus-exporter/main/grafana/dashboard.json";
-              options.path = makeReadOnly ./dashboards/nginx.json;
-            }
-            {
-              name = "Redis";
-              type = "file";
-              url = "https://raw.githubusercontent.com/oliver006/redis_exporter/master/contrib/grafana_prometheus_redis_dashboard.json";
-              options.path = ./dashboards/redis.json;
-            }
-
-          ];
-
-      };
-
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+      env = { LOG_LEVEL = "info"; };
+      volumes = [
+        "${appFolder}:/app/config:rw"
+      ];
     };
-
 
 
     # homepage integration
@@ -187,7 +118,6 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
         extraConfig = "resolver 10.88.0.1;";
       };
     };
