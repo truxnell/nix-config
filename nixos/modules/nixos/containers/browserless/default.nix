@@ -9,7 +9,7 @@ let
   app = "browserless-chrome";
   category = "services";
   description = "docker based browsers for automation";
-  image = "ghcr.io/browserless/chromium:v2.11.0@sha256:ffb9406c44f408ac72c5bd6f95e9c09ecc893309a28da4abae20f4018ffe1d0f";
+  image = "ghcr.io/browserless/chromium:v2.12.0@sha256:93868a5716493a79cae44dc02c21d64db2f0453df133ff952c6ff4c198c02dd1";
   user = "kah"; #string
   group = "kah"; #string
   port = 3000; #int
