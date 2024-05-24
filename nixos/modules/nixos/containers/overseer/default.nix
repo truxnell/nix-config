@@ -6,7 +6,7 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "overseer";
+  app = "overseerr";
   category = "services";
   description = "Media requests";
   image = "ghcr.io/sct/overseerr:1.33.2@sha256:714ea6db2bc007a2262d112bef7eec74972eb33d9c72bddb9cbd98b8742de950";
@@ -117,7 +117,7 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
       };
     };

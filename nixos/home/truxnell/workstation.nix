@@ -105,6 +105,9 @@ with config;
 
         brightnessctl
 
+        # office
+        onlyoffice-bin
+        # libreoffice-bin
 
 
       ];

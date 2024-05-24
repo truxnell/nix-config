@@ -9,7 +9,7 @@ let
   app = "browserless-chrome";
   category = "services";
   description = "docker based browsers for automation";
-  image = "ghcr.io/browserless/chromium:v2.11.0@sha256:ffb9406c44f408ac72c5bd6f95e9c09ecc893309a28da4abae20f4018ffe1d0f";
+  image = "ghcr.io/browserless/chrome";
   user = "kah"; #string
   group = "kah"; #string
   port = 3000; #int
@@ -93,14 +93,23 @@ in
       user = "0"; #:()
       group = "0"; #:()
       env = {
-        TIMEOUT = "10000";
-        CONCURRENT = "10";
+        TIMEOUT = "90000";
+        CONCURRENT = "15";
         EXIT_ON_HEALTH_FAILURE = "true";
         PRE_REQUEST_HEALTH_CHECK = "true";
+        SCREEN_WIDTH = "1920";
+        SCREEN_HEIGHT = "1024";
+        SCREEN_DEPTH = "16";
+        ENABLE_DEBUGGER = "false";
+        PREBOOT_CHROME = "true";
+        CHROME_REFRESH_TIME = "600000";
+        DEFAULT_BLOCK_ADS = "true";
+        DEFAULT_STEALTH = "true";
+        CORS = "true";
       };
-      envFiles = [
-        config.sops.secrets."${category}/${app}/env".path
-      ];
+      # envFiles = [
+      #   config.sops.secrets."${category}/${app}/env".path
+      # ];
 
     };
 

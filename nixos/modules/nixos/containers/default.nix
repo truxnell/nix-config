@@ -21,5 +21,6 @@
     ./rxresume
     ./browserless
     ./overseer
+    ./changedetection
   ];
 }
