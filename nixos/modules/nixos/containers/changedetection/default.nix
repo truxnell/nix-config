@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "radicale";
+  app = "changedetection";
   category = "services";
-  description = "Contact/Calendar managment";
-  #   image = "%{image}";
-  user = app; #string
-  group = app; #string
-  port = 5232; #int
+  description = "Website monitoring";
+  image = "ghcr.io/dgtlmoon/changedetection.io:0.45.23@sha256:be854dbcb2356cefc7c1bf1000f977af63ad7411454004e4a13a8c7f8469e6c4";
+  user = "568"; #string
+  group = "568"; #string
+  port = 5000; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -47,12 +47,13 @@ in
           description = "Development instance";
           default = false;
         };
-      backups = mkOption
+      backup = mkOption
         {
           type = lib.types.bool;
-          description = "Enable local backups";
+          description = "Enable backups";
           default = true;
         };
+
 
 
     };
@@ -60,42 +61,47 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."${category}/${app}/htpasswd" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
-      restartUnits = [ "${app}.service" ];
-    };
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
 
     users.users.truxnell.extraGroups = [ group ];
 
+
+    # Folder perms - only for containers
+    # systemd.tmpfiles.rules = [
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
+    # ];
+
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      hideMounts = true;
-      directories = [ "/var/lib/radicale/" ];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
-    ## service
-    services.radicale = {
-      enable = true;
-      settings = {
-        server.hosts = [ "0.0.0.0:${builtins.toString port}" ];
-        auth = {
-          type = "htpasswd";
-          htpasswd_filename = config.sops.secrets."${category}/${app}/htpasswd".path;
-          htpasswd_encryption = "plain";
-          realm = "Radicale - Password Required";
-        };
-        storage.filesystem_folder = "/var/lib/radicale/collections"; # TODO impermance/move?
 
+    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+      inherit app image user group;
+      env = {
+        PORT = "5000";
+        USE_X_SETTINGS = "1";
+        PLAYWRIGHT_DRIVER_URL = "ws://browserless-chrome:3000/chrome?stealth=1&--disable-web-security=true&blockAds=true";
+        PUID = user;
+        PGID = group;
       };
+      volumes = [
+        "${appFolder}:/datastore:rw"
+      ];
     };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";
-          href = "https://${ url }";
+          href = "https://${url}";
           inherit description;
         };
       }
@@ -114,10 +120,12 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-      useACMEHost = config.networking.domain;
       forceSSL = true;
+      useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
+        proxyWebsockets = true;
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
@@ -130,17 +138,22 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
+      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backups (config.lib.mySystem.mkRestic
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
       {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-
       });
+
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
+
 
 
   };
