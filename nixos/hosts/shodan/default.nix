@@ -42,12 +42,16 @@
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
-    victoriametrics.enable = true;
-    grafana.enable = true;
-
     changedetection.enable = true;
 
+    # monitoring
+    victoriametrics.enable = true;
+    grafana.enable = true;
+    nextdns-exporter.enable = true;
+    unpoller.enable = true;
+
   };
+
   mySystem.containers = {
     calibre.enable = true;
     ecowitt2mqtt.enable = true;
