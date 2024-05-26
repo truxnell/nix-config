@@ -65,12 +65,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."services/alertmanager" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -89,9 +89,72 @@ in
     services.victoriametrics = {
       enable = true;
       retentionPeriod = 12;
-
     };
 
+    services.prometheus.alertmanager = {
+      enable = true;
+      environmentFile = config.sops.secrets."services/alertmanager".path;
+      webExternalUrl = "https://alertmanager.${config.networking.domain}";
+      configuration = {
+        route = {
+          receiver = "default";
+          group_by = [ "alertname" "job" ];
+          group_wait = "5m";
+          group_interval = "1m";
+          repeat_interval = "24h";
+          routes = [{ }
+            {
+              group_by = [ "instance" ];
+              group_wait = "30s";
+              group_interval = "2m";
+              repeat_interval = "2h";
+              receiver = "all";
+            }];
+        };
+        receivers = [
+          {
+            # route that goes nowhere
+            # to suppress always-on watchdog alert
+            name = "null";
+          }
+          {
+            name = "pushover";
+            pushover_configs = [{
+              user_key = "$PUSHOVER_USER_KEY";
+              token = "$PUSHOVER_TOKEN";
+              priority = "{{ if eq .Status " firing " }}1{{ else }}0{{ end }}";
+              title = "{{ .CommonLabels.alertname }} [{{ .Status | toUpper }}{{ if eq .Status " firing " }}:{{ .Alerts.Firing | len }}{{ end }}]";
+              message = ''
+                    {{- range .Alerts }}
+                  {{- if ne .Annotations.description "" }}
+                    {{ .Annotations.description }}
+                  {{- else if ne .Annotations.summary "" }}
+                    {{ .Annotations.summary }}
+                  {{- else if ne .Annotations.message "" }}
+                    {{ .Annotations.message }}
+                  {{- else }}
+                    Alert description not available
+                  {{- end }}
+                  {{- if gt (len .Labels.SortedPairs) 0 }}
+                    <small>
+                    {{- range .Labels.SortedPairs }}
+                      <b>{{ .Name }}:</b> {{ .Value }}
+                    {{- end }}
+                    </small>
+                  {{- end }}
+                {{- end }}
+              '';
+              send_resolved = true;
+              html = true;
+
+            }];
+          }
+          {
+            name = "default";
+          }
+        ];
+      };
+    };
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
