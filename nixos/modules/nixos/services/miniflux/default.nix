@@ -18,6 +18,11 @@ let
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
   databaseUrl = "user=miniflux host=/run/postgresql dbname=miniflux";
+
+  miniflux-reset-feed-errors =
+    pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
+      ${config.services.miniflux.package}/bin/miniflux -reset-feed-errors
+    '';
 in
 {
   options.mySystem.${category}.${app} =
@@ -96,16 +101,18 @@ in
     systemd.services.miniflux-reset-feed-errors = {
       description = "Miniflux reset feed errors";
       wantedBy = [ "multi-user.target" ];
+      requires = [ "${app}.service" ];
       after = [ "network.target" "${app}.service" ];
       environment.DATABASE_URL = databaseUrl;
       startAt = "daily";
       serviceConfig = {
         Type = "oneshot";
+        User = "miniflux";
         DynamicUser = true;
         RuntimeDirectory = "miniflux"; # Creates /run/miniflux.
         EnvironmentFile = config.sops.secrets."${category}/${app}/env".path;
-        ExecStart = pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
-          ${config.services.miniflux.package}/bin/miniflux -reset-feed-errors
+        ExecStart = ''
+          ${miniflux-reset-feed-errors}/bin/miniflux-reset-feed-errors
         '';
       };
     };
