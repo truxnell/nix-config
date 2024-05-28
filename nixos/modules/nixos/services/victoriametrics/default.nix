@@ -14,12 +14,18 @@ let
   user = app; #string
   group = app; #string
   port = 8428; #int
+  portAM = 9093; #int
+  portVAM = 8880; #int
+
   appFolder = "/var/lib/private/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  hostVmAgent = "vmagent" + (if cfg.dev then "-dev" else "");
-  urlVmAgent = "${hostVmAgent}.${config.networking.domain}";
+  hostAM = "alertmanager" + (if cfg.dev then "-dev" else "");
+  urlAM = "${hostAM}.${config.networking.domain}";
+  hostVAM = "vmalert" + (if cfg.dev then "-dev" else "");
+  urlVAM = "${hostVAM}.${config.networking.domain}";
+
 
 in
 {
@@ -65,7 +71,7 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."services/alertmanager" = {
+    sops.secrets."services/alertmanager/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
       group = group;
@@ -91,41 +97,42 @@ in
       retentionPeriod = 12;
     };
 
+    services.vmalert = {
+      enable = true;
+      settings = {
+        "datasource.url" = "http://localhost:${builtins.toString port}";
+        "notifier.url" = [ "http://localhost:${builtins.toString portAM}" ];
+      };
+      rules = {
+        groups = [{
+          name = "alerting-rules";
+          rules = import ./alert-rules.nix { inherit lib; };
+        }];
+      };
+    };
+
     services.prometheus.alertmanager = {
       enable = true;
-      environmentFile = config.sops.secrets."services/alertmanager".path;
+      environmentFile = config.sops.secrets."services/alertmanager/env".path;
       webExternalUrl = "https://alertmanager.${config.networking.domain}";
       configuration = {
         route = {
-          receiver = "default";
+          receiver = "pushover";
           group_by = [ "alertname" "job" ];
           group_wait = "5m";
           group_interval = "1m";
           repeat_interval = "24h";
-          routes = [{ }
-            {
-              group_by = [ "instance" ];
-              group_wait = "30s";
-              group_interval = "2m";
-              repeat_interval = "2h";
-              receiver = "all";
-            }];
         };
         receivers = [
-          {
-            # route that goes nowhere
-            # to suppress always-on watchdog alert
-            name = "null";
-          }
           {
             name = "pushover";
             pushover_configs = [{
               user_key = "$PUSHOVER_USER_KEY";
               token = "$PUSHOVER_TOKEN";
-              priority = "{{ if eq .Status " firing " }}1{{ else }}0{{ end }}";
-              title = "{{ .CommonLabels.alertname }} [{{ .Status | toUpper }}{{ if eq .Status " firing " }}:{{ .Alerts.Firing | len }}{{ end }}]";
+              priority = ''{{ if eq .Status " firing " }}1{{ else }}0{{ end }}'';
+              title = ''{{ .CommonLabels.alertname }} [{{ .Status | toUpper }}{{ if eq .Status " firing " }}:{{ .Alerts.Firing | len }}{{ end }}]'';
               message = ''
-                    {{- range .Alerts }}
+                {{- range .Alerts }}
                   {{- if ne .Annotations.description "" }}
                     {{ .Annotations.description }}
                   {{- else if ne .Annotations.summary "" }}
@@ -178,6 +185,7 @@ in
     ];
 
     ### Ingress
+    # victoriametrics
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
@@ -185,6 +193,26 @@ in
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
+
+    # alertmanager
+    services.nginx.virtualHosts.${urlAM} = {
+      forceSSL = true;
+      useACMEHost = config.networking.domain;
+      locations."^~ /" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString portAM}";
+      };
+    };
+
+    # vmalert
+    services.nginx.virtualHosts.${urlVAM} = {
+      forceSSL = true;
+      useACMEHost = config.networking.domain;
+      locations."^~ /" = {
+        proxyPass = "http://127.0.0.1:${builtins.toString portVAM}";
+      };
+    };
+
+
 
 
     ### firewall config
