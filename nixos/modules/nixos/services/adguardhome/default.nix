@@ -35,11 +35,11 @@ in
 
     services.adguardhome = {
       enable = true;
+      host = "0.0.0.0";
+      port = port_webui;
 
       mutableSettings = false;
       settings = {
-        bind_host = "0.0.0.0";
-        bind_port = port_webui;
         schema_version = yaml_schema_version; # Just to be cautious, defualt is pkgs.adguardhome.schema_version.
 
         users = [{
