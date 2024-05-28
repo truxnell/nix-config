@@ -93,22 +93,22 @@ in
     };
 
     # automatically reset feed errors regular
-    # systemd.services.miniflux-reset-feed-errors = {
-    #   description = "Miniflux reset feed errors";
-    #   wantedBy = [ "multi-user.target" ];
-    #   after = [ "network.target" "${app}.service" ];
-    #   environment.DATABASE_URL = databaseUrl;
-    #   startAt = "00/4:00"; # Every four hours.
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     DynamicUser = true;
-    #     RuntimeDirectory = "miniflux"; # Creates /run/miniflux.
-    ##     EnvironmentFile = cfg.envFilePath;
-    #     ExecStart = pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
-    #       ${cfg.package}/bin/miniflux -reset-feed-errors
-    #     '';
-    #   };
-    # };
+    systemd.services.miniflux-reset-feed-errors = {
+      description = "Miniflux reset feed errors";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" "${app}.service" ];
+      environment.DATABASE_URL = databaseUrl;
+      startAt = "daily";
+      serviceConfig = {
+        Type = "oneshot";
+        DynamicUser = true;
+        RuntimeDirectory = "miniflux"; # Creates /run/miniflux.
+        EnvironmentFile = config.sops.secrets."${category}/${app}/env".path;
+        ExecStart = pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
+          ${config.services.miniflux.package}/bin/miniflux -reset-feed-errors
+        '';
+      };
+    };
 
     # homepage integration
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
