@@ -52,7 +52,7 @@ in
 
     mySystem.services.gatus.monitors = [{
 
-      name = app;
+      name = "${app}-${config.networking.hostName}";
       group = "services";
       url = "https://${url}";
       interval = "1m";

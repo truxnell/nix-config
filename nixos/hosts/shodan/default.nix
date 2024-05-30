@@ -15,6 +15,8 @@
     postgresql.enable = true;
     mariadb.enable = true;
 
+    frigate.enable = true;
+
     nginx.enable = true;
 
     gatus.enable = true;

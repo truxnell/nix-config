@@ -29,22 +29,22 @@ in
       # Only allow PFS-enabled ciphers with AES256
       sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
 
-      appendHttpConfig = ''
-        # Minimize information leaked to other domains
-        add_header 'Referrer-Policy' 'origin-when-cross-origin';
+      # appendHttpConfig = ''
+      #   # Minimize information leaked to other domains
+      #   add_header 'Referrer-Policy' 'origin-when-cross-origin';
 
-        # Disable embedding as a frame
-        add_header X-Frame-Options SAMEORIGIN always;
+      #   # Disable embedding as a frame
+      #   add_header X-Frame-Options SAMEORIGIN always;
 
-        # Prevent injection of code in other mime types (XSS Attacks)
-        add_header X-Content-Type-Options nosniff;
+      #   # Prevent injection of code in other mime types (XSS Attacks)
+      #   add_header X-Content-Type-Options nosniff;
 
 
-      '';
-      # TODO add cloudflre IP's when/if I ingest internally.
-      commonHttpConfig = ''
-        add_header X-Clacks-Overhead "GNU Terry Pratchett";
-      '';
+      # '';
+      # # TODO add cloudflre IP's when/if I ingest internally.
+      # commonHttpConfig = ''
+      #   add_header X-Clacks-Overhead "GNU Terry Pratchett";
+      # '';
       # provide default host with returning error
       # else nginx returns the first server
       # in the config file... >:S
