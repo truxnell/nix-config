@@ -93,7 +93,7 @@ in
         DATABASE_URL = databaseUrl;
         RUN_MIGRATIONS = "1";
         CREATE_ADMIN = "1";
-        YOUTUBE_EMBED_URL_OVERRIDE = "https://invidious.${config.networking.domain}"; #TODO only if invidious enabled on machine somewhere
+        YOUTUBE_EMBED_URL_OVERRIDE = "https://invidious.${config.networking.domain}/"; #TODO only if invidious enabled on machine somewhere
       };
     };
 
