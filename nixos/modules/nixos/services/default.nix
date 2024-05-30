@@ -37,5 +37,9 @@
     ./invidious
     ./thelounge
     ./victoriametrics
+    ./unpoller
+    ./readarr
+    ./lidarr
+    ./prowlarr
   ];
 }

@@ -48,9 +48,12 @@ with config;
     smartd.enable = true;
 
     # required for yubikey
-    udev.packages = [ pkgs.yubikey-personalization ];
+    udev.packages = [ pkgs.yubikey-personalization pkgs.android-udev-rules ];
     pcscd.enable = true;
   };
+
+  users.users.truxnell.extraGroups = [ "adbusers" ];
+
 
   hardware = {
     enableAllFirmware = true;

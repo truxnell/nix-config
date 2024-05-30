@@ -6,23 +6,17 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "miniflux";
+  app = "lidarr";
   category = "services";
-  description = "Minimalist feed reader";
-  # image = "%{image}";
-  user = app; #string
-  group = app; #string
-  port = 8072; #int
+  description = "Music management";
+  # image = "";
+  inherit (config.services.lidarr) user;#string
+  inherit (config.services.lidarr) group;#string
+  port = 8686; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  databaseUrl = "user=miniflux host=/run/postgresql dbname=miniflux";
-
-  miniflux-reset-feed-errors =
-    pkgs.writeShellScriptBin "miniflux-reset-feed-errors" ''
-      ${config.services.miniflux.package}/bin/miniflux -reset-feed-errors
-    '';
 in
 {
   options.mySystem.${category}.${app} =
@@ -60,6 +54,8 @@ in
           default = true;
         };
 
+
+
     };
 
   config = mkIf cfg.enable {
@@ -73,82 +69,37 @@ in
     };
 
     users.users.truxnell.extraGroups = [ group ];
-    users.users.miniflux = {
-      isSystemUser = true;
-      group = "miniflux";
-    };
-
-    users.groups.miniflux = { };
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
     ## service
-    services.miniflux = {
+    services.lidarr = {
       enable = true;
-      adminCredentialsFile = config.sops.secrets."${category}/${app}/env".path;
-      config = {
-        LISTEN_ADDR = "localhost:${builtins.toString port}";
-        DATABASE_URL = databaseUrl;
-        RUN_MIGRATIONS = "1";
-        CREATE_ADMIN = "1";
-        YOUTUBE_EMBED_URL_OVERRIDE = "https://invidious.${config.networking.domain}"; #TODO only if invidious enabled on machine somewhere
-      };
+      dataDir = appFolder;
+      package = pkgs.unstable.lidarr; #TODO move to stable 24.05
     };
 
-    # automatically reset feed errors regular
-    systemd.services.miniflux-reset-feed-errors = {
-      description = "Miniflux reset feed errors";
-      wantedBy = [ "multi-user.target" ];
-      requires = [ "${app}.service" ];
-      after = [ "network.target" "${app}.service" ];
-      environment.DATABASE_URL = databaseUrl;
-      startAt = "daily";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "miniflux";
-        DynamicUser = true;
-        RuntimeDirectory = "miniflux"; # Creates /run/miniflux.
-        EnvironmentFile = config.sops.secrets."${category}/${app}/env".path;
-        ExecStart = ''
-          ${miniflux-reset-feed-errors}/bin/miniflux-reset-feed-errors
-        '';
-      };
-    };
+
 
     # homepage integration
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
+    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
       {
         ${app} = {
           icon = "${app}.svg";
           href = "https://${url}";
           inherit description;
-          widget = {
-            type = "miniflux";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_MINIFLUX_API_KEY}}";
-          };
         };
       }
     ];
-
-    # ensure postgresql setup
-
-    services.postgresql = {
-      ensureDatabases = [ app ];
-      ensureUsers = [{
-        name = app;
-        ensureDBOwnership = true;
-      }];
-    };
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings";
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -171,27 +122,22 @@ in
     # };
 
     ### backups
-    ### backups
     warnings = [
       (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
         "WARNING: Backups for ${app} are disabled!")
-      (mkIf (!config.services.postgresql.enable)
-        "WARNING: Postgres is not enabled on host for ${app}!")
     ];
 
-
-    # services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
-    #   });
-
-    services.postgresqlBackup = mkIf
-      cfg.backup
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
       {
-        databases = [ app ];
-      };
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
+      });
+
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
 
 
 
