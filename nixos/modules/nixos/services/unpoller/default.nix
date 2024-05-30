@@ -64,7 +64,7 @@ in
     sops.secrets."${category}/${app}/pass" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 

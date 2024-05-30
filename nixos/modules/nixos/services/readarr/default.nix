@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Book managment";
   # image = "";
-  user = config.services.readarr.user; #string
-  group = config.services.readarr.group; #string
+  inherit (config.services.readarr) user;#string
+  inherit (config.services.readarr) group;#string
   port = 8787; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -62,7 +62,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 

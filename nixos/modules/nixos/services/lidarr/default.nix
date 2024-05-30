@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Music management";
   # image = "";
-  user = config.services.lidarr.user; #string
-  group = config.services.lidarr.group; #string
+  inherit (config.services.lidarr) user;#string
+  inherit (config.services.lidarr) group;#string
   port = 8686; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -64,7 +64,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 

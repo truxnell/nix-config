@@ -74,7 +74,7 @@ in
     sops.secrets."services/alertmanager/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 
