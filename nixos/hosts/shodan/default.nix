@@ -11,7 +11,9 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
+    # databases
     postgresql.enable = true;
+    mariadb.enable = true;
 
     nginx.enable = true;
 
@@ -22,6 +24,7 @@
     overseerr.enable = true;
     plex.enable = true;
     tautulli.enable = true;
+
     factorio.freight-forwarding.enable = true; # the factory must grow
 
     searxng.enable = true;

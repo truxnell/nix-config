@@ -41,5 +41,6 @@
     ./readarr
     ./lidarr
     ./prowlarr
+    ./mariadb
   ];
 }
