@@ -85,6 +85,10 @@ in
     services.grafana = {
 
       enable = true;
+      declarativePlugins = with pkgs.grafanaPlugins; [
+        grafana-clock-panel
+      ];
+
       settings = {
         database.wal = true;
 
@@ -156,6 +160,65 @@ in
               url = "https://github.com/TwiN/gatus/blob/master/.examples/docker-compose-grafana-prometheus/grafana/provisioning/dashboards/gatus.json";
               options.path = ./dashboards/gatus.json;
             }
+            # Unifi
+            # ref: https://unpoller.com/docs/install/grafana
+            # TODO: can we enabled/disable these based on unpoller setup cross/device?
+            {
+              name = "Unifi-Clients";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/11310/revisions/5/download";
+              options.path = ./dashboards/unifi-clients.json;
+            }
+            # {
+            #   name = "Unifi-DPI";
+            #   type = "file";
+            #   url = "https://grafana.com/api/dashboards/11310/revisions/5/download";
+            #   options.path = ./dashboards/unifi-dpi.json;
+            # }
+            # {
+            #   name = "Unifi-sites";
+            #   type = "file";
+            #   url = "https://grafana.com/api/dashboards/11311/revisions/5/download";
+            #   options.path = ./dashboards/unifi-sites.json;
+            # }
+            {
+              name = "Unifi-UAP";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/undefined/revisions/0/download";
+              options.path = ./dashboards/unifi-uap.json;
+            }
+            {
+              name = "Unifi-USG";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/undefined/revisions/0/download";
+              options.path = ./dashboards/unifi-usg.json;
+            }
+            {
+              name = "Unifi-USW";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/undefined/revisions/0/download";
+              options.path = ./dashboards/unifi-usw.json;
+            }
+            {
+              name = "Unifi-clients";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/11315/revisions/9/download";
+              options.path = ./dashboards/unifi-clients.json;
+            }
+            {
+              name = "smartctl";
+              type = "file";
+              url = "https://grafana.com/api/dashboards/20204/revisions/1/download";
+              options.path = ./dashboards/smartctl.json;
+            }
+            {
+              name = "nextdns";
+              type = "file";
+              url = "https://github.com/truxnell/home-cluster/blob/0f7b47a9fec9419a4c5d6b5c4a4ae219ad342c1c/kubernetes/hegira/apps/monitoring/nextdns-exporter/trusted/externalsecret.yaml";
+              options.path = ./dashboards/nextdns.json;
+            }
+
+
 
           ];
 

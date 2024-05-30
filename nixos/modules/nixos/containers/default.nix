@@ -22,5 +22,7 @@
     ./browserless
     ./overseer
     ./changedetection
+    ./nextdns-exporter
+
   ];
 }

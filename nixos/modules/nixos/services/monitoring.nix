@@ -73,7 +73,7 @@ in
           }
           {
             job_name = "vmagent";
-            scrape_interval = "10s";
+            # scrape_interval = "10s";
             static_configs = [
               { targets = [ "127.0.0.1:8429" ]; }
             ];

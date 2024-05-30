@@ -2,8 +2,8 @@
   imports = [
     # ./sonarr
     # ./radarr
-    ./lidarr
-    ./readarr
-    ./prowlarr
+    # ./lidarr
+    # ./readarr
+    # ./prowlarr
   ];
 }
