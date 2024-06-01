@@ -9,13 +9,7 @@ let
   app = "postgresql";
   category = "services";
   description = "Postgres RDMS";
-  # user = "%{user kah}"; #string
-  # group = "%{group kah}"; #string
-  # port = 1234; #int
   appFolder = "/var/lib/${app}";
-  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  # host = "${app}" + (if cfg.dev then "-dev" else "");
-  # url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =
@@ -46,6 +40,11 @@ in
     #   group = group;
     #   restartUnits = [ "${app}.service" ];
     # };
+
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = "postgres"; group = "postgres"; mode = "750"; }];
+    };
+
 
     services.postgresql = {
       enable = true;
