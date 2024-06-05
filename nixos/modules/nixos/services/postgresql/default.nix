@@ -9,7 +9,7 @@ let
   app = "postgresql";
   category = "services";
   description = "Postgres RDMS";
-  appFolder = "/var/lib/${app}";
+  appFolder = config.services.postgresql.dataDir;
 in
 {
   options.mySystem.${category}.${app} =
