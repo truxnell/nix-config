@@ -21,7 +21,6 @@
     ./blocky
     ./openvscode-server
     ./grafana
-    ./prometheus
     ./radicale
     ./node-red
     ./nginx
@@ -35,5 +34,14 @@
     ./radarr
     ./sabnzbd
     ./minio
+    ./invidious
+    ./thelounge
+    ./victoriametrics
+    ./unpoller
+    ./readarr
+    ./lidarr
+    ./prowlarr
+    ./mariadb
+    ./frigate
   ];
 }

@@ -43,7 +43,7 @@ with lib;
       directories =
         [
           "/var/log" # persist logs between reboots for debugging
-          "/var/lib/cache" # cache files (restic, nginx, contaienrs)
+          "/var/lib/containers" # cache files (restic, nginx, contaienrs)
           "/var/lib/nixos" # nixos state
 
         ];

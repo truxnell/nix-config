@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 let
   cfg = config.mySystem.services.qbittorrent;
-  image = "ghcr.io/buroa/qbtools:v0.15.0@sha256:067a68a0c7b2f522b7527e7bb48cf18614d46c16fcbcd16561d1bbc7f7f983fd";
+  image = "ghcr.io/buroa/qbtools:v0.15.3@sha256:68c211301e88ae942629cf05793f860675467aac5cdc7b7500b394f294f62eac";
 
 in
 with lib;
@@ -87,6 +87,24 @@ with lib;
         startAt = "*-*-* 05:10:00";
 
       };
+
+    systemd.services."qbtools-reannounce" =
+
+      {
+        script = ''
+          ${pkgs.podman}/bin/podman run --rm \
+          -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
+          ${image} \
+          reannounce \
+          --process-seeding \
+          --server https://qbittorrent.trux.dev  \
+          --port 443  \
+          --config /config/config.yaml
+        '';
+        path = [ pkgs.podman ];
+        startAt = "hourly";
+      };
+
 
   };
 }

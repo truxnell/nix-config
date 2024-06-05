@@ -20,5 +20,9 @@
     ./immich
     ./rxresume
     ./browserless
+    ./overseer
+    ./changedetection
+    ./nextdns-exporter
+
   ];
 }

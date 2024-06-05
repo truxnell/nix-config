@@ -10,8 +10,8 @@ let
   category = "services";
   description = "document managment";
   # image = "";
-  inherit (config.services.paperless) user;#string
-  group = app; #string
+  user = "kah"; #string
+  group = "users"; #string
   inherit (config.services.paperless) port;#int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -117,11 +117,36 @@ in
       };
     };
 
+    services.prometheus.exporters.redis = {
+      enable = true;
+      port = 10394;
+    };
+    services.vmagent = {
+      enable = true;
+      remoteWriteUrl = "http://shodan:8428/api/v1/write";
+      extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
+      prometheusConfig = {
+        scrape_configs = [
+          {
+            job_name = "redis";
+            # scrape_timeout = "40s";
+            static_configs = [
+              {
+                targets = [ "http://localhost:10394" ];
+
+              }
+            ];
+          }
+        ];
+      };
+    };
+
+
     # for word/etc conversions
     virtualisation.oci-containers.containers = {
       gotenberg = {
         user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:8.5.0";
+        image = "gotenberg/gotenberg:8.6.0";
         cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
         ports = [
           "127.0.0.1:${gotenbergPort}:3000"

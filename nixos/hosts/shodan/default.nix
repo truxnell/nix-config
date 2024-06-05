@@ -11,7 +11,11 @@
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
+    # databases
     postgresql.enable = true;
+    mariadb.enable = true;
+
+    frigate.enable = true;
 
     nginx.enable = true;
 
@@ -19,8 +23,10 @@
     homepage.enable = true;
     # backrest.enable = true;
 
+    overseerr.enable = true;
     plex.enable = true;
     tautulli.enable = true;
+
     factorio.freight-forwarding.enable = true; # the factory must grow
 
     searxng.enable = true;
@@ -38,8 +44,19 @@
     calibre-web.enable = true;
     rss-bridge.enable = true;
     paperless.enable = true;
+    rxresume.enable = true;
+    invidious.enable = true;
+    thelounge.enable = true;
+    changedetection.enable = true;
+
+    # monitoring
+    victoriametrics.enable = true;
+    grafana.enable = true;
+    nextdns-exporter.enable = true;
+    unpoller.enable = true;
 
   };
+
   mySystem.containers = {
     calibre.enable = true;
     ecowitt2mqtt.enable = true;

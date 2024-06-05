@@ -32,7 +32,7 @@ in
     services.nginx.virtualHosts."code-${config.networking.hostName}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
-      locations."/" = {
+      locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString config.services.openvscode-server.port}";
         proxyWebsockets = true;
       };
@@ -52,7 +52,7 @@ in
 
     mySystem.services.gatus.monitors = [{
 
-      name = app;
+      name = "${app}-${config.networking.hostName}";
       group = "services";
       url = "https://${url}";
       interval = "1m";

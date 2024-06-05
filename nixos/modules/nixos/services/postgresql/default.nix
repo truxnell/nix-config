@@ -9,13 +9,7 @@ let
   app = "postgresql";
   category = "services";
   description = "Postgres RDMS";
-  # user = "%{user kah}"; #string
-  # group = "%{group kah}"; #string
-  # port = 1234; #int
-  appFolder = "/var/lib/${app}";
-  # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  # host = "${app}" + (if cfg.dev then "-dev" else "");
-  # url = "${host}.${config.networking.domain}";
+  appFolder = config.services.postgresql.dataDir;
 in
 {
   options.mySystem.${category}.${app} =
@@ -47,6 +41,11 @@ in
     #   restartUnits = [ "${app}.service" ];
     # };
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = "postgres"; group = "postgres"; mode = "750"; }];
+    };
+
+
     services.postgresql = {
       enable = true;
       identMap = ''
@@ -55,10 +54,12 @@ in
         superuser_map      postgres  postgres
         # Let other names login as themselves
         superuser_map      /^(.*)$   \1
+        superuser_map      root      rxresume
       '';
       authentication = ''
         #type database  DBuser  auth-method optional_ident_map
         local sameuser  all     peer        map=superuser_map
+        local rxresume  root    peer
       '';
       settings = {
         max_connections = 2000;
@@ -73,6 +74,13 @@ in
       location = "${config.mySystem.nasFolder}/backup/nixos/postgresql";
     };
 
+    systemd.services.postgresqlBackup = {
+      requires = [ "postgresql.service" ];
+    };
+
+    services.prometheus.exporters.postgres = {
+      enable = true;
+    };
 
 
     ### firewall config

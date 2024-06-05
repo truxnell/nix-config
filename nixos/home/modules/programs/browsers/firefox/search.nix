@@ -54,7 +54,7 @@
       definedAliases = [ "@gs" ];
     };
     "Whoogle" = {
-      urls = [{ template = "https://whoogle.trux.dev/?q={searchTerms}"; }];
+      urls = [{ template = "https://whoogle.trux.dev/search?q={searchTerms}"; }];
       iconUpdateURL = "https://nixos.wiki/favicon.png";
       updateInterval = 24 * 60 * 60 * 1000; # every day
       definedAliases = [ "@whoogle" ];

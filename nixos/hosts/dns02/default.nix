@@ -29,6 +29,11 @@
       remote.enable = false;
     };
 
+  mySystem.system.autoUpgrade =
+    {
+      enable = true;
+      dates = "Wed 02:00";
+    };
 
   networking.hostName = "dns02"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;

@@ -9,7 +9,7 @@ let
   app = "ecowitt2mqtt";
   category = "containers";
   description = "Weather station to MQTT";
-  image = "ghcr.io/bachya/ecowitt2mqtt:latest@sha256:458f06da6c82958973b5746639853f5ce9ae9468eb48b97d21833285552c7991";
+  image = "ghcr.io/bachya/ecowitt2mqtt:latest@sha256:bbd7fb28fb47ad09c9a94463afa95c7e51bddce840a9b0ed775234b26e7487b4";
   user = "nobody"; #string
   group = "nobody"; #string
   port = 8080; #int

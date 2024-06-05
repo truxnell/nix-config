@@ -9,7 +9,7 @@ let
   app = "browserless-chrome";
   category = "services";
   description = "docker based browsers for automation";
-  image = "ghcr.io/browserless/chromium:v2.8.0@sha256:18ed5b00b6b58fa98d50a72b021f8f1956b3d1255606e07a03cc747f19665f31";
+  image = "ghcr.io/browserless/chrome";
   user = "kah"; #string
   group = "kah"; #string
   port = 3000; #int
@@ -61,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      inherit group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     # users.users.truxnell.extraGroups = [ group ];
 
@@ -89,15 +89,27 @@ in
     ## OR
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user = "0"; #:()
+      group = "0"; #:()
       env = {
-        TIMEOUT = "10000";
-        CONCURRENT = "10";
-        TOKEN = "chrome_token";
+        TIMEOUT = "90000";
+        CONCURRENT = "15";
         EXIT_ON_HEALTH_FAILURE = "true";
         PRE_REQUEST_HEALTH_CHECK = "true";
+        SCREEN_WIDTH = "1920";
+        SCREEN_HEIGHT = "1024";
+        SCREEN_DEPTH = "16";
+        ENABLE_DEBUGGER = "false";
+        PREBOOT_CHROME = "true";
+        CHROME_REFRESH_TIME = "600000";
+        DEFAULT_BLOCK_ADS = "true";
+        DEFAULT_STEALTH = "true";
+        CORS = "true";
       };
-      ports = [ "3001:3000" ];
+      # envFiles = [
+      #   config.sops.secrets."${category}/${app}/env".path
+      # ];
 
     };
 
