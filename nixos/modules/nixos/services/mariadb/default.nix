@@ -10,8 +10,8 @@ let
   category = "services";
   description = "mysql-compatiable database";
   # image = "";
-  user = config.services.mysql.user; #string
-  group = config.services.mysql.group; #string
+  inherit (config.services.mysql) user;#string
+  inherit (config.services.mysql) group;#string
   # port = ; #int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
