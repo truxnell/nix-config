@@ -41,5 +41,7 @@
     ./readarr
     ./lidarr
     ./prowlarr
+    ./mariadb
+    ./frigate
   ];
 }

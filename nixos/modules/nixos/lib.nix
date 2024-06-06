@@ -11,7 +11,7 @@ with lib;
 
       containerExtraOptions = lib.optionals (lib.attrsets.attrByPath [ "caps" "privileged" ] false options) [ "--privileged" ]
         ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "readOnly" ] false options) [ "--read-only" ]
-        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "tmpfs" ] false options) [ (map (folders: "--tmpfs=${folders}") tmpfsFolders) ]
+        ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "tmpfs" ] false options) (map (folders: "--tmpfs=${folders}") options.caps.tmpfsFolders)
         ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "noNewPrivileges" ] false options) [ "--security-opt=no-new-privileges" ]
         ++ lib.optionals (lib.attrsets.attrByPath [ "caps" "dropAll" ] false options) [ "--cap-drop=ALL" ];
 
