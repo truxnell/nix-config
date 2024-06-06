@@ -77,7 +77,7 @@ in
     services.readarr = {
       enable = true;
       dataDir = appFolder;
-      package = pkgs.unstable.readarr; #TODO move to stable 24.05
+      package = pkgs.readarr;
     };
 
 

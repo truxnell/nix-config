@@ -84,8 +84,9 @@ in
     services.invidious = {
       enable = true;
       domain = "invidious.${config.networking.domain}";
-      package = pkgs.unstable.invidious;
+      package = pkgs.invidious;
       inherit port;
+      settings.db.user = app;
     };
     systemd.services.invidious = {
       serviceConfig.RuntimeMaxSec = lib.mkForce "8h";

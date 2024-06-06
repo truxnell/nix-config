@@ -95,7 +95,7 @@ in
     ## service
     services.paperless = {
       enable = true;
-      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
+      package = pkgs.paperless-ngx;
       dataDir = "/var/lib/paperless";
       mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
       consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
@@ -103,7 +103,7 @@ in
       port = 8000;
       address = "localhost";
       passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
-      extraConfig = {
+      settings = {
         PAPERLESS_OCR_LANGUAGE = "eng";
         PAPERLESS_CONSUMER_POLLING = "60";
         PAPERLESS_CONSUMER_RECURSIVE = "true";

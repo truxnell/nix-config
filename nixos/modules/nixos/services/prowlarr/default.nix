@@ -77,7 +77,7 @@ in
     ## service
     services.prowlarr = {
       enable = true;
-      package = pkgs.unstable.prowlarr; #TODO move to stable 24.05
+      package = pkgs.prowlarr;
     };
 
 

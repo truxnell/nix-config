@@ -81,7 +81,7 @@ in
       dataDir = "/var/lib/${app}";
       inherit user;
       inherit group;
-      package = pkgs.unstable.radarr; #TODO move to stable 24.05
+      package = pkgs.radarr;
     };
 
 
