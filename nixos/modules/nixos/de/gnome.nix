@@ -20,22 +20,27 @@ in
 
     # GNOME plz
     services = {
+      displayManager =
+        {
+          defaultSession = "gnome"; # TODO move to config overlay
+
+          autoLogin.enable = true;
+          autoLogin.user = "truxnell"; # TODO move to config overlay
+        };
+
       xserver = {
-        enable = true;
         displayManager =
           {
             gdm.enable = true;
-            defaultSession = "gnome"; # TODO move to config overlay
-
-            autoLogin.enable = true;
-            autoLogin.user = "truxnell"; # TODO move to config overlay
           };
+
+        enable = true;
         desktopManager = {
           # GNOME
           gnome.enable = true;
         };
 
-        layout = "us"; # `localctl` will give you
+        xkb.layout = "us"; # `localctl` will give you
       };
       udev.packages = optionals cfg.systrayicons [ pkgs.gnome.gnome-settings-daemon ]; # support appindicator
 

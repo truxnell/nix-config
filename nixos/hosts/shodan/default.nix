@@ -15,7 +15,7 @@
     postgresql.enable = true;
     mariadb.enable = true;
 
-    frigate.enable = true;
+    # frigate.enable = true;
 
     nginx.enable = true;
 
@@ -37,7 +37,7 @@
     zigbee2mqtt.enable = true;
     node-red.enable = true;
     home-assistant.enable = true;
-    openvscode-server.enable = true;
+    openvscode-server.enable = true; # Why is this bringing in gtk and wayland?
 
     radicale.enable = true;
     miniflux.enable = true;

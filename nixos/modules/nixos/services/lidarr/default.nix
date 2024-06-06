@@ -78,7 +78,7 @@ in
     services.lidarr = {
       enable = true;
       dataDir = appFolder;
-      package = pkgs.unstable.lidarr; #TODO move to stable 24.05
+      package = pkgs.lidarr; #TODO move to stable 24.05
     };
 
 

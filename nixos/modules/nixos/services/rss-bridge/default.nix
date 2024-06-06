@@ -73,7 +73,7 @@ in
     ## service
     services.rss-bridge = {
       enable = true;
-      whitelist = [ "*" ];
+      config.system.enabled_bridges = [ "*" ];
       virtualHost = "${url}";
     };
 

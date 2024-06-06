@@ -79,7 +79,7 @@ in
     services.sonarr = {
       enable = true;
       dataDir = "/var/lib/sonarr";
-      package = pkgs.unstable.sonarr; #TODO move to stable 24.05
+      package = pkgs.sonarr;
     };
 
 

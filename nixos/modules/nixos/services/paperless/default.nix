@@ -103,7 +103,7 @@ in
       port = 8000;
       address = "localhost";
       passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
-      extraConfig = {
+      settings = {
         PAPERLESS_OCR_LANGUAGE = "eng";
         PAPERLESS_CONSUMER_POLLING = "60";
         PAPERLESS_CONSUMER_RECURSIVE = "true";
@@ -123,7 +123,7 @@ in
     };
     services.vmagent = {
       enable = true;
-      remoteWriteUrl = "http://shodan:8428/api/v1/write";
+      remoteWrite.url = "http://shodan:8428/api/v1/write";
       extraArgs = lib.mkForce [ "-remoteWrite.label=instance=${config.networking.hostName}" ];
       prometheusConfig = {
         scrape_configs = [
