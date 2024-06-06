@@ -37,13 +37,13 @@
     zigbee2mqtt.enable = true;
     node-red.enable = true;
     home-assistant.enable = true;
-    # openvscode-server.enable = true; # Why is this bringing in gtk and wayland?
+    openvscode-server.enable = true; # Why is this bringing in gtk and wayland?
 
     radicale.enable = true;
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-    # paperless.enable = true;
+    paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;

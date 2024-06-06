@@ -95,7 +95,7 @@ in
     ## service
     services.paperless = {
       enable = true;
-      package = pkgs.paperless-ngx;
+      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
       dataDir = "/var/lib/paperless";
       mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
       consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";

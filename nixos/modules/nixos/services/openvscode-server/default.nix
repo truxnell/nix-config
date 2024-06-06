@@ -21,7 +21,7 @@ in
     services.openvscode-server = {
       enable = true;
       telemetryLevel = "off";
-      package = pkgs.openvscode-server;
+      package = pkgs.unstable.openvscode-server; # TODO move to stable in 24.05?
       # serverDataDir
       user = "truxnell";
       host = "0.0.0.0";
