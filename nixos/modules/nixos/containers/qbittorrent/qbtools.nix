@@ -33,6 +33,7 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
         startAt = "hourly";
       };
 
@@ -55,6 +56,7 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
         startAt = "*-*-* 05:20:00";
 
       };
@@ -84,6 +86,7 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
         startAt = "*-*-* 05:10:00";
 
       };
@@ -102,6 +105,7 @@ with lib;
           --config /config/config.yaml
         '';
         path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
         startAt = "hourly";
       };
 
