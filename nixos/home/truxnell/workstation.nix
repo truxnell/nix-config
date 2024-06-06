@@ -5,7 +5,6 @@ with config;
     ./global.nix
   ];
 
-  myHome.programs.firefox.enable = true;
 
   myHome.security = {
     ssh = {
@@ -59,19 +58,26 @@ with config;
     };
   };
 
-  myHome.shell = {
 
-    starship.enable = true;
-    fish.enable = true;
-    wezterm.enable = true;
-
-    git = {
-      enable = true;
-      username = "truxnell";
-      email = "19149206+truxnell@users.noreply.github.com";
-      # signingKey = ""; # TODO setup signing keys n shit
+  myHome = {
+    programs = {
+      firefox.enable = true;
+      thunderbird.enable = true;
     };
+    shell = {
 
+      starship.enable = true;
+      fish.enable = true;
+      wezterm.enable = true;
+
+      git = {
+        enable = true;
+        username = "truxnell";
+        email = "19149206+truxnell@users.noreply.github.com";
+        # signingKey = ""; # TODO setup signing keys n shit
+      };
+
+    };
   };
 
 
