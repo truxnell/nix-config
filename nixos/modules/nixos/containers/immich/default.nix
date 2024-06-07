@@ -114,50 +114,54 @@ in
         immich-server = {
           image = "ghcr.io/immich-app/immich-server:v1.105.0";
           cmd = [ "start-server.sh" "immich" ];
-          # autoStart = false;
-
-          user = "390:390";
-
           inherit environment;
-
           volumes = [
-            "/run/postgresql:/run/postgresql"
             "/run/redis-immich:/run/redis-immich"
             "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
           ];
-
-          # extraOptions =  [ "--network=immich" ];
-
+          dependsOn = [ "redis-immich.service" "immich-postgres" ];
         };
 
+        immich-machine-learning = {
+          image = "ghcr.io/immich-app/immich-machine-learning:v1.105.0";
+          inherit environment;
+          volumes = [
+            "/run/postgresql:/run/postgresql"
+            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+            "/var/lib/immich/machine-learning:/cache"
+          ];
+        };
+
+        immich-postgres = {
+          image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+          environment = {
+            POSTGRES_PASSWORD = "${DB_PASSWORD}";
+            POSTGRES_USER = "${DB_USERNAME}";
+            POSTGRES_DB = "${DB_DATABASE_NAME}";
+            POSTGRES_INITDB_ARGS = "--data-checksums";
+          };
+          command = [
+            "postgres"
+            "-c"
+            "shared_preload_libraries=vectors.so"
+            ''-c" 'search_path="$$user, public, vectors''
+            "-c"
+            "logging_collector=on"
+            "-c"
+            "max_wal_size=2GB"
+            "-c"
+            "shared_buffers=512MB"
+            "-c"
+            "wal_compression=on"
+          ];
+          volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
+        };
       };
+
 
     services.redis.servers.immich = {
       enable = true;
       user = "immich";
-    };
-
-    services.postgresql = {
-
-      enable = true;
-      ensureUsers = [{
-        name = "immich";
-        ensureDBOwnership = true;
-      }];
-      ensureDatabases = [ "immich" ];
-
-      # Allow connections from any docker IP addresses
-      authentication = mkBefore "host immich immich 10.88.0.0/12 md5";
-
-      # # Postgres extension pgvecto.rs required since Immich 1.91.0
-      # extraPlugins = [
-      #   (pkgs.pgvecto-rs.override rec {
-      #     postgresql = config.services.postgresql.package;
-      #     stdenv = postgresql.stdenv;
-      #   })
-      # ];
-      # settings.shared_preload_libraries = "vectors.so";
-
     };
 
     # homepage integration

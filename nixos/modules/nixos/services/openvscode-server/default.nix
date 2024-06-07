@@ -25,7 +25,8 @@ in
       # serverDataDir
       user = "truxnell";
       host = "0.0.0.0";
-      extraPackages = with pkgs;[ fish tmux ];
+      extraPackages = with pkgs;[ nixfmt nixd fish tmux ];
+      serverDataDir="/var/lib/openvscode-server/";
       withoutConnectionToken = true;
     };
 
