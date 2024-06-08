@@ -69,35 +69,35 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
-
-    users = {
-      users = {
-
-        # Create immich user
-        immich = {
-          isSystemUser = true;
-          group = "immich";
-          description = "Immich daemon user";
-          # home = cfg.dataDir;
-          uid = 390;
-        };
-
-        truxnell.extraGroups = [ "immich" ];
-        # Add admins to the immich group
-      };
-
-      # Create immich group
-      groups.immich = {
-        gid = 390;
-      };
-
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
     };
+
+    # users = {
+    #   users = {
+
+    #     # Create immich user
+    #     immich = {
+    #       isSystemUser = true;
+    #       group = "immich";
+    #       description = "Immich daemon user";
+    #       # home = cfg.dataDir;
+    #       uid = 390;
+    #     };
+
+    #     truxnell.extraGroups = [ "immich" ];
+    #     # Add admins to the immich group
+    #   };
+
+    #   # Create immich group
+    #   groups.immich = {
+    #     gid = 390;
+    #   };
+
+    # };
 
 
     # Folder perms - only for containers
@@ -111,19 +111,33 @@ in
 
     virtualisation.oci-containers.containers =
       {
-        immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.105.0";
-          cmd = [ "start-server.sh" "immich" ];
-          inherit environment;
-          volumes = [
-            "/run/redis-immich:/run/redis-immich"
-            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
-          ];
-          dependsOn = [ "redis-immich.service" "immich-postgres" ];
-        };
+        # immich-server = {
+        #   image = "ghcr.io/immich-app/immich-server:v1.105.1";
+        #   cmd = [ "start.sh" "immich" ];
+        #   inherit environment;
+        #   volumes = [
+        #     "/run/redis-immich:/run/redis-immich"
+        #     "/etc/localtime:/etc/localtime:ro"
+        #     "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+        #   ];
+        #   dependsOn = [ "redis-immich.service" "podman-immich-postgres.service" ];
+        # };
+
+        # immich-micoservices = {
+        #   image = "ghcr.io/immich-app/immich-server:v1.105.1";
+        #   cmd = [ "start.sh" "microservices" ];
+        #   inherit environment;
+        #   volumes = [
+        #     "/run/redis-immich:/run/redis-immich"
+        #     "/etc/localtime:/etc/localtime:ro"
+        #     "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+        #   ];
+        #   dependsOn = [ "redis-immich.service" "podman-immich-postgres.service" ];
+        # };
+
 
         immich-machine-learning = {
-          image = "ghcr.io/immich-app/immich-machine-learning:v1.105.0";
+          image = "ghcr.io/immich-app/immich-machine-learning:v1.105.1";
           inherit environment;
           volumes = [
             "/run/postgresql:/run/postgresql"
@@ -134,17 +148,16 @@ in
 
         immich-postgres = {
           image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+          environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           environment = {
-            POSTGRES_PASSWORD = "${DB_PASSWORD}";
-            POSTGRES_USER = "${DB_USERNAME}";
-            POSTGRES_DB = "${DB_DATABASE_NAME}";
             POSTGRES_INITDB_ARGS = "--data-checksums";
           };
-          command = [
+          cmd = [
             "postgres"
             "-c"
             "shared_preload_libraries=vectors.so"
-            ''-c" 'search_path="$$user, public, vectors''
+            "-c"
+            ''search_path="$$user", public, vectors''
             "-c"
             "logging_collector=on"
             "-c"
