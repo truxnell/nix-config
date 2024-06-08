@@ -19,11 +19,7 @@ let
   url = "${host}.${config.networking.domain}";
   environment = {
     DB_DATA_LOCATION = "/run/postgresql";
-    DB_USERNAME = "postgres";
-    DB_PASSWORD = "dummy";
-    DB_DATABASE_NAME = "immich";
-    REDIS_SOCKET = "/run/redis-immich/redis.sock";
-    DB_URL = "socket://immich:@/run/postgresql?db=immich";
+    REDIS_HOSTNAME = "immich-redis";
   };
 in
 {
@@ -120,7 +116,7 @@ in
         #     "/etc/localtime:/etc/localtime:ro"
         #     "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
         #   ];
-        #   dependsOn = [ "redis-immich.service" "podman-immich-postgres.service" ];
+        #   dependsOn = [ "podman-immich-redis.service" "podman-immich-postgres.service" ];
         # };
 
         # immich-micoservices = {
@@ -132,7 +128,7 @@ in
         #     "/etc/localtime:/etc/localtime:ro"
         #     "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
         #   ];
-        #   dependsOn = [ "redis-immich.service" "podman-immich-postgres.service" ];
+        #   dependsOn = [ "podman-immich-redis.service" "podman-immich-postgres.service" ];
         # };
 
 
@@ -145,6 +141,11 @@ in
             "/var/lib/immich/machine-learning:/cache"
           ];
         };
+
+        immich-redis = {
+          image = "registry.hub.docker.com/library/redis:6.2-alpine@sha256:84882e87b54734154586e5f8abd4dce69fe7311315e2fc6d67c29614c8de2672";
+        };
+
 
         immich-postgres = {
           image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
@@ -172,10 +173,10 @@ in
       };
 
 
-    services.redis.servers.immich = {
-      enable = true;
-      user = "immich";
-    };
+    # services.redis.servers.immich = {
+    #   enable = true;
+    #   user = "immich";
+    # };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
