@@ -127,7 +127,7 @@ The below will generate a config based on the current setup of your machine, and
 nixos-generate-config --root /mnt
 ```
 
-This will output `configuration.nix` and `hardware-config.nix`.  `configuration.nix` contains a boilerplate with some basics to create a bootable system, mainly importing hardware-config.
+This will output `configuration.nix` and `hardware-config.nix`. `configuration.nix` contains a boilerplate with some basics to create a bootable system, mainly importing hardware-config.
 `hardware-config.nix` contains the nix code to setup the kernel on boot with a expected list of modules based on your systems capabilities, as well as the nix to mount the drives as currently setup.
 
 As I gitops my files, I then copy the hardware-config to my machine, and then copy across a bootstrap configuration file with some basics added for install.
@@ -138,6 +138,12 @@ scp -P 3022 root@127.0.0.1:/mnt/etc/nixos/hardware-configuration.nix nixos/hosts
 ```
 
 ### Installing nix
+
+From flake:
+
+```
+nixos-install --flake github:truxnell/nix-config#daedalus
+```
 
 ```sh
 nixos-install
