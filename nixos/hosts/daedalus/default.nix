@@ -63,7 +63,7 @@
     };
 
     networking.hostName = "daedalus"; # Define your hostname.
-    networking.hostId = "ed3980cb"; # for zfs, helps stop importing to wrong machine
+    networking.hostId = "485cafad"; # for zfs, helps stop importing to wrong machine
     networking.useDHCP = lib.mkDefault true;
 
     fileSystems."/" =
