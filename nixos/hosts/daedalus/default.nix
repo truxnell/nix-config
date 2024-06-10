@@ -74,7 +74,7 @@
 
     fileSystems."/boot" =
       {
-        device = "/dev/disk/by-uuid/F42E-1E48";
+        device = "/dev/disk/by-label/EFI";
         fsType = "vfat";
       };
 

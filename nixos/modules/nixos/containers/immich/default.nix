@@ -121,9 +121,13 @@ in
           inherit environment;
 
           volumes = [
-            "/run/postgresql:/run/postgresql"
-            "/run/redis-immich:/run/redis-immich"
-            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+            "/var/lib/immich/machine-learning:/cache"
+          ];
+          extraOptions = [
+            # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
+            # that includes both this server and the upstream system server, causing resolutions of other pod names
+            # to be inconsistent.
+            "--dns=10.88.0.1"
           ];
 
           # extraOptions =  [ "--network=immich" ];
