@@ -15,7 +15,7 @@ in
       enable = mkEnableOption "${app}";
     };
 
-  config.programs.${app} = lib.mkIf cfg.enable {
+  config.programs.${app} = mkIf cfg.enable {
 
     enable = true;
     profiles = {

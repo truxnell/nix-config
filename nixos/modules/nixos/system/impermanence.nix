@@ -34,8 +34,8 @@ with lib;
     '';
 
     systemd.tmpfiles.rules = mkIf config.services.openssh.enable [
-      "d /etc/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
-      "d /etc/ssh/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
+      # "d /etc/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
+      # "d /etc/ssh/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     environment.persistence."${cfg.persistPath}" = {

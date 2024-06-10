@@ -73,9 +73,10 @@ in
     ## Secrets
     sops.secrets."services/alertmanager/env" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
-      restartUnits = [ "${app}.service" ];
+      owner = "kah";
+      group = "kah";
+      mode = "660";
+      restartUnits = [ "alertmanager.service" ];
     };
 
     users.users.truxnell.extraGroups = [ group ];
