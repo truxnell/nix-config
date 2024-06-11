@@ -240,6 +240,7 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              ./nixos/profiles/role-dev.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };

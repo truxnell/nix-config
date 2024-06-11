@@ -21,10 +21,9 @@ in
     services.code-server = {
       auth = "none";
       enable = true;
-      extraArguments = [
-        "--disable-telemetry"
-        "--proxy-domain=code-${config.networking.hostName}.${config.networking.domain}"
-      ];
+      disableTelemetry = true;
+      disableUpdateCheck = true;
+      proxyDomain = "code-${config.networking.hostName}.${config.networking.domain}";
       host = "127.0.0.1";
       package = pkgs.vscode-with-extensions.override {
         vscode = pkgs.unstable.code-server;

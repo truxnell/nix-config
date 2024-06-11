@@ -70,19 +70,8 @@ with config;
       fish.enable = true;
       wezterm.enable = true;
 
-      git = {
-        enable = true;
-        username = "truxnell";
-        email = "19149206+truxnell@users.noreply.github.com";
-        # signingKey = ""; # TODO setup signing keys n shit
-      };
-
     };
   };
-
-
-
-
 
   home = {
     # Install these packages for my user

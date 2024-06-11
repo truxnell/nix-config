@@ -43,12 +43,11 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-    paperless.enable = true;
+    # paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
     changedetection.enable = true;
-    immich.enable = true;
 
     # monitoring
     victoriametrics.enable = true;

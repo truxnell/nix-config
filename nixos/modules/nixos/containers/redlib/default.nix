@@ -10,8 +10,8 @@ let
   category = "services";
   description = "reddit alternative frontend";
   image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
-  user = "kah"; #string
-  group = "kah"; #string
+  user = "redlib"; #string
+  group = "redlib"; #string
   port = 8080; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
