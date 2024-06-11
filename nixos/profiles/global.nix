@@ -38,10 +38,13 @@ with lib;
       wget
       dnsutils
       tree
+      powertop
     ];
 
     networking.useDHCP = lib.mkDefault true;
     networking.domain = config.mySystem.domain;
+
+    powerManagement.powertop.enable = true;
   };
 
 }

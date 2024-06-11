@@ -11,7 +11,7 @@
     openssh.enable = true;
     podman.enable = true;
     nginx.enable = true;
-    openvscode-server.enable = true;
+    code-server.enable = true;
     postgresql =
       { enable = true; backup = false; };
     # calibre-web = { enable = true; backup = false; dev = true; };

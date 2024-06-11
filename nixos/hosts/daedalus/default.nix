@@ -36,11 +36,11 @@
 
     mySystem.system = {
       zfs.enable = true;
-      zfs.mountPoolsAtBoot = [ "tank" ];
+      zfs.mountPoolsAtBoot = [ "tank" "tank1" ];
     };
 
     mySystem.services.nfs.enable = true;
-    mySystem.system.motd.networkInterfaces = [ "eno1" ];
+    mySystem.system.motd.networkInterfaces = [ "eno2" ];
 
 
     boot = {
@@ -90,9 +90,6 @@
         fsType = "zfs";
         neededForBoot = true; # for impermanence
       };
-
-    swapDevices =
-      [{ device = "/dev/disk/by-uuid/c2f716ef-9e8c-466b-bcb0-699397cb2dc0"; }];
 
     # TODO does this live somewhere else?
     # it is very machine-specific...

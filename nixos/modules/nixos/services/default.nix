@@ -19,7 +19,7 @@
     ./zigbee2mqtt
     ./postgresql
     ./blocky
-    ./openvscode-server
+    ./code-server
     ./grafana
     ./radicale
     ./node-red
@@ -43,5 +43,6 @@
     ./prowlarr
     ./mariadb
     ./frigate
+    ./code-server
   ];
 }
