@@ -9,8 +9,8 @@ let
   app = "sonarr";
   category = "services";
   description = "TV organisar";
-  inherit (config.services.sonarr) user;#string
-  inherit (config.services.sonarr) group;#string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8989; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -71,7 +71,7 @@ in
 
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [{ directory = appFolder; user = "568"; group = "568"; mode = "750"; }];
     };
 
 
@@ -79,7 +79,7 @@ in
     services.sonarr = {
       enable = true;
       dataDir = "/var/lib/sonarr";
-      package = pkgs.sonarr;
+      inherit group;
     };
 
 

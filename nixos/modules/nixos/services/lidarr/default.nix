@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Music management";
   # image = "";
-  inherit (config.services.lidarr) user;#string
-  inherit (config.services.lidarr) group;#string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8686; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -78,7 +78,7 @@ in
     services.lidarr = {
       enable = true;
       dataDir = appFolder;
-      package = pkgs.lidarr; #TODO move to stable 24.05
+      inherit group;
     };
 
 

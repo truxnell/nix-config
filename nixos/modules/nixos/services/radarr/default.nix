@@ -71,7 +71,7 @@ in
 
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [{ directory = appFolder; user = "568"; group = "568"; mode = "750"; }];
     };
 
 
@@ -79,7 +79,6 @@ in
     services.radarr = {
       enable = true;
       dataDir = "/var/lib/${app}";
-      inherit user;
       inherit group;
       package = pkgs.radarr;
     };

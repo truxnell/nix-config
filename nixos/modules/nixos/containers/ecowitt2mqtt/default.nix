@@ -10,8 +10,8 @@ let
   category = "containers";
   description = "Weather station to MQTT";
   image = "ghcr.io/bachya/ecowitt2mqtt:latest@sha256:bbd7fb28fb47ad09c9a94463afa95c7e51bddce840a9b0ed775234b26e7487b4";
-  user = "nobody"; #string
-  group = "nobody"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8080; #int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

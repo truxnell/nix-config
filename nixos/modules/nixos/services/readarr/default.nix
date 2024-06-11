@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Book managment";
   # image = "";
-  inherit (config.services.readarr) user;#string
-  inherit (config.services.readarr) group;#string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8787; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -56,75 +56,76 @@ in
 
     };
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable
+    {
 
-    ## Secrets
-    sops.secrets."${category}/${app}/env" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
-      restartUnits = [ "${app}.service" ];
-    };
-
-    users.users.truxnell.extraGroups = [ group ];
-
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
-
-    ## service
-    services.readarr = {
-      enable = true;
-      dataDir = appFolder;
-      package = pkgs.readarr;
-    };
-
-
-
-    # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-        };
-      }
-    ];
-
-    ### gatus integration
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [
-      {
-        name = app;
-        group = "${category}";
-        url = "https://${url}";
-        interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-      }
-    ];
-
-    ### Ingress
-    services.nginx.virtualHosts.${url} = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+      ## Secrets
+      sops.secrets."${category}/${app}/env" = {
+        sopsFile = ./secrets.sops.yaml;
+        owner = user;
+        group = "kah";
+        restartUnits = [ "${app}.service" ];
       };
+
+      users.users.truxnell.extraGroups = [ group ];
+
+      environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+        directories = [{ directory = appFolder; user = "568"; group = "568"; mode = "750"; }];
+      };
+
+
+      ## service
+      services.readarr = {
+        enable = true;
+        dataDir = appFolder;
+        inherit group;
+      };
+
+
+
+      # homepage integration
+      mySystem. services. homepage. infrastructure = mkIf cfg.addToHomepage [
+        {
+          ${ app} = {
+            icon = "${ app}.svg";
+            href = "https://${ url}";
+            inherit description;
+          };
+        }
+      ];
+
+      ### gatus integration
+      mySystem.services.gatus.monitors = mkIf cfg.monitor [
+        {
+          name = app;
+          group = "${category}";
+          url = "https://${url}";
+          interval = "1m";
+          conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        }
+      ];
+
+      ### Ingress
+      services.nginx.virtualHosts.${url} = {
+        forceSSL = true;
+        useACMEHost = config.networking.domain;
+        locations."^~ /" = {
+          proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        };
+      };
+
+      ### backups
+      warnings = [
+        (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
+          "WARNING: Backups for ${app} are disabled!")
+      ];
+
+      services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
+        {
+          inherit app user;
+          paths = [ appFolder ];
+          inherit appFolder;
+        });
+
     };
-
-    ### backups
-    warnings = [
-      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for ${app} are disabled!")
-    ];
-
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
-      });
-
-  };
 }
