@@ -48,6 +48,7 @@
     invidious.enable = true;
     thelounge.enable = true;
     changedetection.enable = true;
+    linkding.enable = true;
 
     # monitoring
     victoriametrics.enable = true;

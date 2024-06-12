@@ -24,5 +24,6 @@
     ./changedetection
     ./nextdns-exporter
     ./hs110-exporter
+    ./linkding
   ];
 }
