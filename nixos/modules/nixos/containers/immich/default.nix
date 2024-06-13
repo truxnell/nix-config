@@ -152,7 +152,7 @@ in
 
 
         immich-machine-learning = {
-          image = "ghcr.io/immich-app/immich-machine-learning:v1.105.1";
+          image = "ghcr.io/immich-app/immich-machine-learning:v1.106.4";
           inherit environment;
           volumes = [
             "/run/postgresql:/run/postgresql"
