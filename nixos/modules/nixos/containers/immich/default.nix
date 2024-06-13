@@ -112,7 +112,7 @@ in
     virtualisation.oci-containers.containers =
       {
         immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.105.1";
+          image = "ghcr.io/immich-app/immich-server:v1.106.4";
           cmd = [ "start.sh" "immich" ];
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           inherit environment;
@@ -131,7 +131,7 @@ in
         };
 
         immich-micoservices = {
-          image = "ghcr.io/immich-app/immich-server:v1.105.1";
+          image = "ghcr.io/immich-app/immich-server:v1.106.4";
           cmd = [ "start.sh" "microservices" ];
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           inherit environment;
