@@ -7,7 +7,7 @@
 , ...
 }: {
   imports = [
-
+    ./storage.nix
 
   ];
   config = {
@@ -39,8 +39,10 @@
       zfs.mountPoolsAtBoot = [ "tank" "tank1" ];
     };
 
-    mySystem.services.nfs.enable = true;
+    # mySystem.services.nfs.enable = true;
     mySystem.system.motd.networkInterfaces = [ "eno2" ];
+
+
 
 
     boot = {
@@ -130,6 +132,14 @@
       };
 
     };
+    services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+
+    environment.systemPackages = with pkgs; [
+      btrfs-progs
+
+    ];
+
+
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [ "/var/lib/samba/" ];

@@ -170,51 +170,51 @@
 
           };
 
-          "dns01" = mkNixosConfig {
-            # Rpi for DNS and misc services
+          # "dns01" = mkNixosConfig {
+          #   # Rpi for DNS and misc services
 
-            hostname = "dns01";
-            system = "aarch64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-rpi4.nix
-              inputs.nixos-hardware.nixosModules.raspberry-pi-4
-            ];
-            profileModules = [
-              ./nixos/profiles/role-server.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+          #   hostname = "dns01";
+          #   system = "aarch64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-rpi4.nix
+          #     inputs.nixos-hardware.nixosModules.raspberry-pi-4
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-server.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
 
-            ];
-          };
+          #   ];
+          # };
 
-          "dns02" = mkNixosConfig {
-            # Rpi for DNS and misc services
+          # "dns02" = mkNixosConfig {
+          #   # Rpi for DNS and misc services
 
-            hostname = "dns02";
-            system = "aarch64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-rpi4.nix
-              inputs.nixos-hardware.nixosModules.raspberry-pi-4
-            ];
-            profileModules = [
-              ./nixos/profiles/role-server.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
-            ];
-          };
+          #   hostname = "dns02";
+          #   system = "aarch64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-rpi4.nix
+          #     inputs.nixos-hardware.nixosModules.raspberry-pi-4
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-server.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+          #   ];
+          # };
 
-          "durandal" = mkNixosConfig {
-            # test lenovo tiny
+          # "durandal" = mkNixosConfig {
+          #   # test lenovo tiny
 
-            hostname = "durandal";
-            system = "x86_64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-generic-x86.nix
-            ];
-            profileModules = [
-              ./nixos/profiles/role-server.nix
-              ./nixos/profiles/role-dev.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
-            ];
-          };
+          #   hostname = "durandal";
+          #   system = "x86_64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-generic-x86.nix
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-server.nix
+          #     ./nixos/profiles/role-dev.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+          #   ];
+          # };
 
           "daedalus" = mkNixosConfig {
             # lenovo tiny 720q NAS

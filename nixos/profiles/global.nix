@@ -39,6 +39,7 @@ with lib;
       dnsutils
       tree
       powertop
+      parted
     ];
 
     networking.useDHCP = lib.mkDefault true;

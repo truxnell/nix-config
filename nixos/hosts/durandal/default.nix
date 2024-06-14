@@ -23,8 +23,6 @@
   # mySystem.containers.multi-scrobbler = { enable = true; backup = false; dev = true; };
 
 
-  mySystem.system.systemd.pushover-alerts.enable = false;
-
   mySystem.nfs.nas.enable = true;
   mySystem.persistentFolder = "/persistent";
   mySystem.system.motd.networkInterfaces = [ "eno1" ];

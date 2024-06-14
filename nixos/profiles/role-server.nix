@@ -32,6 +32,8 @@ with lib;
     };
 
     services.logrotate.enable = mkDefault true;
+    smervices.smartd.enable = mkDefault true;
+
 
     environment.noXlibs = mkDefault true;
     documentation = {
