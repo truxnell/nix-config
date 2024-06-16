@@ -62,14 +62,14 @@ let
           options = [ "subvol=data" ];
         };
       }
-      # {
-      #   name = "/mnt/${d.name}/.snapshots";
-      #   value = {
-      #     device = "/dev/disk/by-uuid/${d.uuid}";
-      #     fsType = "btrfs";
-      #     options = [ "subvol=.snapshots" ];
-      #   };
-      # }
+      {
+        name = "/mnt/${d.name}/.snapshots";
+        value = {
+          device = "/dev/disk/by-uuid/${d.uuid}";
+          fsType = "btrfs";
+          options = [ "subvol=.snapshots" ];
+        };
+      }
       {
         name = "/mnt/snapraid-content/${d.name}";
         value = {
@@ -106,11 +106,21 @@ in
 {
   environment.systemPackages = with pkgs; [
     mergerfs
-    # snapraid-btrfs
-    # snapraid-btrfs-runner
+    snapraid-btrfs
+    snapraid-btrfs-runner
     xfsprogs
     btrfs-progs
   ];
+
+  # format drive btrfs (parity xfs)
+  # btrfs subvol create data/content/.snapshots
+  # 
+
+  systemd.tmpfiles.rules = [
+    "f /persist/var/snapraid.content 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "f /persist/var/snapraid.content.lock 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
+  ];
+
 
   fileSystems =
     {
@@ -142,9 +152,9 @@ in
     parityFs
     // dataFs;
 
-  services.nfs.server.exports = ''
-    /mnt/storage 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=uuid,anonuid=568,anongid=568)
-  '';
+  # services.nfs.server.exports = ''
+  #   /mnt/storage 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=uuid,anonuid=568,anongid=568)
+  # '';
 
   services.snapraid = {
     inherit contentFiles parityFiles;
@@ -175,46 +185,46 @@ in
 
 
 
-  # systemd.services.snapraid-btrfs-sync = {
-  #   description = "Run the snapraid-btrfs sync with the runner";
-  #   startAt = "01:00";
-  #   serviceConfig = {
-  #     Type = "oneshot";
-  #     ExecStart = "${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner";
-  #     Nice = 19;
-  #     IOSchedulingPriority = 7;
-  #     CPUSchedulingPolicy = "batch";
+  systemd.services.snapraid-btrfs-sync = {
+    description = "Run the snapraid-btrfs sync with the runner";
+    startAt = "01:00";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner";
+      Nice = 19;
+      IOSchedulingPriority = 7;
+      CPUSchedulingPolicy = "batch";
 
-  #     LockPersonality = true;
-  #     MemoryDenyWriteExecute = true;
-  #     NoNewPrivileges = true;
-  #     PrivateTmp = true;
-  #     ProtectClock = true;
-  #     ProtectControlGroups = true;
-  #     ProtectHostname = true;
-  #     ProtectKernelLogs = true;
-  #     ProtectKernelModules = true;
-  #     ProtectKernelTunables = true;
-  #     RestrictAddressFamilies = "AF_UNIX";
-  #     RestrictNamespaces = true;
-  #     RestrictRealtime = true;
-  #     RestrictSUIDSGID = true;
-  #     SystemCallArchitectures = "native";
-  #     SystemCallFilter = "@system-service";
-  #     SystemCallErrorNumber = "EPERM";
-  #     CapabilityBoundingSet = "";
-  #     ProtectSystem = "strict";
-  #     ProtectHome = "read-only";
-  #     ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
-  #     ReadWritePaths =
-  #       # sync requires access to directories containing content files
-  #       # to remove them if they are stale
-  #       let
-  #         contentDirs = builtins.map builtins.dirOf contentFiles;
-  #       in
-  #       lib.unique (
-  #         builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs
-  #       );
-  #   };
-  # };
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      RestrictAddressFamilies = "AF_UNIX";
+      RestrictNamespaces = true;
+      RestrictRealtime = true;
+      RestrictSUIDSGID = true;
+      SystemCallArchitectures = "native";
+      SystemCallFilter = "@system-service";
+      SystemCallErrorNumber = "EPERM";
+      CapabilityBoundingSet = "";
+      ProtectSystem = "strict";
+      ProtectHome = "read-only";
+      ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
+      ReadWritePaths =
+        # sync requires access to directories containing content files
+        # to remove them if they are stale
+        let
+          contentDirs = builtins.map builtins.dirOf contentFiles;
+        in
+        lib.unique (
+          builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs
+        );
+    };
+  };
 }

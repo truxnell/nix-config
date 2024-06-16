@@ -39,7 +39,7 @@
       zfs.mountPoolsAtBoot = [ "tank" "tank1" ];
     };
 
-    # mySystem.services.nfs.enable = true;
+    mySystem.services.nfs.enable = true;
     mySystem.system.motd.networkInterfaces = [ "eno2" ];
 
 
