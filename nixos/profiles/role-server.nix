@@ -48,6 +48,11 @@ with lib;
     sound.enable = false;
     hardware.pulseaudio.enable = false;
 
+    environment.systemPackages = with pkgs; [
+      tmux
+      btop
+    ];
+
 
     services.udisks2.enable = mkDefault false;
     # xdg = {

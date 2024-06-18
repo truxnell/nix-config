@@ -51,6 +51,7 @@ in
         volumes = [
           "${appFolder}:/config:rw"
           "${config.mySystem.nasFolder}/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];
       };

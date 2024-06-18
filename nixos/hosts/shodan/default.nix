@@ -24,7 +24,6 @@
     # backrest.enable = true;
 
     overseerr.enable = true;
-    plex.enable = true;
     tautulli.enable = true;
 
     factorio.freight-forwarding.enable = true; # the factory must grow

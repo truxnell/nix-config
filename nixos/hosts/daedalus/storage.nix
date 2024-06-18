@@ -59,7 +59,7 @@ let
         value = {
           device = "/dev/disk/by-uuid/${d.uuid}";
           fsType = "btrfs";
-          options = [ "subvol=data" ];
+          options = [ "compress=zstd,subvol=data" ];
         };
       }
       {
@@ -67,7 +67,7 @@ let
         value = {
           device = "/dev/disk/by-uuid/${d.uuid}";
           fsType = "btrfs";
-          options = [ "subvol=.snapshots" ];
+          options = [ "compress=zstd,subvol=.snapshots" ];
         };
       }
       {
@@ -75,7 +75,7 @@ let
         value = {
           device = "/dev/disk/by-uuid/${d.uuid}";
           fsType = "btrfs";
-          options = [ "subvol=content" ];
+          options = [ "compress=zstd,subvol=content" ];
         };
       }
     ])
@@ -124,13 +124,14 @@ in
 
   fileSystems =
     {
-      "/mnt/storage" = {
+      "/tank" = {
         #/mnt/disk* /mnt/storage fuse.mergerfs defaults,nonempty,allow_other,use_ino,cache.files=partial,moveonenospc=true,dropcacheonclose=true,minfreespace=100G,fsname=mergerfs 0 0
-        device = lib.strings.concatMapStringsSep ":" (d: "/mnt/${d.name}") dataDisks;
+        device = lib.strings.concatMapStringsSep ":" (d: "/mnt/${d.name}") dataDisks
+        + ":/zfs";
         fsType = "fuse.mergerfs";
         options = [
           "defaults"
-          "nofail"
+          # "nofail"
           "nonempty"
           "allow_other"
           "use_ino"
@@ -143,6 +144,7 @@ in
           # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
           "noforget"
           "inodecalc=path-hash"
+          "nfsvers=4.2"
           # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
           "func.getattr=newest"
         ];
@@ -152,9 +154,12 @@ in
     parityFs
     // dataFs;
 
-  # services.nfs.server.exports = ''
-  #   /mnt/storage 192.168.1.0/24(rw,sync,insecure,no_root_squash,fsid=uuid,anonuid=568,anongid=568)
-  # '';
+  services.nfs.server.enable = true;
+  services.nfs.server.exports = ''
+    /tank 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0)
+  '';
+  networking.firewall.allowedTCPPorts = [ 2049 20048 111 ];
+
 
   services.snapraid = {
     inherit contentFiles parityFiles;
@@ -190,31 +195,32 @@ in
     startAt = "01:00";
     serviceConfig = {
       Type = "oneshot";
+      User = "root";
       ExecStart = "${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner";
       Nice = 19;
       IOSchedulingPriority = 7;
       CPUSchedulingPolicy = "batch";
 
-      LockPersonality = true;
-      MemoryDenyWriteExecute = true;
-      NoNewPrivileges = true;
-      PrivateTmp = true;
-      ProtectClock = true;
-      ProtectControlGroups = true;
-      ProtectHostname = true;
-      ProtectKernelLogs = true;
-      ProtectKernelModules = true;
-      ProtectKernelTunables = true;
-      RestrictAddressFamilies = "AF_UNIX";
-      RestrictNamespaces = true;
-      RestrictRealtime = true;
-      RestrictSUIDSGID = true;
-      SystemCallArchitectures = "native";
-      SystemCallFilter = "@system-service";
-      SystemCallErrorNumber = "EPERM";
-      CapabilityBoundingSet = "";
-      ProtectSystem = "strict";
-      ProtectHome = "read-only";
+      # LockPersonality = true;
+      # MemoryDenyWriteExecute = true;
+      # NoNewPrivileges = true;
+      # PrivateTmp = true;
+      # ProtectClock = true;
+      # ProtectControlGroups = true;
+      # ProtectHostname = true;
+      # ProtectKernelLogs = true;
+      # ProtectKernelModules = true;
+      # ProtectKernelTunables = true;
+      # RestrictAddressFamilies = "AF_UNIX";
+      # RestrictNamespaces = true;
+      # RestrictRealtime = true;
+      # RestrictSUIDSGID = true;
+      # SystemCallArchitectures = "native";
+      # SystemCallFilter = "@system-service";
+      # SystemCallErrorNumber = "EPERM";
+      # CapabilityBoundingSet = "";
+      # ProtectSystem = "strict";
+      # ProtectHome = "read-only";
       ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
       ReadWritePaths =
         # sync requires access to directories containing content files

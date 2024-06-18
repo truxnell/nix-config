@@ -89,7 +89,7 @@ let
     (
       writeScriptBin name
         (builtins.readFile (src + "/snapraid-btrfs-runner.py"))
-    ).overrideAttrs (old: {
+    ).overrideAttrs (old: { 
       buildCommand = "${old.buildCommand}\n patchShebangs $out";
     });
 in
