@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Prometheus exporter for hs110 smartplugs";
   image = "sdelrio/hs110-exporter:v1.0.0";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8110; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

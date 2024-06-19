@@ -6,8 +6,8 @@
 with lib;
 let
   app = "qbittorrent";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8080; #int
   qbit_port = 32189;
   cfg = config.mySystem.services.${app};
@@ -43,7 +43,7 @@ in
       in
       {
         image = "${image}";
-        user = "${user}:${group}";
+        user = "568:568";
         environment = {
           QBITTORRENT__BT_PORT = builtins.toString qbit_port;
         };

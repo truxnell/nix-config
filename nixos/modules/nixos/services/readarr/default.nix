@@ -70,7 +70,7 @@ in
       users.users.truxnell.extraGroups = [ group ];
 
       environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-        directories = [{ directory = appFolder; user = "568"; group = "568"; mode = "750"; }];
+        directories = [{ directory = appFolder; user = "kah"; group = "kah"; mode = "750"; }];
       };
 
 

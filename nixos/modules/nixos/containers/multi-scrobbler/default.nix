@@ -10,8 +10,8 @@ let
   category = "containers";
   description = "Music scrobbler";
   image = "ghcr.io/foxxmd/multi-scrobbler:0.7.1@sha256:5be5c5987cf44a5c00591f6d6cb812be9a52f76f23cab81c134aba4fbc7e9a76";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 9078; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

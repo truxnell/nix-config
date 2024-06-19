@@ -8,8 +8,8 @@ with lib;
 let
   app = "homepage";
   image = "ghcr.io/gethomepage/homepage:v0.9.2";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 3000; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -211,35 +211,35 @@ in
     # api secrets from other apps
     sops.secrets."services/sonarr/env" = {
       # configure secret for forwarding rules
-      sopsFile = ../arr/sonarr/secrets.sops.yaml;
+      sopsFile = ../../services/sonarr/secrets.sops.yaml;
       owner = "kah";
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
     sops.secrets."services/radarr/env" = {
       # configure secret for forwarding rules
-      sopsFile = ../arr/radarr/secrets.sops.yaml;
+      sopsFile = ../../services/radarr/secrets.sops.yaml;
       owner = "kah";
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
     sops.secrets."services/lidarr/env" = {
       # configure secret for forwarding rules
-      sopsFile = ../arr/lidarr/secrets.sops.yaml;
+      sopsFile = ../../services/lidarr/secrets.sops.yaml;
       owner = "kah";
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
     sops.secrets."services/readarr/env" = {
       # configure secret for forwarding rules
-      sopsFile = ../arr/readarr/secrets.sops.yaml;
+      sopsFile = ../../services/readarr/secrets.sops.yaml;
       owner = "kah";
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
     };
     sops.secrets."services/prowlarr/env" = {
       # configure secret for forwarding rules
-      sopsFile = ../arr/prowlarr/secrets.sops.yaml;
+      sopsFile = ../../services/prowlarr/secrets.sops.yaml;
       owner = "kah";
       group = "kah";
       restartUnits = [ "podman-${app}.service" ];
@@ -254,7 +254,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
 
       environment = {
         UMASK = "002";

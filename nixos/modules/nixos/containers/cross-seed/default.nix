@@ -7,8 +7,8 @@ with lib;
 let
   app = "cross-seed";
   image = "ghcr.io/onedr0p/sabnzbd:4.2.3@sha256:8943148a1ac5d6cc91d2cc2aa0cae4f0ab3af49fb00ca2d599fbf0344798bc37";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -30,7 +30,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       cmd = [ "daemon" ];
       volumes = [
         "${appFolder}:/config:rw"

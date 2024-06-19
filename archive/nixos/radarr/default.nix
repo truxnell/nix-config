@@ -5,15 +5,14 @@
 }:
 with lib;
 let
-  app = "sonarr";
-  image = "ghcr.io/onedr0p/sonarr:4.0.4@sha256:b513d3836c5b86d3e5c2eb7cb4908e0002856d922b0a360f136781aaa89ef38a";
-  user = "568"; #string
-  group = "568"; #string
-  port = 8989; #int
+  app = "radarr";
+  image = "ghcr.io/onedr0p/radarr:5.4.6.8723@sha256:3198f09197697a4d57f995650ebf34b57b2fdbb991dac1611ad8356d9e8bda8e";
+  user = "kah"; #string
+  group = "kah"; #string
+  port = 7878; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =
@@ -42,12 +41,11 @@ in
       user = "${user}:${group}";
       dependsOn = [ "prowlarr" ];
       environment = {
-        TZ = "${config.time.timeZone}";
         PUSHOVER_DEBUG = "false";
         PUSHOVER_APP_URL = "${app}.${config.mySystem.domain}";
-        SONARR__INSTANCE_NAME = "Radarr";
-        SONARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
-        SONARR__LOG_LEVEL = "info";
+        RADARR__INSTANCE_NAME = "Radarr";
+        RADARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
+        RADARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
@@ -55,6 +53,7 @@ in
         "${config.mySystem.nasFolder}/natflix:/media:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
+
     };
 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
@@ -71,18 +70,19 @@ in
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
+
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        Sonarr = {
+        Radarr = {
           icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
-          description = "TV show management";
+          description = "Movie management";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_SONARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_RADARR__API_KEY}}";
           };
         };
       }

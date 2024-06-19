@@ -8,6 +8,9 @@ let
   cfg = config.mySystem.services.code-server;
   app = "code-server";
   url = "code-${config.networking.hostName}.${config.networking.domain}";
+  appFolder = "/var/lib/${app}";
+  user="truxnell";
+  group="users";
 in
 {
   options.mySystem.services.code-server =
@@ -18,13 +21,19 @@ in
 
   config = mkIf cfg.enable {
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
+
+
+
     services.code-server = {
       auth = "none";
       enable = true;
       disableTelemetry = true;
       disableUpdateCheck = true;
       proxyDomain = "code-${config.networking.hostName}.${config.networking.domain}";
-      userDataDir = "/var/lib/code-server/";
+      userDataDir = "${appFolder}";
       host = "127.0.0.1";
       package = pkgs.vscode-with-extensions.override {
         vscode = pkgs.unstable.code-server;

@@ -8,8 +8,8 @@ with lib;
 let
   app = "gatus";
   image = "ghcr.io/twin/gatus:v5.11.0@sha256:eb0374eb55e3ff84ec8f9ea10342ddb623cfba23e5836138896cde01f11cf23d";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8080; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -96,7 +96,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
         "/etc/localtime:/etc/localtime:ro"

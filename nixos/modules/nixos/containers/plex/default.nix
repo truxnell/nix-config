@@ -7,8 +7,8 @@ with lib;
 let
   app = "plex";
   image = "ghcr.io/onedr0p/plex:1.40.1.8227-c0dd5a73e@sha256:a60bc6352543b4453b117a8f2b89549e458f3ed8960206d2f3501756b6beb519";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 32400; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -33,7 +33,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/data:rw"

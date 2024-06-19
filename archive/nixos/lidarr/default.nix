@@ -5,13 +5,14 @@
 }:
 with lib;
 let
-  app = "readarr";
-  image = "ghcr.io/onedr0p/readarr-nightly:0.3.27.2538";
-  user = "568"; #string
-  group = "568"; #string
-  port = 8787; #int
+  app = "lidarr";
+  image = "ghcr.io/onedr0p/lidarr:2.2.5";
+  user = "kah"; #string
+  group = "kah"; #string
+  port = 8686; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
+
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
@@ -41,10 +42,11 @@ in
       user = "${user}:${group}";
       dependsOn = [ "prowlarr" ];
       environment = {
-        TZ = "${config.time.timeZone}";
-        READARR__INSTANCE_NAME = "Lidarr";
-        READARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
-        READARR__LOG_LEVEL = "info";
+        PUSHOVER_DEBUG = "false";
+        PUSHOVER_APP_URL = "${app}.${config.mySystem.domain}";
+        LIDARR__INSTANCE_NAME = "Lidarr";
+        LIDARR__APPLICATION_URL = "https://${app}.${config.mySystem.domain}";
+        LIDARR__LOG_LEVEL = "info";
       };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       volumes = [
@@ -70,16 +72,16 @@ in
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        Readar = {
+        Lidarr = {
           icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
 
-          description = "Book management";
+          description = "Music management";
           container = "${app}";
           widget = {
             type = "${app}";
             url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_READARR__API_KEY}}";
+            key = "{{HOMEPAGE_VAR_LIDARR__API_KEY}}";
           };
         };
       }
@@ -96,11 +98,11 @@ in
 
     services.restic.backups = config.lib.mySystem.mkRestic
       {
-        inherit app user;
+        inherit app;
+        user = builtins.toString user;
         excludePaths = [ "Backups" ];
         paths = [ appFolder ];
         inherit appFolder;
       };
-
   };
 }

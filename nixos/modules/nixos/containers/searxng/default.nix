@@ -27,7 +27,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       volumes = [
         "${configFile}:/config/config.yaml:ro"
         "/etc/localtime:/etc/localtime:ro"

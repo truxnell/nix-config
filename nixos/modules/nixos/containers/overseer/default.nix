@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Media requests";
   image = "ghcr.io/sct/overseerr:1.33.2@sha256:714ea6db2bc007a2262d112bef7eec74972eb33d9c72bddb9cbd98b8742de950";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 5055; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -82,7 +82,9 @@ in
 
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user="568";
+      group="568";
       env = { LOG_LEVEL = "info"; };
       volumes = [
         "${appFolder}:/app/config:rw"

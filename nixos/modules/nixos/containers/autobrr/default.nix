@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Torrent brr-er";
   image = "ghcr.io/autobrr/autobrr:v1.43.0@sha256:149bb687a7dc2a7c184d2d6592e5fc49b0ee4da3250ac99938333d6c50e9fab6";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 7474; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

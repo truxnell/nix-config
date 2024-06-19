@@ -7,8 +7,8 @@ with lib;
 let
   app = "home-assistant";
   image = "ghcr.io/onedr0p/home-assistant:2024.6.3@sha256:35b49d32f55365f7125f7050da3c40d81623ff6f9115863e57f58f8aaf4fcb30";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8123; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -38,7 +38,7 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       environment = {
         HASS_IP = "10.8.20.42";
       };

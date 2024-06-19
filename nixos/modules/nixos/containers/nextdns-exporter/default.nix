@@ -10,8 +10,8 @@ let
   category = "services";
   description = "NextDNS exporter";
   image = "ghcr.io/raylas/nextdns-exporter:0.5.4@sha256:9e41d74d3bda8cf0f65b2fddf5300332a22bd540cbe8226b9cc88583dc35f6ff";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 9948; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -69,7 +69,9 @@ in
     };
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user="568";
+      group="568";
       env = { };
       ports = [ "${builtins.toString port}:${builtins.toString port}" ];
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];

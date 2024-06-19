@@ -10,8 +10,8 @@ let
   category = "services";
   description = "Website monitoring";
   image = "ghcr.io/dgtlmoon/changedetection.io:0.45.24@sha256:2857e6d9390ed12cce71fd1812a12df180ef28ec535b26d03a711163dc83f398";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 5000; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -82,7 +82,9 @@ in
 
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit app image;
+      user="568";
+      group="568";
       env = {
         PORT = "5000";
         USE_X_SETTINGS = "1";

@@ -7,8 +7,8 @@ with lib;
 let
   app = "tautulli";
   image = "ghcr.io/onedr0p/tautulli:2.13.4@sha256:633a57b2f8634feb67811064ec3fa52f40a70641be927fdfda6f5d91ebbd5d73";
-  user = "568"; #string
-  group = "568"; #string
+  user = "kah"; #string
+  group = "kah"; #string
   port = 8181; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
@@ -29,11 +29,11 @@ in
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
-      user = "${user}:${group}";
+      user = "568:568";
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
-        "${config.mySystem.nasFolder}/backup/kubernetes/apps/tautulli:/config/backup:rw"
+        "${config.mySystem.nasFolder}/backup/apps/tautulli:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
