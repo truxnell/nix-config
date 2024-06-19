@@ -6,7 +6,7 @@
       "github>truxnell/nix-config//.github/renovate/autoMerge.json5",
     ],
     "gitAuthor": "Trux-Bot <19149206+trux-bot[bot]@users.noreply.github.com>",
-    "ignoreTests": "false",
+    "ignoreTests": "true",
 
     // TODO remove once out of beta?
     // https://docs.renovatebot.com/modules/manager/nix/
@@ -22,7 +22,7 @@
 
     "regexManagers": [
     {
-      fileMatch: ["^.*\\.nix$", "^.*\\.toml$"],
+      fileMatch: ["(^|/)nixos/.*\\.nix$", "(^|/)flyio/.*\\.toml$"],
       matchStrings: [
         'image *= *"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?"',
       ],

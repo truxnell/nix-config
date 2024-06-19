@@ -24,6 +24,7 @@ in
       disableTelemetry = true;
       disableUpdateCheck = true;
       proxyDomain = "code-${config.networking.hostName}.${config.networking.domain}";
+      userDataDir="/var/lib/code-server/";
       host = "127.0.0.1";
       package = pkgs.vscode-with-extensions.override {
         vscode = pkgs.unstable.code-server;

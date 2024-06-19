@@ -9,13 +9,12 @@
       "schedule": [ "before 4am on Sunday" ],
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
-        // 'ghcr.io/onedr0p/sonarr',
-        // 'ghcr.io/onedr0p/readarr-nightly',
-        // 'ghcr.io/onedr0p/radarr',
-        // 'ghcr.io/onedr0p/lidarr',
-        // 'ghcr.io/onedr0p/prowlarr',
         'ghcr.io/twin/gatus',
         'vaultwarden/server',
+        'sissbruecker/linkding',
+        'ghcr.io/autobrr/autobrr',
+        'gotenberg/gotenberg',
+
       ],
 
     },
@@ -30,6 +29,8 @@
         "ghcr.io/gethomepage/homepage",
         "garethgeorge/backrest",
         "ghcr.io/buroa/qbtools",
+        "ghcr.io/dgtlmoon/changedetection.io",
+        "ghcr.io/amruthpillai/reactive-resume",
       ]
 
     },
