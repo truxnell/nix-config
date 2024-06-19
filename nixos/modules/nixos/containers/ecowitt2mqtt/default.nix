@@ -10,8 +10,8 @@ let
   category = "containers";
   description = "Weather station to MQTT";
   image = "ghcr.io/bachya/ecowitt2mqtt:latest@sha256:bbd7fb28fb47ad09c9a94463afa95c7e51bddce840a9b0ed775234b26e7487b4";
-  user = "kah"; #string
-  group = "kah"; #string
+  user = "1000"; #string
+  group = "1000"; #string
   port = 8080; #int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -68,8 +68,8 @@ in
     ## Secrets
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
+      # owner = user;
+      # inherit group;
       restartUnits = [ "podman-${app}.service" ];
     };
 

@@ -32,6 +32,8 @@ with lib;
     };
 
     services.logrotate.enable = mkDefault true;
+    services.smartd.enable = mkDefault true;
+
 
     environment.noXlibs = mkDefault true;
     documentation = {
@@ -45,6 +47,11 @@ with lib;
 
     sound.enable = false;
     hardware.pulseaudio.enable = false;
+
+    environment.systemPackages = with pkgs; [
+      tmux
+      btop
+    ];
 
 
     services.udisks2.enable = mkDefault false;

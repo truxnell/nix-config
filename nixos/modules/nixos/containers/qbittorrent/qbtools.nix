@@ -81,6 +81,10 @@ with lib;
           permaseed \
           --exclude-tag \
           site:myanonamouse \
+          --exclude-tag \
+          site:orpheus \
+          --exclude-tag \
+          site:redacted \
           --server https://qbittorrent.trux.dev  \
           --port 443  \
           --config /config/config.yaml

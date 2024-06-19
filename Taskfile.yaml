@@ -12,6 +12,10 @@ includes:
   pre:
     taskfile: ".taskfiles/pre-commit"
     dir: "{{.ROOT_DOR}}"
+  rst:
+    taskfile: ".taskfiles/rst"
+    dir: "{{.ROOT_DOR}}"
+
 
 tasks:
   default:

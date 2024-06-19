@@ -82,6 +82,7 @@ in
 
     virtualisation.oci-containers.containers."${app}-rack" = {
       inherit image;
+      ports = [ "${builtins.toString port}:${builtins.toString port}" ];
       environment = {
         HS110IP = "10.8.30.131";
         FREQUENCY = "60";
@@ -90,25 +91,19 @@ in
       };
     };
 
-
-    ### gatus integration
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [
-      {
-        name = app;
-        group = "${category}";
-        url = "https://${url}";
-        interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-      }
-    ];
-
-    ### Ingress
-    services.nginx.virtualHosts.${url} = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://${app}-rack:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
+    services.vmagent = {
+      prometheusConfig = {
+        scrape_configs = [
+          {
+            job_name = "${app}-rack";
+            # scrape_timeout = "40s";
+            static_configs = [
+              {
+                targets = [ "http://127.0.0.1:${builtins.toString port}" ];
+              }
+            ];
+          }
+        ];
       };
     };
 

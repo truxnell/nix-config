@@ -7,7 +7,7 @@
 , ...
 }: {
   imports = [
-
+    ./storage.nix
 
   ];
   config = {
@@ -26,6 +26,9 @@
       sabnzbd.enable = true;
       qbittorrent.enable = true;
       prowlarr.enable = true;
+      autobrr.enable = true;
+      plex.enable = true;
+      immich.enable = true;
 
 
     };
@@ -36,11 +39,13 @@
 
     mySystem.system = {
       zfs.enable = true;
-      zfs.mountPoolsAtBoot = [ "tank" "tank1" ];
+      zfs.mountPoolsAtBoot = [ "zfs" "old_zfs" ];
     };
 
     mySystem.services.nfs.enable = true;
     mySystem.system.motd.networkInterfaces = [ "eno2" ];
+
+
 
 
     boot = {
@@ -91,6 +96,12 @@
         neededForBoot = true; # for impermanence
       };
 
+    fileSystems."/mnt/cache" =
+      {
+        device = "/dev/disk/by-uuid/fe725638-ca41-4ecc-9b8a-7bf0807786e1";
+        fsType = "xfs";
+      };
+
     # TODO does this live somewhere else?
     # it is very machine-specific...
     # add user with `sudo smbpasswd -a my_user`
@@ -112,15 +123,15 @@
       '';
       shares = {
         backup = {
-          path = "/tank/backup";
+          path = "/zfs/backup";
           "read only" = "no";
         };
         documents = {
-          path = "/tank/documents";
+          path = "/zfs/documents";
           "read only" = "no";
         };
         natflix = {
-          path = "/tank/natflix";
+          path = "/zfs/natflix";
           "read only" = "no";
         };
         # paperless = {
@@ -130,6 +141,14 @@
       };
 
     };
+    services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+
+    environment.systemPackages = with pkgs; [
+      btrfs-progs
+
+    ];
+
+
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [ "/var/lib/samba/" ];

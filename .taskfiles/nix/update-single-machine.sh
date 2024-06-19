@@ -2,7 +2,7 @@
 
 set -e
 
-cd /home/truxnell/.local/nix-config
+# cd /home/truxnell/.local/nix-config
 
 # rsa_key="~/.nixos/secrets/ssh_keys/ansible/ansible.key"
 # export NIX_SSHOPTS="-t -i $rsa_key"

@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "redlib";
+  app = "linkding";
   category = "services";
-  description = "reddit alternative frontend";
-  image = "quay.io/redlib/redlib@sha256:7fa92bb9b5a281123ee86a0b77a443939c2ccdabba1c12595dcd671a84cd5a64";
-  user = "redlib"; #string
-  group = "redlib"; #string
-  port = 8080; #int
+  description = "Bookmark manager";
+  image = "sissbruecker/linkding:1.30.0";
+  user = "568"; #string
+  group = "568"; #string
+  port = 9090; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -47,12 +47,13 @@ in
           description = "Development instance";
           default = false;
         };
-      backups = mkOption
+      backup = mkOption
         {
           type = lib.types.bool;
-          description = "Enable local backups";
+          description = "Enable backups";
           default = true;
         };
+
 
 
     };
@@ -60,30 +61,39 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
 
-    # Folder perms
+    # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d ${appFolder}/ 0750 ${user} ${group} -"
     # ];
 
-    ## service
-    # services.test= {
-    #   enable = true;
-    # };
-
-    ## container
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; user = "kah"; group = "kah"; mode = "750"; }];
     };
+
+
+    virtualisation.oci-containers.containers."${app}" = {
+      inherit image;
+      environment = {
+        LD_SUPERUSER_NAME = "truxnell";
+      };
+      environmentFiles = [
+        config.sops.secrets."${category}/${app}/env".path
+      ];
+      volumes = [
+        "${appFolder}:/etc/linkding/data:rw"
+      ];
+    };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -101,7 +111,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -109,8 +119,8 @@ in
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
-      useACMEHost = config.networking.domain;
       forceSSL = true;
+      useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
@@ -125,18 +135,23 @@ in
     # };
 
     ### backups
-    # warnings = [
-    #   (mkIf (!cfg.backups && config.mySystem.purpose != "Development")
-    #     "WARNING: Local backups for ${app} are disabled!")
-    # ];
+    warnings = [
+      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
+        "WARNING: Backups for ${app} are disabled!")
+    ];
 
-    # services.restic.backups = config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
+      });
 
-    #   };
+
+    # services.postgresqlBackup = {
+    #   databases = [ app ];
+    # };
+
 
 
   };

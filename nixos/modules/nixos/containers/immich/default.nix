@@ -70,7 +70,7 @@ in
       sopsFile = ./secrets.sops.yaml;
       owner = user;
       inherit group;
-      restartUnits = [ "${app}.service" ];
+      restartUnits = [ "${app}-server.service" "${app}-postgres.service" ];
     };
 
     # users = {
@@ -112,13 +112,12 @@ in
     virtualisation.oci-containers.containers =
       {
         immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.105.1";
-          cmd = [ "start.sh" "immich" ];
+          image = "ghcr.io/immich-app/immich-server:v1.106.4";
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           inherit environment;
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
-            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+            "/zfs/photos/immich/:/usr/src/app/upload"
           ];
           dependsOn = [ "immich-redis" "immich-postgres" ];
           ports = [ "${builtins.toString port}:${builtins.toString port}" ];
@@ -127,36 +126,17 @@ in
             # that includes both this server and the upstream system server, causing resolutions of other pod names
             # to be inconsistent.
             "--dns=10.88.0.1"
-          ];
-        };
-
-        immich-micoservices = {
-          image = "ghcr.io/immich-app/immich-server:v1.105.1";
-          cmd = [ "start.sh" "microservices" ];
-          environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-          inherit environment;
-          volumes = [
-            "/etc/localtime:/etc/localtime:ro"
-            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
-          ];
-          dependsOn = [ "immich-redis" "immich-postgres" ];
-          extraOptions = [
-            # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
-            # that includes both this server and the upstream system server, causing resolutions of other pod names
-            # to be inconsistent.
-            "--dns=10.88.0.1"
             "--device=/dev/dri:/dev/dri"
           ];
-
         };
+
 
 
         immich-machine-learning = {
-          image = "ghcr.io/immich-app/immich-machine-learning:v1.105.1";
+          image = "ghcr.io/immich-app/immich-machine-learning:v1.106.4";
           inherit environment;
           volumes = [
-            "/run/postgresql:/run/postgresql"
-            "${config.mySystem.nasFolder}/photos/upload:/usr/src/app/upload"
+            "/zfs/photos/immich/:/usr/src/app/upload"
             "/var/lib/immich/machine-learning:/cache"
           ];
           extraOptions = [

@@ -1,0 +1,34 @@
+---
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  source: '{{ .source | default "local" }}'
+
+
+tasks:
+  restore:
+    desc: Restore backup
+    silent: true
+    requires:
+      vars:
+        - source
+        - app
+    cmds:
+      - echo "This will restore {{ .app }}."
+      - echo "THIS IS DESTRUCTIVE!!!"
+      - task: .prompt_to_continue
+      - sudo systemctl stop {{ .app }} || sudo systemctl stop podman-{{ .app }}
+      - sudo rm -Rf {{ .path }}/*
+      - sudo restic-{{ .app }}-{{ .source }} restore {{ .snap }}:/mnt/nightly_backup{{ .path }} --target {{ .path }}
+      - sudo ls -la {{ .path }}
+      - sudo systemctl start {{ .app }} || sudo systemctl start podman-{{ .app }}
+
+    vars:
+      path: 
+        sh: sudo restic-{{ .app }}-{{ .source }} snapshots | tail -n3 | head -1 | awk '{ path = $NF } END { sub("^/mnt/nightly_backup", "", path); print path }'
+      snap: '{{.snap | default "latest" }}'
+
+  .prompt_to_continue:
+    internal: true
+    prompt: Do you want to continue applying this configuration?

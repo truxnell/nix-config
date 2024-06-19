@@ -24,7 +24,6 @@
     # backrest.enable = true;
 
     overseerr.enable = true;
-    plex.enable = true;
     tautulli.enable = true;
 
     factorio.freight-forwarding.enable = true; # the factory must grow
@@ -43,12 +42,12 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-    paperless.enable = true;
+    # paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
     changedetection.enable = true;
-    immich.enable = true;
+    linkding.enable = true;
 
     # monitoring
     victoriametrics.enable = true;
