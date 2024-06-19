@@ -9,7 +9,7 @@ let
   app = "linkding";
   category = "services";
   description = "Bookmark manager";
-  image = "sissbruecker/linkding:1.30.0";
+  image = "sissbruecker/linkding:1.31.0";
   user = "568"; #string
   group = "568"; #string
   port = 9090; #int
