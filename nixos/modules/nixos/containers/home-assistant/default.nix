@@ -6,7 +6,7 @@
 with lib;
 let
   app = "home-assistant";
-  image = "ghcr.io/onedr0p/home-assistant:2024.6.0@sha256:a06e560e16131deabef39ff4842c01a5f7d797bb3d9a473c046d9d09e0b8227d";
+  image = "ghcr.io/onedr0p/home-assistant:2024.6.3@sha256:35b49d32f55365f7125f7050da3c40d81623ff6f9115863e57f58f8aaf4fcb30";
   user = "568"; #string
   group = "568"; #string
   port = 8123; #int
