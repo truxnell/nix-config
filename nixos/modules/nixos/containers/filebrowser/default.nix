@@ -91,12 +91,12 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "568:568";
-      environment={
-        TZ="Australia/Melbourne";
-        FB_DATABASE="/config/filebrowser.db";
-        FB_ROOT="/tank";
-        FB_LOG="stdout";
-        FB_NOAUTH="true";
+      environment = {
+        TZ = "Australia/Melbourne";
+        FB_DATABASE = "/config/filebrowser.db";
+        FB_ROOT = "/tank";
+        FB_LOG = "stdout";
+        FB_NOAUTH = "true";
       };
       volumes = [
         "${appFolder}:/config:rw"

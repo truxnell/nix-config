@@ -83,8 +83,8 @@ in
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
       inherit app image;
-      user="568";
-      group="568";
+      user = "568";
+      group = "568";
       env = { LOG_LEVEL = "info"; };
       volumes = [
         "${appFolder}:/app/config:rw"

@@ -70,8 +70,8 @@ in
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
       inherit app image;
-      user="568";
-      group="568";
+      user = "568";
+      group = "568";
       env = { };
       ports = [ "${builtins.toString port}:${builtins.toString port}" ];
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
