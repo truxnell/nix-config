@@ -27,16 +27,16 @@ To Install
 
 ## Goals
 
-- [ ] Learn nix
-- [ ] Mostly reproduce features from my existing homelab
-- [ ] Replace existing ubuntu-based 'NAS'
+- [X] Learn nix
+- [X] Mostly reproduce features from my existing homelab
+- [X] Replace existing ubuntu-based 'NAS'
 - [ ] Expand usage to other shell environments such as WSL, etc
-- [ ] handle secrets - decide between sweet and simple SOPS or re-use my doppler setup.
-- [ ] keep it simple, use trusted boring tools
+- [X] handle secrets - decide between sweet and simple SOPS or re-use my doppler setup.
+- [x] keep it simple, use trusted boring tools
 
 ## TODO
 
-- [ ] Github Actions update fly.io instances (Bitwarden)
+- [X] Github Actions update fly.io instances (Bitwarden)
 - [ ] Bring over hosts
   - [x] DNS01 Raspi4
   - [x] DNS02 Raspi4
