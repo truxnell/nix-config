@@ -29,8 +29,7 @@
       autobrr.enable = true;
       plex.enable = true;
       immich.enable = true;
-
-
+      fielbrowser.enable=true;
     };
     mySystem.security.acme.enable = true;
 
