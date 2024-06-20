@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "multi-scrobbler";
-  category = "containers";
-  description = "Music scrobbler";
-  image = "ghcr.io/foxxmd/multi-scrobbler:0.7.1@sha256:5be5c5987cf44a5c00591f6d6cb812be9a52f76f23cab81c134aba4fbc7e9a76";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 9078; #int
+  app = "filebrowser";
+  category = "services";
+  description = "Webui Filebrowser";
+  image = "docker.io/filebrowser/filebrowser:v2.30.0@sha256:1252d3e3d7c27598765a4cd08d68a8b4dda57753649870dcfd2fdcc2e3622709";
+  user = "568"; #string
+  group = "568"; #string
+  port = 80; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -61,41 +61,49 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."${category}/${app}/config.js" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = config.users.users.kah.name;
-      inherit (config.users.users.kah) group;
-      restartUnits = [ "podman-${app}.service" ];
-    };
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
 
     users.users.truxnell.extraGroups = [ group ];
 
 
     # Folder perms - only for containers
-    systemd.tmpfiles.rules = [
-      "d ${appFolder}/ 0750 ${user} ${group} -"
-    ];
+    # systemd.tmpfiles.rules = [
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
+    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image;
-      user = "0"; # :(
-      group = "0"; # :(
-      env = {
-        PUID = "568";
-        PGID = "568";
+    ## service
+    # services.test= {
+    #   enable = true;
+    # };
+
+    ## OR
+
+    virtualisation.oci-containers.containers.${app} = {
+      image = "${image}";
+      user = "568:568";
+      environment={
+        TZ="Australia/Melbourne";
+        FB_DATABASE="/config/filebrowser.db";
+        FB_ROOT="/tank";
+        FB_LOG="stdout";
+        FB_NOAUTH="true";
       };
-      dependsOn = [ "maloja" ];
       volumes = [
         "${appFolder}:/config:rw"
-        ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.json:ro''
+        "${config.mySystem.nasFolder}/natflix:/tank:rw"
+        "/etc/localtime:/etc/localtime:ro"
       ];
     };
-
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -113,7 +121,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/health";
+        url = "https://${url}";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -124,7 +132,7 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://${app}:${builtins.toString port}";
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
       };
     };

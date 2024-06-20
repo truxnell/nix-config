@@ -94,6 +94,11 @@ in
       restartUnits = [ "podman-${app}.service" ];
     };
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
+
+
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "568:568";
@@ -101,6 +106,8 @@ in
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
         "${configFile}:/config/config.yaml:ro"
+        "${appFolder}:/config:rw"
+        
       ];
 
       extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring

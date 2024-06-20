@@ -23,5 +23,6 @@
     ./hs110-exporter
     ./linkding
     ./autobrr
+    ./filebrowser
   ];
 }

@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "tautulli";
-  image = "ghcr.io/onedr0p/tautulli:2.13.4@sha256:633a57b2f8634feb67811064ec3fa52f40a70641be927fdfda6f5d91ebbd5d73";
+  app = "sabnzbd";
+  image = "ghcr.io/onedr0p/sabnzbd:4.2.3@sha256:8943148a1ac5d6cc91d2cc2aa0cae4f0ab3af49fb00ca2d599fbf0344798bc37";
   user = "kah"; #string
   group = "kah"; #string
-  port = 8181; #int
+  port = 8080; #int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -30,10 +30,12 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "568:568";
+      environment = {
+        SABNZBD__HOST_WHITELIST_ENTRIES = "sabnzbd, sabnzbd.trux.dev";
+      };
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
-        "${config.mySystem.nasFolder}/backups/nixos/manual/tautulli:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
@@ -48,30 +50,35 @@ in
       };
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
 
     mySystem.services.homepage.media = mkIf cfg.addToHomepage [
       {
-        Tautulli = {
+        Sabnzbd = {
           icon = "${app}.svg";
           href = "https://${app}.${config.mySystem.domain}";
-
-          description = "Plex Monitoring & Stats";
+          description = "Usenet Downloader";
           container = "${app}";
+          widget = {
+            type = "${app}";
+            url = "https://${app}.${config.mySystem.domain}";
+            key = "{{HOMEPAGE_VAR_SABNZBD__API_KEY}}";
+          };
         };
       }
     ];
+
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
 
     mySystem.services.gatus.monitors = [{
 
       name = app;
       group = "media";
       url = "https://${app}.${config.mySystem.domain}";
+
       interval = "1m";
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-
     }];
 
     services.restic.backups = config.lib.mySystem.mkRestic
