@@ -29,7 +29,7 @@
       autobrr.enable = true;
       plex.enable = true;
       immich.enable = true;
-      fielbrowser.enable=true;
+      filebrowser.enable=true;
     };
     mySystem.security.acme.enable = true;
 
@@ -38,7 +38,7 @@
 
     mySystem.system = {
       zfs.enable = true;
-      zfs.mountPoolsAtBoot = [ "zfs" "old_zfs" ];
+      zfs.mountPoolsAtBoot = [ "zfs" ];
     };
 
     mySystem.services.nfs.enable = true;
