@@ -107,7 +107,7 @@ in
         "/etc/localtime:/etc/localtime:ro"
         "${configFile}:/config/config.yaml:ro"
         "${appFolder}:/config:rw"
-        
+
       ];
 
       extraOptions = [ "--cap-add=NET_RAW" ]; # Required for ping/etc to do monitoring

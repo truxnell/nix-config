@@ -9,8 +9,8 @@ let
   app = "code-server";
   url = "code-${config.networking.hostName}.${config.networking.domain}";
   appFolder = "/var/lib/${app}";
-  user="truxnell";
-  group="users";
+  user = "truxnell";
+  group = "users";
 in
 {
   options.mySystem.services.code-server =
