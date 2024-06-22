@@ -9,7 +9,7 @@ let
   app = "changedetection";
   category = "services";
   description = "Website monitoring";
-  image = "ghcr.io/dgtlmoon/changedetection.io:0.45.24@sha256:5745e1111a8a723e9b179a61548dab756bbd84bb6a69a474f7d1258d561afd37";
+  image = "ghcr.io/dgtlmoon/changedetection.io:0.45.24@sha256:2857e6d9390ed12cce71fd1812a12df180ef28ec535b26d03a711163dc83f398";
   user = "kah"; #string
   group = "kah"; #string
   port = 5000; #int
