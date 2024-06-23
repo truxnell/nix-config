@@ -6,7 +6,7 @@
 with lib;
 let
   app = "prowlarr";
-  image = "ghcr.io/onedr0p/prowlarr:1.16.2.4435@sha256:3d3d5702d40824da9ece02f465dbf221dfa726846e9212bc3fe89af5562e6e9e";
+  image = "ghcr.io/onedr0p/prowlarr:1.19.0.4568@sha256:fa2d6968b50c4b15ea80bf32ef6ccaf0b7190f71e6c53cc35ae1d2c97ba8f124";
   user = "kah"; #string
   group = "kah"; #string
   port = 9696; #int
