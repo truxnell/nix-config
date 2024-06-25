@@ -28,11 +28,11 @@ in
       environment.systemPackages = with pkgs; [ nfs-utils ];
 
       systemd.mounts = lib.mkIf cfg.lazy [{
-        type = "nfs";
+        type = "nfs4";
         mountConfig = {
           Options = "noatime";
         };
-        what = "daedalus.${config.mySystem.internalDomain}:/tank";
+        what = "daedalus.${config.mySystem.internalDomain}:/";
         where = "/mnt/nas";
       }];
 
@@ -45,7 +45,7 @@ in
       }];
 
       fileSystems."${config.mySystem.nasFolder}" = lib.mkIf (!cfg.lazy) {
-        device = "daedalus.${config.mySystem.internalDomain}:/tank";
+        device = "daedalus.${config.mySystem.internalDomain}:/";
         fsType = "nfs";
       };
 

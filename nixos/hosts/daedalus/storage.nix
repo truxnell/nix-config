@@ -5,31 +5,58 @@
 , ...
 }:
 let
+  ## Formatting disks
+  # sudo parted /dev/sdk mklabel gpt
+  # sudo parted -a opt /dev/sdk mkpart primary btrfs 0% 100%
+  # sudo mkfs.btrfs /dev/sdh1
+  ## Mount drives temporarily
+  # create data, content and .snapshot folders
+  # sudo btrfs subvol create /mnt/tmp/data
+  # sudo btrfs subvol create /mnt/tmp/content
+  # sudo btrfs subvol create /mnt/tmp/.snapshots
+
   disks = [
     {
       type = "parity";
       name = "parity0";
-      uuid = "6eb8102d-8fb9-4b90-baca-d0164f167d1d"; # 20TB
+      # 20TB wwn-0x5000c500e65322f6
+      uuid = "6eb8102d-8fb9-4b90-baca-d0164f167d1d"; 
     }
     {
       type = "data";
       name = "data0";
-      uuid = "17d7179b-d134-463a-aeaf-5c171d6fdd28"; # 20TB
+      # 20TB wwn-0x5000c500e64e4a57
+      uuid = "17d7179b-d134-463a-aeaf-5c171d6fdd28";
     }
     {
       type = "data";
       name = "data1";
-      uuid = "dcf8c276-dd1b-4144-866d-2a24bca04488"; # 6TB
+      # 6TB wwn-0x50014ee2b6a93916
+      uuid = "dcf8c276-dd1b-4144-866d-2a24bca04488";
     }
     {
       type = "data";
       name = "data2";
-      uuid = "b1328b55-9523-47cd-b937-5eaecaa36d6f"; # 16TB
+      # 18TB wwn-0x5000cca2a6c067ab
+      uuid = "b1328b55-9523-47cd-b937-5eaecaa36d6f";
     }
     {
       type = "data";
       name = "data3";
-      uuid = "645e1ba4-14bf-42f7-84e1-c4efe7cff691"; # 16TB
+      # 18TB wwn-0x5000cca2a6c0631a
+      uuid = "645e1ba4-14bf-42f7-84e1-c4efe7cff691";
+    }
+    {
+      type = "data";
+      name = "data4";
+      # 18TB wwn-0x5000cca2b4c7693b
+      uuid = "e29760af-5c0d-4c53-9f32-aaaf3034c7a8";
+    }
+    {
+      type = "data";
+      name = "data5";
+      # 18TB wwn-0x5000cca2cfc0a510
+      uuid = "2d642e37-20a5-4f97-8392-8471f9e17901";
     }
 
   ];
@@ -105,6 +132,7 @@ let
 in
 {
   environment.systemPackages = with pkgs; [
+    fuse3
     mergerfs
     snapraid-btrfs
     snapraid-btrfs-runner
@@ -131,7 +159,7 @@ in
         fsType = "fuse.mergerfs";
         options = [
           "defaults"
-          # "nofail"
+          "nofail" # I believe this needs fuse3
           "nonempty"
           "allow_other"
           "use_ino"
@@ -153,10 +181,21 @@ in
     parityFs
     // dataFs;
 
+  # nfs
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
     /tank 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0)
   '';
+  # disable v2/v3 nfs to force v4
+  services.nfs.settings.nfsd={
+    # UDP="off";
+    # rdma = "true"; # Remote Direct Memory Access
+    vers3 = "false";
+    vers4 = "true";
+    "vers4.0" = "false";
+    "vers4.1" = "false";
+    "vers4.2" = "true";
+  };
   networking.firewall.allowedTCPPorts = [ 2049 20048 111 ];
 
 
@@ -200,18 +239,18 @@ in
       IOSchedulingPriority = 7;
       CPUSchedulingPolicy = "batch";
 
-      # LockPersonality = true;
-      # MemoryDenyWriteExecute = true;
-      # NoNewPrivileges = true;
-      # PrivateTmp = true;
-      # ProtectClock = true;
-      # ProtectControlGroups = true;
-      # ProtectHostname = true;
-      # ProtectKernelLogs = true;
-      # ProtectKernelModules = true;
-      # ProtectKernelTunables = true;
-      # RestrictAddressFamilies = "AF_UNIX";
-      # RestrictNamespaces = true;
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      RestrictAddressFamilies = "AF_UNIX";
+      RestrictNamespaces = true;
       # RestrictRealtime = true;
       # RestrictSUIDSGID = true;
       # SystemCallArchitectures = "native";
@@ -219,7 +258,7 @@ in
       # SystemCallErrorNumber = "EPERM";
       # CapabilityBoundingSet = "";
       # ProtectSystem = "strict";
-      # ProtectHome = "read-only";
+      ProtectHome = "read-only";
       ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
       ReadWritePaths =
         # sync requires access to directories containing content files

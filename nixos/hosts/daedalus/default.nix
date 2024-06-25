@@ -29,7 +29,8 @@
       autobrr.enable = true;
       plex.enable = true;
       immich.enable = true;
-      filebrowser.enable = true;
+      filebrowser.enable=true;
+      syncthing.enable=true;
     };
     mySystem.security.acme.enable = true;
 
@@ -122,7 +123,7 @@
       '';
       shares = {
         backup = {
-          path = "/zfs/backup";
+          path = "/zfs/backups";
           "read only" = "no";
         };
         documents = {
@@ -130,7 +131,7 @@
           "read only" = "no";
         };
         natflix = {
-          path = "/zfs/natflix";
+          path = "/tank/natflix";
           "read only" = "no";
         };
         # paperless = {

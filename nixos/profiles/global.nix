@@ -40,6 +40,7 @@ with lib;
       tree
       powertop
       parted
+      smartmontools
     ];
 
     networking.useDHCP = lib.mkDefault true;

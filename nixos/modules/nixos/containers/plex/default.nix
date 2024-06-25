@@ -37,7 +37,7 @@ in
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/data:rw"
-        "${config.mySystem.nasFolder}/backup/kubernetes/apps/plex:/config/backup:rw"
+        "${config.mySystem.nasFolder}/backups/kubernetes/apps/plex:/config/backup:rw"
         "/dev/dri:/dev/dri" # for hardware transcoding
         "/etc/localtime:/etc/localtime:ro"
       ];
