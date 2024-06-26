@@ -75,7 +75,7 @@
   mySystem.system.motd.networkInterfaces = [ "enp1s0" ];
 
   mySystem.nasFolder = "/mnt/nas";
-  mySystem.system.resticBackup.local.location = "/mnt/nas/backup/nixos/nixos";
+  mySystem.system.resticBackup.local.location = "/mnt/nas/backups/nixos/nixos";
 
 
   boot = {
