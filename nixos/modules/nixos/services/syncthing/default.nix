@@ -10,8 +10,8 @@ let
   category = "services";
   description = "File syncing service";
   # image = "";
-  user = config.services.syncthing.user; #string
-  group = config.services.syncthing.group; #string
+  inherit (config.services.syncthing) user;#string
+  inherit (config.services.syncthing) group;#string
   port = 8384; #int
   appFolder = config.services.syncthing.configDir;
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -95,17 +95,17 @@ in
       group = "users";
       guiAddress = "0.0.0.0:8384";
       openDefaultPorts = true;
-      overrideDevices = true; 
-      overrideFolders = true; 
+      overrideDevices = true;
+      overrideFolders = true;
       settings = {
-        options.urAccepted=-1;
+        options.urAccepted = -1;
         devices = {
           "Nat Pixel 6Pro" = { id = "OMARXQ7-KTMH2EB-BAIU7LO-VJB6Q5Z-D6GAAAA-75J4I5D-Q7XPGTI-K34WEQR"; };
         };
-         folders = {
-          "pixel_6_pro_vq13-photos" = { 
-            path = "/tank/syncthing/android_photos"; 
-            devices = [ "Nat Pixel 6Pro" ]; 
+        folders = {
+          "pixel_6_pro_vq13-photos" = {
+            path = "/tank/syncthing/android_photos";
+            devices = [ "Nat Pixel 6Pro" ];
           };
         };
       };

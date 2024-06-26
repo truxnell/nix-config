@@ -29,8 +29,8 @@
       autobrr.enable = true;
       plex.enable = true;
       immich.enable = true;
-      filebrowser.enable=true;
-      syncthing.enable=true;
+      filebrowser.enable = true;
+      syncthing.enable = true;
     };
     mySystem.security.acme.enable = true;
 
