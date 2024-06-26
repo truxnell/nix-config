@@ -71,7 +71,7 @@
     networking.hostId = "485cafad"; # for zfs, helps stop importing to wrong machine
     networking.useDHCP = lib.mkDefault true;
 
-    fileSystems."/" =
+      fileSystems."/" =
       {
         device = "rpool/local/root";
         fsType = "zfs";
