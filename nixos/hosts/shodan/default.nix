@@ -42,7 +42,7 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-    # paperless.enable = true;
+    paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
@@ -75,7 +75,7 @@
   mySystem.system.motd.networkInterfaces = [ "enp1s0" ];
 
   mySystem.nasFolder = "/mnt/nas";
-  mySystem.system.resticBackup.local.location = "/mnt/nas/backups/nixos/nixos";
+  mySystem.system.resticBackup.local.location = "/mnt/nas/backup/nixos/nixos";
 
 
   boot = {

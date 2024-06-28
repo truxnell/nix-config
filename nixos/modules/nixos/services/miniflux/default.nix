@@ -94,6 +94,7 @@ in
         RUN_MIGRATIONS = lib.mkForce "1";
         CREATE_ADMIN = lib.mkForce "1";
         YOUTUBE_EMBED_URL_OVERRIDE = "https://invidious.${config.networking.domain}/"; #TODO only if invidious enabled on machine somewhere
+        METRICS_COLLECTOR = "true";
       };
     };
 
@@ -148,7 +149,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}/settings";
+        url = "https://${url}/metrics";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
@@ -162,6 +163,24 @@ in
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
       };
     };
+
+# Victoriametrics scraping
+    services.vmagent = {
+      prometheusConfig = {
+        scrape_configs = [
+          {
+            job_name = app;
+            # scrape_timeout = "40s";
+            static_configs = [
+              {
+                targets = [ "https://${app}.${config.mySystem.domain}/metrics" ];
+              }
+            ];
+          }
+        ];
+      };
+    };
+
 
     ### firewall config
 

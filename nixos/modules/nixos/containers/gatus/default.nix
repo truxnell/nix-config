@@ -34,15 +34,6 @@ let
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
-    {
-      name = "octoprint";
-      group = "servers";
-      url = "icmp://prusa.${config.mySystem.internalDomain}";
-      interval = "1m";
-      alerts = [{ type = "pushover"; }];
-      conditions = [ "[CONNECTED] == true" ];
-    }
-
   ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
     (builtins.attrValues self.nixosConfigurations);
 
@@ -94,10 +85,6 @@ in
       restartUnits = [ "podman-${app}.service" ];
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
@@ -106,7 +93,6 @@ in
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
         "${configFile}:/config/config.yaml:ro"
-        "${appFolder}:/config:rw"
 
       ];
 

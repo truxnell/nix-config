@@ -112,7 +112,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}";
+        url = "https://${url}/admin_overview";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }

@@ -71,7 +71,7 @@ in
     # enable backups
     services.postgresqlBackup = mkIf cfg.backup {
       enable = lib.mkForce true;
-      location = "${config.mySystem.nasFolder}/backups/nixos/postgresql";
+      location = "${config.mySystem.nasFolder}/backup/nixos/postgresql";
     };
 
     systemd.services.postgresqlBackup = {

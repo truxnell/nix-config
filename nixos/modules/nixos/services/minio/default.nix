@@ -10,8 +10,8 @@ let
   category = "services";
   description = "s3 compatiable storage";
   # image = "";
-  user = "kah"; #string
-  group = "kah"; #string
+  user = "minio"; #string
+  group = "minio"; #string
   port = 9001; #int
   s3port = 9000; #int
   appFolder = "/var/lib/${app}";

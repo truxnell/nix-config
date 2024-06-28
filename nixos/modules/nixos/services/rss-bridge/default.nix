@@ -93,7 +93,7 @@ in
       {
         name = app;
         group = "${category}";
-        url = "https://${url}";
+        url = "https://${url}/static/logo.svg";
         interval = "1m";
         conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 100" ];
       }

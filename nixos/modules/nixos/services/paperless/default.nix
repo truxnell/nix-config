@@ -95,7 +95,6 @@ in
     ## service
     services.paperless = {
       enable = true;
-      package = pkgs.unstable.paperless-ngx; #TODO drop to stable in 24.05?
       dataDir = "/var/lib/paperless";
       mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
       consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
@@ -108,8 +107,8 @@ in
         PAPERLESS_CONSUMER_POLLING = "60";
         PAPERLESS_CONSUMER_RECURSIVE = "true";
         PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
-        PAPERLESS_DBENGINE = "postgresql";
-        PAPERLESS_DBHOST = "/run/postgresql";
+        # PAPERLESS_DBENGINE = "postgresql";
+        # PAPERLESS_DBHOST = "/run/postgresql";
         HOME = "/tmp"; # Prevent GNUPG home dir error
         PAPERLESS_TIKA_ENABLED = true;
         PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";

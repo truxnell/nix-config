@@ -35,7 +35,7 @@
     mySystem.security.acme.enable = true;
 
     mySystem.nasFolder = "/tank";
-    mySystem.system.resticBackup.local.location = "/tank/backups/nixos/nixos";
+    mySystem.system.resticBackup.local.location = "/tank/backup/nixos/nixos";
 
     mySystem.system = {
       zfs.enable = true;
@@ -123,7 +123,7 @@
       '';
       shares = {
         backup = {
-          path = "/zfs/backups";
+          path = "/zfs/backup";
           "read only" = "no";
         };
         documents = {

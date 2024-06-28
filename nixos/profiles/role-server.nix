@@ -35,7 +35,7 @@ with lib;
     services.smartd.enable = mkDefault true;
 
 
-    environment.noXlibs = mkDefault true;
+    # environment.noXlibs = mkDefault true;
     documentation = {
       enable = mkDefault false;
       doc.enable = mkDefault false;
