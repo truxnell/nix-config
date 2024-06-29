@@ -20,7 +20,7 @@ let
       type = "parity";
       name = "parity0";
       # 20TB wwn-0x5000c500e65322f6
-      uuid = "6eb8102d-8fb9-4b90-baca-d0164f167d1d"; 
+      uuid = "6eb8102d-8fb9-4b90-baca-d0164f167d1d";
     }
     {
       type = "data";
@@ -187,7 +187,7 @@ in
     /tank 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=100,rw,fsid=0)
   '';
   # disable v2/v3 nfs to force v4
-  services.nfs.settings.nfsd={
+  services.nfs.settings.nfsd = {
     # UDP="off";
     # rdma = "true"; # Remote Direct Memory Access
     vers3 = "false";
