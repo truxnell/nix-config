@@ -29,8 +29,8 @@
       autobrr.enable = true;
       plex.enable = true;
       immich.enable = true;
-      filebrowser.enable=true;
-      syncthing.enable=true;
+      filebrowser.enable = true;
+      syncthing.enable = true;
     };
     mySystem.security.acme.enable = true;
 
@@ -71,7 +71,7 @@
     networking.hostId = "485cafad"; # for zfs, helps stop importing to wrong machine
     networking.useDHCP = lib.mkDefault true;
 
-      fileSystems."/" =
+    fileSystems."/" =
       {
         device = "rpool/local/root";
         fsType = "zfs";
