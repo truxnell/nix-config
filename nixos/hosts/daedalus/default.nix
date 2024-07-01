@@ -28,6 +28,7 @@
       prowlarr.enable = true;
       autobrr.enable = true;
       plex.enable = true;
+      maintainerr.enable=true;
       immich.enable = true;
       filebrowser.enable=true;
       syncthing.enable=true;

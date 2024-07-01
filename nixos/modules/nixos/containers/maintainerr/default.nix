@@ -6,14 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "minio";
+  app = "maintainerr";
   category = "services";
-  description = "s3 compatiable storage";
-  # image = "";
-  user = "minio"; #string
-  group = "minio"; #string
-  port = 9001; #int
-  s3port = 9000; #int
+  description = "Plex content manager";
+  image = "ghcr.io/jorenn92/maintainerr:2.0.4@sha256:302281ac214dfae767eae42a1739af3971ef40b98dcaf971ab7a77027a53a752";
+  user = "568"; #string
+  group = "568"; #string
+  port = 6246; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -62,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    sops.secrets."${category}/${app}/env" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = user;
-      inherit group;
-      restartUnits = [ "${app}.service" ];
-    };
+    # sops.secrets."${category}/${app}/env" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = user;
+    #   group = group;
+    #   restartUnits = [ "${app}.service" ];
+    # };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -78,30 +77,23 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; group="kah"; mode = "750"; }];
     };
 
 
     ## service
-
-
-    services.minio = {
-      enable = true;
-      listenAddress = "0.0.0.0:${builtins.toString s3port}";
-      consoleAddress = "0.0.0.0:${builtins.toString port}";
-      region = "us-east-1";
-      rootCredentialsFile = "${config.sops.secrets."${category}/${app}/env".path}";
-      dataDir = [ "${config.mySystem.nasFolder}/minio" ];
-      configDir = "/var/lib/${app}";
-    };
-
-    systemd.services.minio = {
+    virtualisation.oci-containers.containers.${app} = {
+      inherit image;
+      user = "${user}:${group}";
+      # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
       environment = {
-        MINIO_SERVER_URL = "https://s3.trux.dev";
-        MINIO_BROWSER_REDIRECT_URL = "https://minio.trux.dev";
-      };
-    };
 
+      };
+      volumes = [
+        "/etc/localtime:/etc/localtime:ro"
+        "${appFolder}:/opt/data:rw"
+      ];
+    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -130,34 +122,17 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
-      };
-      extraConfig = ''
-        # To allow special characters in headers
-        ignore_invalid_headers off;
-        # Allow any size file to be uploaded.
-        # Set to a value such as 1000m; to restrict file size to a specific value
-        client_max_body_size 0;
-        # To disable buffering
-        proxy_buffering off;
-      '';
-    };
-    services.nginx.virtualHosts."s3.${config.networking.domain}" = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString s3port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
-
 
     ### firewall config
 
-    networking.firewall.interfaces.wg0.allowedTCPPorts = [
-      9000
-      9001
-    ];
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
 
     ### backups
     warnings = [

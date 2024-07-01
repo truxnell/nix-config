@@ -93,33 +93,68 @@ in
 
 
     ## service
-    services.paperless = {
-      enable = true;
-      dataDir = "/var/lib/paperless";
-      mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
-      consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
-      consumptionDirIsPublic = true;
-      port = 8000;
-      address = "localhost";
-      passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
-      settings = {
-        PAPERLESS_OCR_LANGUAGE = "eng";
-        PAPERLESS_CONSUMER_POLLING = "60";
-        PAPERLESS_CONSUMER_RECURSIVE = "true";
-        PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
-        # PAPERLESS_DBENGINE = "postgresql";
-        # PAPERLESS_DBHOST = "/run/postgresql";
-        HOME = "/tmp"; # Prevent GNUPG home dir error
-        PAPERLESS_TIKA_ENABLED = true;
-        PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";
-        PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
+    # services.paperless = {
+    #   enable = true;
+    #   dataDir = "/var/lib/paperless";
+    #   mediaDir = "${config.mySystem.nasFolder}/documents/paperless/media";
+    #   consumptionDir = "${config.mySystem.nasFolder}/documents/paperless-inbox";
+    #   consumptionDirIsPublic = true;
+    #   port = 8000;
+    #   address = "localhost";
+    #   passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
+    #   settings = {
+    #     PAPERLESS_OCR_LANGUAGE = "eng";
+    #     PAPERLESS_CONSUMER_POLLING = "60";
+    #     PAPERLESS_CONSUMER_RECURSIVE = "true";
+    #     PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
+    #     # PAPERLESS_DBENGINE = "postgresql";
+    #     # PAPERLESS_DBHOST = "/run/postgresql";
+    #     HOME = "/tmp"; # Prevent GNUPG home dir error
+    #     PAPERLESS_TIKA_ENABLED = true;
+    #     PAPERLESS_TIKA_ENDPOINT = "http://127.0.0.1:${tikaPort}";
+    #     PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
+    #   };
+    # };
+        # for word/etc conversions
+    virtualisation.oci-containers.containers = {
+      paperless = {
+        user="postgres:postgres";
+        image="ghcr.io/paperless-ngx/paperless-ngx:2.4.2@sha256:d632fac5bd143dcd8d846726d1c475c683b96ccbc4901cb8a1c2e02e5d54a4e9";
+        environment={
+          PAPERLESS_OCR_LANGUAGE = "eng";
+          PAPERLESS_CONSUMER_POLLING = "60";
+          PAPERLESS_CONSUMER_RECURSIVE = "true";
+          PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
+          PAPERLESS_DBENGINE = "postgresql";
+          PAPERLESS_DBHOST = "/run/postgresql";
+          PAPERLESS_TIKA_ENABLED = true;
+          PAPERLESS_TIKA_ENDPOINT = "http://tika:${tikaPort}";
+          PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://gotenberg:${gotenbergPort}";
+        };
+      };
+      gotenberg = {
+        user = "gotenberg:gotenberg";
+        image = "gotenberg/gotenberg:8.7.0";
+        cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
+        # ports = [
+        #   "127.0.0.1:${gotenbergPort}:3000"
+        # ];
+      };
+      tika = {
+        image = "apache/tika:2.5.0";
+        # ports = [
+        #   "127.0.0.1:${tikaPort}:9998"
+        # ];
       };
     };
+
+
 
     services.prometheus.exporters.redis = {
       enable = true;
       port = 10394;
     };
+
     services.vmagent = {
       enable = true;
       remoteWrite.url = "http://shodan:8428/api/v1/write";
@@ -141,23 +176,6 @@ in
     };
 
 
-    # for word/etc conversions
-    virtualisation.oci-containers.containers = {
-      gotenberg = {
-        user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:8.7.0";
-        cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
-        ports = [
-          "127.0.0.1:${gotenbergPort}:3000"
-        ];
-      };
-      tika = {
-        image = "apache/tika:2.5.0";
-        ports = [
-          "127.0.0.1:${tikaPort}:9998"
-        ];
-      };
-    };
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [

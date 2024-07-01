@@ -24,5 +24,6 @@
     ./linkding
     ./autobrr
     ./filebrowser
+    ./maintainerr
   ];
 }

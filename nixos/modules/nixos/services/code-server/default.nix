@@ -36,7 +36,7 @@ in
       userDataDir = "${appFolder}";
       host = "127.0.0.1";
       package = pkgs.vscode-with-extensions.override {
-        vscode = pkgs.unstable.code-server;
+        vscode = pkgs.code-server;
         vscodeExtensions = with pkgs.vscode-extensions;
           [
             bbenoist.nix
