@@ -77,7 +77,7 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; group="kah"; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; group = "kah"; mode = "750"; }];
     };
 
 
@@ -86,9 +86,7 @@ in
       inherit image;
       user = "${user}:${group}";
       # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-      environment = {
-
-      };
+      environment = { };
       volumes = [
         "/etc/localtime:/etc/localtime:ro"
         "${appFolder}:/opt/data:rw"

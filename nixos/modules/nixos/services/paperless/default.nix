@@ -115,12 +115,12 @@ in
     #     PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://127.0.0.1:${gotenbergPort}";
     #   };
     # };
-        # for word/etc conversions
+    # for word/etc conversions
     virtualisation.oci-containers.containers = {
       paperless = {
-        user="postgres:postgres";
-        image="ghcr.io/paperless-ngx/paperless-ngx:2.10.2@sha256:f6038522ba8029e765dfbd9366ed41d65c3f0f5be5aacabbae501eb7e3ff3944";
-        environment={
+        user = "postgres:postgres";
+        image = "ghcr.io/paperless-ngx/paperless-ngx:2.10.2@sha256:f6038522ba8029e765dfbd9366ed41d65c3f0f5be5aacabbae501eb7e3ff3944";
+        environment = {
           PAPERLESS_OCR_LANGUAGE = "eng";
           PAPERLESS_CONSUMER_POLLING = "60";
           PAPERLESS_CONSUMER_RECURSIVE = "true";
