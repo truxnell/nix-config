@@ -10,7 +10,7 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
-      services.syncthing.enable=true;
+      services.syncthing.enable = true;
     };
 
     # TODO build this in from flake host names

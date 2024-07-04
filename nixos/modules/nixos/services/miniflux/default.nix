@@ -164,7 +164,7 @@ in
       };
     };
 
-# Victoriametrics scraping
+    # Victoriametrics scraping
     services.vmagent = {
       prometheusConfig = {
         scrape_configs = [
