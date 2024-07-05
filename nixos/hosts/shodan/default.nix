@@ -8,7 +8,7 @@
 }: {
   mySystem.purpose = "Homelab";
   mySystem.system.impermanence.enable = true;
-    mySystem.system.autoUpgrade.enable=true; # bold move cotton
+  mySystem.system.autoUpgrade.enable=true; # bold move cotton
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
@@ -43,7 +43,7 @@
     miniflux.enable = true;
     calibre-web.enable = true;
     rss-bridge.enable = true;
-    paperless.enable = true;
+    # paperless.enable = true;
     rxresume.enable = true;
     invidious.enable = true;
     thelounge.enable = true;
