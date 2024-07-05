@@ -127,7 +127,7 @@ in
           PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS = "true";
           PAPERLESS_DBENGINE = "postgresql";
           PAPERLESS_DBHOST = "/run/postgresql";
-          PAPERLESS_TIKA_ENABLED = true;
+          PAPERLESS_TIKA_ENABLED = "true";
           PAPERLESS_TIKA_ENDPOINT = "http://tika:${tikaPort}";
           PAPERLESS_TIKA_GOTENBERG_ENDPOINT = "http://gotenberg:${gotenbergPort}";
         };

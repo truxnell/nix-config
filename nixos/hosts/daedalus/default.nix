@@ -13,6 +13,7 @@
   config = {
     mySystem.purpose = "Network Attached Storage";
     mySystem.system.impermanence.enable = true;
+    mySystem.system.autoUpgrade.enable=true; # bold move cotton
     mySystem.services = {
       openssh.enable = true;
       minio.enable = true;
