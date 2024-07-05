@@ -37,7 +37,7 @@
     zigbee2mqtt.enable = true;
     node-red.enable = true;
     home-assistant.enable = true;
-    code-server.enable = true; # Why is this bringing in gtk and wayland?
+    code-server.enable = true; 
 
     radicale.enable = true;
     miniflux.enable = true;
