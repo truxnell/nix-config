@@ -8,7 +8,7 @@
 }: {
   mySystem.purpose = "Homelab";
   mySystem.system.impermanence.enable = true;
-  mySystem.system.autoUpgrade.enable=true; # bold move cotton
+  mySystem.system.autoUpgrade.enable = true; # bold move cotton
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
@@ -37,7 +37,7 @@
     zigbee2mqtt.enable = true;
     node-red.enable = true;
     home-assistant.enable = true;
-    code-server.enable = true; 
+    code-server.enable = true;
 
     radicale.enable = true;
     miniflux.enable = true;
