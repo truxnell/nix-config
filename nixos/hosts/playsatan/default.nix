@@ -8,7 +8,7 @@
 }: {
   mySystem.purpose = "Media Streaming";
   mySystem.system.impermanence.enable = true;
-  mySystem.system.autoUpgrade.enable=true; # bold move cotton
+  mySystem.system.autoUpgrade.enable = true; # bold move cotton
   mySystem.services = {
     openssh.enable = true;
 
@@ -46,23 +46,27 @@
   networking.hostId = "b8cc9645";
   networking.useDHCP = lib.mkDefault true;
 
- fileSystems."/" =
-    { device = "rpool/local/root";
+  fileSystems."/" =
+    {
+      device = "rpool/local/root";
       fsType = "zfs";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/72A3-FA67";
+    {
+      device = "/dev/disk/by-uuid/72A3-FA67";
       fsType = "vfat";
     };
 
   fileSystems."/nix" =
-    { device = "rpool/local/nix";
+    {
+      device = "rpool/local/nix";
       fsType = "zfs";
     };
 
   fileSystems."/persist" =
-    { device = "rpool/safe/persist";
+    {
+      device = "rpool/safe/persist";
       fsType = "zfs";
       neededForBoot = true; # for impermanence
     };
