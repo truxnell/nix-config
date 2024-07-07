@@ -21,6 +21,52 @@
   mySystem.nasFolder = "/mnt/nas";
   mySystem.system.resticBackup.local.location = "/mnt/nas/backup/nixos/nixos";
 
+  # TODO fix this bit of a hack
+  users.users.kah = {
+    uid = 568;
+    group = "kah";
+  };
+  users.groups.kah = {};
+
+  users.users.moonlight = {
+    uid = 1002;
+    group = "moonlight";
+    isNormalUser=true;
+  };
+  users.groups.moonlight = {};
+
+  services.getty.autologinUser="moonlight";
+  environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
+      directories = [{ directory = "/home/moonlight/.config/Moonlight Game Streaming Project"; user="moonlight"; group="moonlight"; mode = "750"; }];
+    };
+
+  # TODO abstract out?
+
+  # Intel qsv
+  boot.kernelParams = [
+    "i915.enable_guc=2"
+  ];
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-compute-runtime
+    ];
+  };
+
+  # set xserver videodrivers if used
+  services.xserver={
+    enable = true;
+    autorun=true;
+    displayManager.startx.enable = true;
+  };
+
+programs.fish.promptInit = ''
+if test (tty) = "/dev/tty1"
+    startx moonlight
+end
+'';
 
   boot = {
 
@@ -41,6 +87,11 @@
 
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+  ];
+
 
   networking.hostName = "playsatan"; # Define your hostname.
   networking.hostId = "b8cc9645";
