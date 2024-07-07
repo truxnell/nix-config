@@ -26,19 +26,19 @@
     uid = 568;
     group = "kah";
   };
-  users.groups.kah = {};
+  users.groups.kah = { };
 
   users.users.moonlight = {
     uid = 1002;
     group = "moonlight";
-    isNormalUser=true;
+    isNormalUser = true;
   };
-  users.groups.moonlight = {};
+  users.groups.moonlight = { };
 
-  services.getty.autologinUser="moonlight";
+  services.getty.autologinUser = "moonlight";
   environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
-      directories = [{ directory = "/home/moonlight/.config/Moonlight Game Streaming Project"; user="moonlight"; group="moonlight"; mode = "750"; }];
-    };
+    directories = [{ directory = "/home/moonlight/.config/Moonlight Game Streaming Project"; user = "moonlight"; group = "moonlight"; mode = "750"; }];
+  };
 
   # TODO abstract out?
 
@@ -56,17 +56,17 @@
   };
 
   # set xserver videodrivers if used
-  services.xserver={
+  services.xserver = {
     enable = true;
-    autorun=true;
+    autorun = true;
     displayManager.startx.enable = true;
   };
 
-programs.fish.promptInit = ''
-if test (tty) = "/dev/tty1"
-    startx moonlight
-end
-'';
+  programs.fish.promptInit = ''
+    if test (tty) = "/dev/tty1"
+        startx moonlight
+    end
+  '';
 
   boot = {
 
