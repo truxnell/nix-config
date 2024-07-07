@@ -17,6 +17,7 @@ keys:
   - &daedalus_old age1jpeh4s553taxkyxhzlshzqjfrtvmmp5lw0hmpgn3mdnmgzku332qe082dl
   - &durandal age1j2r8mypw44uvqhfs53424h6fu2rkr5m7asl7rl3zn3xzva9m3dcqpa97gw
   - &daedalus age1ezmtw7qaw93yggtcncqpyej9qjlref8au5uceqat49htmlfgps2swsttyr
+  - &playsatan age1m24gvg0wq5ps872ezcjwdx7e9rrs65rq2vt05qwt9purptxyyessasckk9
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$
@@ -30,3 +31,4 @@ creation_rules:
           - *daedalus_old
           - *durandal
           - *daedalus
+          - *playsatan
