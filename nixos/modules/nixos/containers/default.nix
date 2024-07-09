@@ -25,5 +25,6 @@
     ./autobrr
     ./filebrowser
     ./maintainerr
+    ./cross-seed
   ];
 }

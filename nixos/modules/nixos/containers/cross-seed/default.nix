@@ -5,39 +5,96 @@
 }:
 with lib;
 let
+  cfg = config.mySystem.${category}.${app};
   app = "cross-seed";
-  image = "ghcr.io/onedr0p/sabnzbd:4.2.3@sha256:8943148a1ac5d6cc91d2cc2aa0cae4f0ab3af49fb00ca2d599fbf0344798bc37";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 8080; #int
-  cfg = config.mySystem.services.${app};
+  category = "services";
+  description = "xseed";
+  image = "ghcr.io/cross-seed/cross-seed:5.9.2@sha256:6abdca45f0ecfd8d23a3035beefa716a14b66f23c14854631fe369d1ad346f1e";
+  user = "568"; #string
+  group = "568"; #string
+  port = 2468; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  configFile = builtins.toFile "config.js" (builtins.toJSON configVar);
-
+  host = "${app}" + (if cfg.dev then "-dev" else "");
+  url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.services.${app} =
+  options.mySystem.${category}.${app} =
     {
       enable = mkEnableOption "${app}";
+      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+      monitor = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable gatus monitoring";
+          default = true;
+        };
+      prometheus = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable prometheus scraping";
+          default = true;
+        };
+      addToDNS = mkOption
+        {
+          type = lib.types.bool;
+          description = "Add to DNS list";
+          default = true;
+        };
+      dev = mkOption
+        {
+          type = lib.types.bool;
+          description = "Development instance";
+          default = false;
+        };
+      backup = mkOption
+        {
+          type = lib.types.bool;
+          description = "Enable backups";
+          default = true;
+        };
+
+
+
     };
 
   config = mkIf cfg.enable {
-    # ensure folder exist and has correct owner/group
+
+    ## Secrets
+    sops.secrets."${category}/${app}/config.js" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = "kah";
+      group = "kah";
+      restartUnits = [ "podman-${app}.service" ];
+    };
+
+    users.users.truxnell.extraGroups = [ group ];
+
+
+    # Folder perms - only for containers
     systemd.tmpfiles.rules = [
-      "d ${appFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    };
+
+
+    ## service
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "568:568";
-      cmd = [ "daemon" ];
+      cmd = [ "daemon" "-v" ];
       volumes = [
         "${appFolder}:/config:rw"
-        "${configFile}:/config/config.yaml:ro"
+        "/mnt/data0/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+        ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
+
+
 
   };
 }

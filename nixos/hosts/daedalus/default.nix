@@ -26,6 +26,7 @@
       readarr.enable = true;
       sabnzbd.enable = true;
       qbittorrent.enable = true;
+      cross-seed.enable=true;
       prowlarr.enable = true;
       autobrr.enable = true;
       plex.enable = true;

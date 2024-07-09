@@ -50,11 +50,13 @@ in
         ports = [ "${builtins.toString qbit_port}:${builtins.toString qbit_port}" ];
         volumes = [
           "${appFolder}:/config:rw"
-          "${config.mySystem.nasFolder}/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "/mnt/data0/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
           "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];
       };
+
+ 
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];

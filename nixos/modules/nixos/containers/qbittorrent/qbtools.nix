@@ -85,6 +85,8 @@ with lib;
           site:orpheus \
           --exclude-tag \
           site:redacted \
+          --exclude-tag \
+          site:beyond-hd \
           --server https://qbittorrent.trux.dev  \
           --port 443  \
           --config /config/config.yaml
@@ -94,6 +96,33 @@ with lib;
         startAt = "*-*-* 05:10:00";
 
       };
+
+    systemd.services."qbtools-orphaned" =
+
+      {
+        script = ''
+          ${pkgs.podman}/bin/podman run --rm \
+          -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
+          -v /mnt/data0/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
+          ${image} \
+          orphaned \
+          --exclude-pattern \
+          *_unpackerred \
+          --exclude-pattern \
+          */manual/* \
+          --exclude-pattern \
+          */uploads/* \
+          --server https://qbittorrent.trux.dev  \
+          --port 443  \
+          --config /config/config.yaml
+        '';
+        path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
+        startAt = "daily";
+      };
+
+
+
 
     systemd.services."qbtools-reannounce" =
 

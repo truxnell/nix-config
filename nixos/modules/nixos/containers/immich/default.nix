@@ -150,6 +150,13 @@ in
 
         immich-redis = {
           image = "registry.hub.docker.com/library/redis:6.2-alpine@sha256:d6c2911ac51b289db208767581a5d154544f2b2fe4914ea5056443f62dc6e900";
+          extraOptions = [
+            "--health-cmd=redis-cli ping || exit 1"
+            "--health-interval=10s"
+            "--health-timeout=5s"
+            "--health-start-period=30s"
+          ];
+
         };
 
 
@@ -175,6 +182,12 @@ in
             "wal_compression=on"
           ];
           volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
+           extraOptions = [
+            ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
+            "--health-interval=10s"
+            "--health-timeout=5s"
+            "--health-start-period=30s"
+          ];
         };
       };
 
