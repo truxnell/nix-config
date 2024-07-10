@@ -44,5 +44,6 @@
     ./mariadb
     ./frigate
     ./code-server
+    ./navidrome
   ];
 }

@@ -34,6 +34,7 @@
       immich.enable = true;
       filebrowser.enable = true;
       syncthing.enable = true;
+      navidrome.enable=true;
     };
     mySystem.security.acme.enable = true;
 
