@@ -164,11 +164,12 @@ in
           "allow_other"
           "use_ino"
           "cache.files=partial"
-          "category.create=epmfs"
+          "category.create=mfs"
           "moveonenospc=true"
           "dropcacheonclose=true"
           "minfreespace=100G"
           "fsname=mergerfs"
+          "ignorepponrename=true" # Helps hardlinking
           # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
           "noforget"
           "inodecalc=path-hash"

@@ -13,6 +13,12 @@ let
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
+  xseedShell = pkgs.writeScriptBin "xseed.sh" # scrit to call cross-seed upon torrent finish
+  ''
+    #!/bin/bash
+    /usr/bin/curl -X POST --data-urlencode "path=$1" https://cross-seed.trux.dev/api/webhook
+  '';
+
 in
 {
 
@@ -50,7 +56,8 @@ in
         ports = [ "${builtins.toString qbit_port}:${builtins.toString qbit_port}" ];
         volumes = [
           "${appFolder}:/config:rw"
-          "/mnt/data0/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "${xseedShell}/bin/xseed.sh:/scripts/xseed.sh:Z"
+          "/tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
           "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];

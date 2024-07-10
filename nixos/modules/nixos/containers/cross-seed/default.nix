@@ -85,15 +85,35 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "568:568";
-      cmd = [ "daemon" "-v" ];
+      cmd = [ "daemon" ];
       volumes = [
         "${appFolder}:/config:rw"
-        "/mnt/data0/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+        "/tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];
+      dependsOn = [ "qbittorrent" ];
+
     };
 
+    services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
+      useACMEHost = config.networking.domain;
+      forceSSL = true;
+      locations."^~ /" = {
+        proxyPass = "http://${app}:${builtins.toString port}";
+        extraConfig = "resolver 10.88.0.1;";
+
+      };
+    };
+
+
+    services.restic.backups = config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        excludePaths = [ "Backups" ];
+        paths = [ appFolder ];
+        inherit appFolder;
+      };
 
 
   };
