@@ -119,7 +119,7 @@ in
     virtualisation.oci-containers.containers = {
       paperless = {
         user = "postgres:postgres";
-        image = "ghcr.io/paperless-ngx/paperless-ngx:2.4.2@sha256:d632fac5bd143dcd8d846726d1c475c683b96ccbc4901cb8a1c2e02e5d54a4e9";
+        image = "ghcr.io/paperless-ngx/paperless-ngx:2.11.0@sha256:da0476cea301df8bc8d20739f0e76de1e77d91ad2c9170b45c803468dde19208";
         environment = {
           PAPERLESS_OCR_LANGUAGE = "eng";
           PAPERLESS_CONSUMER_POLLING = "60";
