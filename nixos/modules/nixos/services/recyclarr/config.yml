@@ -64,8 +64,7 @@ sonarr:
           - 1efe8da11bfd74fbbcd4d8117ddb9213 # STAN
           - 5d2317d99af813b6529c7ebf01c83533 # VDL
           - 77a7b25585c18af08f60b1547bb9b4fb # CC
-          # Allowed Scene groups and tiered P2P groups
-          - d0c516558625b04b363fa6c5c2c7cfd4 # WEB Scene (allowed Scene groups)
+          
           - e6258996055b9fbab7e9cb2f75819294 # WEB Tier 01
           - 58790d4e2fdcd9733aa7ae68ba2bb503 # WEB Tier 02
           - d84935abd3f8556dcd51d4f27e22d0a6 # WEB Tier 03
