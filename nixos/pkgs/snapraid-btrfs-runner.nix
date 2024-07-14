@@ -44,7 +44,7 @@ let
       ; path to the snapraid config to be used
       config = /etc/snapraid.conf
       ; abort operation if there are more deletes than this, set to -1 to disable
-      deletethreshold = 200
+      deletethreshold = -1
       ; if you want touch to be ran each time
       touch = false
 

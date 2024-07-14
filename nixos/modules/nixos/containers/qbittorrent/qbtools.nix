@@ -73,12 +73,16 @@ with lib;
           manual \
           --exclude-category \
           uploads \
+          --exclude-category \
+          lts \
           --include-tag \
           expired \
           --exclude-tag \
           activity:24h \
           --exclude-tag \
           permaseed \
+          --exclude-tag \
+          lts \
           --exclude-tag \
           site:myanonamouse \
           --exclude-tag \
