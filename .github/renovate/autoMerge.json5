@@ -31,6 +31,7 @@
         "ghcr.io/buroa/qbtools",
         "ghcr.io/dgtlmoon/changedetection.io",
         "ghcr.io/amruthpillai/reactive-resume",
+        "ghcr.io/foxxmd/multi-scrobbler",
       ]
 
     },
