@@ -78,7 +78,7 @@ in
     services.lidarr = {
       enable = true;
       dataDir = appFolder;
-      inherit group;
+      inherit user group;
     };
 
 

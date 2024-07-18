@@ -79,7 +79,7 @@ in
     services.sonarr = {
       enable = true;
       dataDir = "/var/lib/sonarr";
-      inherit group;
+      inherit user group;
     };
 
 

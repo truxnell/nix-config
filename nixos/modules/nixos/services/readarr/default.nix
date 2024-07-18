@@ -78,7 +78,7 @@ in
       services.readarr = {
         enable = true;
         dataDir = appFolder;
-        inherit group;
+        inherit user group;
       };
 
 

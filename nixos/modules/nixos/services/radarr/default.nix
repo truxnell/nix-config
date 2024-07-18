@@ -79,7 +79,7 @@ in
     services.radarr = {
       enable = true;
       dataDir = "/var/lib/${app}";
-      inherit group;
+      inherit user group;
       package = pkgs.radarr;
     };
 

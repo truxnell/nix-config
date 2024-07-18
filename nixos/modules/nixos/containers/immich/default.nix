@@ -182,12 +182,12 @@ in
             "wal_compression=on"
           ];
           volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
-           extraOptions = [
-            ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
-            "--health-interval=10s"
-            "--health-timeout=5s"
-            "--health-start-period=30s"
-          ];
+          #  extraOptions = [
+          #   ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
+          #   "--health-interval=10s"
+          #   "--health-timeout=5s"
+          #   "--health-start-period=30s"
+          # ];
         };
       };
 
