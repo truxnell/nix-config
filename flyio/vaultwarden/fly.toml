@@ -1,6 +1,7 @@
 primary_region = "syd"
 kill_signal = "SIGINT"
 kill_timeout = "5s"
+app = "vaultwarden"
 
 [experimental]
 auto_rollback = true
