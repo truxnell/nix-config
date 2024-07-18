@@ -6,7 +6,7 @@ kill_timeout = "5s"
 auto_rollback = true
 
 [build]
-image = "ghcr.io/dani-garcia/vaultwarden:1.30.5@sha256:3d9d937b29281dc251ecae06e627b03d34a2c85d2ed876bf4d1ffe695836f864"
+image = "ghcr.io/dani-garcia/vaultwarden:1.31.0@sha256:a59540ae27beec83cd057eddaa8746890b68ab7615612f6609b9ffcff52708b6"
 
 [env]
 DATABASE_URL = "data/db.sqlite3"
