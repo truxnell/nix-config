@@ -35,7 +35,7 @@
   };
   users.groups.moonlight = { };
 
-  services.getty.autologinUser = "moonlight";
+  # services.getty.autologinUser = "moonlight";
   environment.persistence."${config.mySystem.system.impermanence.persistPath}" = {
     directories = [{ directory = "/home/moonlight/.config/Moonlight Game Streaming Project"; user = "moonlight"; group = "moonlight"; mode = "750"; }];
   };
@@ -56,17 +56,31 @@
   };
 
   # set xserver videodrivers if used
+  services.displayManager={
+    defaultSession = "xfce";
+    autoLogin={
+          enable=true;
+          user="moonlight";
+        };
+    };
+    
   services.xserver = {
     enable = true;
-    autorun = true;
-    displayManager.startx.enable = true;
+    # autorun = true;
+    # displayManager.startx.enable = true;
+    desktopManager = {
+      xterm.enable = false;
+      xfce.enable = true;
+    };
+
   };
 
-  programs.fish.promptInit = ''
-    if test (tty) = "/dev/tty1"
-        startx moonlight
-    end
-  '';
+
+  # programs.fish.promptInit = ''
+  #   if test (tty) = "/dev/tty1"
+  #       startx moonlight
+  #   end
+  # '';
 
   boot = {
 
