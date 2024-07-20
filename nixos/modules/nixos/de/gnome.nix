@@ -43,7 +43,14 @@ in
         xkb.layout = "us"; # `localctl` will give you
       };
       udev.packages = optionals cfg.systrayicons [ pkgs.gnome.gnome-settings-daemon ]; # support appindicator
-
+      
+      # printing
+      printing.enable = true;
+      avahi = {
+        enable = true;
+        nssmdns = true;
+        openFirewall = true;
+      };
 
     };
 
