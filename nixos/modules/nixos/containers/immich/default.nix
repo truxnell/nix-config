@@ -101,7 +101,7 @@ in
     systemd.tmpfiles.rules = [
       "d ${appFolder}/ 0750 ${user} ${group} -"
       "d ${appFolder}/machine-learning 0750 ${user} ${group} -"
-      "d ${appFolder}/postgres 0750 ${user} ${group} -"
+      "d ${appFolder}/postgres 0750 acme acme -"
 
     ];
 
@@ -265,12 +265,12 @@ in
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    # services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-    #   {
-    #     inherit app user;
-    #     paths = [ appFolder ];
-    #     inherit appFolder;
-    #   });
+    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
+      {
+        inherit app user;
+        paths = [ appFolder ];
+        inherit appFolder;
+      });
 
 
     # services.postgresqlBackup = {
