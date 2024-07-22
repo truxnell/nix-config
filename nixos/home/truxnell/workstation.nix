@@ -103,7 +103,7 @@ with config;
         # office
         onlyoffice-bin
         # libreoffice-bin
-        talosctl
+        logseq
 
 
       ];

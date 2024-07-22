@@ -26,15 +26,18 @@
       readarr.enable = true;
       sabnzbd.enable = true;
       qbittorrent.enable = true;
-      cross-seed.enable=true;
+      cross-seed.enable = true;
       prowlarr.enable = true;
       autobrr.enable = true;
       plex.enable = true;
       maintainerr.enable = true;
       immich.enable = true;
       # filebrowser.enable = true;
-      syncthing.enable = true;
-      navidrome.enable=true;
+      syncthing = {
+        enable = true;
+        syncPath = "/tank/syncthing/";
+      };
+      navidrome.enable = true;
     };
     mySystem.security.acme.enable = true;
 

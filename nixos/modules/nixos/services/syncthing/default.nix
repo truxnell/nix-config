@@ -56,9 +56,17 @@ in
       dataDir = lib.mkOption {
         type = lib.types.str;
       };
-
-
-
+      syncPath = lib.mkOption {
+        type = lib.types.str;
+      };
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = "syncthing";
+      };
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = "users";
+      };
     };
 
   config = mkIf cfg.enable {
@@ -75,9 +83,9 @@ in
 
 
     # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
@@ -92,24 +100,28 @@ in
     #
     services.syncthing = {
       enable = true;
-      group = "users";
+      group = cfg.group;
       guiAddress = "0.0.0.0:8384";
       openDefaultPorts = true;
       overrideDevices = true;
       overrideFolders = true;
+      user = cfg.user;
+
       settings = {
         options.urAccepted = -1;
         devices = {
           "Nat Pixel 6Pro" = { id = "OMARXQ7-KTMH2EB-BAIU7LO-VJB6Q5Z-D6GAAAA-75J4I5D-Q7XPGTI-K34WEQR"; };
+          "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
+          "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
         };
         folders = {
           "pixel_6_pro_vq13-photos" = {
-            path = "/tank/syncthing/android_photos";
-            devices = [ "Nat Pixel 6Pro" ];
+            path = "${cfg.syncPath}/android_photos";
+            devices = [ "Nat Pixel 6Pro"  ];
           };
           "logseq" = {
-            path = "/tank/syncthing/logseq";
-            devices = [ "Nat Pixel 6Pro" ];
+            path = "${cfg.syncPath}/logseq";
+            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" ];
           };
 
         };
