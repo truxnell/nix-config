@@ -81,6 +81,12 @@ in
       }];
     };
 
+    # systemd.services.podman-rxresume={
+    #   after = [ "postgresql.service" ];
+    #   requires = [ "postgresql.service" ];
+    # };
+
+
     # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d ${appFolder}/ 0750 ${user} ${group} -"

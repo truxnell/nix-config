@@ -95,6 +95,12 @@ in
       dependsOn = [ "qbittorrent" ];
 
     };
+    systemd.services.${app} = {
+      serviceConfig = {
+        ExecStartPre = "${pkgs.coreutils}/bin/sleep 30";
+      };
+    };
+
 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;

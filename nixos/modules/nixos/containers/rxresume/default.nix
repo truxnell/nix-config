@@ -121,6 +121,11 @@ in
       dependsOn = [ "browserless-chrome" ];
     };
 
+    systemd.services.podman-rxresume={
+      after = [ "postgresql.service" ];
+      requires = [ "postgresql.service" ];
+    };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf

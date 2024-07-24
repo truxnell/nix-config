@@ -98,6 +98,12 @@ in
       };
     };
 
+    systemd.services.miniflux={
+      after = [ "postgresql.service" ];
+      requires = [ "postgresql.service" ];
+    };
+
+
     # automatically reset feed errors regular
     systemd.services.miniflux-reset-feed-errors = {
       description = "Miniflux reset feed errors";
