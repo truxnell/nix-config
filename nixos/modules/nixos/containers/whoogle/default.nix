@@ -41,7 +41,7 @@ in
         WHOOGLE_ALT_QUORA = "";
         WHOOGLE_CONFIG_ALTS = "1";
         WHOOGLE_CONFIG_THEME = "system";
-        WHOOGLE_CONFIG_URL = "https://search.${config.networking.domain}";
+        WHOOGLE_CONFIG_URL = "https://whoogle.${config.networking.domain}";
         WHOOGLE_CONFIG_GET_ONLY = "1";
         WHOOGLE_CONFIG_COUNTRY = "AU";
         WHOOGLE_CONFIG_VIEW_IMAGE = "1";
