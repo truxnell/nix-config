@@ -78,13 +78,18 @@ in
       restartUnits = [ "${app}.service" ];
     };
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+      directories = [{ directory = appFolder; inherit user group; mode="755"; }];
+    };
+
+
     ## service
     systemd.services.recyclarr = {
       description = "Recyclarr Sync Service";
       serviceConfig = {
         Type = "oneshot";
         EnvironmentFile = [ config.sops.secrets."${category}/${app}/env".path ];
-        ExecStart = "${pkgs.recyclarr}/bin/recyclarr sync --config ${recyclarrYaml} --app-data /tmp -d";
+        ExecStart = "${pkgs.recyclarr}/bin/recyclarr sync --config ${recyclarrYaml} --app-data ${appFolder} -d";
         User = user;
         Group = group;
         PrivateTmp = "true";

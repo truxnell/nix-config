@@ -78,6 +78,21 @@
   mySystem.nasFolder = "/mnt/nas";
   mySystem.system.resticBackup.local.location = "/mnt/nas/backup/nixos/nixos";
 
+  # TODO abstract out?
+
+  # Intel qsv
+  boot.kernelParams = [
+    "i915.enable_guc=2"
+  ];
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      intel-compute-runtime
+    ];
+  };
+
 
   boot = {
 
