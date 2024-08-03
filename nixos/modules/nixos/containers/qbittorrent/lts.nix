@@ -5,11 +5,11 @@
 }:
 with lib;
 let
-  app = "qbittorrent";
+  app = "qbittorrent-lts";
   user = "kah"; #string
   group = "kah"; #string
   port = 8080; #int
-  qbit_port = 32189;
+  qbit_port = 32985;
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -22,11 +22,6 @@ let
 
 in
 {
-
-  imports = [
-    ./qbtools.nix
-    ./lts.nix
-  ];
 
   options.mySystem.services.${app} =
     {

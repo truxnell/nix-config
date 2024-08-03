@@ -88,7 +88,7 @@ in
       cmd = [ "daemon" ];
       volumes = [
         "${appFolder}:/config:rw"
-        "/tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+        "/tank//natflix/downloads:/tank/natflix/downloads:rw"
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];

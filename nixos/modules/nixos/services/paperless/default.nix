@@ -216,7 +216,10 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
+        extraConfig = ''
+          resolver 10.88.0.1;
+          client_max_body_size 256m;
+        '';
       };
     };
 
