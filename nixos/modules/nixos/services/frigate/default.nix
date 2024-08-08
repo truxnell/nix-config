@@ -9,7 +9,7 @@ let
   app = "frigate";
   category = "services";
   description = "Camera object detection";
-  image = "ghcr.io/blakeblackshear/frigate:0.13.2@sha256:2906991ccad85035b176941f9dedfd35088ff710c39d45ef1baa9a49f2b16734";
+  image = "ghcr.io/blakeblackshear/frigate:0.14.0@sha256:416fa4cc44fd1e40abf522ddb01defa83f2fefeca2337425c1fe1574b7f4bb14";
   user = "kah"; #string
   group = "kah"; #string
   port = 5000; #int
