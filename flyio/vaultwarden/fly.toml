@@ -7,7 +7,7 @@ app = "vaultwarden"
 auto_rollback = true
 
 [build]
-image = "ghcr.io/dani-garcia/vaultwarden:1.31.0@sha256:a59540ae27beec83cd057eddaa8746890b68ab7615612f6609b9ffcff52708b6"
+image = "ghcr.io/dani-garcia/vaultwarden:1.32.0@sha256:c1ac298c3f1803e87d719ac882f01ccb1f0385c403bdb94db3e09e24dcbdfe7d"
 
 [env]
 DATABASE_URL = "data/db.sqlite3"
