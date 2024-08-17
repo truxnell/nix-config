@@ -140,7 +140,7 @@ in
       };
       gotenberg = {
         user = "gotenberg:gotenberg";
-        image = "gotenberg/gotenberg:8.9.0";
+        image = "gotenberg/gotenberg:8.9.1";
         cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
         # ports = [
         #   "127.0.0.1:${gotenbergPort}:3000"
