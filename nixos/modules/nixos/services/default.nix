@@ -42,7 +42,6 @@
     ./lidarr
     ./prowlarr
     ./mariadb
-    ./frigate
     ./code-server
     ./navidrome
   ];

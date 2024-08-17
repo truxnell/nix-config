@@ -9,7 +9,7 @@ let
   app = "recyclarr";
   category = "services";
   description = "TRaSH guides sync";
-  # image = "";
+  image = "ghcr.io/recyclarr/recyclarr:7.2.1@sha256:e9692cac4548bfff6b5224da484d7af9303523182df2ddcd08ed844408437d65";
   user = "kah"; #string
   group = "kah"; #string
   port = 8000; #int
@@ -83,20 +83,25 @@ in
     };
 
 
-    ## service
-    systemd.services.recyclarr = {
-      description = "Recyclarr Sync Service";
-      serviceConfig = {
-        Type = "oneshot";
-        EnvironmentFile = [ config.sops.secrets."${category}/${app}/env".path ];
-        ExecStart = "${pkgs.recyclarr}/bin/recyclarr sync --config ${recyclarrYaml} --app-data ${appFolder} -d";
-        User = user;
-        Group = group;
-        PrivateTmp = "true";
-      };
-      startAt = "weekly";
+    systemd.services."recyclarr" =
 
-    };
+      {
+        script = ''
+          ${pkgs.podman}/bin/podman run --rm \
+          --user 568:568 \
+          -v ${config.sops.secrets."${category}/${app}/env".path}:/config/recyclarr.yml:ro \
+          -v ${appFolder}:/data:rw \
+          ${image} \
+          sync \
+          -c /config/recyclarr.yml \
+          --app-data /data \
+          -d
+        '';
+        path = [ pkgs.podman ];
+        requires = [ "sonarr.service" "radarr.service" ];
+        startAt = "daily";
+
+      };
 
   };
 }
