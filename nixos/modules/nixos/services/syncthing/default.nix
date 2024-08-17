@@ -116,7 +116,7 @@ in
           "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
         };
         folders = {
-          "pixel_6_pro_vq13-photos" = {
+          "pixel_6_pro_j4mw-photos" = {
             path = "${cfg.syncPath}/android_photos";
             devices = [ "Nat Pixel 6Pro"  ];
           };
