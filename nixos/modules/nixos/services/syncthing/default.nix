@@ -109,11 +109,11 @@ in
 
       settings = {
         options.urAccepted = -1;
-        devices = {
-          "Nat Pixel 6Pro" = { id = "OMARXQ7-KTMH2EB-BAIU7LO-VJB6Q5Z-D6GAAAA-75J4I5D-Q7XPGTI-K34WEQR"; };
+        devices = { # TODO secret lul
+          "Nat Pixel 6Pro" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
           "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
           "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
-          "citadel" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
+          "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
         };
         folders = {
           "pixel_6_pro_vq13-photos" = {
