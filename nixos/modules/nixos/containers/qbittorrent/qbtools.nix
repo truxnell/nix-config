@@ -37,29 +37,31 @@ with lib;
         startAt = "hourly";
       };
 
-    systemd.services."qbtools-prune-orphaned" =
+    # systemd.services."qbtools-prune-orphaned" =
 
-      {
-        script = ''
-          ${pkgs.podman}/bin/podman run --rm \
-          -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
-          ${image} \
-          prune  \
-          --exclude-category  \
-          manual \
-          --exclude-category \
-          uploads \
-          --include-tag \
-          unregistered \
-          --server https://qbittorrent.trux.dev  \
-          --port 443  \
-          --config /config/config.yaml
-        '';
-        path = [ pkgs.podman ];
-        requires = [ "podman-qbittorrent.service" ];
-        startAt = "*-*-* 05:20:00";
+    #   {
+    #     script = ''
+    #       ${pkgs.podman}/bin/podman run --rm \
+    #       -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
+    #       ${image} \
+    #       prune  \
+    #       --exclude-category  \
+    #       manual \
+    #       --exclude-category  \
+    #       lts \
+    #       --exclude-category \
+    #       uploads \
+    #       --include-tag \
+    #       unregistered \
+    #       --server https://qbittorrent.trux.dev  \
+    #       --port 443  \
+    #       --config /config/config.yaml
+    #     '';
+    #     path = [ pkgs.podman ];
+    #     requires = [ "podman-qbittorrent.service" ];
+    #     startAt = "*-*-* 05:20:00";
 
-      };
+    #   };
 
     systemd.services."qbtools-prune-expired" =
 
