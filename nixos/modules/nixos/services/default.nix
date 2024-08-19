@@ -44,5 +44,6 @@
     ./mariadb
     ./code-server
     ./navidrome
+    ./vikunja
   ];
 }
