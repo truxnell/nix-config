@@ -102,7 +102,7 @@ with config;
 
         # office
         onlyoffice-bin
-        # libreoffice-bin
+        evince # pdf viewer
         logseq
 
 
