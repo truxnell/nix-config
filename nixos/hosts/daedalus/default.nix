@@ -36,7 +36,7 @@
       # filebrowser.enable = true;
       syncthing = {
         enable = true;
-        syncPath = "/tank/syncthing/";
+        syncPath = "/zfs/syncthing/";
       };
       navidrome.enable = true;
     };

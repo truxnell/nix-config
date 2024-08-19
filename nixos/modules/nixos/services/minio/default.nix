@@ -91,7 +91,7 @@ in
       consoleAddress = "0.0.0.0:${builtins.toString port}";
       region = "us-east-1";
       rootCredentialsFile = "${config.sops.secrets."${category}/${app}/env".path}";
-      dataDir = [ "${config.mySystem.nasFolder}/minio" ];
+      dataDir = [ "/zfs/minio" ];
       configDir = "/var/lib/${app}";
     };
 

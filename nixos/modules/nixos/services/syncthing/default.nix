@@ -124,6 +124,10 @@ in
             path = "${cfg.syncPath}/logseq";
             devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" ];
           };
+          "mobile" = {
+            path = "${cfg.syncPath}/mobile";
+            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" ];
+          };
 
         };
       };
