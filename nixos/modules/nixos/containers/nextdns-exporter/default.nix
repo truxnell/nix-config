@@ -9,7 +9,7 @@ let
   app = "nextdns-exporter";
   category = "services";
   description = "NextDNS exporter";
-  image = "ghcr.io/raylas/nextdns-exporter:0.5.4@sha256:9e41d74d3bda8cf0f65b2fddf5300332a22bd540cbe8226b9cc88583dc35f6ff";
+  image = "ghcr.io/raylas/nextdns-exporter:0.6.0@sha256:dc452249866c1de2ad4115a9d6dd8e9dc06b9a72e675a72ea7aaab2a36ea7a9c";
   user = "kah"; #string
   group = "kah"; #string
   port = 9948; #int
