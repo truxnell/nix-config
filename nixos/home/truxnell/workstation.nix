@@ -101,7 +101,7 @@ with config;
         brightnessctl
 
         # office
-        onlyoffice-bin
+        unstable.onlyoffice-bin
         evince # pdf viewer
         logseq
 

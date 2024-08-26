@@ -18,6 +18,7 @@ in
   config.programs.${app} = mkIf cfg.enable {
 
     enable = true;
+    package = pkgs.unstable.thunderbird;
     profiles = {
       "main" = {
         isDefault = true;
