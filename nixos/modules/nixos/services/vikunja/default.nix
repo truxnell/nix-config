@@ -6,14 +6,14 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "changedetection";
+  app = "vikunja";
   category = "services";
-  description = "Website monitoring";
-  image = "ghcr.io/dgtlmoon/changedetection.io:0.46.03@sha256:e5efe3d67ac5e926216cf0f852c5a95d6397ef1edc804f4dcd30b9f40d8804f4";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 5000; #int
-  appFolder = "/var/lib/${app}";
+  description = "Task Managment";
+  # image = "";
+  user = "vikunja"; #string
+  group = "vikunja"; #string
+  port = config.services.vikunja.port; #int
+  appFolder = "/var/lib/private/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
@@ -61,41 +61,58 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
-    users.users.truxnell.extraGroups = [ group ];
-
-
-    # Folder perms - only for containers
-    # systemd.tmpfiles.rules = [
-    # "d ${appFolder}/ 0750 ${user} ${group} -"
-    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+      directories = [ appFolder ];
     };
 
+    users = {
+      groups.vikunja = { };
 
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image;
-      user = "568";
-      group = "568";
-      env = {
-        PORT = "5000";
-        USE_X_SETTINGS = "1";
-        PLAYWRIGHT_DRIVER_URL = "ws://browserless-chrome:3000/chrome?stealth=1&--disable-web-security=true&blockAds=true";
-        PUID = user;
-        PGID = group;
+      users.truxnell.extraGroups = [ group ];
+      users."${user}" = {
+        group = group;
+        createHome = false;
+        isSystemUser = true;
       };
-      volumes = [
-        "${appFolder}:/datastore:rw"
-      ];
     };
+
+    ## service
+    services.vikunja = {
+      enable = true;
+      frontendHostname = url;
+      frontendScheme = "https";
+      # TODO add JWT secret
+      environmentFiles=[ config.sops.secrets."${category}/${app}/env".path ]; # TODO jwt and mailer
+      settings = { 
+        service = {
+          publicurl = url;
+          enablecaldav=true;
+          timezone="Australia/Melbourne";
+        };
+        mailer = {
+          enabled = true;
+          # smtp deets set using ENV in secret
+        };
+
+      };
+    };
+
+    ## OR
+
+    # virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+    #   inherit app image user group;
+    #   env = { };
+    #   ports = [ ];
+    #   environmentFiles = [ ];
+    # };
 
 
     # homepage integration
@@ -125,8 +142,7 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://${app}:${builtins.toString port}";
-        proxyWebsockets = true;
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
       };
     };

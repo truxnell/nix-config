@@ -49,6 +49,7 @@
     thelounge.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
+    vikunja.enable = true;
 
     # monitoring
     victoriametrics.enable = true;

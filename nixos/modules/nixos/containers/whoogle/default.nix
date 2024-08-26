@@ -31,7 +31,7 @@ in
         TZ = "${config.time.timeZone}";
         WHOOGLE_ALT_TW = "nitter.${config.networking.domain}";
         WHOOGLE_ALT_YT = "invidious.${config.networking.domain}";
-        WHOOGLE_ALT_IG = "i mginn.com";
+        WHOOGLE_ALT_IG = "imginn.com";
         WHOOGLE_ALT_RD = "redlib.${config.networking.domain}";
         WHOOGLE_ALT_MD = "scribe.${config.networking.domain}";
         WHOOGLE_ALT_TL = "";

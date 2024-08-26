@@ -156,10 +156,14 @@
           path = "/tank/natflix";
           "read only" = "no";
         };
-        # paperless = {
-        #   path = "/tank/Apps/paperless/incoming";
-        #   "read only" = "no";
-        # };
+        scans = {
+          path = "/zfs/documents/scans";
+          "read only" = "no";
+        };
+        paperless = {
+          path = "/zfs/documents/paperless/inbound";
+          "read only" = "no";
+        };
       };
 
     };
