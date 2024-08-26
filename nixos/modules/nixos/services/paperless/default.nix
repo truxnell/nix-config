@@ -10,8 +10,8 @@ let
   category = "services";
   description = "document managment";
   # image = "";
-  user = "kah"; #string
-  group = "users"; #string
+  user = "paperless"; #string
+  group = "paperless"; #string
   inherit (config.services.paperless) port;#int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
