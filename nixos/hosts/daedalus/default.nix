@@ -39,6 +39,7 @@
         syncPath = "/zfs/syncthing/";
       };
       navidrome.enable = true;
+      paperless.enable = true;
     };
     mySystem.security.acme.enable = true;
 
