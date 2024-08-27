@@ -40,20 +40,6 @@
     directories = [{ directory = "/home/moonlight/.config/Moonlight Game Streaming Project"; user = "moonlight"; group = "moonlight"; mode = "750"; }];
   };
 
-  # TODO abstract out?
-
-  # Intel qsv
-  boot.kernelParams = [
-    "i915.enable_guc=2"
-  ];
-
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-compute-runtime
-    ];
-  };
 
   # set xserver videodrivers if used
   services.displayManager={
