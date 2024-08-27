@@ -14,7 +14,9 @@
         'sissbruecker/linkding',
         'ghcr.io/autobrr/autobrr',
         'gotenberg/gotenberg',
-
+        'ghcr.io/recyclarr/recyclarr',
+        'ghcr.io/onedr0p/sabnzbd',
+        'ghcr.io/onedr0p/qbittorrent',
       ],
 
     },
@@ -32,6 +34,8 @@
         "ghcr.io/dgtlmoon/changedetection.io",
         "ghcr.io/amruthpillai/reactive-resume",
         "ghcr.io/foxxmd/multi-scrobbler",
+        "ghcr.io/raylas/nextdns-exporter",
+        
       ]
 
     },
