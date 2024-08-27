@@ -226,6 +226,7 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              ./nixos/profiles/hw-intel-igpu.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
@@ -237,6 +238,7 @@
             system = "x86_64-linux";
             hardwareModules = [
               ./nixos/profiles/hw-generic-x86.nix
+              ./nixos/profiles/hw-intel-igpu.nix
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
@@ -255,17 +257,12 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
+              ./nixos/profiles/hw-intel-igpu.nix
               { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
 
-
-
-
-
         };
-
-
 
 
       # # nix build .#images.rpi4
