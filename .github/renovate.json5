@@ -22,7 +22,7 @@
 
     "regexManagers": [
     {
-      fileMatch: ["(^|/)nixos/.*\\.nix$", "(^|/)flyio/.*\\.toml$"],
+      fileMatch: ["^nixos/.*\\.nix$", "^flyio/.*\\.toml$"],
       matchStrings: [
         'image *= *"(?<depName>.*?):(?<currentValue>.*?)(@(?<currentDigest>sha256:[a-f0-9]+))?"',
       ],
