@@ -54,7 +54,7 @@ in
         volumes = [
           "${appFolder}:/config:rw"
           "${xseedShell}/bin/xseed.sh:/scripts/xseed.sh:Z"
-          "/tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "/tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
           "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];

@@ -32,8 +32,16 @@ in
         mountConfig = {
           Options = "noatime";
         };
-        what = "daedalus.${config.mySystem.internalDomain}:/";
-        where = "/mnt/nas";
+        what = "daedalus.${config.mySystem.internalDomain}:/tank";
+        where = "/mnt/nas/tank";
+      }
+      {
+        type = "nfs4";
+        mountConfig = {
+          Options = "noatime";
+        };
+        what = "daedalus.${config.mySystem.internalDomain}:/zfs";
+        where = "/mnt/nas/zfs";
       }];
 
       systemd.automounts = lib.mkIf cfg.lazy [{
@@ -41,13 +49,25 @@ in
         automountConfig = {
           TimeoutIdleSec = "600";
         };
-        where = "/mnt/nas";
+        where = "/mnt/nas/tank";
+      }
+      {
+        wantedBy = [ "multi-user.target" ];
+        automountConfig = {
+          TimeoutIdleSec = "600";
+        };
+        where = "/mnt/nas/zfs";
       }];
 
       fileSystems."${config.mySystem.nasFolder}" = lib.mkIf (!cfg.lazy) {
-        device = "daedalus.${config.mySystem.internalDomain}:/";
+        device = "daedalus.${config.mySystem.internalDomain}:/tank";
         fsType = "nfs";
       };
+      fileSystems."/mnt/nas/zfs" = lib.mkIf (!cfg.lazy) {
+        device = "daedalus.${config.mySystem.internalDomain}:/zfs";
+        fsType = "nfs";
+      };
+
 
     };
 }

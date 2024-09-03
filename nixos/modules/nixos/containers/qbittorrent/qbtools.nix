@@ -109,7 +109,7 @@ with lib;
     #     script = ''
     #       ${pkgs.podman}/bin/podman run --rm \
     #       -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
-    #       -v /tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
+    #       -v /tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
     #       ${image} \
     #       orphaned \
     #       --exclude-pattern \
