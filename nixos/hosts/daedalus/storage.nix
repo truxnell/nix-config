@@ -176,16 +176,34 @@ in
           "func.getattr=newest"
         ];
       };
+      "/export/natflix" = {
+        device = "/tank/natflix";
+        options = [ "bind" ];
+      };
+      "/export/syncthing" = {
+        device = "/zfs/syncthing";
+        options = [ "bind" ];
+      };
+      "/export/documents" = {
+        device = "/zfs/documents";
+        options = [ "bind" ];
+      };
+      "/export/photos" = {
+        device = "/zfs/photos";
+        options = [ "bind" ];
+      };
+      "/export/backup" = {
+        device = "/zfs/backup";
+        options = [ "bind" ];
+      };
     }
-    //
-    parityFs
+    // parityFs
     // dataFs;
 
   # nfs
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /tank 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
-    /zfs 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+    /export 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
   '';
   # disable v2/v3 nfs to force v4
   services.nfs.settings.nfsd = {
