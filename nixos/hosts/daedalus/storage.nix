@@ -204,6 +204,10 @@ in
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
     /export 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+    /export/natflix 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+    /export/photos 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+    /export/backup 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+    /export/syncthing 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
   '';
   # disable v2/v3 nfs to force v4
   services.nfs.settings.nfsd = {
