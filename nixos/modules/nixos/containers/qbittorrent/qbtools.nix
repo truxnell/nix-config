@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 let
   cfg = config.mySystem.services.qbittorrent;
-  image = "ghcr.io/buroa/qbtools:v0.16.3@sha256:1eb3be84d7d63bfd0aaffd1e85f1cfd9a5064fd8ce5ed94522672eca0d201e56";
+  image = "ghcr.io/buroa/qbtools:v0.16.10@sha256:fec06dd13ec90694110ca912eb9003d3a46d29be83944538599b35fc78dcbf18";
 
 in
 with lib;
@@ -109,7 +109,7 @@ with lib;
     #     script = ''
     #       ${pkgs.podman}/bin/podman run --rm \
     #       -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
-    #       -v /tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
+    #       -v /tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
     #       ${image} \
     #       orphaned \
     #       --exclude-pattern \

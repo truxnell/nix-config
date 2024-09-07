@@ -103,7 +103,7 @@ in
         NODE_ENV = "production";
         PUBLIC_URL = "https://rxresume.${config.networking.domain}";
         STORAGE_URL = "https://s3.${config.networking.domain}/rxresume";
-        CHROME_URL = "ws://browserless-chrome:3000";
+        CHROME_URL = "ws://browserless-chrome:3000/chrome";
         DATABASE_URL = "postgresql://rxresume@localhost/rxresume?host=/run/postgresql";
         MAIL_FROM = "noreply@localhost";
         STORAGE_ENDPOINT = "s3.trux.dev";

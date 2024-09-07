@@ -47,7 +47,7 @@ in
 
     virtualisation.oci-containers.containers.${app} =
       let
-        image = "ghcr.io/onedr0p/qbittorrent:4.6.6@sha256:e21c95568c9175f40390bacd7f778d8d2af5331d1e663e1a6860140891c65742";
+        image = "ghcr.io/onedr0p/qbittorrent:4.6.6@sha256:2fd0eba46205055c3f758411a79d5fa175df324f707dab9ad9a3a5be2ab92071";
       in
       {
         image = "${image}";
@@ -59,7 +59,7 @@ in
         volumes = [
           "${appFolder}:/config:rw"
           "${xseedShell}/bin/xseed.sh:/scripts/xseed.sh:Z"
-          "/tank//natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+          "/tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
           "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];

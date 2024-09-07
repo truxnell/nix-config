@@ -95,17 +95,18 @@ in
       env = {
         TIMEOUT = "90000";
         CONCURRENT = "15";
+        TOKEN =  "derpyderpderp";
         EXIT_ON_HEALTH_FAILURE = "true";
         PRE_REQUEST_HEALTH_CHECK = "true";
-        SCREEN_WIDTH = "1920";
-        SCREEN_HEIGHT = "1024";
-        SCREEN_DEPTH = "16";
-        ENABLE_DEBUGGER = "false";
-        PREBOOT_CHROME = "true";
-        CHROME_REFRESH_TIME = "600000";
-        DEFAULT_BLOCK_ADS = "true";
-        DEFAULT_STEALTH = "true";
-        CORS = "true";
+        # SCREEN_WIDTH = "1920";
+        # SCREEN_HEIGHT = "1024";
+        # SCREEN_DEPTH = "16";
+        # ENABLE_DEBUGGER = "false";
+        # PREBOOT_CHROME = "true";
+        # CHROME_REFRESH_TIME = "600000";
+        # DEFAULT_BLOCK_ADS = "true";
+        # DEFAULT_STEALTH = "true";
+        # CORS = "true";
       };
       # envFiles = [
       #   config.sops.secrets."${category}/${app}/env".path

@@ -127,15 +127,15 @@ in
         user = "gotenberg:gotenberg";
         image = "gotenberg/gotenberg:8.9.1";
         cmd = [ "gotenberg" "--chromium-disable-javascript=true" "--chromium-allow-list=file:///tmp/.*" ];
-        # ports = [
-        #   "127.0.0.1:${gotenbergPort}:3000"
-        # ];
+        ports = [
+          "127.0.0.1:${gotenbergPort}:3000"
+        ];
       };
       tika = {
         image = "apache/tika:2.5.0";
-        # ports = [
-        #   "127.0.0.1:${tikaPort}:9998"
-        # ];
+        ports = [
+          "127.0.0.1:${tikaPort}:9998"
+        ];
       };
     };
 
@@ -219,8 +219,8 @@ in
     warnings = [
       (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
         "WARNING: Backups for ${app} are disabled!")
-      (mkIf (!config.services.postgresql.enable)
-        "WARNING: Postgres is not enabled on host for ${app}!")
+      # (mkIf (!config.services.postgresql.enable)
+      #   "WARNING: Postgres is not enabled on host for ${app}!")
     ];
 
     services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
