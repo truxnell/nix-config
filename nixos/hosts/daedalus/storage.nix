@@ -201,9 +201,19 @@ in
     // dataFs;
 
   # nfs
+  # mergerfs needs fsid=x to identify itself, not required for normal filesystems.
+  # exportfs -avr to retry exports, can show error messages
+  # https://wiki.archlinux.org/title/NFS
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
     /export 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0)
+
+    /export/natflix 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,nohide) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,crossmnt,nohide)
+    /export/syncthing 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
+    /export/documents 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
+    /export/backup 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
+    /export/photos 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
+
   '';
   # disable v2/v3 nfs to force v4
   services.nfs.settings.nfsd = {
