@@ -98,7 +98,7 @@ in
       };
     };
 
-    systemd.services.miniflux={
+    systemd.services.miniflux = {
       after = [ "postgresql.service" ];
       requires = [ "postgresql.service" ];
     };

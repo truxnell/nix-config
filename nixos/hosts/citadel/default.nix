@@ -21,6 +21,9 @@
     boot.kernelModules = [ "kvm-amd" ];
     boot.extraModulePackages = [ ];
 
+    # xbox controller
+    hardware.xpadneo.enable = true;
+
     networking.hostName = "citadel"; # Define your hostname.
 
     fileSystems."/" =

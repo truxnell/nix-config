@@ -103,7 +103,7 @@ with config;
         # office
         unstable.onlyoffice-bin
         evince # pdf viewer
-        logseq
+        unstable.logseq
 
 
       ];
