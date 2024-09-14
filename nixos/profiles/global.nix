@@ -39,6 +39,7 @@ with lib;
       dnsutils
       tree
       powertop
+      usbutils
       parted
       smartmontools
     ];
@@ -46,7 +47,7 @@ with lib;
     networking.useDHCP = lib.mkDefault true;
     networking.domain = config.mySystem.domain;
 
-    powerManagement.powertop.enable = true;
+    # powerManagement.powertop.enable = true;
   };
 
 }

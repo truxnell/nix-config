@@ -9,7 +9,7 @@ let
   app = "cross-seed";
   category = "services";
   description = "xseed";
-  image = "ghcr.io/cross-seed/cross-seed:5.9.2@sha256:6abdca45f0ecfd8d23a3035beefa716a14b66f23c14854631fe369d1ad346f1e";
+  image = "ghcr.io/cross-seed/cross-seed:6.0.0-34@sha256:f294429647b41cf4cd368386ff6ab24df1108d09a9463f98c76809dc7f25ec38";
   user = "568"; #string
   group = "568"; #string
   port = 2468; #int
@@ -73,7 +73,7 @@ in
 
     # Folder perms - only for containers
     systemd.tmpfiles.rules = [
-    "d ${appFolder}/ 0750 ${user} ${group} -"
+      "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {

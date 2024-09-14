@@ -80,6 +80,7 @@ with config;
         #apps
         discord
         steam
+        lutris
         spotify
         prusa-slicer
         bitwarden
@@ -103,7 +104,7 @@ with config;
         # office
         unstable.onlyoffice-bin
         evince # pdf viewer
-        unstable.logseq
+        # unstable.logseq
 
 
       ];
