@@ -103,29 +103,29 @@ with lib;
 
       };
 
-    # systemd.services."qbtools-orphaned" =
+    systemd.services."qbtools-orphaned" =
 
-    #   {
-    #     script = ''
-    #       ${pkgs.podman}/bin/podman run --rm \
-    #       -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
-    #       -v /tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
-    #       ${image} \
-    #       orphaned \
-    #       --exclude-pattern \
-    #       *_unpackerred \
-    #       --exclude-pattern \
-    #       */manual/* \
-    #       --exclude-pattern \
-    #       */uploads/* \
-    #       --server https://qbittorrent.trux.dev  \
-    #       --port 443  \
-    #       --config /config/config.yaml
-    #     '';
-    #     path = [ pkgs.podman ];
-    #     requires = [ "podman-qbittorrent.service" ];
-    #     startAt = "daily";
-    #   };
+      {
+        script = ''
+          ${pkgs.podman}/bin/podman run --rm \
+          -v ${config.sops.secrets."services/qbittorrent/config.yaml".path}:/config/config.yaml \
+          -v /tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw \
+          ${image} \
+          orphaned \
+          --exclude-pattern \
+          *_unpackerred \
+          --exclude-pattern \
+          */manual/* \
+          --exclude-pattern \
+          */uploads/* \
+          --server https://qbittorrent.trux.dev  \
+          --port 443  \
+          --config /config/config.yaml
+        '';
+        path = [ pkgs.podman ];
+        requires = [ "podman-qbittorrent.service" ];
+        startAt = "daily";
+      };
 
 
   };
