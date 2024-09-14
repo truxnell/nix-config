@@ -89,6 +89,7 @@ in
       volumes = [
         "${appFolder}:/config:rw"
         "/tank/natflix/downloads:/tank/natflix/downloads:rw"
+        "/var/lib/qbittorrent/qBittorrent/BT_Backup:/qbit-torrents:r"
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];
