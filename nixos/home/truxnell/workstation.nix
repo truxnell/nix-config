@@ -105,6 +105,9 @@ with config;
         unstable.onlyoffice-bin
         evince # pdf viewer
         # unstable.logseq
+        pinta
+        gimp
+        
 
 
       ];
