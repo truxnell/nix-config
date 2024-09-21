@@ -35,7 +35,7 @@ in
     };
     programs.gamescope = {
       enable = true;
-      capSysNice = fales; # capSysNice freezes gamescopeSession for me.
+      capSysNice = false; # capSysNice freezes gamescopeSession for me.
       args = [ ];
       env = lib.mkForce {
         WLR_RENDERER = "vulkan";
