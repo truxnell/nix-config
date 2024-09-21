@@ -42,6 +42,7 @@ with lib;
       usbutils
       parted
       smartmontools
+      comma
     ];
 
     networking.useDHCP = lib.mkDefault true;
