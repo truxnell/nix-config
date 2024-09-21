@@ -97,7 +97,7 @@
 
   # By defining the script source outside of the overlay, we don't have to
   # rebuild the package every time we change the startup script.
-  environment.etc."openbox/autostart".source = writeScript "autostart" autostart;
+  # environment.etc."openbox/autostart".source = writeScript "autostart" autostart;
 
 
   boot = {

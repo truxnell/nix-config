@@ -45,5 +45,6 @@
     ./code-server
     ./navidrome
     ./vikunja
+    ./steam
   ];
 }
