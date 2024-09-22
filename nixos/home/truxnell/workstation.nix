@@ -21,28 +21,12 @@ with config;
           port = 22;
           identityFile = "~/.ssh/id_ed25519";
         };
-        dns01 = {
-          hostname = "dns01";
-          port = 22;
-          identityFile = "~/.ssh/id_ed25519";
-        };
-        dns02 = {
-          hostname = "dns02";
-          port = 22;
-          identityFile = "~/.ssh/id_ed25519";
-        };
         pikvm = {
           hostname = "pikvm";
           port = 22;
           user = "root";
           identityFile = "~/.ssh/id_ed25519";
         };
-        durandal = {
-          hostname = "durandal";
-          port = 22;
-          identityFile = "~/.ssh/id_ed25519";
-        };
-
         daedalus = {
           hostname = "daedalus";
           port = 22;
@@ -107,7 +91,7 @@ with config;
         # unstable.logseq
         pinta
         gimp
-        
+
 
 
       ];
