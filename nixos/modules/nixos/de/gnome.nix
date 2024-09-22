@@ -43,7 +43,7 @@ in
         xkb.layout = "us"; # `localctl` will give you
       };
       udev.packages = optionals cfg.systrayicons [ pkgs.gnome.gnome-settings-daemon ]; # support appindicator
-      
+
       # printing
       printing.enable = true;
       avahi = {
@@ -71,9 +71,11 @@ in
         gnomeExtensions.caffeine
         gnomeExtensions.spotify-tray
         gnomeExtensions.dash-to-dock
-
+        unstable.gnomeExtensions.tiling-shell # TODO remove unstable in 24.11
       ]
-      ++ optionals cfg.systrayicons [ pkgs.gnomeExtensions.appindicator ];
+      ++ optionals
+        cfg.systrayicons
+        [ pkgs.gnomeExtensions.appindicator ];
     };
 
     # enable gsconnect
