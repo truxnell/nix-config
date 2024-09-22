@@ -26,5 +26,6 @@
     ./filebrowser
     ./maintainerr
     ./cross-seed
+    ./redbot
   ];
 }

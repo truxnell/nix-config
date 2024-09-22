@@ -9,7 +9,7 @@ let
   user = "kah"; #string
   group = "kah"; #string
   port = 8080; #int
-  qbit_port = 32985;
+  qbit_port = 32387;
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

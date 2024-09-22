@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "maintainerr";
+  app = "redbot";
   category = "services";
-  description = "Plex content manager";
-  image = "ghcr.io/jorenn92/maintainerr:2.1.2@sha256:bb08c801f407abe9388dd35faecf9c4d4fc5be3b6021057bff3c1da5acf13ef5";
+  description = "Discord bot";
+  image = "phasecorex/red-discordbot:core-audio";
   user = "568"; #string
   group = "568"; #string
-  port = 6246; #int
+  # port = ; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -61,12 +61,12 @@ in
   config = mkIf cfg.enable {
 
     ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = "kah";
+      group = "kah";
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -77,53 +77,65 @@ in
     # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; group = "kah"; mode = "750"; }];
+      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
     ## service
-    virtualisation.oci-containers.containers.${app} = {
+    # services.test= {
+    #   enable = true;
+    # };
+
+    ## OR
+
+    virtualisation.oci-containers.containers."${app}" = {
       inherit image;
-      user = "${user}:${group}";
-      # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-      environment = { };
-      volumes = [
-        "/etc/localtime:/etc/localtime:ro"
-        "${appFolder}:/opt/data:rw"
+      environment = { 
+        PREFIX="?";
+        NICENESS="-15";
+      };
+      environmentFiles = [ 
+        config.sops.secrets."${category}/${app}/env".path
       ];
+      volumes = [ 
+        "${appFolder}:/data:rw" 
+        "/tank/natflix/music:/music/localtracks:ro" 
+      ];
+      extraOptions = [ "--cap-add=SYS_NICE" ];
     };
+
 
     # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-        };
-      }
-    ];
+    # mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
+    #   {
+    #     ${app} = {
+    #       icon = "${app}.svg";
+    #       href = "https://${url}";
+    #       inherit description;
+    #     };
+    #   }
+    # ];
 
     ### gatus integration
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [
-      {
-        name = app;
-        group = "${category}";
-        url = "https://${url}";
-        interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-      }
-    ];
+    # mySystem.services.gatus.monitors = mkIf cfg.monitor [
+    #   {
+    #     name = app;
+    #     group = "${category}";
+    #     url = "https://${url}";
+    #     interval = "1m";
+    #     conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+    #   }
+    # ];
 
     ### Ingress
-    services.nginx.virtualHosts.${url} = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://${app}:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
-      };
-    };
+    # services.nginx.virtualHosts.${url} = {
+    #   forceSSL = true;
+    #   useACMEHost = config.networking.domain;
+    #   locations."^~ /" = {
+    #     proxyPass = "http://127.0.0.1:${builtins.toString port}";
+    #     extraConfig = "resolver 10.88.0.1;";
+    #   };
+    # };
 
     ### firewall config
 

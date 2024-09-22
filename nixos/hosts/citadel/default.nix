@@ -12,6 +12,7 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      services.steam.enable=true;
 
       time.hwClockLocalTime = true; # due to windows dualboot
     };
@@ -24,34 +25,6 @@
     # xbox controller
     hardware.xone.enable = true;
 
-    # gamescope for HDR
-    programs.steam = {
-      enable = true;
-      gamescopeSession = {
-        enable = true; # Gamescope session is better for AAA gaming.
-        env = {
-          SCREEN_WIDTH = "3840";
-          SCREEN_HEIGHT = "2160";
-        };
-        args = [
-          "--hdr-enabled"
-          "--hdr-itm-enable"
-        ];
-      };
-    };
-    programs.gamescope = {
-      enable = true;
-      capSysNice = true; # capSysNice freezes gamescopeSession for me.
-      args = [ ];
-      env = lib.mkForce {
-        WLR_RENDERER = "vulkan";
-        DXVK_HDR = "1";
-        ENABLE_GAMESCOPE_WSI = "1";
-        WINE_FULLSCREEN_FSR = "1";
-      };
-    };
-
-    environment.variables.WINE_FULLSCREEN_FSR = "1";
 
     # sunshine
 

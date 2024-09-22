@@ -16,8 +16,8 @@ let
   xseedShell = pkgs.writeScriptBin "xseed.sh" # scrit to call cross-seed upon torrent finish
   ''
     #!/bin/bash
-    # qbit command: /scripts/xseed.sh "%F"
-    /usr/bin/curl -X POST --data-urlencode "path=$1" https://cross-seed.trux.dev/api/webhook
+    # qbit command: /scripts/xseed.sh "%F" 
+    /usr/bin/curl -H "X-Api-Key: 39934d99311cdb0695bf13b10dde639d892d0cb13c615ddb" -X POST --data-urlencode "infoHash=$1" https://cross-seed.trux.dev/api/webhook
   '';
 
 in
