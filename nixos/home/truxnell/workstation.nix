@@ -1,4 +1,16 @@
 { lib, pkgs, self, config, inputs, ... }:
+let
+  # useful shortcuts
+  reboot-uefi = pkgs.writeTextDir
+    "share/applications/reboot-uefi.desktop" # ini
+
+    ''
+      [Desktop Entry]
+      Name=Steam Session
+      Exec=sudo systemctl reboot --firmware-setup
+      Type=Application
+    '';
+in
 with config;
 {
   imports = [
@@ -72,7 +84,6 @@ with config;
 
     };
   };
-
   home = {
     # Install these packages for my user
     packages = with pkgs;
@@ -104,13 +115,15 @@ with config;
         # office
         unstable.onlyoffice-bin
         evince # pdf viewer
-        # unstable.logseq
+        unstable.logseq
         pinta
         gimp
-        
 
+        #shortcuts
+        reboot-uefi
 
       ];
 
   };
+
 }
