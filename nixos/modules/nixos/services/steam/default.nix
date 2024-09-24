@@ -14,6 +14,7 @@ in
   options.mySystem.${category}.${app} =
     {
       enable = mkEnableOption "${app}";
+      hdr = mkEnableOption "hdr support";
     };
 
   config = mkIf cfg.enable {
@@ -21,7 +22,7 @@ in
     # gamescope for HDR
     programs.steam = {
       enable = true;
-      gamescopeSession = {
+      gamescopeSession = mkIf cfg.hdr {
         enable = true; # Gamescope session is better for AAA gaming.
         env = {
           SCREEN_WIDTH = "3840";
@@ -33,7 +34,7 @@ in
         ];
       };
     };
-    programs.gamescope = {
+    programs.gamescope = mkIf cfg.hdr {
       enable = true;
       capSysNice = false; # capSysNice freezes gamescopeSession for me.
       args = [ ];
@@ -45,7 +46,7 @@ in
       };
     };
 
-    environment.variables.WINE_FULLSCREEN_FSR = "1";
+    environment.variables.WINE_FULLSCREEN_FSR = mkIf cfg.hdr "1";
 
 
 

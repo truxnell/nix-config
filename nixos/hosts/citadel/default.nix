@@ -12,7 +12,10 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
-      services.steam.enable=true;
+      services.steam = {
+        enable = true;
+        hdr = true;
+      };
 
       time.hwClockLocalTime = true; # due to windows dualboot
     };

@@ -16,6 +16,10 @@
         backup = false;
         user = "truxnell";
       };
+      services.steam = {
+        enable = true;
+        hdr = true;
+      };
     };
 
     # TODO build this in from flake host names

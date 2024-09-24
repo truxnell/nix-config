@@ -72,6 +72,9 @@ with config;
         yubikey-manager-qt
         flameshot
         vlc
+        ffmpeg
+        pinta
+        gimp
 
         # cli
         bat
@@ -82,6 +85,8 @@ with config;
         python3
         fzf
         ripgrep
+        jq
+        yq
 
         brightnessctl
 
@@ -89,8 +94,7 @@ with config;
         unstable.onlyoffice-bin
         evince # pdf viewer
         # unstable.logseq
-        pinta
-        gimp
+
 
 
 
