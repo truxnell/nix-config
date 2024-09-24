@@ -109,24 +109,27 @@ in
 
       settings = {
         options.urAccepted = -1;
-        devices = { # TODO secret lul
-          "Nat Pixel 6Pro" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
-          "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
-          "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
-          "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
-        };
+        devices =
+          {
+            # TODO secret lul
+            "Nat Pixel 6Pro" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
+            "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
+            "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
+            "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
+            "citadel-nixos" = { id = "VM3JFO4-EML4GSF-3U5J3FU-PDJJCEQ-NRJHQKE-KYK7KE2-RSA3NHG-BRWUSQJ"; };
+          };
         folders = {
           "pixel_6_pro_j4mw-photos" = {
             path = "${cfg.syncPath}/android_photos";
-            devices = [ "Nat Pixel 6Pro"  ];
+            devices = [ "Nat Pixel 6Pro" ];
           };
           "logseq" = {
             path = "${cfg.syncPath}/logseq";
-            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" ];
+            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" "citadel-nixos" ];
           };
           "mobile" = {
             path = "${cfg.syncPath}/mobile";
-            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" ];
+            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" "citadel-nixos" ];
           };
 
         };

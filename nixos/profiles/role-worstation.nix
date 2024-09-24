@@ -71,7 +71,9 @@ with config;
     cpupower-gui
 
 
+
   ];
+
 
   i18n = {
     defaultLocale = lib.mkDefault "en_AU.UTF-8";
