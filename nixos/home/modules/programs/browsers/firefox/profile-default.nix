@@ -35,5 +35,6 @@
     privacy-badger
     link-cleaner
     refined-github
+    plasma-integration
   ];
 }

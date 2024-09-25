@@ -25,6 +25,9 @@
     boot.kernelModules = [ "kvm-amd" "uinput" ]; # 'uniput' for sunshine
     boot.extraModulePackages = [ ];
 
+    networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine
+    mySystem.system.impermanence.enable = true;
+
 
     # xbox controller
     hardware.xone.enable = true;
@@ -54,15 +57,36 @@
 
     fileSystems."/" =
       {
-        device = "/dev/disk/by-uuid/701fc943-ede7-41ed-8a53-3cc38fc68fe5";
-        fsType = "ext4";
+        device = "rpool/local/root";
+        fsType = "zfs";
       };
 
     fileSystems."/boot" =
       {
         device = "/dev/disk/by-uuid/1D5B-36D3";
         fsType = "vfat";
+        options = [ "fmask=0022" "dmask=0022" ];
       };
+
+    fileSystems."/nix" =
+      {
+        device = "rpool/local/nix";
+        fsType = "zfs";
+      };
+
+    fileSystems."/persist" =
+      {
+        device = "rpool/safe/persist";
+        fsType = "zfs";
+      };
+
+    fileSystems."/home" =
+      {
+        device = "rpool/safe/home";
+        fsType = "zfs";
+      };
+    hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
 
     swapDevices = [ ];
 
