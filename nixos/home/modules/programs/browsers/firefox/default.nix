@@ -24,9 +24,9 @@ in
               DontCheckDefaultBrowser = true;
               DisablePocket = true;
               # See nixpkgs' firefox/wrapper.nix to check which options you can use
-              nativeMessagingHosts = []
-              ++ lib.optionals osConfig.de.gnome pkgs.gnome-browser-connector
-              ++ lib.optionals osConfig.de.kde pkgs.gnome-browser-connector
+              # nativeMessagingHosts = [ ]
+              #   ++ lib.optionals osConfig.de.gnome pkgs.gnome-browser-connector
+              #   ++ lib.optionals osConfig.de.kde pkgs.gnome-browser-connector;
             };
           };
         policies = import ./policies.nix;
