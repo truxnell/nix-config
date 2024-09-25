@@ -26,7 +26,7 @@
     boot.extraModulePackages = [ ];
 
     networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine
-    mySystem.system.impermanence.enable = true;
+    # mySystem.system.impermanence.enable = true;
 
 
     # xbox controller
