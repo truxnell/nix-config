@@ -11,7 +11,7 @@
 keys:
   - &dns01 age1lj5vmr02qkudvv2xedfj5tq8x93gllgpr6tzylwdlt7lud4tfv5qfqsd5u
   - &dns02 age17edew3aahg3t5nte5g0a505sn96vnj8g8gqse8q06ccrrn2n3uysyshu2c
-  - &citadel age1u4tht685sqg6dkmjyer96r93pl425u6353md6fphpd84jh3jwcusvm7mgk
+  - &citadel age1rpud4d0cg603d27kxkh3sequz32q7hgjx706fvyur9q0yhfrm96q64lptj
   - &rickenbacker age1cp6vegrmqfkuj8nmt2u3z0sur7n0f7e9x9zmdv4zygp8j2pnucpsdkgagc
   - &shodan age1ekt5xz7u2xgdzgsrffhd9x22n80cn4thxd8zxjy2ey5vq3ca7gnqz25g5r
   - &daedalus_old age1jpeh4s553taxkyxhzlshzqjfrtvmmp5lw0hmpgn3mdnmgzku332qe082dl

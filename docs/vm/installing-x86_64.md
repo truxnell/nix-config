@@ -90,3 +90,5 @@ Subsequent rebuilds can be called with the default command as after first build 
 ```sh
 nixos-rebuild switch --flake .#<machinename>
 ```
+
+NOTE: do secrets for sops and shit!!

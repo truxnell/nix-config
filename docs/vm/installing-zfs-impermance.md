@@ -54,3 +54,5 @@ Set ` networking.hostId`` in the nixos config to  `head -c 8 /etc/machine-id`
     nixos-install --impure --flake github:truxnell/nix-config#<MACHINE_ID>
 
 consider a nixos-enter to import a zpool if required (for NAS) instead of rebooting post-install
+
+NOTE: do secrets for sops and shit!!
