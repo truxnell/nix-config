@@ -25,6 +25,10 @@
     # TODO build this in from flake host names
     networking.hostName = "rickenbacker";
 
+    hardware.bluetooth.enable = true;
+
+    boot.kernelPackages = pkgs.linuxPackages_latest;
+
 
     fileSystems."/" =
       {

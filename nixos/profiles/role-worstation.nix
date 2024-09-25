@@ -9,7 +9,7 @@ with config;
 
   mySystem = {
 
-    de.gnome.enable = true;
+    de.kde.enable = true;
     editor.vscodium.enable = true;
 
     # Lets see if fish everywhere is OK on the pi's
