@@ -102,6 +102,7 @@ with config;
         brightnessctl
 
         # office
+        thunderbird
         unstable.onlyoffice-bin
         evince # pdf viewer
         unstable.logseq

@@ -55,9 +55,11 @@ in
         };
       dataDir = lib.mkOption {
         type = lib.types.str;
+        default = "/var/lib/syncthing";
       };
       syncPath = lib.mkOption {
         type = lib.types.str;
+
       };
       user = lib.mkOption {
         type = lib.types.str;
@@ -106,7 +108,7 @@ in
       overrideDevices = true;
       overrideFolders = true;
       user = cfg.user;
-
+      dataDir = cfg.dataDir;
       settings = {
         options.urAccepted = -1;
         devices =

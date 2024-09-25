@@ -29,9 +29,9 @@ with lib;
     # move ssh keys
 
     # bind a initrd command to rollback to blank root after boot
-    boot.initrd.postDeviceCommands = lib.mkAfter ''
-      zfs rollback -r ${cfg.rootPoolName}@${cfg.rootBlankSnapshotName}
-    '';
+   boot.initrd.postDeviceCommands = lib.mkAfter ''
+     zfs rollback -r ${cfg.rootPoolName}@${cfg.rootBlankSnapshotName}
+   '';
 
     systemd.tmpfiles.rules = mkIf config.services.openssh.enable [
       # "d /etc/ 0755 root root -" #The - disables automatic cleanup, so the file wont be removed after a period
