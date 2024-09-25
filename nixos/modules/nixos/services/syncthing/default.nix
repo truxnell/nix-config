@@ -118,7 +118,7 @@ in
             "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
             "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
             "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
-            "citadel-nixos" = { id = "VM3JFO4-EML4GSF-3U5J3FU-PDJJCEQ-NRJHQKE-KYK7KE2-RSA3NHG-BRWUSQJ"; };
+            "citadel-nixos" = { id = "YHGKWKL-LU262ZA-WIFC7ZO-BKIPU2D-2UAF3W2-PEVA63M-I3TETOE-YVR5QQ4"; };
           };
         folders = {
           "pixel_6_pro_j4mw-photos" = {
