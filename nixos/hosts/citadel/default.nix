@@ -35,6 +35,9 @@
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-amd" "uinput" ]; # 'uniput' for sunshine
     boot.extraModulePackages = [ ];
+    boot.kernelParams = [    
+      "nvidia-drm.fbdev=1" # fix for kde/nvidia?
+    ];
 
     networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine
     # mySystem.system.impermanence.enable = true;
