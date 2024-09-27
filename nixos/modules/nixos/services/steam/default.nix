@@ -19,9 +19,24 @@ in
 
   config = mkIf cfg.enable {
 
+    hardware.steam-hardware.enable = true;
+
+    environment.systemPackages = with pkgs; [
+
+      # Enable terminal interaction
+      steamPackages.steamcmd
+      steam-tui
+
+      protontricks
+
+      # Overlay with performance monitoring
+      mangohud
+    ];
+
     # gamescope for HDR
     programs.steam = {
       enable = true;
+      extraCompatPackages = [ pkgs.proton-ge-bin ];
       gamescopeSession = mkIf cfg.hdr {
         enable = true; # Gamescope session is better for AAA gaming.
         env = {
@@ -33,6 +48,7 @@ in
           "--hdr-itm-enable"
         ];
       };
+
     };
     programs.gamescope = mkIf cfg.hdr {
       enable = true;
