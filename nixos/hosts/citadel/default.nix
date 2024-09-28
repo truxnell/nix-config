@@ -37,6 +37,7 @@
     boot.extraModulePackages = [ ];
     boot.kernelParams = [    
       "nvidia-drm.fbdev=1" # fix for kde/nvidia?
+      "NVreg_EnableGpuFirmware=0"
     ];
 
     networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine

@@ -59,23 +59,23 @@ in
 
       # manual build nvidia driver, works around some wezterm issues
       # https://github.com/wez/wezterm/issues/2011
-      # package =
-      #   # let
-      #   # rcu_patch = pkgs.fetchpatch {
-      #   #   url = "https://github.com/gentoo/gentoo/raw/c64caf53/x11-drivers/nvidia-drivers/files/nvidia-drivers-470.223.02-gpl-pfn_valid.patch";
-      #   #   hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
-      #   # };
-      #   # in
-      #   config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      #     version = "550.67";
-      #     sha256_64bit = "sha256-mSAaCccc/w/QJh6w8Mva0oLrqB+cOSO1YMz1Se/32uI=";
-      #     sha256_aarch64 = "sha256-+UuK0UniAsndN15VDb/xopjkdlc6ZGk5LIm/GNs5ivA=";
-      #     openSha256 = "sha256-M/1qAQxTm61bznAtCoNQXICfThh3hLqfd0s1n1BFj2A=";
-      #     settingsSha256 = "sha256-FUEwXpeUMH1DYH77/t76wF1UslkcW721x9BHasaRUaM=";
-      #     persistencedSha256 = "sha256-ojHbmSAOYl3lOi2X6HOBlokTXhTCK6VNsH6+xfGQsyo=";
+      package =
+        # let
+        # rcu_patch = pkgs.fetchpatch {
+        #   url = "https://github.com/gentoo/gentoo/raw/c64caf53/x11-drivers/nvidia-drivers/files/nvidia-drivers-470.223.02-gpl-pfn_valid.patch";
+        #   hash = "sha256-eZiQQp2S/asE7MfGvfe6dA/kdCvek9SYa/FFGp24dVg=";
+        # };
+        # in
+        config.boot.kernelPackages.nvidiaPackages.mkDriver {
+          version = "550.67";
+          sha256_64bit = "sha256-mSAaCccc/w/QJh6w8Mva0oLrqB+cOSO1YMz1Se/32uI=";
+          sha256_aarch64 = "sha256-+UuK0UniAsndN15VDb/xopjkdlc6ZGk5LIm/GNs5ivA=";
+          openSha256 = "sha256-M/1qAQxTm61bznAtCoNQXICfThh3hLqfd0s1n1BFj2A=";
+          settingsSha256 = "sha256-FUEwXpeUMH1DYH77/t76wF1UslkcW721x9BHasaRUaM=";
+          persistencedSha256 = "sha256-ojHbmSAOYl3lOi2X6HOBlokTXhTCK6VNsH6+xfGQsyo=";
 
-      #     # patches = [ rcu_patch ];
-      #   };
+          # patches = [ rcu_patch ];
+        };
     };
 
     nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
