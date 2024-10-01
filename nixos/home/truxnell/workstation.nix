@@ -98,6 +98,9 @@ with config;
         ripgrep
         jq
         yq
+        unrar
+        p7zip
+
 
         brightnessctl
 
@@ -111,6 +114,13 @@ with config;
 
         #shortcuts
         reboot-uefi
+
+        # split out to emulation hm
+        nsz
+        ryujinx
+        steam-rom-manager
+        cemu
+        cdecrypt
 
       ];
 

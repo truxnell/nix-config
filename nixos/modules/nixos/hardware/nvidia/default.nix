@@ -23,6 +23,13 @@ in
       vaapiVdpau
     ];
 
+    boot.kernelParams = [    
+      "nvidia-drm.fbdev=1" # fix for kde/nvidia?
+      "nvidia_drm.modeset=1"
+      "NVreg_EnableGpuFirmware=0"
+      "nvidia.NVreg_PreserveVideoMemoryAllocations=1" # fix wakeup issues
+    ];
+
     # This is for the benefit of VSCODE running natively in wayland
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
@@ -35,7 +42,7 @@ in
       # Enable this if you have graphical corruption issues or application crashes after waking
       # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
       # of just the bare essentials.
-      powerManagement.enable = false;
+      powerManagement.enable = true; # fixing wakeup issues
 
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).

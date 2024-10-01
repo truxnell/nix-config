@@ -3,5 +3,6 @@
     ./browsers
     ./de
     ./thunderbird.nix
+    ./gaming
   ];
 }

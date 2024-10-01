@@ -12,6 +12,7 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      time.hwClockLocalTime = true; # due to windows dualboot
       services.syncthing = {
         enable = true;
         syncPath = "/home/truxnell/syncthing/";
@@ -19,16 +20,16 @@
         backup = false;
         user = "truxnell";
       };
-
-     services.steam = {
-       enable = true;
-       hdr = true;
-     };
-
-      time.hwClockLocalTime = true; # due to windows dualboot
+    services.steam = {
+      enable = true;
+      hdr = true;
+      };
     };
 
-        hardware.bluetooth.enable = true;
+
+    
+
+    hardware.bluetooth.enable = true;
 
 
     boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
@@ -36,8 +37,6 @@
     boot.kernelModules = [ "kvm-amd" "uinput" ]; # 'uniput' for sunshine
     boot.extraModulePackages = [ ];
     boot.kernelParams = [    
-      "nvidia-drm.fbdev=1" # fix for kde/nvidia?
-      "NVreg_EnableGpuFirmware=0"
     ];
 
     networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine
