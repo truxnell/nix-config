@@ -6,7 +6,7 @@
 with lib;
 let
   app = "sabnzbd";
-  image = "ghcr.io/onedr0p/sabnzbd:4.3.3@sha256:6614d759bbaa6884926c6aa75018339bd35cd1add0ff92c907087327dd470477";
+  image = "ghcr.io/onedr0p/sabnzbd:4.3.3@sha256:47c42cd27e20fa37c2ef2e292b259b767de1fea58f63b50895c3366ba2ce1d53";
   user = "kah"; #string
   group = "kah"; #string
   port = 8080; #int
