@@ -84,7 +84,7 @@ in
     services.invidious = {
       enable = true;
       domain = "invidious.${config.networking.domain}";
-      package = pkgs.invidious;
+      package = pkgs.unstable.invidious;
       inherit port;
       settings.db.user = app;
     };

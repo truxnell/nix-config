@@ -48,6 +48,12 @@ with lib;
     networking.useDHCP = lib.mkDefault true;
     networking.domain = config.mySystem.domain;
 
+    # This being enabled stops boot on any mount failing
+    # which can be a pain with the NAS
+    # as it makes it harder to troubleshoot-fix
+    # than just continuing as far as possible
+    systemd.enableEmergencyMode=false;
+
     # powerManagement.powertop.enable = true;
   };
 
