@@ -108,7 +108,7 @@ with config;
         thunderbird
         unstable.onlyoffice-bin
         evince # pdf viewer
-        unstable.logseq
+        # logseq nixpkgs ver is PITA
         pinta
         gimp
 
@@ -118,9 +118,15 @@ with config;
         # split out to emulation hm
         nsz
         ryujinx
+        # 
         steam-rom-manager
+
+
+        #wiiu
         cemu
         cdecrypt
+
+
 
       ];
 

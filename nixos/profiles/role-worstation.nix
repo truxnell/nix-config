@@ -74,10 +74,26 @@ with config;
 
   ];
 
+  # split out
+  programs.gamemode = {
+      enable = true;
+      settings = {
+        general = {
+          softrealtime = "auto";
+          renice = 15;
+        };
+      };
+    };
+
 
   i18n = {
     defaultLocale = lib.mkDefault "en_AU.UTF-8";
   };
 
   programs.mtr.enable = true;
+
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 }
