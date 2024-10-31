@@ -27,7 +27,8 @@
     overseerr.enable = true;
     tautulli.enable = true;
 
-    factorio.freight-forwarding.enable = true; # the factory must grow
+    # factorio.freight-forwarding.enable = true; # the factory must grow
+    factorio.spage-age.enable = true; # the factory must launch into space
 
     searxng.enable = true;
     whoogle.enable = true;
