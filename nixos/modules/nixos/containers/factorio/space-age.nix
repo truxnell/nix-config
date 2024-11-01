@@ -7,7 +7,7 @@ with lib;
 let
   app = "factorio";
   instance = "spage-age";
-  image = "factoriotools/factorio:stable@sha256:35eaa7109868b1a3b1f85fda6b3ad9f46e79d9e11a4c1e33330746b5e51636a6";
+  image = "factoriotools/factorio:stable@sha256:9aba1cff5bd1e23c0ad3b207e8aa27c8f96d2dfc175a90eda93e5ba08f7f1797";
   user = "845"; #string
   group = "845"; #string
   port = 34204; #int
