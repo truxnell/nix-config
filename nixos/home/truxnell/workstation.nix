@@ -77,7 +77,7 @@ with config;
         steam
         lutris
         spotify
-        prusa-slicer
+        unstable.prusa-slicer
         bitwarden
         yubioath-flutter
         yubikey-manager-qt
