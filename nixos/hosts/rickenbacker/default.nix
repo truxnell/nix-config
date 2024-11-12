@@ -10,6 +10,7 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      system.autoUpgrade.enable = true; # bold move cotton
       services.syncthing = {
         enable = true;
         syncPath = "/home/truxnell/syncthing/";

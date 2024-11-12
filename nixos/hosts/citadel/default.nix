@@ -12,6 +12,7 @@
     mySystem = {
       services.openssh.enable = true;
       security.wheelNeedsSudoPassword = false;
+      system.autoUpgrade.enable = true; # bold move cotton
       time.hwClockLocalTime = true; # due to windows dualboot
       services.syncthing = {
         enable = true;
@@ -20,14 +21,14 @@
         backup = false;
         user = "truxnell";
       };
-    services.steam = {
-      enable = true;
-      hdr = true;
+      services.steam = {
+        enable = true;
+        hdr = true;
       };
     };
 
 
-    
+
 
     hardware.bluetooth.enable = true;
 
@@ -36,7 +37,7 @@
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-amd" "uinput" ]; # 'uniput' for sunshine
     boot.extraModulePackages = [ ];
-    boot.kernelParams = [    
+    boot.kernelParams = [
     ];
 
     networking.hostId = "f8122c14"; # for zfs, helps stop importing to wrong machine
@@ -44,7 +45,7 @@
 
 
     # xbox controller
-   hardware.xone.enable = true;
+    hardware.xone.enable = true;
 
 
     # sunshine
