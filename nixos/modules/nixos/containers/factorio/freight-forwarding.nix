@@ -7,7 +7,7 @@ with lib;
 let
   app = "factorio";
   instance = "freight-forwarding";
-  image = "factoriotools/factorio:stable@sha256:1d2ca117b793080e54ed5ab13cea360e6782b8cc32887bbe99aa931d89e7ac5a";
+  image = "factoriotools/factorio:stable@sha256:a46d91fc4c9cc01aaa936bb470feb9620f233aaf05097cfb3c7615bb750d2aec";
   user = "845"; #string
   group = "845"; #string
   port = 34203; #int
@@ -71,7 +71,7 @@ in
           RCON_PORT = "${builtins.toString port_rcon}";
         };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
-      ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" ]; # expose port
+      ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" "${builtins.toString port_rcon}:${builtins.toString port_rcon}/UDP" ]; # expose port
     };
     networking.firewall = mkIf cfg.openFirewall {
 
