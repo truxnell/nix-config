@@ -14,7 +14,7 @@ with lib.hm.gvariant; {
 
     # needed for info center
     aha
-    lspci
+    pciutils
     clinfo
     glxinfo
     vulkan-tools
