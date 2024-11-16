@@ -33,7 +33,6 @@ in
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/media:rw"
-        "${config.mySystem.nasFolder}/backup/nixos/manual/tautulli:/config/backup:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
