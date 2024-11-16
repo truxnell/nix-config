@@ -109,6 +109,7 @@ in
       home.sessionVariables.fish_greeting = "";
 
       programs.nix-index.enable = true;
+      programs.zoxide.enable = true;
 
       # programs.fish = {
       #   functions = {
