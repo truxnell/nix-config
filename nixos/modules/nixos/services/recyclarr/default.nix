@@ -9,7 +9,7 @@ let
   app = "recyclarr";
   category = "services";
   description = "TRaSH guides sync";
-  image = "ghcr.io/recyclarr/recyclarr:7.3.0@sha256:e8f84da62a715e2b0aef8e5de35f462731268eba0fb668955ca9ec2850469b84";
+  image = "ghcr.io/recyclarr/recyclarr:7.4.0@sha256:c3a46c4e6afb5e1e7b1f7307dd38a5cd7cc47994eee0b4d8e3b7d5d929120881";
   user = "kah"; #string
   group = "kah"; #string
   port = 8000; #int
