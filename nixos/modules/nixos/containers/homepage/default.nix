@@ -7,7 +7,7 @@
 with lib;
 let
   app = "homepage";
-  image = "ghcr.io/gethomepage/homepage:v0.9.12";
+  image = "ghcr.io/gethomepage/homepage:v0.9.13";
   user = "kah"; #string
   group = "kah"; #string
   port = 3000; #int
