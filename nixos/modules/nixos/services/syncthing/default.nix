@@ -116,9 +116,10 @@ in
             # TODO secret lul
             "Nat Pixel 6Pro" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
             "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
-            "rickenbacker" = { id = "TFUS4NM-RCCKPUD-NDR5S7Z-DYAAMF4-G6GQPC2-7I6EGSD-NHJ5YKG-N3EHIQL"; };
+            "rickenbacker" = { id = "WTL2NPD-QDY26QZ-NNGRK7R-Z6A7U67-3RBP5PN-BE2VO2V-XFQMT7H-3LMZKQH"; };
             "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
             "citadel-nixos" = { id = "YHGKWKL-LU262ZA-WIFC7ZO-BKIPU2D-2UAF3W2-PEVA63M-I3TETOE-YVR5QQ4"; };
+            "steam-deck" = { id = "4TD66JX-TO4NBCX-2HSAXJL-JK43SVI-F5QYEWU-GTDPUNQ-BTLAM7Z-DLTEOAR"; };
           };
         folders = {
           "pixel_6_pro_j4mw-photos" = {
@@ -132,6 +133,10 @@ in
           "mobile" = {
             path = "${cfg.syncPath}/mobile";
             devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" "citadel-nixos" ];
+          };
+          "emulation" = {
+            path = "${cfg.syncPath}/emulation";
+            devices = [ "daedalus" "steam-deck" ];
           };
 
         };
