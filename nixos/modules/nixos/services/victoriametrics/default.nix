@@ -95,7 +95,7 @@ in
     ## service
     services.victoriametrics = {
       enable = true;
-      retentionPeriod = 12;
+      retentionPeriod = "12";
     };
 
     services.vmalert = {
