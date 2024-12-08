@@ -12,7 +12,7 @@ let
   image = "docker.io/filebrowser/filebrowser:v2.31.2@sha256:a4da9ca8364b0a1fc5dd36f7add92582bf673c0ae0bda8dd9bd13062c41d1715";
   user = "568"; #string
   group = "568"; #string
-  port = 80; #int
+  port = 8080; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -94,13 +94,15 @@ in
       environment = {
         TZ = "Australia/Melbourne";
         FB_DATABASE = "/config/filebrowser.db";
-        FB_ROOT = "/tank";
+        FB_ROOT = "/srv";
         FB_LOG = "stdout";
         FB_NOAUTH = "true";
+        FB_PORT = "${builtins.toString port}";
       };
       volumes = [
         "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix:/tank:rw"
+        "/tank:/srv/tank:rw"
+        "/zfs:/srv/zfs:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
@@ -132,7 +134,8 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyPass = "http://${app}:${builtins.toString port}";
+        proxyWebsockets = true;
         extraConfig = "resolver 10.88.0.1;";
       };
     };

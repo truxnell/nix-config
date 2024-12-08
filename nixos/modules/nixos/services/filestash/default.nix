@@ -6,14 +6,14 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "syncthing";
+  app = "filestash";
   category = "services";
-  description = "File syncing service";
-  # image = "";
-  inherit (config.services.syncthing) user;#string
-  inherit (config.services.syncthing) group;#string
-  port = 8384; #int
-  appFolder = config.services.syncthing.configDir;
+  description = "File browser";
+  image = "";
+  user = "568"; #string
+  group = "568"; #string
+  port = ; #int
+  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
@@ -53,22 +53,9 @@ in
           description = "Enable backups";
           default = true;
         };
-      dataDir = lib.mkOption {
-        type = lib.types.str;
-        default = "/var/lib/syncthing";
-      };
-      syncPath = lib.mkOption {
-        type = lib.types.str;
 
-      };
-      user = lib.mkOption {
-        type = lib.types.str;
-        default = "syncthing";
-      };
-      group = lib.mkOption {
-        type = lib.types.str;
-        default = "users";
-      };
+
+
     };
 
   config = mkIf cfg.enable {
@@ -85,9 +72,9 @@ in
 
 
     # Folder perms - only for containers
-    systemd.tmpfiles.rules = [
-      "d ${appFolder}/ 0750 ${user} ${group} -"
-    ];
+    # systemd.tmpfiles.rules = [
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
+    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
@@ -95,53 +82,19 @@ in
 
 
     ## service
-    # Ref: https://wes.today/nixos-syncthing/
-    #
-    # First run may need settings omitted, then a setting changed in webui and saved
-    # just to create the config.xml file that the syncthing-init file needs
-    #
-    services.syncthing = {
-      enable = true;
-      group = cfg.group;
-      guiAddress = "0.0.0.0:8384";
-      openDefaultPorts = true;
-      overrideDevices = true;
-      overrideFolders = true;
-      user = cfg.user;
-      dataDir = cfg.dataDir;
-      settings = {
-        options.urAccepted = -1;
-        devices =
-          {
-            # TODO secret lul
-            "Nat Pixel 6Pro" = { id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW"; };
-            "daedalus" = { id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB"; };
-            "rickenbacker" = { id = "WTL2NPD-QDY26QZ-NNGRK7R-Z6A7U67-3RBP5PN-BE2VO2V-XFQMT7H-3LMZKQH"; };
-            "citadel" = { id = "OPJO4SQ-ZWGUZXL-XHF25ES-RNLF5TR-AOEY4O6-2TJEFU5-AVDOQ52-AOSJWAI"; };
-            "citadel-bazzite" = { id = "XZP6Z5P-YHSDKKJ-PU5GUZ2-GHXPF2J-UITLC2P-A56TEBX-F5UVGTJ-AI6YHAA"; };
-            "steam-deck" = { id = "4TD66JX-TO4NBCX-2HSAXJL-JK43SVI-F5QYEWU-GTDPUNQ-BTLAM7Z-DLTEOAR"; };
-          };
-        folders = {
-          "pixel_6_pro_j4mw-photos" = {
-            path = "${cfg.syncPath}/android_photos";
-            devices = [ "Nat Pixel 6Pro" ];
-          };
-          "logseq" = {
-            path = "${cfg.syncPath}/logseq";
-            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" "citadel-bazzite" ];
-          };
-          "mobile" = {
-            path = "${cfg.syncPath}/mobile";
-            devices = [ "Nat Pixel 6Pro" "daedalus" "rickenbacker" "citadel" "citadel-bazzite" ];
-          };
-          "emulation" = {
-            path = "${cfg.syncPath}/emulation";
-            devices = [ "daedalus" "steam-deck" "citadel-bazzite" ];
-          };
+    # services.test= {
+    #   enable = true;
+    # };
 
-        };
-      };
-    };
+    ## OR
+
+    # virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
+    #   inherit app image user group;
+    #   env = { };
+    #   ports = [ ];
+    #   environmentFiles = [ ];
+    # };
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -155,15 +108,15 @@ in
     ];
 
     ### gatus integration
-    # mySystem.services.gatus.monitors = mkIf cfg.monitor [
-    #   {
-    #     name = app;
-    #     group = "${category}";
-    #     url = "https://${url}";
-    #     interval = "1m";
-    #     conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-    #   }
-    # ];
+    mySystem.services.gatus.monitors = mkIf cfg.monitor [
+      {
+        name = app;
+        group = "${category}";
+        url = "https://${url}";
+        interval = "1m";
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      }
+    ];
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {

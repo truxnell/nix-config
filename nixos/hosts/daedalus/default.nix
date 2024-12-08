@@ -33,7 +33,7 @@
       plex.enable = true;
       maintainerr.enable = true;
       immich.enable = true;
-      # filebrowser.enable = true;
+      filebrowser.enable = true;
       syncthing = {
         enable = true;
         syncPath = "/zfs/syncthing/";
