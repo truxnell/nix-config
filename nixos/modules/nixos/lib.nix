@@ -39,7 +39,7 @@ with lib;
   # build a restic restore set for both local and remote
   lib.mySystem.mkRestic = options: (
     let
-      excludePath = if builtins.hasAttr "excludePath" options then options.excludePath else [ ];
+      excludePaths = if builtins.hasAttr "excludePaths" options then options.excludePaths else [ ];
       timerConfig = {
         OnCalendar = "02:05";
         Persistent = true;
@@ -65,7 +65,7 @@ with lib;
         # Move the path to the zfs snapshot path
         paths = map (x: "${config.mySystem.system.resticBackup.mountPath}/${x}") options.paths;
         passwordFile = config.sops.secrets."services/restic/password".path;
-        exclude = excludePath;
+        exclude = excludePaths;
         repository = "${config.mySystem.system.resticBackup.local.location}/${options.appFolder}";
         # inherit (options) user;
       };
@@ -78,7 +78,7 @@ with lib;
         environmentFile = config.sops.secrets."services/restic/env".path;
         passwordFile = config.sops.secrets."services/restic/password".path;
         repository = "${config.mySystem.system.resticBackup.remote.location}/${options.appFolder}";
-        exclude = excludePath;
+        exclude = excludePaths;
         # inherit (options) user;
       };
 
