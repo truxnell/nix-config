@@ -66,12 +66,10 @@ in
           echo "INIT: Checking if pdns sqlite exists"
           # Check if the pdns.sqlite3 file exists in the pdns folder
           if [ ! -f "${persistentFolder}/pdns.sqlite3" ]; then
-              echo "INIT: No sqlite db found, initializing from pdns github schema..."
+              echo "INIT: No sqlite db found, initializing from pdns pkgs schema..."
 
-              ${pkgs.wget}/bin/wget -O "${persistentFolder}/schema.sqlite3.sql" https://raw.githubusercontent.com/PowerDNS/pdns/master/modules/gsqlite3backend/schema.sqlite3.sql
-              ${pkgs.sqlite}/bin/sqlite3 "${persistentFolder}/pdns.sqlite3" < "${persistentFolder}/schema.sqlite3.sql"
+              ${pkgs.sqlite}/bin/sqlite3 "${persistentFolder}/pdns.sqlite3" < "${pkgs.pdns}/share/doc/pdns/schema.sqlite3.sql"
               ${pkgs.busybox}/bin/chown pdns:pdns ${persistentFolder}/pdns.sqlite3
-              ${pkgs.busybox}/bin/rm "${persistentFolder}/schema.sqlite3.sql"
           fi
 
           # Exit successfully
