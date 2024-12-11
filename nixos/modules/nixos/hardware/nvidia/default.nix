@@ -16,8 +16,6 @@ in
     # Enable OpenGL
     hardware.graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
     };
     hardware.graphics.extraPackages = with pkgs; [
       vaapiVdpau

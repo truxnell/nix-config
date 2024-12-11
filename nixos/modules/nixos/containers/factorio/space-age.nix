@@ -6,7 +6,7 @@
 with lib;
 let
   app = "factorio";
-  instance = "spage-age";
+  instance = "space-age";
   image = "factoriotools/factorio:stable";
   user = "845"; #string
   group = "845"; #string
