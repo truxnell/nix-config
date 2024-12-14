@@ -28,7 +28,7 @@
     tautulli.enable = true;
 
     # factorio.freight-forwarding.enable = true; # the factory must grow
-    factorio.spage-age.enable = true; # the factory must launch into space
+    factorio.space-age.enable = true; # the factory must launch into space
 
     searxng.enable = true;
     whoogle.enable = true;
@@ -87,7 +87,7 @@
     "i915.enable_guc=2"
   ];
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver

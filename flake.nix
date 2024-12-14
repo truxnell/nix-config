@@ -3,7 +3,7 @@
 
   inputs = {
     # Nixpkgs and unstable
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # impermanence
@@ -20,7 +20,7 @@
     # home-manager - home user+dotfile manager
     # https://github.com/nix-community/home-manager
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -129,6 +129,14 @@
                 config = {
                   allowUnfree = true;
                   allowUnfreePredicate = _: true;
+                  # TODO remove when sonarr and friends update
+                  permittedInsecurePackages = [
+                    "aspnetcore-runtime-6.0.36"
+                    "aspnetcore-runtime-wrapped-6.0.36"
+                    "dotnet-sdk-6.0.428"
+                    "dotnet-sdk-wrapped-6.0.428"
+                  ];
+
                 };
               };
 

@@ -59,6 +59,9 @@ in
 
   config = mkIf cfg.enable {
 
+
+
+
     ## Secrets
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;

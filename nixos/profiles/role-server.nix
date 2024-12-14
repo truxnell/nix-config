@@ -45,7 +45,6 @@ with lib;
     };
     programs.command-not-found.enable = mkDefault false;
 
-    sound.enable = false;
     hardware.pulseaudio.enable = false;
 
     environment.systemPackages = with pkgs; [

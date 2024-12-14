@@ -11,6 +11,8 @@
 
   ];
   config = {
+
+
     mySystem.purpose = "Network Attached Storage";
     mySystem.system.impermanence.enable = true;
     mySystem.system.autoUpgrade.enable = true; # bold move cotton
@@ -62,7 +64,7 @@
     "i915.enable_guc=2"
   ];
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver
@@ -132,20 +134,17 @@
     services.samba = {
       enable = true;
       openFirewall = true;
-      extraConfig = ''
-        workgroup = WORKGROUP
-        server string = daedalus
-        netbios name = daedalus
-        security = user
-        #use sendfile = yes
-        #max protocol = smb2
-        # note: localhost is the ipv6 localhost ::1
-        hosts allow = 10.8.10. 127.0.0.1 localhost
-        hosts deny = 0.0.0.0/0
-        guest account = nobody
-        map to guest = bad user
-      '';
-      shares = {
+      settings.global = {
+        workgroup = "WORKGROUP";
+        "server string" = "daedalus";
+        "netbios name" = "daedalus";
+        security = "user";
+        "hosts allow" = "10.8.10. 127.0.0.1 localhost";
+        "hosts deny" = "0.0.0.0/0";
+        "guest account" = "nobody";
+        "map to guest" = "bad user";
+      };
+      settings.shares = {
         backup = {
           path = "/zfs/backup";
           "read only" = "no";
