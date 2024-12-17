@@ -144,39 +144,39 @@
         in
         rec {
 
-          "rickenbacker" = mkNixosConfig {
-            # NixOS laptop (dualboot windows, dunno why i kept it)
-            hostname = "rickenbacker";
-            system = "x86_64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-thinkpad-e14-amd.nix
-              inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e14-amd
-            ];
-            profileModules = [
-              ./nixos/profiles/role-worstation.nix
-              ./nixos/profiles/role-dev.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
+          # "rickenbacker" = mkNixosConfig {
+          #   # NixOS laptop (dualboot windows, dunno why i kept it)
+          #   hostname = "rickenbacker";
+          #   system = "x86_64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-thinkpad-e14-amd.nix
+          #     inputs.nixos-hardware.nixosModules.lenovo-thinkpad-e14-amd
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-worstation.nix
+          #     ./nixos/profiles/role-dev.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
 
 
-            ];
-          };
+          #   ];
+          # };
 
-          "citadel" = mkNixosConfig {
-            # Gaming PC (dualboot windows)
+          # "citadel" = mkNixosConfig {
+          #   # Gaming PC (dualboot windows)
 
-            hostname = "citadel";
-            system = "x86_64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-gaming-desktop.nix
-            ];
-            profileModules = [
-              ./nixos/profiles/role-worstation.nix
-              ./nixos/profiles/role-dev.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
+          #   hostname = "citadel";
+          #   system = "x86_64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-gaming-desktop.nix
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-worstation.nix
+          #     ./nixos/profiles/role-dev.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/workstation.nix; }
 
-            ];
+          #   ];
 
-          };
+          # };
 
           # "dns01" = mkNixosConfig {
           #   # Rpi for DNS and misc services
@@ -253,19 +253,19 @@
             ];
           };
 
-          "playsatan" = mkNixosConfig {
-            # nuci5 tv streaming
+          # "playsatan" = mkNixosConfig {
+          #   # nuci5 tv streaming
 
-            hostname = "playsatan";
-            system = "x86_64-linux";
-            hardwareModules = [
-              ./nixos/profiles/hw-generic-x86.nix
-            ];
-            profileModules = [
-              ./nixos/profiles/role-server.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
-            ];
-          };
+          #   hostname = "playsatan";
+          #   system = "x86_64-linux";
+          #   hardwareModules = [
+          #     ./nixos/profiles/hw-generic-x86.nix
+          #   ];
+          #   profileModules = [
+          #     ./nixos/profiles/role-server.nix
+          #     { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
+          #   ];
+          # };
 
 
 
