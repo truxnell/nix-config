@@ -36,6 +36,7 @@
       maintainerr.enable = true;
       immich.enable = true;
       filebrowser.enable = true;
+      atuin.enable = true;
       syncthing = {
         enable = true;
         syncPath = "/zfs/syncthing/";

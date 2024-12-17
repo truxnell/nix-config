@@ -46,5 +46,6 @@
     ./navidrome
     ./vikunja
     ./steam
+    ./atuin
   ];
 }
