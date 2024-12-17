@@ -134,35 +134,35 @@
     services.samba = {
       enable = true;
       openFirewall = true;
-      settings.global = {
-        workgroup = "WORKGROUP";
+      settings = {
+        global = {
+        "workgroup" = "WORKGROUP";
         "server string" = "daedalus";
         "netbios name" = "daedalus";
-        security = "user";
+        "security" = "user";
         "hosts allow" = "10.8.10. 127.0.0.1 localhost";
         "hosts deny" = "0.0.0.0/0";
         "guest account" = "nobody";
         "map to guest" = "bad user";
-      };
-      settings.shares = {
-        backup = {
-          path = "/zfs/backup";
+        };
+        "backup" = {
+          "path" = "/zfs/backup";
           "read only" = "no";
         };
-        documents = {
-          path = "/zfs/documents";
+        "documents" = {
+          "path" = "/zfs/documents";
           "read only" = "no";
         };
-        natflix = {
-          path = "/tank/natflix";
+        "natflix" = {
+          "path" = "/tank/natflix";
           "read only" = "no";
         };
-        scans = {
-          path = "/zfs/documents/scans";
+        "scans" = {
+          "path" = "/zfs/documents/scans";
           "read only" = "no";
         };
-        paperless = {
-          path = "/zfs/documents/paperless/inbound";
+        "paperless" = {
+          "path" = "/zfs/documents/paperless/inbound";
           "read only" = "no";
         };
       };
