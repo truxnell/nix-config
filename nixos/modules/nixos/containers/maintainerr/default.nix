@@ -9,7 +9,7 @@ let
   app = "maintainerr";
   category = "services";
   description = "Plex content manager";
-  image = "ghcr.io/jorenn92/maintainerr:2.2.1@sha256:13121a8292ef6db7560a931bf19b601cf3cc12df0a9dea9086b757798eea5b6d";
+  image = "ghcr.io/jorenn92/maintainerr:2.3.1@sha256:0f4714a5f7bfdb1d47f52aeb0b8aedc2c89cae639975dd0c54aa65931cf88468";
   user = "568"; #string
   group = "568"; #string
   port = 6246; #int
