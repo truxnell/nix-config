@@ -49,7 +49,7 @@ with lib;
         ];
       files = [
         "/etc/machine-id"
-        "/etc/adjtime" # hardware clock adjustment
+        # "/etc/adjtime" # hardware clock adjustment
         # ssh keys
         "/etc/ssh/ssh_host_ed25519_key"
         "/etc/ssh/ssh_host_ed25519_key.pub"
