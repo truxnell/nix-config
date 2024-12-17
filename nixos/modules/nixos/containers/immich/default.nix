@@ -12,7 +12,7 @@ let
   # image = "";
   user = "kah"; #string
   group = "kah"; #string
-  port = 3001; #int
+  port = 2283; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
