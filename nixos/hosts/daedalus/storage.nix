@@ -177,28 +177,75 @@ in
         ];
       };
       "/export/natflix" = {
-        device = "/tank/natflix";
+        device = "/tank/natflix" ;
         options = [ "bind" ];
       };
-      "/export/syncthing" = {
-        device = "/zfs/syncthing";
-        options = [ "bind" ];
-      };
-      "/export/documents" = {
-        device = "/zfs/documents";
-        options = [ "bind" ];
-      };
-      "/export/photos" = {
-        device = "/zfs/photos";
-        options = [ "bind" ];
-      };
-      "/export/backup" = {
-        device = "/zfs/backup";
-        options = [ "bind" ];
-      };
+      # "/export/syncthing" = {
+      #   device = "/zfs/syncthing";
+      #   options = [ "bind" ];
+      # };
+      # "/export/documents" = {
+      #   device = "/zfs/documents";
+      #   options = [ "bind" ];
+      # };
+      # "/export/photos" = {
+      #   device = "/zfs/photos";
+      #   options = [ "bind" ];
+      # };
+      # "/export/backup" = {
+      #   device = "/zfs/backup";
+      #   options = [ "bind" ];
+      # };
     }
     // parityFs
     // dataFs;
+
+  systemd.mounts = [
+    {
+      type = "none";
+      options = "bind";
+      what = "/zfs/backup";
+      where = "/export/backup";
+      requires = [ "zfs-mount.service" ];
+      after = [ "zfs-mount.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "nfs-server.service" ];
+      requiredBy = [ "nfs-server.service" ];
+    }
+        {
+      type = "none";
+      options = "bind";
+      what = "/zfs/syncthing";
+      where = "/export/syncthing";
+      requires = [ "zfs-mount.service" ];
+      after = [ "zfs-mount.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "nfs-server.service" ];
+      requiredBy = [ "nfs-server.service" ];
+    }
+        {
+      type = "none";
+      options = "bind";
+      what = "/zfs/documents";
+      where = "/export/documents";
+      requires = [ "zfs-mount.service" ];
+      after = [ "zfs-mount.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "nfs-server.service" ];
+      requiredBy = [ "nfs-server.service" ];
+    }
+        {
+      type = "none";
+      options = "bind";
+      what = "/zfs/photos";
+      where = "/export/photos";
+      requires = [ "zfs-mount.service" ];
+      after = [ "zfs-mount.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "nfs-server.service" ];
+      requiredBy = [ "nfs-server.service" ];
+    }
+  ];
 
   # nfs
   # mergerfs needs fsid=x to identify itself, not required for normal filesystems.

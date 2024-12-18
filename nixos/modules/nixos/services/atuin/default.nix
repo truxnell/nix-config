@@ -76,9 +76,9 @@ in
     # "d ${appFolder}/ 0750 ${user} ${group} -"
     # ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    # environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
+    #   directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
+    # };
 
 
     ## service
@@ -142,17 +142,17 @@ in
         "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
-      });
+    # services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
+    #   {
+    #     inherit app user;
+    #     paths = [ appFolder ];
+    #     inherit appFolder;
+    #   });
 
 
-    # services.postgresqlBackup = {
-    #   databases = [ app ];
-    # };
+    services.postgresqlBackup = {
+      databases = [ app ];
+    };
 
 
 
