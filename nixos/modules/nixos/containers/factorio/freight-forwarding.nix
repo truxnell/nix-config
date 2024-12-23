@@ -18,7 +18,6 @@ let
 in
 {
 
-
   options.mySystem.services.${app}.${instance} =
     {
       enable = mkEnableOption "${app} - ${instance}";
