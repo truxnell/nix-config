@@ -44,6 +44,7 @@
       navidrome.enable = true;
       paperless.enable = true;
       redbot.enable=true;
+      silverbullet.enable=true;
     };
     mySystem.security.acme.enable = true;
 

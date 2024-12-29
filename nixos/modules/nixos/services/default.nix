@@ -47,5 +47,6 @@
     ./vikunja
     ./steam
     ./atuin
+    ./silverbullet
   ];
 }
