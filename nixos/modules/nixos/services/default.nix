@@ -48,5 +48,6 @@
     ./steam
     ./atuin
     ./silverbullet
+    ./tandoor
   ];
 }

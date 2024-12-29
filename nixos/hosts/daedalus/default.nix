@@ -45,6 +45,7 @@
       paperless.enable = true;
       redbot.enable=true;
       silverbullet.enable=true;
+      tandoor.enable=true;
     };
     mySystem.security.acme.enable = true;
 
