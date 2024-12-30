@@ -175,7 +175,8 @@
 
     environment.systemPackages = with pkgs; [
       btrfs-progs
-
+      p7zip
+      unrar
     ];
 
 
