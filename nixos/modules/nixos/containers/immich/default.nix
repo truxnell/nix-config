@@ -149,7 +149,7 @@ in
         };
 
         immich-redis = {
-          image = "registry.hub.docker.com/library/redis:6.2-alpine@sha256:eaba718fecd1196d88533de7ba49bf903ad33664a92debb24660a922ecd9cac8";
+          image = "registry.hub.docker.com/library/redis:6.2-alpine@sha256:87e22d38b59e6ce8340fa7bd530cd455e0b4ea491835b0d36519ede865d6b4bb";
           extraOptions = [
             "--health-cmd=redis-cli ping || exit 1"
             "--health-interval=10s"
