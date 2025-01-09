@@ -133,7 +133,7 @@ in
 
 
         immich-machine-learning = {
-          image = "ghcr.io/immich-app/immich-machine-learning:v1.123.0";
+          image = "ghcr.io/immich-app/immich-machine-learning:v1.124.2";
           inherit environment;
           volumes = [
             "/zfs/photos/immich/:/usr/src/app/upload"
