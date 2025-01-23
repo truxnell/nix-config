@@ -61,12 +61,6 @@ let
 in
 {
 
-    sops.secrets."services/${app}/env" = {
-      sopsFile = ./secrets.sops.yaml;
-      owner = app;
-      group = app;
-    };
-
     systemd.services.factorio-update = {
       description = "Factorio update";
       wantedBy = [ "multi-user.target" ];
