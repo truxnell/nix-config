@@ -23,7 +23,7 @@ let
       fi
 
       # Get the current image ID of the running container
-      CURRENT_IMAGE=$(${pkgs.podman}/bin/podman inspect -f '{{.Id}}' $CONTAINER_NAME)
+      CURRENT_IMAGE=$(${pkgs.podman}/bin/podman inspect -f '{{.Image}}' $CONTAINER_NAME)
 
       # Pull the latest image from Docker Hub (or your specified registry)
       LATEST_IMAGE_ID=$(${pkgs.podman}/bin/podman pull --quiet $REGISTRY:$TAG)
@@ -38,16 +38,35 @@ let
 
       # Pull the latest image for the service
       echo "Pulling latest image..."
-      podman pull $REGISTRY:$TAG
+      ${pkgs.podman}/bin/podman pull $REGISTRY:$TAG
 
       # Restart the service
       echo "Restarting the container..."
-      podman restart $CONTAINER_NAME
-
+      systemctl restart podman-$CONTAINER_NAME
       echo "Update and restart completed successfully."
+
+      LATEST_VERSION=$(${pkgs.podman}/bin/podman inspect -f '{{index .Config.Labels "factorio.version"}}' $CONTAINER_NAME)
+      echo "New version is $LATEST_VERSION"
+
+      # Message to be posted in Discord
+      MESSAGE="**Server Update:** $CONTAINER_NAME has been updated to version $LATEST_VERSION!"
+
+      # Send the message using curl
+      ${pkgs.curl}/bin/curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"$MESSAGE\"}" \
+          "$DISCORD_WEBHOOK_URL"
+
+
     '';
 in
 {
+
+    sops.secrets."services/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = app;
+      group = app;
+    };
+
     systemd.services.factorio-update = {
       description = "Factorio update";
       wantedBy = [ "multi-user.target" ];
@@ -56,9 +75,11 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = "root";
+        EnvironmentFile = [ config.sops.secrets."services/factorio/env".path ];
         ExecStart = ''
           ${factorio-update}/bin/factorio-update
         '';
+
       };
     };
 }
