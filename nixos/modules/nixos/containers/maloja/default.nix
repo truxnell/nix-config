@@ -9,7 +9,7 @@ let
   app = "maloja";
   category = "containers";
   description = "Music scrobbler";
-  image = "krateng/maloja:3.2.2@sha256:c76bca4be5b382118df83a8ab6be5b7a2c69622503a24f0948d04ff22caacde2";
+  image = "krateng/maloja:3.2.3@sha256:034896ea414f903153933a3d555082d6bbaec40b4703d0baf6aaf9d1285c6144";
   user = "kah"; #string
   group = "kah"; #string
   port = 42010; #int
