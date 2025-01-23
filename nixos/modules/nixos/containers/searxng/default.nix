@@ -26,7 +26,8 @@ in
   services.searx = {
     enable = true;
     # environmentFile = config.sops.secrets.searxng_env_file.path;
-    redisCreateLocally = true;
+    redisCreateLocally = false;
+    package = pkgs.unstable.searxng;
 
     # Rate limiting
     # limiterSettings = {
@@ -72,6 +73,7 @@ in
       search = {
         autocomplete = "startpage";
         autocomplete_min = 2;
+        favicon_resolver = "duckduckgo";
         ban_time_on_fail = 5;
         default_lang = "en";
         formats = [
@@ -114,7 +116,8 @@ in
 
         "curlie".disabled = true;
         "currency".disabled = true;
-        "dailymotion".disabled = true;
+        "codeberg".disabled = false;
+        "dailymotion".disabled = false;
 
         "ddg definitions" = {
           disabled = false;
@@ -131,6 +134,10 @@ in
         "google news".disabled = true;
         "google play movies".disabled = true;
         "google videos".disabled = false;
+        "github".disabled=false;
+        "gitlab".disabled=false;
+        "gentoo".disabled=true;
+        "hoogle".disabled = true;
         "imgur".disabled = false;
         "invidious".disabled = true;
         "library of congress".disabled = false;
@@ -141,11 +148,13 @@ in
           weight = 0.2;
         };
 
-        "mojeek".disabled = true;
+        "mojeek".disabled = false;
         "mwmbl" = {
           disabled = false;
           weight = 0.4;
         };
+        "npm".disabled=true;
+        "rubygems".disabled=true;
 
         "odysee".disabled = true;
         "openverse".disabled = false;
@@ -154,12 +163,13 @@ in
         "piped".disabled = true;
         "qwant images".disabled = true;
         "qwant videos".disabled = false;
-        "qwant".disabled = true;
+        "qwant".disabled = false;
         "rumble".disabled = false;
+        "reddit".disabled = false;
         "sepiasearch".disabled = false;
         "svgrepo".disabled = false;
         "unsplash".disabled = false;
-        "vimeo".disabled = true;
+        "vimeo".disabled = false;
 
         "wallhaven" = {
           disabled = false;
@@ -189,6 +199,7 @@ in
         };
 
         "yacy images".disabled = true;
+        "yahoo".disabled = false;
         "youtube".disabled = false;
       };
 
