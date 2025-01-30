@@ -61,7 +61,7 @@ let
 in
 {
 
-    systemd.services.factorio-update = {
+    systemd.services.factorio-update = mkIf config.mySystem.services.factorio.space-age.enable {
       description = "Factorio update";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target"  ];
