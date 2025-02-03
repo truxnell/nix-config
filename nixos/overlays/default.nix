@@ -16,5 +16,9 @@
   nixpkgs-overlays = final: prev: {
     snapraid-btrfs = prev.callPackage ../pkgs/snapraid-btrfs.nix { };
     snapraid-btrfs-runner = prev.callPackage ../pkgs/snapraid-btrfs-runner.nix { };
+    podman-containers = prev.callPackage ../pkgs/cockpit-podman.nix { };
+    podman-sensors = prev.callPackage ../pkgs/cockpit-sensors.nix { };
+    podman-files = prev.callPackage ../pkgs/cockpit-files.nix { };
+
   };
 }
