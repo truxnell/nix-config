@@ -17,6 +17,7 @@
         'ghcr.io/recyclarr/recyclarr',
         'ghcr.io/onedr0p/sabnzbd',
         'ghcr.io/onedr0p/qbittorrent',
+        'docker.io/filebrowser/filebrowser'
       ],
 
     },
