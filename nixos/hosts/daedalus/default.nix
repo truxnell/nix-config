@@ -46,6 +46,7 @@
       redbot.enable=true;
       silverbullet.enable=true;
       tandoor.enable=true;
+      open-webui.enable=true;
     };
     mySystem.security.acme.enable = true;
 

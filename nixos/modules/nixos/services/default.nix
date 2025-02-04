@@ -49,5 +49,6 @@
     ./atuin
     ./silverbullet
     ./tandoor
+    ./open-webui
   ];
 }
