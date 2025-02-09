@@ -50,5 +50,6 @@
     ./silverbullet
     ./tandoor
     ./open-webui
+    ./afterlogic
   ];
 }
