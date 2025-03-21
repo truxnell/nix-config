@@ -9,7 +9,7 @@ let
   app = "redlib";
   category = "services";
   description = "reddit alternative frontend";
-  image = "quay.io/redlib/redlib:latest@sha256:494380fcb271f878a099f4e597b523b9c3677de08dca2e4a284c15d2393fde6c";
+  image = "quay.io/redlib/redlib:latest@sha256:a083413259666bdcabe2f52f9724af91e9506a04984e103ecc17eb8b02750d1a";
   user = "redlib"; #string
   group = "redlib"; #string
   port = 8080; #int
