@@ -9,7 +9,7 @@ let
   app = "overseerr";
   category = "services";
   description = "Media requests";
-  image = "ghcr.io/sct/overseerr:1.33.2@sha256:714ea6db2bc007a2262d112bef7eec74972eb33d9c72bddb9cbd98b8742de950";
+  image = "ghcr.io/sct/overseerr:1.34.0@sha256:4f38f58d68555004d3f487a4c5cbe2823e6a0942d946a25a2d9391d8492240a4";
   user = "kah"; #string
   group = "kah"; #string
   port = 5055; #int
