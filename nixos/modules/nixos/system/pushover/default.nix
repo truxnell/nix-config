@@ -39,20 +39,11 @@ in
       # which I can reference with bash $1.
       scriptArgs = "%i %H";
       script = ''
-        ${pkgs.curl}/bin/curl --fail -s -o /dev/null \
-          --form-string "priority=1" \
-          --form-string "html=1" \
-          --form-string "timestamp=$(date +%s)" \
-          --form-string "url=https://$2:9090/system/services#/$1" \
-          --form-string "url_title=View in Cockpit" \
-          --form-string "title=Unit failure: '$1' on $2" \
-          --form-string "message=<b>$1</b> has failed on <b>$2</b><br><u>Journal tail:</u><br><br><i>$(journalctl -u $1 -n 10 -o cat)</i>" \
-          https://api.pushover.net/1/messages.json 2&>1
           ${pkgs.curl}/bin/curl \
             -H "Title: $1 failed" \
             -H "Tags: warning,skull" \
-            -d "Journal tail:<br><br>$(journalctl -u $1 -n 10 -o cat)" 2&>1
-            https://ntfy.trux.dev/homelab
+            -d "Journal tail:<br><br>$(journalctl -u $1 -n 10 -o cat)" \
+            https://ntfy.trux.dev/homelab 2&>1
 
       '';
     };
