@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 let
   cfg = config.mySystem.services.qbittorrent;
-  image = "ghcr.io/buroa/qbtools:v0.19.15@sha256:4145020bab12b2ed892f548c2812c4979793def80dce5f907e49640329e54933";
+  image = "ghcr.io/buroa/qbtools:v0.19.16@sha256:2b90924170f62083cf01646e41bda92319ad641e7627add59e15b2b21c6f8cd1";
 
 in
 with lib;
