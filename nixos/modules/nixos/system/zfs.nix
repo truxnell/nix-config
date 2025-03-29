@@ -60,9 +60,8 @@ with lib;
     ];
 
     services.zfs.zed.settings = {
-      ZED_PUSHOVER_TOKEN = "$(${pkgs.busybox}/bin/cat ${config.sops.secrets.pushover-api-key.path})";
-      ZED_PUSHOVER_USER = "$(${pkgs.busybox}/bin/cat ${config.sops.secrets.pushover-user-key.path})";
+      ZED_NTFY_TOPIC = "homelab";
+      ZED_NTFY_URL = "https://ntfy.trux.dev";
     };
-
   };
 }

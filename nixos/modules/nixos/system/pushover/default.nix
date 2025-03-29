@@ -40,8 +40,6 @@ in
       scriptArgs = "%i %H";
       script = ''
         ${pkgs.curl}/bin/curl --fail -s -o /dev/null \
-          --form-string "token=$PUSHOVER_API_KEY" \
-          --form-string "user=$PUSHOVER_USER_KEY" \
           --form-string "priority=1" \
           --form-string "html=1" \
           --form-string "timestamp=$(date +%s)" \
@@ -50,6 +48,11 @@ in
           --form-string "title=Unit failure: '$1' on $2" \
           --form-string "message=<b>$1</b> has failed on <b>$2</b><br><u>Journal tail:</u><br><br><i>$(journalctl -u $1 -n 10 -o cat)</i>" \
           https://api.pushover.net/1/messages.json 2&>1
+          ${pkgs.curl}/bin/curl \
+            -H "Title: $1 failed" \
+            -H "Tags: warning,skull" \
+            -d "Journal tail:<br><br>$(journalctl -u $1 -n 10 -o cat)" 2&>1
+            https://ntfy.trux.dev/homelab
 
       '';
     };

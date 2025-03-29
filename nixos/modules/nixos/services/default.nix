@@ -51,5 +51,6 @@
     ./tandoor
     ./open-webui
     ./afterlogic
+    ./ntfy-sh
   ];
 }

@@ -6,18 +6,17 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "afterlogic";
+  app = "ntfy";
   category = "services";
-  description = "webmail";
-  image = "afterlogic/docker-webmail-lite:latest";
+  description = "notification server";
+  image = "";
   user = "568"; #string
   group = "568"; #string
-  port = 80; #int
+  port = 8111; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
-  afterlogicPhpFile = pkgs.writeTextFile { name = "afterlogic.php"; text = builtins.readFile ./afterlogic.php; };
 in
 {
   options.mySystem.${category}.${app} =
@@ -82,29 +81,16 @@ in
     };
 
 
-    virtualisation.oci-containers.containers.${app} = {
-      image = "${image}";
-      user = "0:0";
-      environment = {
+    ## service
+    services.ntfy-sh = {
+      enable = true;
+      settings = {
+        base-url = "https://ntfy.trux.dev";
+        listen-http = "localhost:8111";
+        attachment-cache-dir = "/var/lib/ntfy-sh/attachments";
+        behind-proxy = true;
       };
-      # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-
-      volumes = [
-         "${afterlogicPhpFile}:/var/www/html/afterlogic.php:Z"
-      ];
     };
-
-    # services.mysql = {
-    #   ensureDatabases = [ app ];
-    #   ensureUsers = [{
-    #     name = app;
-    #     ensurePermissions = {
-    #       "database.*" = "ALL PRIVILEGES";
-    #       "*.*" = "SELECT, LOCK TABLES";
-    #     };
-    #   }];
-    # };
-
 
 
     # homepage integration
@@ -134,7 +120,8 @@ in
       forceSSL = true;
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
-        proxyPass = "http://afterlogic:${builtins.toString port}";
+        proxyPass = "http://127.0.0.1:${builtins.toString port}";
+        proxyWebsockets = true;
         extraConfig = "resolver 10.88.0.1;";
       };
     };

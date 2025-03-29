@@ -47,6 +47,7 @@
       silverbullet.enable=true;
       tandoor.enable=true;
       open-webui.enable=true;
+      ntfy.enable=true;
     };
     mySystem.security.acme.enable = true;
 
