@@ -310,7 +310,19 @@ in
     serviceConfig = {
       Type = "oneshot";
       User = "root";
-      ExecStart = "${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner";
+      ExecStart = [
+        (pkgs.writeScript "btrfs-sync.sh"
+          ''
+          #!${pkgs.bash}/bin/bash
+
+          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner && \
+          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid sync succeeded" https://ntfy.trux.dev/snapraid || \
+          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid sync FAILED" https://ntfy.trux.dev/snapraid
+
+          ''
+        )
+      ];
+      
       Nice = 19;
       IOSchedulingPriority = 7;
       CPUSchedulingPolicy = "batch";
@@ -325,8 +337,8 @@ in
       ProtectKernelLogs = true;
       ProtectKernelModules = true;
       ProtectKernelTunables = true;
-      RestrictAddressFamilies = "AF_UNIX";
-      RestrictNamespaces = true;
+      # RestrictAddressFamilies = "AF_UNIX";
+      # RestrictNamespaces = true;
       # RestrictRealtime = true;
       # RestrictSUIDSGID = true;
       # SystemCallArchitectures = "native";
@@ -347,4 +359,59 @@ in
         );
     };
   };
+
+    systemd.services.snapraid-btrfs-scrub = {
+    description = "Run the snapraid-btrfs scrub with the runner";
+    startAt = "06:00";
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      ExecStart = [
+        (pkgs.writeScript "btrfs-scrub.sh"
+          ''
+          #!${pkgs.bash}/bin/bash
+
+          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs scrub -p 3 -o 30 && \
+          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid scrub succeeded" https://ntfy.trux.dev/snapraid || \
+          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid scrub FAILED" https://ntfy.trux.dev/snapraid
+          ''
+        )
+      ];
+      Nice = 19;
+      IOSchedulingPriority = 7;
+      CPUSchedulingPolicy = "batch";
+
+      LockPersonality = true;
+      MemoryDenyWriteExecute = true;
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+      ProtectClock = true;
+      ProtectControlGroups = true;
+      ProtectHostname = true;
+      ProtectKernelLogs = true;
+      ProtectKernelModules = true;
+      ProtectKernelTunables = true;
+      # RestrictAddressFamilies = "AF_UNIX";
+      # RestrictNamespaces = true;
+      # RestrictRealtime = true;
+      # RestrictSUIDSGID = true;
+      # SystemCallArchitectures = "native";
+      # SystemCallFilter = "@system-service";
+      # SystemCallErrorNumber = "EPERM";
+      # CapabilityBoundingSet = "";
+      # ProtectSystem = "strict";
+      ProtectHome = "read-only";
+      ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
+      ReadWritePaths =
+        # sync requires access to directories containing content files
+        # to remove them if they are stale
+        let
+          contentDirs = builtins.map builtins.dirOf contentFiles;
+        in
+        lib.unique (
+          builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs
+        );
+    };
+  };
+
 }
