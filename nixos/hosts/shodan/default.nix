@@ -59,7 +59,7 @@
     unpoller.enable = true;
 
     hs110-exporter.enable = true;
-    afterlogic.enable=true;
+    # afterlogic.enable=true;
 
   };
 

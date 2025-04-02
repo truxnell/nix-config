@@ -12,7 +12,7 @@ let
   image = "";
   user = "568"; #string
   group = "568"; #string
-  port = config.services.trilium-server.port; #int
+  port = 8089; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -85,6 +85,7 @@ in
     services.trilium-server = {
       enable=true;
       package=pkgs.trilium-next-server;
+      port=port;
     };
 
 
