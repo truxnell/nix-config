@@ -52,5 +52,6 @@
     ./open-webui
     ./afterlogic
     ./ntfy-sh
+    ./trilium
   ];
 }

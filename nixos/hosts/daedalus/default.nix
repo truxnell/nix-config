@@ -48,6 +48,7 @@
       tandoor.enable=true;
       open-webui.enable=true;
       ntfy.enable=true;
+      trilium.enable=true;
     };
     mySystem.security.acme.enable = true;
 

@@ -14,16 +14,16 @@ in
   config.services.cockpit = mkIf cfg.enable {
     enable = true;
     openFirewall = true;
-    package = pkgs.cockpit.overrideAttrs (old: {
-      # remove packagekit and selinux, don't work on NixOS
-      postBuild = ''
-        ${old.postBuild}
+    # package = pkgs.cockpit.overrideAttrs (old: {
+    #   # remove packagekit and selinux, don't work on NixOS
+    #   postBuild = ''
+    #     ${old.postBuild}
 
-        rm -rf \
-          dist/packagekit \
-          dist/selinux
-      '';
-    });
+    #     rm -rf \
+    #       dist/packagekit \
+    #       dist/selinux
+    #   '';
+    # });
   };
 
   config.environment = mkIf cfg.enable {
