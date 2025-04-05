@@ -53,5 +53,6 @@
     ./afterlogic
     ./ntfy-sh
     ./trilium
+    ./seafile
   ];
 }

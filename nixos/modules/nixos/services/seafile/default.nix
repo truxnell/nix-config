@@ -6,13 +6,13 @@
 with lib;
 let
   cfg = config.mySystem.${category}.${app};
-  app = "trilium";
+  app = "seafile";
   category = "services";
-  description = "note taking software";
+  description = "file syncronization";
   image = "";
   user = "568"; #string
   group = "568"; #string
-  port = 8089; #int
+  port = 0; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -53,6 +53,12 @@ in
           description = "Enable backups";
           default = true;
         };
+      fileLocation = mkOption
+        {
+          type = lib.types.str;
+          description = "Location of seafile root";
+          default = true;
+        };
 
 
 
@@ -82,11 +88,17 @@ in
 
 
     ## service
-    services.trilium-server = {
-      enable=true;
-      package=pkgs.trilium-next-server;
-      port=port;
-    };
+    services.seafile = {
+        enable = true;
+        ccnetSettings.General.SERVICE_URL = "https://${url}";
+        seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
+        adminEmail = "admin@trux.dev";
+        initialAdminPassword = "whatever"; # overriden below
+        seahubExtraConf = ''
+          CSRF_TRUSTED_ORIGINS = ["https://${host}"]
+        '';
+        dataDir = cfg.fileLocation;
+      };
 
 
     # homepage integration
@@ -115,10 +127,19 @@ in
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
-      };
+        locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+        locations."/seafhttp" = {
+          proxyPass = "http://unix:/run/seafile/server.sock";
+          extraConfig = ''
+            rewrite ^/seafhttp(.*)$ $1 break;
+            client_max_body_size 0;
+            proxy_connect_timeout  36000s;
+            proxy_read_timeout  36000s;
+            proxy_send_timeout  36000s;
+            send_timeout  36000s;
+            proxy_http_version 1.1;
+          '';
+          };
     };
 
     ### firewall config

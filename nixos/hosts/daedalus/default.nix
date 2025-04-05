@@ -49,6 +49,10 @@
       open-webui.enable=true;
       ntfy.enable=true;
       trilium.enable=true;
+      seafile = {
+        enable=true;
+        fileLocation="/zfs/seafile";
+      };
     };
     mySystem.security.acme.enable = true;
 
