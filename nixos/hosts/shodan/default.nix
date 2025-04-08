@@ -60,6 +60,7 @@
 
     hs110-exporter.enable = true;
     # afterlogic.enable=true;
+    firefly-iii.enable=true;
 
   };
 

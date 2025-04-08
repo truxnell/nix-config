@@ -54,5 +54,6 @@
     ./ntfy-sh
     ./trilium
     ./seafile
+    ./firefly-iii
   ];
 }

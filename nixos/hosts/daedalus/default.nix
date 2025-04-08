@@ -16,7 +16,13 @@
     mySystem.purpose = "Network Attached Storage";
     mySystem.system.impermanence.enable = true;
     mySystem.system.autoUpgrade.enable = true; # bold move cotton
+    
+    services.postgresqlBackup =  {
+      location = lib.mkForce "/zfs/backup/nixos/postgresql";
+    };
+
     mySystem.services = {
+      postgresql.enable = true;
       openssh.enable = true;
       minio.enable = true;
       podman.enable = true;
