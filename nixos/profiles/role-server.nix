@@ -50,7 +50,6 @@ with lib;
     environment.systemPackages = with pkgs; [
       tmux
       btop
-      ntfy
     ];
 
 
