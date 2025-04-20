@@ -3,7 +3,7 @@
   "packageRules": [
     {
   // automerge minor, patch, digest
-      "matchDatasources": ['docker'],
+      "matchDatasources": ['docker', 'github-tags'],
       "automerge": "true",
       "automergeType": "branch",
       "schedule": [ "before 4am on Sunday" ],
@@ -19,8 +19,8 @@
         'ghcr.io/onedr0p/qbittorrent',
         'docker.io/filebrowser/filebrowser',
         'ghcr.io/jorenn92/Maintainerr',
-        'zricethezav/gitleaks',
-        'actions/create-github-app-token',
+        'github.com/zricethezav/gitleaks',
+        'github.com/actions/create-github-app-token',
         
       ],
 
