@@ -14,7 +14,7 @@
     enabled: true,
     automerge: true,
     schedule: [
-      'before 4am on Sunday',
+      'before 11am on Sunday',
     ],
   },
   customManagers: [
