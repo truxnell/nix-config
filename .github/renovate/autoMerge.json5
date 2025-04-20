@@ -6,7 +6,7 @@
       "matchDatasources": ['docker', 'github-tags'],
       "automerge": "true",
       "automergeType": "branch",
-      "schedule": [ "before 4am on Sunday" ],
+      "schedule": [ "before 11am on Sunday" ],
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
         'ghcr.io/twin/gatus',
@@ -30,7 +30,7 @@
       "matchDatasources": ['docker'],
       "automerge": "true",
       "automergeType": "branch",
-      "schedule": [ "before 4am on Sunday" ],
+      "schedule": [ "before 11am on Sunday" ],
       "matchUpdateTypes": [ 'patch', 'digest'],
       "matchPackageNames": [
         "ghcr.io/gethomepage/homepage",
