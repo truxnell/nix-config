@@ -9,7 +9,7 @@ let
   app = "cross-seed";
   category = "services";
   description = "xseed";
-  image = "ghcr.io/cross-seed/cross-seed:6.0.0-34@sha256:f294429647b41cf4cd368386ff6ab24df1108d09a9463f98c76809dc7f25ec38";
+  image = "ghcr.io/cross-seed/cross-seed:6.0.0-34@sha256:f68f7fd7fa30bf45be844d7012d3b117841dea8fdfa0169d579e44698b041ae4";
   user = "568"; #string
   group = "568"; #string
   port = 2468; #int
