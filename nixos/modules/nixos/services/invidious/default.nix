@@ -87,6 +87,25 @@ in
       package = pkgs.unstable.invidious;
       inherit port;
       settings.db.user = app;
+      # hmacKeyFile = cfg.hmac_key;
+      sig-helper = {
+        enable = true; # Currently broken.
+        package = pkgs.unstable.inv-sig-helper;
+      };
+      database.createLocally = true;
+      settings = {
+        admins = ["truxnell"];
+        external_port = 80;
+        channel_refresh_interval = "60m";
+        use_quic = true;
+        channel_threads = 2;
+        use_pubsub_feeds = true;
+        https_only = false;
+        popular_enabled = false;
+        quality = "dash";
+        quality_dash = "best";
+	      hmac_key = "herpyderpderp";
+      };
     };
     systemd.services.invidious = {
       serviceConfig.RuntimeMaxSec = lib.mkForce "8h";
