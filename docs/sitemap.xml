@@ -2,114 +2,114 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://truxnell.github.io/nix-config/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/motd/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/postgres/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/tips/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/administration/cockpit/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/administration/deployment/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/administration/taskfile/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/includes/abbreviations/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/installation/install/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/maintenance/backups/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/maintenance/software_updates/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/monitoring/systemd/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/monitoring/warnings/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/monitoring/zed/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/network/dns/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/network/dns_dhcp/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/design/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/features/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/goals/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/k8s/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/options/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/overview/structure/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/security/containers/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/vm/faq/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/vm/impermance/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/vm/installing-x86_64/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/vm/installing-zfs-impermance/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
     <url>
          <loc>https://truxnell.github.io/nix-config/vm/secrets/</loc>
-         <lastmod>2025-05-03</lastmod>
+         <lastmod>2025-05-14</lastmod>
     </url>
 </urlset>
