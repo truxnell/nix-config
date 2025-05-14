@@ -6,7 +6,7 @@ k{ lib
 with lib;
 let
   app = "sonarr";
-  image = "ghcr.io/onedr0p/sonarr:4.0.4@sha256:b513d3836c5b86d3e5c2eb7cb4908e0002856d922b0a360f136781aaa89ef38a";
+  image = "ghcr.io/home-operations/sonarr:4.0.4";
   user = "kah"; #string
   group = "kah"; #string
   port = 8989; #int

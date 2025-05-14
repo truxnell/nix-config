@@ -92,11 +92,11 @@ And then I can pick and choose what level (if any) I want for container software
       "automergeType": "branch",
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
       "matchPackageNames": [
-        'ghcr.io/onedr0p/sonarr',
-        'ghcr.io/onedr0p/readarr',
-        'ghcr.io/onedr0p/radarr',
-        'ghcr.io/onedr0p/lidarr',
-        'ghcr.io/onedr0p/prowlarr'
+        'ghcr.io/home-operations/sonarr',
+        'ghcr.io/home-operations/readarr',
+        'ghcr.io/home-operations/radarr',
+        'ghcr.io/home-operations/lidarr',
+        'ghcr.io/home-operations/prowlarr'
         'ghcr.io/twin/gatus',
       ]
     },

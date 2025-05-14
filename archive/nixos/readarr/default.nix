@@ -6,7 +6,7 @@
 with lib;
 let
   app = "readarr";
-  image = "ghcr.io/onedr0p/readarr-nightly:0.3.27.2538";
+  image = "ghcr.io/home-operations/readarr";
   user = "kah"; #string
   group = "kah"; #string
   port = 8787; #int
