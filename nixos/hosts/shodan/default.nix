@@ -61,7 +61,7 @@
     hs110-exporter.enable = true;
     # afterlogic.enable=true;
     firefly-iii.enable=true;
-
+    rapt2mqtt.enable=true;
   };
 
   mySystem.containers = {

@@ -55,5 +55,6 @@
     ./trilium
     ./seafile
     ./firefly-iii
+    ./rapt2mqtt
   ];
 }
