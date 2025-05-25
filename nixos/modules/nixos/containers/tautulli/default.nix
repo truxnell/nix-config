@@ -6,7 +6,7 @@
 with lib;
 let
   app = "tautulli";
-  image = "ghcr.io/home-operations/tautulli:2.15.1";
+  image = "ghcr.io/home-operations/tautulli:2.15.2";
   user = "kah"; #string
   group = "kah"; #string
   port = 8181; #int
