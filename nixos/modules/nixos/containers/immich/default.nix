@@ -161,7 +161,7 @@ in
 
 
         immich-postgres = {
-          image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0";
+          image = "ghcr.io/immich-app/postgres:16-vectorchord0.3.0-pgvectors0.2.0";
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           environment = {
             POSTGRES_INITDB_ARGS = "--data-checksums";
