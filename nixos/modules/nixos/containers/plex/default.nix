@@ -87,7 +87,7 @@ in
       group = "media";
       url = "https://${app}.${config.mySystem.domain}/web/";
       interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
     }];
 
     services.restic.backups = config.lib.mySystem.mkRestic

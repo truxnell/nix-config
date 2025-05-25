@@ -88,7 +88,7 @@ in
       group = "media";
       url = "udp://${config.networking.hostName}:${builtins.toString port}";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" "[RESPONSE_TIME] < 1500" ];
     }];
 
     services.restic.backups = config.lib.mySystem.mkRestic

@@ -71,7 +71,7 @@ in
 
       # Search engine settings
       search = {
-        autocomplete = "startpage";
+        autocomplete = "brave";
         autocomplete_min = 2;
         favicon_resolver = "duckduckgo";
         ban_time_on_fail = 5;
@@ -261,7 +261,7 @@ in
       group = "media";
       url = "https://${app}.${config.mySystem.domain}";
       interval = "30s";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
 
     }];
 

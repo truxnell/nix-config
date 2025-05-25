@@ -161,26 +161,11 @@ in
 
 
         immich-postgres = {
-          image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:739cdd626151ff1f796dc95a6591b55a714f341c737e27f045019ceabf8e8c52";
+          image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0";
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           environment = {
             POSTGRES_INITDB_ARGS = "--data-checksums";
           };
-          cmd = [
-            "postgres"
-            "-c"
-            "shared_preload_libraries=vectors.so"
-            "-c"
-            ''search_path="$$user", public, vectors''
-            "-c"
-            "logging_collector=on"
-            "-c"
-            "max_wal_size=2GB"
-            "-c"
-            "shared_buffers=512MB"
-            "-c"
-            "wal_compression=on"
-          ];
           volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
           #  extraOptions = [
           #   ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
@@ -215,7 +200,7 @@ in
         group = "${category}";
         url = "https://${url}";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
       }
     ];
 

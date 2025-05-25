@@ -107,7 +107,7 @@ in
         group = "${category}";
         url = "https://${url}";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
       }
     ];
 

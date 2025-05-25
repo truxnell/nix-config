@@ -77,7 +77,7 @@ with lib;
       url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208:/api/3/status";
 
       interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
     }];
 
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [

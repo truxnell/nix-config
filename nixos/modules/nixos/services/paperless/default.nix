@@ -106,7 +106,6 @@ in
       consumptionDir = "/zfs/documents/paperless/inbound";
       consumptionDirIsPublic = true;
       port = 8000;
-      address = "localhost";
       passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
       settings = {
         PAPERLESS_OCR_LANGUAGE = "eng";
@@ -191,7 +190,7 @@ in
         group = "${category}";
         url = "https://${url}/api";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
       }
     ];
 

@@ -45,7 +45,7 @@ with lib;
     };
     programs.command-not-found.enable = mkDefault false;
 
-    hardware.pulseaudio.enable = false;
+    services.pulseaudio.enable = false;
 
     environment.systemPackages = with pkgs; [
       tmux

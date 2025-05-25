@@ -113,7 +113,7 @@ in
         group = "${category}";
         url = "http://${url}/data/report"; # check https & the reporting URL for 405 'method not allowed's
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 405" "[RESPONSE_TIME] < 50" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 405" "[RESPONSE_TIME] < 1500" ];
       }
     ];
 

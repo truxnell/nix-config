@@ -103,7 +103,7 @@ in
         group = "${category}";
         url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
       }
     ];
 
