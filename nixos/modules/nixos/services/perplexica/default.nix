@@ -89,6 +89,9 @@ in
       };
       volumes = [
         "${appFolder}/config.toml:/home/perplexica/config.toml"
+        "${appFolder}/data:/home/perplexica/data"
+        "${appFolder}/upload:/home/perplexica/upload"
+
       ];
 
       # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
