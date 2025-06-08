@@ -56,5 +56,6 @@
     ./seafile
     ./firefly-iii
     ./rapt2mqtt
+    ./perplexica
   ];
 }
