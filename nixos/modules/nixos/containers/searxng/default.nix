@@ -15,6 +15,11 @@ let
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
+  imports=[
+    ./higher.nix
+    ./lower.nix
+    ./remove.nix
+  ];
   options.mySystem.services.${app} =
     {
       enable = mkEnableOption "${app}";
