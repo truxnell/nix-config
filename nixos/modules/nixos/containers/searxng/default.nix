@@ -187,16 +187,9 @@ in
       # and a brave goggle
       # https://raw.githubusercontent.com/vnuxa/scribe_optimizations/refs/heads/main/brave.goggle
       hostnames = {
-        remove = map (x: "(.*\.)" + x + "$") [
-
-         ];
-
-        high_priority = map (x: "(.*\.)" + x + "$") [ 
-
-        ];
-        low_priority = map (x: "(.*\.)" + x + "$") [
-
-        ];
+        remove = map (x: "(.*\.)" + x + "$") import ./remove_priority;
+        high_priority = map (x: "(.*\.)" + x + "$") import ./high_priority;
+        low_priority = map (x: "(.*\.)" + x + "$") import ./low_priority;
       };
     };
   };
