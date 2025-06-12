@@ -15,11 +15,6 @@ let
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  imports=[
-    ./higher.nix
-    ./lower.nix
-    ./remove.nix
-  ];
   options.mySystem.services.${app} =
     {
       enable = mkEnableOption "${app}";
@@ -186,11 +181,12 @@ in
       # mix of kagi leaderboard
       # and a brave goggle
       # https://raw.githubusercontent.com/vnuxa/scribe_optimizations/refs/heads/main/brave.goggle
-      hostnames = {
-        remove = map (x: "(.*\.)" + x + "$") import ./remove_priority;
-        high_priority = map (x: "(.*\.)" + x + "$") import ./high_priority;
-        low_priority = map (x: "(.*\.)" + x + "$") import ./low_priority;
-      };
+    hostnames = {
+      remove = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./remove));
+      high_priority = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./higher_domains));
+      low_priority = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./lower_domains));
+    };
+
     };
   };
     
