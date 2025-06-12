@@ -9,7 +9,7 @@ let
   app = "cross-seed";
   category = "services";
   description = "xseed";
-  image = "ghcr.io/cross-seed/cross-seed:6.0.0-34@sha256:f68f7fd7fa30bf45be844d7012d3b117841dea8fdfa0169d579e44698b041ae4";
+  image = "ghcr.io/cross-seed/cross-seed:6.12.6";
   user = "568"; #string
   group = "568"; #string
   port = 2468; #int
@@ -89,6 +89,7 @@ in
       volumes = [
         "${appFolder}:/config:rw"
         "/tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+        "/tank/natflix/downloads/qbittorrent-lts:/tank/natflix/downloads/qbittorrent-lts:rw"
         "/var/lib/qbittorrent/qBittorrent/BT_backup:/qbit-torrents:ro"
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
