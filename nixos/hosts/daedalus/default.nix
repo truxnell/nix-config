@@ -59,6 +59,7 @@
         enable=true;
         fileLocation="/zfs/seafile";
       };
+      technitium-dns-server.enable=true;
     };
     mySystem.security.acme.enable = true;
 

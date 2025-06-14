@@ -63,6 +63,8 @@
     firefly-iii.enable=true;
     rapt2mqtt.enable=true;
     perplexica.enable=true;
+    technitium-dns-server.enable=true;
+
   };
 
   mySystem.containers = {

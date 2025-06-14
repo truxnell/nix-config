@@ -57,5 +57,6 @@
     ./firefly-iii
     ./rapt2mqtt
     ./perplexica
+    ./technitium
   ];
 }
