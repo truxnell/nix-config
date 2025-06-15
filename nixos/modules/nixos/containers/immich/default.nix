@@ -112,7 +112,7 @@ in
     virtualisation.oci-containers.containers =
       {
         immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.133.1";
+          image = "ghcr.io/immich-app/immich-server:v1.134.0";
           environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
           inherit environment;
           volumes = [
