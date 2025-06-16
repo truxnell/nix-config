@@ -100,15 +100,15 @@ in
     ];
 
     ### gatus integration
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [
-      {
-        name = app;
-        group = "${category}";
-        url = "https://${url}";
-        interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
-      }
-    ];
+    # mySystem.services.gatus.monitors = mkIf cfg.monitor [
+    #   {
+    #     name = app;
+    #     group = "${category}";
+    #     url = "https://${url}";
+    #     interval = "1m";
+    #     conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
+    #   }
+    # ];
 
     ### Ingress
     services.nginx.virtualHosts.${url} = {
