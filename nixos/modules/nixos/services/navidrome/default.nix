@@ -91,6 +91,7 @@ in
           CovertArtPriority = "*.jpg, *.JPG, *.png, *.PNG, embedded";
           AutoImportPlaylists = false;
           EnableSharing = true;
+          # Scanner.PurgeMissing = "always";
           # "LastFM.Enabled" = true;
           # "LastFM.ApiKey" = config.sops.secrets.last-fm-key.path;
           # "LastFM.Secret" = config.sops.secrets.last-fm-secret.path;
