@@ -58,5 +58,6 @@
     ./rapt2mqtt
     ./perplexica
     ./technitium
+    ./jellyfin
   ];
 }
