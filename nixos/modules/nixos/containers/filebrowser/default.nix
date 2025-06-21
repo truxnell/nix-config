@@ -9,7 +9,7 @@ let
   app = "filebrowser";
   category = "services";
   description = "Webui Filebrowser";
-  image = "docker.io/filebrowser/filebrowser:v2.32.0@sha256:593478e3c24c5ea9f5d7478dc549965b7bc7030707291006ce8d0b6162d3454b";
+  image = "docker.io/filebrowser/filebrowser:v2.33.2@sha256:57a7a972787ae64ca4d26c2c3cb2cdd05f258e8aca250ade6ea2c206341c03bd";
   user = "568"; #string
   group = "568"; #string
   port = 8080; #int
