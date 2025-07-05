@@ -42,7 +42,7 @@ in
 
     virtualisation.oci-containers.containers.${app} =
       let
-        image = "ghcr.io/home-operations/qbittorrent:5.1.1";
+        image = "ghcr.io/home-operations/qbittorrent:5.1.2";
       in
       {
         image = "${image}";
