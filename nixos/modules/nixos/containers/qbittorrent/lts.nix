@@ -55,6 +55,7 @@ in
           "${appFolder}:/config:rw"
           "${xseedShell}/bin/xseed.sh:/scripts/xseed.sh:Z"
           "/tank/natflix/downloads/qbittorrent-lts:/tank/natflix/downloads/qbittorrent:rw"
+          "/tank/natflix/i486:/tank/natflix/i486:rw"
           "/mnt/cache:/cache"
           "/etc/localtime:/etc/localtime:ro"
         ];
