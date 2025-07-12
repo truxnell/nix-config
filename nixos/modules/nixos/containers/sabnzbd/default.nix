@@ -6,7 +6,7 @@
 with lib;
 let
   app = "sabnzbd";
-  image = "ghcr.io/home-operations/sabnzbd:4.5.1";
+  image = "ghcr.io/home-operations/sabnzbd:4.5.2";
   user = "kah"; #string
   group = "kah"; #string
   port = 8080; #int
