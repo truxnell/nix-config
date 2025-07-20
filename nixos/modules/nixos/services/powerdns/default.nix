@@ -9,7 +9,7 @@ let
   persistentFolder = "${config.mySystem.persistentFolder}/nixos/pdns"; # TODO refactor using bind mounts
   user = "pdns";
   group = "pdns";
-  portDns = 5353; # avoiding conflict with adguardhome
+  portDns = 53; # avoiding conflict with adguardhome
   portWebUI = 8081;
   configDir = pkgs.writeTextDir "pdns.conf" "${pdnsConfig}";
 

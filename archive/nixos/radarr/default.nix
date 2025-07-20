@@ -62,7 +62,7 @@ in
       locations."^~ /" = {
         proxyPass = "http://${app}:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
-
+        proxyWebsockets = true;
       };
     };
 
