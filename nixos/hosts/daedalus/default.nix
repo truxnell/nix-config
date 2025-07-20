@@ -140,11 +140,12 @@
         neededForBoot = true; # for impermanence
       };
 
-    fileSystems."/mnt/cache" =
-      {
-        device = "/dev/disk/by-uuid/fe725638-ca41-4ecc-9b8a-7bf0807786e1";
-        fsType = "xfs";
-      };
+    # deaders :(
+    # fileSystems."/mnt/cache" =
+    #   {
+    #     device = "/dev/disk/by-uuid/fe725638-ca41-4ecc-9b8a-7bf0807786e1";
+    #     fsType = "xfs";
+    #   };
 
     # TODO does this live somewhere else?
     # it is very machine-specific...
