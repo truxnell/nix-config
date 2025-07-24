@@ -42,7 +42,7 @@
 
     radicale.enable = true;
     miniflux.enable = true;
-    calibre-web.enable = true;
+    # calibre-web.enable = true;
     rss-bridge.enable = true;
     # paperless.enable = true;
     rxresume.enable = true;
