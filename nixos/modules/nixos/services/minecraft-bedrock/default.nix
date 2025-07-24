@@ -5,26 +5,25 @@
 }:
 with lib;
 let
-  cfg = config.mySystem.${category}.${app};
-  app = "calibre";
-  category = "containers";
-  description = "eBook managment";
-  image = "ghcr.io/linuxserver/calibre:8.7.0";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 8091; #int
-  appFolder = "/var/lib/${app}";
+  app = "minecraft-bedrock";
+  category = "services";
+  description = "Minecraft Bedrock Server";
+  instance = "CordiWorld";
+  image = "docker.io/itzg/minecraft-bedrock-server:latest";
+  user = "568"; #string
+  group = "568"; #string
+  port = 19132; #int
+  cfg = config.mySystem.services.${app}.${instance};
+  appFolder = "/var/lib/${app}/${instance}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.${category}.${app} =
+  options.mySystem.services.${app}.${instance} =
     {
       enable = mkEnableOption "${app}";
       addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      openFirewall = mkEnableOption "Open firewall for ${app} - ${instance}" // { default = true; };
-
       monitor = mkOption
         {
           type = lib.types.bool;
@@ -74,37 +73,41 @@ in
 
 
     # Folder perms - only for containers
-    systemd.tmpfiles.rules = [
-      "d ${appFolder}/ 0750 ${user} ${group} -"
-    ];
+    # systemd.tmpfiles.rules = [
+    # "d ${appFolder}/ 0750 ${user} ${group} -"
+    # ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
 
-    ## service
-    virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image;
-      user = "0"; # :(
-      group = "0"; # :(
-
-      env = {
-        PUID = "568";
-        PGID = "568";
-      };
+    virtualisation.oci-containers.containers."${app}-${instance}" = {
+      image = "${image}";
+      user = "${user}:${group}";
       volumes = [
-        "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix/:/media:rw"
+        "${appFolder}:/data:rw"
+        "/etc/localtime:/etc/localtime:ro"
       ];
-      ports = [
-        "${builtins.toString port}:8080"
-        "8081:8081"
-      ];
-      caps = {
-        noNewPrivileges = true;
-      };
+      environment =
+        {
+          SERVER_NAME = "Natflix Servers";
+          EULA = "TRUE";
+          GAMEMODE = "creative";
+          DIFFICULTY = "normal";
+          FORCE_GAMEMODE = "false";
+          TICK_DISTANCE = "12";
+          VIEW_DISTANCE = "64";
+          LEVEL_NAME = instance;
+          TEXTUREPACK_REQUIRED = "false";
+          WHITE_LIST = "false";
+          ALLOW_CHEATS = "true";
+        };
+      # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
+      ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" ]; # expose port
     };
+
+
 
     # homepage integration
     mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
@@ -124,7 +127,7 @@ in
         group = "${category}";
         url = "https://${url}";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
+        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 50" ];
       }
     ];
 
@@ -134,16 +137,16 @@ in
       useACMEHost = config.networking.domain;
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        proxyWebsockets = true;
+        extraConfig = "resolver 10.88.0.1;";
       };
     };
 
     ### firewall config
 
-    networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 8081 ];
-      allowedUDPPorts = [ 8081 ];
-    };
+    # networking.firewall = mkIf cfg.openFirewall {
+    #   allowedTCPPorts = [ port ];
+    #   allowedUDPPorts = [ port ];
+    # };
 
     ### backups
     warnings = [

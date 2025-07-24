@@ -64,6 +64,7 @@
     rapt2mqtt.enable=true;
     perplexica.enable=true;
     technitium-dns-server.enable=true;
+    minecraft-bedrock.CordiWorld.enable=true;
 
   };
 

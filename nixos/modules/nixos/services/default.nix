@@ -59,5 +59,6 @@
     ./perplexica
     ./technitium
     ./jellyfin
+    ./minecraft-bedrock
   ];
 }
