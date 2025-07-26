@@ -60,5 +60,6 @@
     ./technitium
     ./jellyfin
     ./minecraft-bedrock
+    ./jellyseer
   ];
 }
