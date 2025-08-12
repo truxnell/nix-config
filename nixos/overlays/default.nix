@@ -3,7 +3,7 @@
 }:
 {
 
-  nur = inputs.nur.overlays.default;
+  # nur = inputs.nur.overlays.default;
 
   # The unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'

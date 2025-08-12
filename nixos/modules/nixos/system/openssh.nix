@@ -32,7 +32,7 @@ in
       openFirewall = true;
       # TODO: Enable this when option becomes available
       # Don't allow home-directory authorized_keys
-      authorizedKeysFiles = mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
+      # authorizedKeysFiles = mkForce [ "/etc/ssh/authorized_keys.d/%u" ];
       settings = {
         # Harden
         PasswordAuthentication = cfg.passwordAuthentication;

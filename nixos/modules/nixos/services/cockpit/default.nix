@@ -30,8 +30,8 @@ in
     systemPackages = with pkgs;
       [
         # nur.repos.procyon.cockpit-podman # TODO replace only if server runs pods
-        nur.repos.dukzcry.cockpit-machines # TODO enable with virtualisation on server
-        nur.repos.dukzcry.libvirt-dbus # TODO enable with virtualisation on server
+        # nur.repos.dukzcry.cockpit-machines # TODO enable with virtualisation on server
+        # nur.repos.dukzcry.libvirt-dbus # TODO enable with virtualisation on server
         pkgs.virt-manager # TODO enable with virtualisation on server
         podman-containers
         podman-sensors

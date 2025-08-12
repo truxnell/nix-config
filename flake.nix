@@ -10,8 +10,8 @@
     # https://github.com/nix-community/impermanence
     impermanence.url = "github:nix-community/impermanence";
 
-    # nur
-    nur.url = "github:nix-community/NUR";
+    # # nur
+    # nur.url = "github:nix-community/NUR";
 
     # nix-community hardware quirks
     # https://github.com/nix-community
@@ -19,10 +19,10 @@
 
     # home-manager - home user+dotfile manager
     # https://github.com/nix-community/home-manager
-    home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # home-manager = {
+    #   url = "github:nix-community/home-manager/release-25.05";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     # sops-nix - secrets with mozilla sops
     # https://github.com/Mic92/sops-nix
@@ -52,7 +52,6 @@
     { self
     , nixpkgs
     , sops-nix
-    , home-manager
     , nix-vscode-extensions
     , impermanence
     , ...
@@ -99,20 +98,19 @@
               # here we import all the modules and setup home-manager
             , baseModules ? [
                 sops-nix.nixosModules.sops
-                home-manager.nixosModules.home-manager
                 impermanence.nixosModules.impermanence
                 ./nixos/profiles/global.nix # all machines get a global profile
                 ./nixos/modules/nixos # all machines get nixos modules
                 ./nixos/hosts/${hostname}   # load this host's config folder for machine-specific config
                 {
-                  home-manager = {
-                    useUserPackages = true;
-                    useGlobalPkgs = true;
-                    extraSpecialArgs = {
-                      inherit inputs hostname system;
-                    };
+                  # home-manager = {
+                  #   useUserPackages = true;
+                  #   useGlobalPkgs = true;
+                  #   extraSpecialArgs = {
+                  #     inherit inputs hostname system;
+                  #   };
 
-                  };
+                  # };
                 }
               ]
             , profileModules ? [ ]
@@ -234,7 +232,6 @@
             ];
             profileModules = [
               ./nixos/profiles/role-server.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
 
@@ -249,7 +246,6 @@
             profileModules = [
               ./nixos/profiles/role-server.nix
               ./nixos/profiles/role-dev.nix
-              { home-manager.users.truxnell = ./nixos/home/truxnell/server.nix; }
             ];
           };
 
