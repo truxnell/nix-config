@@ -62,6 +62,7 @@
       technitium-dns-server.enable=true;
       jellyfin.enable=true;
       jellyseer.enable=true;
+      glance.enable=true;
     };
     mySystem.security.acme.enable = true;
 

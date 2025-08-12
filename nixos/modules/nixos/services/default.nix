@@ -61,5 +61,6 @@
     ./jellyfin
     ./minecraft-bedrock
     ./jellyseer
+    ./glance
   ];
 }
