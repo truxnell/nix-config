@@ -24,7 +24,7 @@ in
 {
 
   imports = [
-    ./qbtools.nix
+    # ./qbtools.nix 
     ./lts.nix
   ];
 

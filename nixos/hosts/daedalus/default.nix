@@ -63,6 +63,7 @@
       jellyfin.enable=true;
       jellyseer.enable=true;
       glance.enable=true;
+      qbit-tqm.enable=true;
     };
     mySystem.security.acme.enable = true;
 

@@ -27,5 +27,6 @@
     ./maintainerr
     ./cross-seed
     ./redbot
+    ./tqm
   ];
 }

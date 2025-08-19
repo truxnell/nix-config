@@ -13,6 +13,7 @@ with lib;
       sopsFile = ./secrets.sops.yaml;
       owner = config.users.users.kah.name;
       inherit (config.users.users.kah) group;
+      mode = "0444";
     };
 
     systemd.services."qbtools-tag" =
