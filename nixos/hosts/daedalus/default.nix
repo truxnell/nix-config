@@ -64,6 +64,7 @@
       jellyseer.enable=true;
       glance.enable=true;
       qbit-tqm.enable=true;
+      qui.enable=true;
     };
     mySystem.security.acme.enable = true;
 

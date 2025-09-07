@@ -62,5 +62,6 @@
     ./minecraft-bedrock
     ./jellyseer
     ./glance
+    ./qui
   ];
 }
