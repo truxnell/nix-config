@@ -9,7 +9,7 @@ let
   app = "qbit-tqm";
   category = "services";
   description = "qbit tag manager";
-  image = "ghcr.io/home-operations/tqm:1.16.0@sha256:4b9fb56c43e1e5d82dec0be3b471af415e1d4092daff87354ad6d1008f756bba";
+  image = "ghcr.io/home-operations/tqm:1.17.0@sha256:05b62239063ad1e884f2254532e3dc9b60cff08870112dca244af328d761be0d";
   user = "568"; #string
   group = "568"; #string
   port = 0; #int
