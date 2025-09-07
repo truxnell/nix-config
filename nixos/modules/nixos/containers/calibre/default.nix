@@ -9,7 +9,7 @@ let
   app = "calibre";
   category = "containers";
   description = "eBook managment";
-  image = "ghcr.io/linuxserver/calibre:8.9.0";
+  image = "ghcr.io/linuxserver/calibre:8.10.0";
   user = "kah"; #string
   group = "kah"; #string
   port = 8091; #int
