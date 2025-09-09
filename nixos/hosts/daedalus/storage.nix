@@ -255,7 +255,7 @@ in
   services.nfs.server.exports = ''
     /export 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0,crossmnt) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=0,crossmnt)
 
-    /export/natflix 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,nohide) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,crossmnt,nohide)
+    /export/natflix 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,nohide) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,crossmnt,nohide) 192.168.12.0/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,fsid=1,crossmnt,nohide)
     /export/syncthing 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
     /export/documents 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw)
     /export/backup 10.8.10.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,nohide) 10.8.20.1/24(no_subtree_check,all_squash,anonuid=568,anongid=568,rw,nohide)
