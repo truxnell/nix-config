@@ -13,7 +13,7 @@ jobs:
     steps:
       # 1. Free up runner disk space (optional but recommended for large builds)
       - name: Maximize build space
-        uses: wimpysworld/nothing-but-nix@v1   # QoL: strip bloat, keep only Nix【1】
+        uses: wimpysworld/nothing-but-nix@v6   # QoL: strip bloat, keep only Nix【1】
 
       # 2. Install Nix with flakes enabled
       - name: Install Nix
