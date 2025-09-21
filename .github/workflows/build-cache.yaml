@@ -1,0 +1,50 @@
+name: Build all flake outputs and push to Cachix
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Free up runner disk space (optional but recommended for large builds)
+      - name: Maximize build space
+        uses: wimpysworld/nothing-but-nix@v1   # QoL: strip bloat, keep only Nix【1】
+
+      # 2. Install Nix with flakes enabled
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          install_url: https://nixos.org/nix/install
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      # 3. Check out your repo
+      - uses: actions/checkout@v4
+
+      # 4. Authenticate to your personal Cachix cache
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v14
+        with:
+          name: ${{ vars.CACHIX_CACHE_NAME }}   # set in repo → Settings → Variables
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      # 5. Build every flake output and push to cache
+      - name: Build all flake outputs
+        run: |
+          # Build default package and all devShells, packages, checks, etc.
+          nix build .# --print-build-logs --json | jq -r '.[].outputs | to_entries[].value' | cachix push ${{ vars.CACHIX_CACHE_NAME }}
+
+          # Also build checks (tests) so they’re cached
+          nix build .#checks.x86_64-linux --print-build-logs --json | jq -r '.[].outputs | to_entries[].value' | cachix push ${{ vars.CACHIX_CACHE_NAME }}
+
+      # 6. (Optional) Garbage-collect to keep runner size down
+      - name: Post-build GC
+        if: always()
+        run: nix-collect-garbage -d

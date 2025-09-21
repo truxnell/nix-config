@@ -29,12 +29,13 @@
       substituters = [
         "https://nix-community.cachix.org"
         "https://numtide.cachix.org"
+        "https://truxnell.cachix.org"
       ];
 
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
-        "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+        "truxnell.cachix.org-1:ZhbK/e/SERuvwJVF8rX3qKrvk3JJylG0jLkeBBvbR68="
       ];
 
       # Fallback quickly if substituters are not available.
