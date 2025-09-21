@@ -1,51 +1,34 @@
-name: Build all flake outputs and push to Cachix
+name: Build and push to Cachix
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        host: [daedalus, shodan]          # one job per host
+        host: [daedalus, shodan]
     runs-on: ubuntu-latest
     steps:
-      # 1. Free up runner disk space (optional but recommended for large builds)
-      - name: Maximize build space
-        uses: wimpysworld/nothing-but-nix@v6   # QoL: strip bloat, keep only Nix【1】
+      - uses: actions/checkout@v4
 
-      # 2. Install Nix with flakes enabled
-      - name: Install Nix
-        uses: cachix/install-nix-action@v31
+      # 1. 2-in-1: install Nix + enable the free eval-cache
+      - uses: DeterminateSystems/nix-installer-action@v16
         with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          install_url: https://nixos.org/nix/install
-          extra_nix_config: |
-            experimental-features = nix-command flakes
-            accept-flake-config = true
+          github-access-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. Check out your repo
-      - uses: actions/checkout@v5
+      # 2. Push/pop /nix/store via the same cache that backs Magic-Nix-Cache
+      - uses: DeterminateSystems/magic-nix-cache-action@v8
 
-      # 4. Authenticate to your personal Cachix cache
-      - name: Set up Cachix
-        uses: cachix/cachix-action@v16
+      - uses: cachix/cachix-action@v16
         with:
-          name: ${{ vars.CACHIX_CACHE_NAME }}   # set in repo → Settings → Variables
+          name: ${{ vars.CACHIX_CACHE_NAME }}
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      # 5. Build every flake output and push to cache
-      - name: Build all flake outputs
-        run: |
+      # 3. Build only the closure that deploy-rs will copy
+      - run: |
           nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel \
             --print-build-logs --json
-
-      # 6. (Optional) Garbage-collect to keep runner size down
-      - name: Post-build GC
-        if: always()
-        run: nix-collect-garbage -d
