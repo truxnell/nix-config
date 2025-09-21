@@ -45,18 +45,6 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
-      # Development shell with deployment tools
-      devShells = forAllSystems (system: {
-        default = nixpkgs.legacyPackages.${system}.mkShell {
-          packages = with nixpkgs.legacyPackages.${system}; [
-            inputs.deploy-rs.packages.${system}.deploy-rs 
-            inputs.cachix.packages.${system}.cachix
-            nixpkgs-fmt
-            sops
-          ];
-        };
-      });
-
       # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
         final: prev: {
