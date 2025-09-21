@@ -12,7 +12,7 @@ jobs:
       pull-requests: write    # open / merge the PR
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/update-flake-lock@v20
+      - uses: DeterminateSystems/update-flake-lock@v27
         with:
           # Optional: open a PR instead of direct push
           pr-title: "chore: update flake.lock"
