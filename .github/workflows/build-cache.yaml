@@ -38,11 +38,7 @@ jobs:
       # 5. Build every flake output and push to cache
       - name: Build all flake outputs
         run: |
-          # Build default package and all devShells, packages, checks, etc.
-          nix build .# --print-build-logs --json | jq -r '.[].outputs | to_entries[].value' | cachix push ${{ vars.CACHIX_CACHE_NAME }}
-
-          # Also build checks (tests) so they’re cached
-          nix build .#checks.x86_64-linux --print-build-logs --json | jq -r '.[].outputs | to_entries[].value' | cachix push ${{ vars.CACHIX_CACHE_NAME }}
+          nix build 
 
       # 6. (Optional) Garbage-collect to keep runner size down
       - name: Post-build GC
