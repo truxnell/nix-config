@@ -15,12 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # 1. 2-in-1: install Nix + enable the free eval-cache
       - uses: DeterminateSystems/nix-installer-action@v16
-        with:
-          github-access-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # 2. Push/pop /nix/store via the same cache that backs Magic-Nix-Cache
       - uses: DeterminateSystems/magic-nix-cache-action@v8
 
       - uses: cachix/cachix-action@v16
@@ -28,7 +24,6 @@ jobs:
           name: ${{ vars.CACHIX_CACHE_NAME }}
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      # 3. Build only the closure that deploy-rs will copy
       - run: |
           nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel \
             --print-build-logs --json
