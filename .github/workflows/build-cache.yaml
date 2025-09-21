@@ -26,7 +26,7 @@ jobs:
             accept-flake-config = true
 
       # 3. Check out your repo
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # 4. Authenticate to your personal Cachix cache
       - name: Set up Cachix
