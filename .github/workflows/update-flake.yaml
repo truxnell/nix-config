@@ -11,11 +11,27 @@ jobs:
       contents: write         # push the new lock file
       pull-requests: write    # open / merge the PR
     steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/update-flake-lock@v27
+      - name: Generate Github App Token
+        uses: navikt/github-app-token-generator@v1
+        id: github-app-token
         with:
-          # Optional: open a PR instead of direct push
-          pr-title: "chore: update flake.lock"
-          pr-labels: dependencies,nix
-          # Optional: auto-merge if CI passes (needs extra token)
-          # auto-merge: true
+          app-id: ${{ vars.TRUXNELL_APP_ID }}
+          private-key: ${{ secrets.TRUXNELL_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v4
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@main
+        id: update-flake-lock
+        with:
+          commit-msg: "chore: Update flake.lock"
+          pr-title: "Update flake.lock"
+          pr-body: |
+            Automated changes by the [update-flake-lock](https://github.com/DeterminateSystems/update-flake-lock) GitHub Action.
+
+            ```
+            {{ env.GIT_COMMIT_MESSAGE }}
+            ```
+          pr-labels: |
+            automated
+      - run: "gh pr merge --auto --rebase --delete-branch ${{ steps.update-flake-lock.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
