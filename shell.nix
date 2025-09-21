@@ -17,11 +17,13 @@ pkgs.mkShell {
     git
     nil
     nixpkgs-fmt
-    go-task
+    just
     sops
     pre-commit
     gitleaks
     mkdocs
     mqttui
+    deploy-rs
+    cachix
   ];
 }

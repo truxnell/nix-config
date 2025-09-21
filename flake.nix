@@ -27,7 +27,6 @@
     , sops-nix
     , nix-vscode-extensions
     , impermanence
-    , colmena
     , cachix
     , deploy-rs
     , ...

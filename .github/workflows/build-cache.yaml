@@ -3,7 +3,9 @@ name: Build and push to Cachix
 on:
   push:
     branches: [main]
+    paths: ['flake.nix', 'flake.lock', 'nixos/**', 'shell.nix', '*.nix']
   pull_request:
+    paths: ['flake.nix', 'flake.lock', 'nixos/**', 'shell.nix', '*.nix']
 
 jobs:
   build:
