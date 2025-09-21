@@ -9,6 +9,10 @@ on:
 
 jobs:
   build:
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [daedalus, shodan]          # one job per host
     runs-on: ubuntu-latest
     steps:
       # 1. Free up runner disk space (optional but recommended for large builds)
@@ -38,7 +42,8 @@ jobs:
       # 5. Build every flake output and push to cache
       - name: Build all flake outputs
         run: |
-          nix build 
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel \
+            --print-build-logs --json
 
       # 6. (Optional) Garbage-collect to keep runner size down
       - name: Post-build GC
