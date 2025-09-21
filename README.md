@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/github/license/truxnell/nix-config?style=for-the-badge)](https://github.com/truxnell/nix-config/blob/ci/LICENSE)
 
 [![renovate](https://img.shields.io/badge/renovate-enabled-%231A1F6C?logo=renovatebot)](https://developer.mend.io/github/truxnell/nix-config)
-[![built with garnix](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fgarnix.io%2Fapi%2Fbadges%2Ftruxnell%2Fnix-config%3Fbranch%3Dmain)](https://garnix.io)
+[![Flake Lock Update](https://github.com/truxnell/nix-config/actions/workflows/update-flake.yaml/badge.svg)](https://github.com/truxnell/nix-config/actions/workflows/update-flake.yaml)
 ![Code Comprehension](https://img.shields.io/badge/Code%20comprehension-26%25-red)
 
 Leveraging nix, nix-os and other funny magic man words to apply machine and home configurations
@@ -37,14 +37,10 @@ To Install
 ## TODO
 
 - [X] Github Actions update fly.io instances (Bitwarden)
-- [ ] Bring over hosts
-  - [x] DNS01 Raspi4
-  - [x] DNS02 Raspi4
+- [ ] Bring over hosts (landed on bazzite for laptop/gaming desktop)
   - [x] NAS
-  - [x] Latop
-  - [x] Gaming desktop
-  - [ ] WSL
-  - [ ] JJY emulator Raspi4
+  - [ ] NUC
+  - [ ] JJY raspi
 - [x] Documentation!
 - [x] ssh_config build from computers?
 - [x] Modularise host to allow vm builds and hw builds

@@ -27,7 +27,6 @@
 
       # Substitutions
       substituters = [
-        "https://cache.garnix.io"
         "https://nix-community.cachix.org"
         "https://numtide.cachix.org"
       ];
