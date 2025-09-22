@@ -9,7 +9,7 @@ let
   app = "afterlogic";
   category = "services";
   description = "webmail";
-  image = "afterlogic/docker-webmail-lite:latest";
+  image = "docker.io/afterlogic/docker-webmail-lite:latest";
   user = "568"; #string
   group = "568"; #string
   port = 80; #int
