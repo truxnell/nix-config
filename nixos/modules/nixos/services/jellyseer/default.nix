@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "jellyseer";
   category = "services";
   description = "Requests for NatFlix";
-  image = "";
   user = "568"; #string
   group = "568"; #string
   port = config.services.jellyseerr.port; #int

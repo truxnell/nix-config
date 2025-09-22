@@ -1,4 +1,4 @@
-{ lib, pkgs, self, config, ... }:
+{ config, ... }:
 with config;
 {
   imports = [

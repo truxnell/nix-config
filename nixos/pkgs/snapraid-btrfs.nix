@@ -1,5 +1,4 @@
 { symlinkJoin
-, fetchFromGitHub
 , writeScriptBin
 , makeWrapper
 , coreutils

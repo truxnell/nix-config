@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,11 +8,9 @@ let
   app = "atuin";
   category = "services";
   description = "synced terminal history";
-  # image = "";
-  user = "568"; #string
+  # image = ""; #string
   group = "568"; #string
   port = config.services.atuin.port; #int
-  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";

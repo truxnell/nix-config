@@ -5,13 +5,10 @@
 }:
 with lib;
 let
-  app = "searxng";
-  image = "docker.io/searxng/searxng:2023.11.1-b5a8ddfec";
-  user = "977"; #string
+  app = "searxng"; #string
   group = "977"; #string
   port = 8084; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {

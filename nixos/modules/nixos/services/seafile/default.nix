@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,10 +8,8 @@ let
   app = "seafile";
   category = "services";
   description = "file syncronization";
-  image = "";
   user = "568"; #string
-  group = "568"; #string
-  port = 0; #int
+  group = "568"; #string #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");

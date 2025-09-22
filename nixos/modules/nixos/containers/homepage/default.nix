@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , self
 , ...
 }:
@@ -12,7 +11,6 @@ let
   group = "kah"; #string
   port = 3000; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 
   # TODO refactor out this sht

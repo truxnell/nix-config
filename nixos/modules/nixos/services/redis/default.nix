@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "redis";
   category = "services";
   description = "redis";
-  image = "";
   user = "kah"; #string
   group = "kah"; #string
   port = 80; #int

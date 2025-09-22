@@ -15,8 +15,6 @@ let
   port = 2468; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =

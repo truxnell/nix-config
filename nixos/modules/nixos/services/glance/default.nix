@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "glance";
   category = "services";
   description = "homepgae";
-  image = "";
   user = "kah"; #string
   group = "kah"; #string
   port = 8092; #int

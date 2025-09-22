@@ -56,19 +56,6 @@ with lib;
         #
         ${pkgs.restic}/bin/restic unlock --remove-all || true
       '';
-      backupCleanupCommand = ''
-        if [ $EXIT_STATUS -ne 0 ]; then
-          ${pkgs.curl}/bin/curl \
-          -H 'Title: Backup ${app} failed!' \
-          -H 'Tags: backup,restic' \
-          -d "Restic (${site}) backup error!" 'https://ntfy.trux.dev/backups'
-        else
-          ${pkgs.curl}/bin/curl \
-          -H 'Title: Backup ${app} successful!' \
-          -H 'Tags: backup,restic' \
-          -d "Restic (${site}) backup success on ${host}!" 'https://ntfy.trux.dev/backups'
-        fi
-      '';
     in
     {
       # local backup

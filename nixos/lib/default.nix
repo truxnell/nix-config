@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ lib, ... }:
 
 with lib;
 rec {
@@ -29,9 +29,6 @@ rec {
       homepageIcon = if (builtins.hasAttr "homepage" options) && (builtins.hasAttr "icon" options.homepage) then options.homepage.icon else "${options.app}.svg";
       subdomain = existsOrDefault "subdomainOverride" options options.app;
       host = existsOrDefault "host" options "${subdomain}.${options.domain}";
-
-      enableBackups = (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options)
-        && (lib.attrsets.attrByPath [ "persistence" "enable" ] true options);
       # nix doesnt have an exhausive list of options for oci
       # so here i try to get a robust list of security options for containers
       # because everyone needs more tinfoild hat right?  RIGHT?
@@ -94,7 +91,6 @@ rec {
   mkTraefikLabels = options: (
     let
       inherit (options) name;
-      subdomain = if builtins.hasAttr "subdomain" options then options.subdomain else options.name;
       host = existsOrDefault "host" options "${options.name}.${options.domain}";
 
       # created if port is specified

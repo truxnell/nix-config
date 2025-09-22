@@ -1,6 +1,5 @@
 k { lib
   , config
-  , pkgs
   , ...
   }:
 with lib;
@@ -13,7 +12,6 @@ let
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  containerPersistentFolder = "/config";
 in
 {
   options.mySystem.services.${app} =

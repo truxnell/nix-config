@@ -13,7 +13,7 @@
       config.allowUnfree = true;
     };
   };
-  nixpkgs-overlays = final: prev: {
+  nixpkgs-overlays = _final: prev: {
     snapraid-btrfs = prev.callPackage ../pkgs/snapraid-btrfs.nix { };
     snapraid-btrfs-runner = prev.callPackage ../pkgs/snapraid-btrfs-runner.nix { };
     podman-containers = prev.callPackage ../pkgs/cockpit-podman.nix { };

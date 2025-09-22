@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -11,12 +10,8 @@ let
   description = "docker based browsers for automation";
   image = "ghcr.io/browserless/chrome";
   user = "kah"; #string
-  group = "kah"; #string
-  port = 3000; #int
-  appFolder = "/var/lib/${app}";
+  group = "kah"; #string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =

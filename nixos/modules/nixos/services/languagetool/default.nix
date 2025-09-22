@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "%{app}";
   category = "%{cat}";
   description = "%{description}";
-  image = "%{image}";
   user = "%{user kah}"; #string
   group = "%{group kah}"; #string
   port = 1234; #int

@@ -1,4 +1,4 @@
-{ lib, pkgs, self, config, inputs, ... }:
+{ pkgs, config, ... }:
 let
   # useful shortcuts
   reboot-uefi = pkgs.writeTextDir

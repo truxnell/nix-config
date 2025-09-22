@@ -1,7 +1,5 @@
-{ config
-, lib
+{ lib
 , pkgs
-, modulesPath
 , ...
 }:
 let

@@ -11,19 +11,10 @@ let
   description = "TRaSH guides sync";
   image = "ghcr.io/recyclarr/recyclarr:7.4.1@sha256:759540877f95453eca8a26c1a93593e783a7a824c324fbd57523deffb67f48e1";
   user = "kah"; #string
-  group = "kah"; #string
-  port = 8000; #int
+  group = "kah"; #string #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
-
-  recyclarrNix = {
-    sonarr = import ./sonarr.nix;
-    radarr = import ./radarr.nix;
-  };
   # recyclarrYaml = (pkgs.formats.yaml { }).generate "recyclarr.yml" (recyclarrNix);
-  recyclarrYaml = pkgs.writeTextFile { name = "config.yml"; text = builtins.readFile ./config.yml; };
 in
 {
   options.mySystem.${category}.${app} =

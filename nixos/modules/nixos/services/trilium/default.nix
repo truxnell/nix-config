@@ -9,7 +9,6 @@ let
   app = "trilium";
   category = "services";
   description = "note taking software";
-  image = "";
   user = "568"; #string
   group = "568"; #string
   port = 8089; #int

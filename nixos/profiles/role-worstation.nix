@@ -1,4 +1,4 @@
-{ config, lib, pkgs, imports, boot, self, inputs, ... }:
+{ config, lib, pkgs, boot, ... }:
 # Role for workstations
 # Covers desktops/laptops, expected to have a GUI and do worloads
 # Will have home-manager installs

@@ -11,7 +11,6 @@ let
   group = "pdns";
   portDns = 53; # avoiding conflict with adguardhome
   portWebUI = 8081;
-  configDir = pkgs.writeTextDir "pdns.conf" "${pdnsConfig}";
 
   # $APIKEY is replaced via envsubst in the pdns module
   pdnsConfig = ''

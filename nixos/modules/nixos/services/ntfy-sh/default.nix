@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "ntfy";
   category = "services";
   description = "notification server";
-  image = "";
   user = "568"; #string
   group = "568"; #string
   port = 8111; #int

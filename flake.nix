@@ -25,9 +25,7 @@
     { self
     , nixpkgs
     , sops-nix
-    , nix-vscode-extensions
     , impermanence
-    , cachix
     , deploy-rs
     , ...
     } @ inputs:
@@ -46,7 +44,7 @@
 
       # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
-        final: prev: {
+        final: _prev: {
           inherit inputs;
           myLib = import ./nixos/lib { inherit inputs; lib = final; };
         }

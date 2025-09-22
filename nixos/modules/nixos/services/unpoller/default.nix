@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "unpoller";
   category = "services";
   description = "";
-  image = "";
   user = "unpoller-exporter"; #string
   group = "unpoller-exporter"; #string
   port = 9130; #int

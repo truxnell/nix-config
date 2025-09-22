@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "jellyfin";
   category = "services";
   description = "Media Player";
-  image = "";
   user = config.services.jellyfin.user; #string
   group = config.services.jellyfin.group; #string
   port = 8096; #int

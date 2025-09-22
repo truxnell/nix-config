@@ -1,4 +1,4 @@
-{ config, lib, pkgs, imports, boot, ... }:
+{ lib, pkgs, boot, ... }:
 
 with lib;
 {

@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -11,8 +10,7 @@ let
   description = "rss feed for sites without";
   # image = "%{image}";
   inherit (config.services.rss-bridge) user;#string
-  inherit (config.services.rss-bridge) group;#string
-  port = 1234; #int
+  inherit (config.services.rss-bridge) group;#string #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");

@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 # ref: https://github.com/rishid/nix-config/blob/be0d5cbbe4df79ed2b2ba4714456f21777c72b38/modules/traefik/default.nix#L170

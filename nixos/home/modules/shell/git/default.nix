@@ -5,7 +5,6 @@
 }:
 let
   cfg = config.myHome.shell.git;
-  inherit (pkgs.stdenv) isDarwin;
 in
 {
   options.myHome.shell.git = {

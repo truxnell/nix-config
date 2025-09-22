@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -11,7 +10,6 @@ let
   group = "927"; #string
   port = 5000; #int
   cfg = config.mySystem.services.${app};
-  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {

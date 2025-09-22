@@ -1,16 +1,12 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
 let
   cfg = config.mySystem.security.acme;
   app = "acme";
-  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  user = app;
-  group = app;
 
 in
 {

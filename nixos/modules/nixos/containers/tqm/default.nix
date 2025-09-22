@@ -9,14 +9,9 @@ let
   app = "qbit-tqm";
   category = "services";
   description = "qbit tag manager";
-  image = "ghcr.io/home-operations/tqm:1.17.0@sha256:05b62239063ad1e884f2254532e3dc9b60cff08870112dca244af328d761be0d";
-  user = "568"; #string
-  group = "568"; #string
-  port = 0; #int
-  appFolder = "/var/lib/${app}";
+  image = "ghcr.io/home-operations/tqm:1.17.0@sha256:05b62239063ad1e884f2254532e3dc9b60cff08870112dca244af328d761be0d"; #string
+  group = "568"; #string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =

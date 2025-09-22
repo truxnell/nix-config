@@ -1,4 +1,4 @@
-{ config, lib, pkgs, imports, boot, self, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 # Role for dev stations
 # Could be a workstatio or a headless server.
 

@@ -8,7 +8,6 @@ let
   cfg = config.mySystem.${category}.${app};
   app = "steam";
   category = "services";
-  description = "steam with gamescope";
 in
 {
   options.mySystem.${category}.${app} =

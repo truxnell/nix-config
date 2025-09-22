@@ -9,14 +9,11 @@ let
   app = "mariadb";
   category = "services";
   description = "mysql-compatiable database";
-  # image = "";
-  inherit (config.services.mysql) user;#string
+  # image = "";#string
   inherit (config.services.mysql) group;#string
   # port = ; #int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =

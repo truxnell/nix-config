@@ -10,14 +10,9 @@ let
   app = "rapt2mqtt";
   category = "services";
   description = "";
-  image = "";
   user = "root"; #string
-  group = "root"; #string
-  port = 0; #int
-  appFolder = "/var/lib/${app}";
+  group = "root"; #string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} =

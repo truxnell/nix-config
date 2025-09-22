@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,10 +8,8 @@ let
   app = "firefly-iii";
   category = "services";
   description = "Financial tracking";
-  image = "";
   user = app; #string
-  group = "nginx"; #string
-  port = 0; #int
+  group = "nginx"; #string #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");

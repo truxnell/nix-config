@@ -8,7 +8,7 @@
     { systems
     , nixpkgs
     , ...
-    } @ inputs:
+    }:
     let
       eachSystem = f:
         nixpkgs.lib.genAttrs (import systems) (

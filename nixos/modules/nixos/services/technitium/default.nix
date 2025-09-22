@@ -1,6 +1,5 @@
 { lib
 , config
-, pkgs
 , ...
 }:
 with lib;
@@ -9,7 +8,6 @@ let
   app = "technitium-dns-server";
   category = "services";
   description = "DNS server with ad blocking";
-  image = "na";
   user = "568"; #string
   group = "568"; #string
   port = 53443; #int
