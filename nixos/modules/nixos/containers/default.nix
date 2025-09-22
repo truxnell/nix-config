@@ -23,7 +23,6 @@
     ./hs110-exporter
     ./linkding
     ./autobrr
-    ./filebrowser
     ./maintainerr
     ./cross-seed
     ./redbot
