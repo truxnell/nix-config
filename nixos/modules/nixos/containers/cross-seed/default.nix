@@ -93,16 +93,17 @@ in
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];
-      dependsOn = [ "qbittorrent" "prowlarr" ];
 
     };
     systemd.services.${app} = {
       serviceConfig = {
         ExecStartPre = "${pkgs.coreutils}/bin/sleep 30";
       };
+      requires   = [ "qbittorrent.service" "cross-seed.service" ];
+      after      = [ "qbittorrent.service" "cross-seed.service" ];
+
     };
-
-
+ 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;
