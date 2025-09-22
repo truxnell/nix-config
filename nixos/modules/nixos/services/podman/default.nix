@@ -45,7 +45,7 @@ in
       };
       users.groups.kah = {
         gid = 568;
-       };
+      };
       users.users.truxnell.extraGroups = [ "kah" ];
     };
 

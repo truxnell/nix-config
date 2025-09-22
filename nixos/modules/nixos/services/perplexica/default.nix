@@ -85,7 +85,7 @@ in
       image = "itzcrazykns1337/perplexica:v1.11.0-rc1";
       # user = "568:568";
       environment = {
-        SEARXNG_API_URL="https://searxng.trux.dev";
+        SEARXNG_API_URL = "https://searxng.trux.dev";
       };
       volumes = [
         "${appFolder}/config.toml:/home/perplexica/config.toml"
@@ -98,7 +98,7 @@ in
 
     };
 
-    
+
 
 
 

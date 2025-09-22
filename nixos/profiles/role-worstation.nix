@@ -76,14 +76,14 @@ with config;
 
   # split out
   programs.gamemode = {
-      enable = true;
-      settings = {
-        general = {
-          softrealtime = "auto";
-          renice = 15;
-        };
+    enable = true;
+    settings = {
+      general = {
+        softrealtime = "auto";
+        renice = 15;
       };
     };
+  };
 
 
   i18n = {

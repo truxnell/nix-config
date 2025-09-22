@@ -79,7 +79,7 @@ in
 
     # Folder perms - only for containers
     systemd.tmpfiles.rules = [
-    "d ${appFolder}/ 0750 ${user} ${group} -"
+      "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
@@ -88,17 +88,17 @@ in
 
 
     ## service
-    services.technitium-dns-server={
-      enable=true;
-      openFirewall=true;
+    services.technitium-dns-server = {
+      enable = true;
+      openFirewall = true;
     };
 
     # really hate dynamic user
-    systemd.services.technitium-dns-server ={
+    systemd.services.technitium-dns-server = {
       serviceConfig = {
-          User = "technitium";
-          Group = "technitium";
-          DynamicUser = mkForce false;
+        User = "technitium";
+        Group = "technitium";
+        DynamicUser = mkForce false;
       };
     };
 

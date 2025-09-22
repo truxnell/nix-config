@@ -95,7 +95,7 @@ in
       env = {
         TIMEOUT = "90000";
         CONCURRENT = "15";
-        TOKEN =  "derpyderpderp";
+        TOKEN = "derpyderpderp";
         EXIT_ON_HEALTH_FAILURE = "true";
         PRE_REQUEST_HEALTH_CHECK = "true";
         # SCREEN_WIDTH = "1920";

@@ -50,7 +50,7 @@ in
             streetsidesoftware.code-spell-checker
             oderwat.indent-rainbow
 
-          
+
           ];
       };
       user = "truxnell";

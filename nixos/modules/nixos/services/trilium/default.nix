@@ -83,9 +83,9 @@ in
 
     ## service
     services.trilium-server = {
-      enable=true;
-      package=pkgs.unstable.trilium-next-server;
-      port=port;
+      enable = true;
+      package = pkgs.unstable.trilium-next-server;
+      port = port;
     };
 
 

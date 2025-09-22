@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  makeFlags = ["DESTDIR=$(out)" "PREFIX="];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   # postPatch = ''
   #   substituteInPlace Makefile \
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     homepage = "https://github.com/cockpit-project/cockpit-sensors";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [];
+    maintainers = with lib.maintainers; [ ];
   };
 }

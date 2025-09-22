@@ -52,7 +52,7 @@ with lib;
     # which can be a pain with the NAS
     # as it makes it harder to troubleshoot-fix
     # than just continuing as far as possible
-    systemd.enableEmergencyMode=false;
+    systemd.enableEmergencyMode = false;
 
     # powerManagement.powertop.enable = true;
   };

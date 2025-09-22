@@ -85,12 +85,11 @@ in
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
       user = "0:0";
-      environment = {
-      };
+      environment = { };
       # environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
 
       volumes = [
-         "${afterlogicPhpFile}:/var/www/html/afterlogic.php:Z"
+        "${afterlogicPhpFile}:/var/www/html/afterlogic.php:Z"
       ];
     };
 

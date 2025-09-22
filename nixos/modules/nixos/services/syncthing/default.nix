@@ -140,7 +140,7 @@ in
           };
           "Mackup" = {
             path = "${cfg.syncPath}/Mackup";
-            devices = [ "daedalus" "citadel-bazzite" "rickenbacker"  ];
+            devices = [ "daedalus" "citadel-bazzite" "rickenbacker" ];
           };
 
         };

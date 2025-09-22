@@ -76,10 +76,10 @@ in
     };
 
     services.silverbullet = {
-        enable = true;
-        listenPort = port;
-        # envFile = config.age.secrets.silverbulletEnv.path;
-      };
+      enable = true;
+      listenPort = port;
+      # envFile = config.age.secrets.silverbulletEnv.path;
+    };
 
     # virtualisation.oci-containers.containers.${app} = {
     #   image = "${image}";

@@ -83,20 +83,20 @@ in
 
     ## service
     services.navidrome = {
-        enable = true;
-        settings = {
-          Address = "0.0.0.0";
-          Port = 4533;
-          MusicFolder = "${config.mySystem.nasFolder}/natflix/music";
-          CovertArtPriority = "*.jpg, *.JPG, *.png, *.PNG, embedded";
-          AutoImportPlaylists = false;
-          EnableSharing = true;
-          # Scanner.PurgeMissing = "always";
-          # "LastFM.Enabled" = true;
-          # "LastFM.ApiKey" = config.sops.secrets.last-fm-key.path;
-          # "LastFM.Secret" = config.sops.secrets.last-fm-secret.path;
-        };
+      enable = true;
+      settings = {
+        Address = "0.0.0.0";
+        Port = 4533;
+        MusicFolder = "${config.mySystem.nasFolder}/natflix/music";
+        CovertArtPriority = "*.jpg, *.JPG, *.png, *.PNG, embedded";
+        AutoImportPlaylists = false;
+        EnableSharing = true;
+        # Scanner.PurgeMissing = "always";
+        # "LastFM.Enabled" = true;
+        # "LastFM.ApiKey" = config.sops.secrets.last-fm-key.path;
+        # "LastFM.Secret" = config.sops.secrets.last-fm-secret.path;
       };
+    };
 
 
     # homepage integration

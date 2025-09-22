@@ -90,16 +90,16 @@ in
 
     virtualisation.oci-containers.containers."${app}" = {
       inherit image;
-      environment = { 
-        PREFIX="?";
-        NICENESS="-15";
+      environment = {
+        PREFIX = "?";
+        NICENESS = "-15";
       };
-      environmentFiles = [ 
+      environmentFiles = [
         config.sops.secrets."${category}/${app}/env".path
       ];
-      volumes = [ 
-        "${appFolder}:/data:rw" 
-        "/tank/natflix/music:/music/localtracks:ro" 
+      volumes = [
+        "${appFolder}:/data:rw"
+        "/tank/natflix/music:/music/localtracks:ro"
       ];
       extraOptions = [ "--cap-add=SYS_NICE" ];
     };

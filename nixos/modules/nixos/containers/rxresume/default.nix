@@ -121,7 +121,7 @@ in
       dependsOn = [ "browserless-chrome" ];
     };
 
-    systemd.services.podman-rxresume={
+    systemd.services.podman-rxresume = {
       after = [ "postgresql.service" ];
       requires = [ "postgresql.service" ];
     };

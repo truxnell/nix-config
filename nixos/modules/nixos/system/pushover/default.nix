@@ -9,7 +9,7 @@ let
 in
 {
 
-    options.mySystem.system.systemd.pushover-alerts.enable = mkEnableOption "Pushover alers for systemd failures" // { default = true; };
+  options.mySystem.system.systemd.pushover-alerts.enable = mkEnableOption "Pushover alers for systemd failures" // { default = true; };
   options.systemd.services = mkOption {
     type = with types; attrsOf (
       submodule {
@@ -39,11 +39,11 @@ in
       # which I can reference with bash $1.
       scriptArgs = "%i %H";
       script = ''
-          ${pkgs.curl}/bin/curl \
-            -H "Title: $1 failed" \
-            -H "Tags: warning,skull" \
-            -d "Journal tail:<br><br>$(journalctl -u $1 -n 10 -o cat)" \
-            https://ntfy.trux.dev/homelab 2&>1
+        ${pkgs.curl}/bin/curl \
+          -H "Title: $1 failed" \
+          -H "Tags: warning,skull" \
+          -d "Journal tail:<br><br>$(journalctl -u $1 -n 10 -o cat)" \
+          https://ntfy.trux.dev/homelab 2&>1
 
       '';
     };

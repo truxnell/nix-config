@@ -79,7 +79,7 @@ in
     };
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user group; mode="755"; }];
+      directories = [{ directory = appFolder; inherit user group; mode = "755"; }];
     };
 
 

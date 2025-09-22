@@ -90,12 +90,12 @@ in
       frontendHostname = url;
       frontendScheme = "https";
       # TODO add JWT secret
-      environmentFiles=[ config.sops.secrets."${category}/${app}/env".path ]; # TODO jwt and mailer
-      settings = { 
+      environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ]; # TODO jwt and mailer
+      settings = {
         service = {
           publicurl = url;
-          enablecaldav=true;
-          timezone="Australia/Melbourne";
+          enablecaldav = true;
+          timezone = "Australia/Melbourne";
         };
         mailer = {
           enabled = true;

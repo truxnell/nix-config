@@ -67,7 +67,7 @@ in
           UPDATE_MODS_ON_START = "false";
           PORT = "${builtins.toString port}";
           RCON_PORT = "${builtins.toString port_rcon}";
-          
+
         };
       environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       ports = [ "${builtins.toString port}:${builtins.toString port}/UDP" "${builtins.toString port_rcon}:${builtins.toString port_rcon}/UDP" ]; # expose port

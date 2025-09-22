@@ -14,11 +14,11 @@ let
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   xseedShell = pkgs.writeScriptBin "xseed.sh" # scrit to call cross-seed upon torrent finish
-  ''
-    #!/bin/bash
-    # qbit command: /scripts/xseed.sh "%F" 
-    /usr/bin/curl -H "X-Api-Key: 39934d99311cdb0695bf13b10dde639d892d0cb13c615ddb" -X POST --data-urlencode "infoHash=$1" https://cross-seed.trux.dev/api/webhook
-  '';
+    ''
+      #!/bin/bash
+      # qbit command: /scripts/xseed.sh "%F" 
+      /usr/bin/curl -H "X-Api-Key: 39934d99311cdb0695bf13b10dde639d892d0cb13c615ddb" -X POST --data-urlencode "infoHash=$1" https://cross-seed.trux.dev/api/webhook
+    '';
 
 in
 {
@@ -65,7 +65,7 @@ in
         ];
       };
 
- 
+
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];

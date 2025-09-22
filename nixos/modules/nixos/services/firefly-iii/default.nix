@@ -102,14 +102,14 @@ in
         DB_PORT = 5432;
         DB_DATABASE = "firefly-iii";
 
-        DEFAULT_LOCALE = "en_AU.UTF-8";  # Sensible data formats
+        DEFAULT_LOCALE = "en_AU.UTF-8"; # Sensible data formats
 
         ENABLE_EXTERNAL_MAP = "true";
       };
     };
 
     services.firefly-iii-data-importer = {
-      enable=true;
+      enable = true;
       group = lib.mkForce "nginx";
       virtualHost = "firefly-iii-importer.trux.dev";
       settings = commonConf // {
@@ -118,7 +118,7 @@ in
         FIREFLY_III_CLIENT_ID = "5";
 
         # TODO
-#              IGNORE_DUPLICATE_ERRORS = "true";
+        #              IGNORE_DUPLICATE_ERRORS = "true";
       };
     };
 
@@ -161,47 +161,47 @@ in
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
-        root = "${config.services.firefly-iii.package}/public";
-        locations = {
-          "/" = {
-            tryFiles = "$uri $uri/ /index.php?$query_string";
-            index = "index.php";
-            extraConfig = ''
-              sendfile off;
-            '';
-          };
-          "~ \\.php$" = {
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/fastcgi_params ;
-              fastcgi_param SCRIPT_FILENAME $request_filename;
-              fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
-              fastcgi_pass unix:${config.services.phpfpm.pools.firefly-iii.socket};
-            '';
-          };
+      root = "${config.services.firefly-iii.package}/public";
+      locations = {
+        "/" = {
+          tryFiles = "$uri $uri/ /index.php?$query_string";
+          index = "index.php";
+          extraConfig = ''
+            sendfile off;
+          '';
+        };
+        "~ \\.php$" = {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/fastcgi_params ;
+            fastcgi_param SCRIPT_FILENAME $request_filename;
+            fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+            fastcgi_pass unix:${config.services.phpfpm.pools.firefly-iii.socket};
+          '';
         };
       };
-      services.nginx.virtualHosts."firefly-iii-importer.trux.dev" = {
-        forceSSL = true;
-        useACMEHost = config.networking.domain;
-        root = "${config.services.firefly-iii-data-importer.package}/public";
-        locations = {
-          "/" = {
-            tryFiles = "$uri $uri/ /index.php?$query_string";
-            index = "index.php";
-            extraConfig = ''
-              sendfile off;
-            '';
-          };
-          "~ \\.php$" = {
-            extraConfig = ''
-              include ${config.services.nginx.package}/conf/fastcgi_params ;
-              fastcgi_param SCRIPT_FILENAME $request_filename;
-              fastcgi_param modHeadersAvailable true;
-              fastcgi_pass unix:${config.services.phpfpm.pools.firefly-iii-data-importer.socket};
-            '';
-          };
+    };
+    services.nginx.virtualHosts."firefly-iii-importer.trux.dev" = {
+      forceSSL = true;
+      useACMEHost = config.networking.domain;
+      root = "${config.services.firefly-iii-data-importer.package}/public";
+      locations = {
+        "/" = {
+          tryFiles = "$uri $uri/ /index.php?$query_string";
+          index = "index.php";
+          extraConfig = ''
+            sendfile off;
+          '';
         };
+        "~ \\.php$" = {
+          extraConfig = ''
+            include ${config.services.nginx.package}/conf/fastcgi_params ;
+            fastcgi_param SCRIPT_FILENAME $request_filename;
+            fastcgi_param modHeadersAvailable true;
+            fastcgi_pass unix:${config.services.phpfpm.pools.firefly-iii-data-importer.socket};
+          '';
         };
+      };
+    };
 
 
 

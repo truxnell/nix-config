@@ -83,7 +83,7 @@ in
 
     ## service
     services.tandoor-recipes = {
-      enable=true;
+      enable = true;
       extraConfig = {
         GUNICORN_MEDIA = "0";
       };
@@ -112,7 +112,7 @@ in
       }
     ];
 
-  
+
     # needed to show images
     users.groups.tandoor-recipes.members = [ "nginx" ];
 

@@ -61,7 +61,7 @@ in
 
   config = mkIf cfg.enable {
 
-    
+
     ## Secrets
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
@@ -73,16 +73,17 @@ in
     systemd.services.rapt2mqtt = {
       description = "rapt2mqtt";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target"  ];
+      after = [ "network.target" ];
       startAt = "hourly";
       serviceConfig = {
         Restart = "on-failure";
         User = user;
         EnvironmentFile = [ config.sops.secrets."${category}/${app}/env".path ];
         # https://github.com/sgoadhouse/rapt-mqtt-bridge
-        ExecStart = let
-        python = pkgs.python3.withPackages (ps: with ps; [ paho-mqtt requests python-dateutil ]);
-        in
+        ExecStart =
+          let
+            python = pkgs.python3.withPackages (ps: with ps; [ paho-mqtt requests python-dateutil ]);
+          in
           "${python.interpreter} ${rapt2mqtt} -n 15 -f -s -v 1";
 
       };

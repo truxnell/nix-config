@@ -82,9 +82,9 @@ in
 
 
     ## service
-    services.jellyseerr= {
+    services.jellyseerr = {
       enable = true;
-      openFirewall=true;
+      openFirewall = true;
     };
 
 

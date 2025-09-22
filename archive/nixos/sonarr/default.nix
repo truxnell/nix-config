@@ -1,8 +1,8 @@
-k{ lib
-, config
-, pkgs
-, ...
-}:
+k { lib
+  , config
+  , pkgs
+  , ...
+  }:
 with lib;
 let
   app = "sonarr";

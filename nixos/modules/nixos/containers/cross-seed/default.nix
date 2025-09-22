@@ -99,11 +99,11 @@ in
       serviceConfig = {
         ExecStartPre = "${pkgs.coreutils}/bin/sleep 30";
       };
-      requires   = [ "qbittorrent.service" "cross-seed.service" ];
-      after      = [ "qbittorrent.service" "cross-seed.service" ];
+      requires = [ "qbittorrent.service" "cross-seed.service" ];
+      after = [ "qbittorrent.service" "cross-seed.service" ];
 
     };
- 
+
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
       forceSSL = true;

@@ -89,16 +89,16 @@ in
 
     ## service
     services.seafile = {
-        enable = true;
-        ccnetSettings.General.SERVICE_URL = "https://${url}";
-        seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
-        adminEmail = "admin@trux.dev";
-        initialAdminPassword = "whatever"; # overriden below
-        seahubExtraConf = ''
-          CSRF_TRUSTED_ORIGINS = ["https://${host}"]
-        '';
-        dataDir = cfg.fileLocation;
-      };
+      enable = true;
+      ccnetSettings.General.SERVICE_URL = "https://${url}";
+      seafileSettings.fileserver.host = "unix:/run/seafile/server.sock";
+      adminEmail = "admin@trux.dev";
+      initialAdminPassword = "whatever"; # overriden below
+      seahubExtraConf = ''
+        CSRF_TRUSTED_ORIGINS = ["https://${host}"]
+      '';
+      dataDir = cfg.fileLocation;
+    };
 
 
     # homepage integration
@@ -127,19 +127,19 @@ in
     services.nginx.virtualHosts.${url} = {
       forceSSL = true;
       useACMEHost = config.networking.domain;
-        locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
-        locations."/seafhttp" = {
-          proxyPass = "http://unix:/run/seafile/server.sock";
-          extraConfig = ''
-            rewrite ^/seafhttp(.*)$ $1 break;
-            client_max_body_size 0;
-            proxy_connect_timeout  36000s;
-            proxy_read_timeout  36000s;
-            proxy_send_timeout  36000s;
-            send_timeout  36000s;
-            proxy_http_version 1.1;
-          '';
-          };
+      locations."/".proxyPass = "http://unix:/run/seahub/gunicorn.sock";
+      locations."/seafhttp" = {
+        proxyPass = "http://unix:/run/seafile/server.sock";
+        extraConfig = ''
+          rewrite ^/seafhttp(.*)$ $1 break;
+          client_max_body_size 0;
+          proxy_connect_timeout  36000s;
+          proxy_read_timeout  36000s;
+          proxy_send_timeout  36000s;
+          send_timeout  36000s;
+          proxy_http_version 1.1;
+        '';
+      };
     };
 
     ### firewall config

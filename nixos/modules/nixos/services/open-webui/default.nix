@@ -96,7 +96,7 @@ in
         ENABLE_ADMIN_EXPORT = "True";
         SHOW_ADMIN_DETAILS = "True";
         ADMIN_EMAIL = "admin@${config.networking.hostName}";
-        WEBUI_URL="https://${url}";
+        WEBUI_URL = "https://${url}";
 
         USER_PERMISSIONS_WORKSPACE_MODELS_ACCESS = "True";
         USER_PERMISSIONS_WORKSPACE_KNOWLEDGE_ACCESS = "True";
@@ -116,21 +116,21 @@ in
         AUTOCOMPLETE_GENERATION_INPUT_MAX_LENGTH = "-1";
 
         ENABLE_RAG_WEB_SEARCH = "True";
-        CONTENT_EXTRACTION_ENGINE="tika";
-        RAG_WEB_SEARCH_ENGINE="searxng";
+        CONTENT_EXTRACTION_ENGINE = "tika";
+        RAG_WEB_SEARCH_ENGINE = "searxng";
 
         ENABLE_SEARCH_QUERY_GENERATION = "True";
-        SEARXNG_QUERY_URL="https://searxng.${config.networking.domain}/search";
+        SEARXNG_QUERY_URL = "https://searxng.${config.networking.domain}/search";
 
         ENABLE_TAGS_GENERATION = "True";
 
         ENABLE_IMAGE_GENERATION = "True";
         IMAGE_GENERATION_ENGINE = "automatic1111";
-        IMAGE_GENERATION_MODEL="";
-        AUTOMATIC1111_BASE_URL="http://citadel:7860";
-        AUTOMATIC1111_CFG_SCALE="4.5";
-        AUTOMATIC1111_SAMPLER="DPM++ 2M";
-        AUTOMATIC1111_SCHEDULER="Karras";
+        IMAGE_GENERATION_MODEL = "";
+        AUTOMATIC1111_BASE_URL = "http://citadel:7860";
+        AUTOMATIC1111_CFG_SCALE = "4.5";
+        AUTOMATIC1111_SAMPLER = "DPM++ 2M";
+        AUTOMATIC1111_SCHEDULER = "Karras";
 
 
         YOUTUBE_LOADER_LANGUAGE = "en";
@@ -146,7 +146,7 @@ in
 
         ENABLE_OLLAMA_API = "True";
         ENABLE_OPENAI_API = "True";
-        TIKA_SERVER_URL="http://127.0.0.1:33001";
+        TIKA_SERVER_URL = "http://127.0.0.1:33001";
       };
       environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
 

@@ -83,10 +83,10 @@ in
 
     ## service
     services.jellyfin = {
-        enable = true;
-        openFirewall = true;
-        dataDir = appFolder;
-      };
+      enable = true;
+      openFirewall = true;
+      dataDir = appFolder;
+    };
 
 
     # homepage integration

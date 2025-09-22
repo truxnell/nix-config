@@ -21,7 +21,7 @@ in
       vaapiVdpau
     ];
 
-    boot.kernelParams = [    
+    boot.kernelParams = [
       "nvidia-drm.fbdev=1" # fix for kde/nvidia?
       "nvidia_drm.modeset=1"
       "NVreg_EnableGpuFirmware=0"

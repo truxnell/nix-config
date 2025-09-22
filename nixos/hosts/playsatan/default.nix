@@ -73,7 +73,7 @@
     displayManager = {
       defaultSession = "none+openbox";
       autoLogin = {
-        user="kah";
+        user = "kah";
         enable = true;
       };
     };

@@ -94,7 +94,7 @@ in
       };
       database.createLocally = true;
       settings = {
-        admins = ["truxnell"];
+        admins = [ "truxnell" ];
         external_port = 80;
         channel_refresh_interval = "60m";
         use_quic = true;
@@ -104,7 +104,7 @@ in
         popular_enabled = false;
         quality = "dash";
         quality_dash = "best";
-	      hmac_key = "herpyderpderp";
+        hmac_key = "herpyderpderp";
       };
     };
     systemd.services.invidious = {

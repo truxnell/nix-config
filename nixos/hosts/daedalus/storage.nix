@@ -177,7 +177,7 @@ in
         ];
       };
       "/export/natflix" = {
-        device = "/tank/natflix" ;
+        device = "/tank/natflix";
         options = [ "bind" ];
       };
       # "/export/syncthing" = {
@@ -212,7 +212,7 @@ in
       before = [ "nfs-server.service" ];
       requiredBy = [ "nfs-server.service" ];
     }
-        {
+    {
       type = "none";
       options = "bind";
       what = "/zfs/syncthing";
@@ -223,7 +223,7 @@ in
       before = [ "nfs-server.service" ];
       requiredBy = [ "nfs-server.service" ];
     }
-        {
+    {
       type = "none";
       options = "bind";
       what = "/zfs/documents";
@@ -234,7 +234,7 @@ in
       before = [ "nfs-server.service" ];
       requiredBy = [ "nfs-server.service" ];
     }
-        {
+    {
       type = "none";
       options = "bind";
       what = "/zfs/photos";
@@ -313,16 +313,16 @@ in
       ExecStart = [
         (pkgs.writeScript "btrfs-sync.sh"
           ''
-          #!${pkgs.bash}/bin/bash
+            #!${pkgs.bash}/bin/bash
 
-          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner && \
-          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid sync succeeded" https://ntfy.trux.dev/snapraid || \
-          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid sync FAILED" https://ntfy.trux.dev/snapraid
+            ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner && \
+            ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid sync succeeded" https://ntfy.trux.dev/snapraid || \
+            ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid sync FAILED" https://ntfy.trux.dev/snapraid
 
           ''
         )
       ];
-      
+
       Nice = 19;
       IOSchedulingPriority = 7;
       CPUSchedulingPolicy = "batch";
@@ -360,7 +360,7 @@ in
     };
   };
 
-    systemd.services.snapraid-btrfs-scrub = {
+  systemd.services.snapraid-btrfs-scrub = {
     description = "Run the snapraid-btrfs scrub with the runner";
     startAt = "06:00";
     serviceConfig = {
@@ -369,11 +369,11 @@ in
       ExecStart = [
         (pkgs.writeScript "btrfs-scrub.sh"
           ''
-          #!${pkgs.bash}/bin/bash
+            #!${pkgs.bash}/bin/bash
 
-          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs scrub -p 3 -o 30 && \
-          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid scrub succeeded" https://ntfy.trux.dev/snapraid || \
-          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid scrub FAILED" https://ntfy.trux.dev/snapraid
+            ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs scrub -p 3 -o 30 && \
+            ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid scrub succeeded" https://ntfy.trux.dev/snapraid || \
+            ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid scrub FAILED" https://ntfy.trux.dev/snapraid
           ''
         )
       ];

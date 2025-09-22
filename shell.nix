@@ -1,6 +1,6 @@
 # shell.nix  (kept for direnv speed)
-{ pkgs ?  # let the flake supply pkgs
-    (builtins.getFlake (toString ./.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}
+{ pkgs ? # let the flake supply pkgs
+  (builtins.getFlake (toString ./.)).inputs.nixpkgs.legacyPackages.${builtins.currentSystem}
 }:
 
 let

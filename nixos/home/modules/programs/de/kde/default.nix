@@ -12,14 +12,14 @@ with lib.hm.gvariant; {
     home.packages = with pkgs;  [
       kdePackages.kalk
 
-    # needed for info center
-    aha
-    pciutils
-    clinfo
-    glxinfo
-    vulkan-tools
-    wayland-utils
-    
+      # needed for info center
+      aha
+      pciutils
+      clinfo
+      glxinfo
+      vulkan-tools
+      wayland-utils
+
     ];
 
   };

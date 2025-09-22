@@ -16,8 +16,8 @@
     mySystem.purpose = "Network Attached Storage";
     # mySystem.system.impermanence.enable = true;
     mySystem.system.autoUpgrade.enable = true; # bold move cotton
-    
-    services.postgresqlBackup =  {
+
+    services.postgresqlBackup = {
       location = lib.mkForce "/zfs/backup/nixos/postgresql";
     };
 
@@ -49,22 +49,22 @@
       };
       navidrome.enable = true;
       paperless.enable = true;
-      redbot.enable=true;
-      silverbullet.enable=true;
-      tandoor.enable=true;
-      open-webui.enable=true;
-      ntfy.enable=true;
-      trilium.enable=true;
+      redbot.enable = true;
+      silverbullet.enable = true;
+      tandoor.enable = true;
+      open-webui.enable = true;
+      ntfy.enable = true;
+      trilium.enable = true;
       seafile = {
-        enable=true;
-        fileLocation="/zfs/seafile";
+        enable = true;
+        fileLocation = "/zfs/seafile";
       };
-      technitium-dns-server.enable=true;
-      jellyfin.enable=true;
+      technitium-dns-server.enable = true;
+      jellyfin.enable = true;
       # jellyseer.enable=true;
       # glance.enable=true;
-      qbit-tqm.enable=true;
-      qui.enable=true;
+      qbit-tqm.enable = true;
+      qui.enable = true;
     };
     mySystem.security.acme.enable = true;
 
@@ -79,20 +79,20 @@
     mySystem.services.nfs.enable = true;
     mySystem.system.motd.networkInterfaces = [ "eno2" ];
 
-  # TODO abstract out?
+    # TODO abstract out?
 
-  # Intel qsv
-  boot.kernelParams = [
-    "i915.enable_guc=2"
-  ];
-
-  hardware.graphics = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      intel-compute-runtime
+    # Intel qsv
+    boot.kernelParams = [
+      "i915.enable_guc=2"
     ];
-  };
+
+    hardware.graphics = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-compute-runtime
+      ];
+    };
 
 
 
@@ -159,14 +159,14 @@
       openFirewall = true;
       settings = {
         global = {
-        "workgroup" = "WORKGROUP";
-        "server string" = "daedalus";
-        "netbios name" = "daedalus";
-        "security" = "user";
-        "hosts allow" = "10.8.10. 127.0.0.1 localhost";
-        "hosts deny" = "0.0.0.0/0";
-        "guest account" = "nobody";
-        "map to guest" = "bad user";
+          "workgroup" = "WORKGROUP";
+          "server string" = "daedalus";
+          "netbios name" = "daedalus";
+          "security" = "user";
+          "hosts allow" = "10.8.10. 127.0.0.1 localhost";
+          "hosts deny" = "0.0.0.0/0";
+          "guest account" = "nobody";
+          "map to guest" = "bad user";
         };
         "backup" = {
           "path" = "/zfs/backup";

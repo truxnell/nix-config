@@ -386,11 +386,11 @@ in
                     issues-limit = 0;
                   }
                   {
-                    type="custom-api";
-                    title="Random Fact";
-                    cache="6h";
-                    url="https://uselessfacts.jsph.pl/api/v2/facts/random";
-                    template=''
+                    type = "custom-api";
+                    title = "Random Fact";
+                    cache = "6h";
+                    url = "https://uselessfacts.jsph.pl/api/v2/facts/random";
+                    template = ''
                       <p class="size-h4 color-paragraph">{{ .JSON.String "text" }}</p>
                     '';
 

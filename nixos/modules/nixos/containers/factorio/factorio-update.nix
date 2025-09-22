@@ -61,19 +61,19 @@ let
 in
 {
 
-    systemd.services.factorio-update = mkIf config.mySystem.services.factorio.space-age.enable {
-      description = "Factorio update";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target"  ];
-      startAt = "hourly";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-        EnvironmentFile = [ config.sops.secrets."services/factorio/env".path ];
-        ExecStart = ''
-          ${factorio-update}/bin/factorio-update
-        '';
+  systemd.services.factorio-update = mkIf config.mySystem.services.factorio.space-age.enable {
+    description = "Factorio update";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    startAt = "hourly";
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+      EnvironmentFile = [ config.sops.secrets."services/factorio/env".path ];
+      ExecStart = ''
+        ${factorio-update}/bin/factorio-update
+      '';
 
-      };
     };
+  };
 }
