@@ -1,13 +1,18 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ lib
-, pkgs
-, ...
-}: {
+{
+  lib,
+  pkgs,
+  ...
+}:
+{
   mySystem.purpose = "Homelab";
   # mySystem.system.impermanence.enable = true;
-  mySystem.system.autoUpgrade.enable = true; # bold move cotton
+  mySystem.system.autoUpgrade = {
+    enable = true;
+    dates = "Wed 06:00";
+  }; # bold move cotton
   mySystem.services = {
     openssh.enable = true;
     podman.enable = true;
@@ -75,7 +80,6 @@
 
   };
 
-
   mySystem.security.acme.enable = true;
 
   mySystem.nfs.nas.enable = true;
@@ -100,10 +104,15 @@
     ];
   };
 
-
   boot = {
 
-    initrd.availableKernelModules = [ "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "ahci"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+    ];
     initrd.kernelModules = [ ];
     kernelModules = [ "kvm-intel" ];
     extraModulePackages = [ ];
@@ -125,30 +134,29 @@
   networking.hostId = "0a90730f";
   networking.useDHCP = lib.mkDefault true;
 
-  fileSystems."/" =
-    {
-      device = "rpool/local/root";
-      fsType = "zfs";
-    };
+  fileSystems."/" = {
+    device = "rpool/local/root";
+    fsType = "zfs";
+  };
 
-  fileSystems."/nix" =
-    {
-      device = "rpool/local/nix";
-      fsType = "zfs";
-    };
+  fileSystems."/nix" = {
+    device = "rpool/local/nix";
+    fsType = "zfs";
+  };
 
-  fileSystems."/persist" =
-    {
-      device = "rpool/safe/persist";
-      fsType = "zfs";
-      neededForBoot = true; # for impermanence
-    };
+  fileSystems."/persist" = {
+    device = "rpool/safe/persist";
+    fsType = "zfs";
+    neededForBoot = true; # for impermanence
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/76FA-78DF";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/76FA-78DF";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
+    ];
+  };
 
 }

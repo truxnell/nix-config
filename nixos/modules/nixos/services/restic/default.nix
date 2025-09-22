@@ -94,9 +94,9 @@ in
         script = ''
           mkdir -p /mnt/nightly_backup/ && \
           umount ${cfg.mountPath} || true && \
-          zfs destroy rpool/safe/persist@restic_nightly_snap || true && \
-          zfs snapshot rpool/safe/persist@restic_nightly_snap && \
-          mount -t zfs rpool/safe/persist@restic_nightly_snap ${cfg.mountPath}
+          zfs destroy rpool/local/root@restic_nightly_snap || true && \
+          zfs snapshot rpool/local/root@restic_nightly_snap && \
+          mount -t zfs rpool/local/root@restic_nightly_snap ${cfg.mountPath}
         '';
       };
 

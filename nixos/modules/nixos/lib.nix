@@ -43,7 +43,7 @@ with lib;
       timerConfig = {
         OnCalendar = "02:05";
         Persistent = true;
-        RandomizedDelaySec = "3h";
+        RandomizedDelaySec = "1h";
       };
       pruneOpts = [
         "--keep-daily 7"
