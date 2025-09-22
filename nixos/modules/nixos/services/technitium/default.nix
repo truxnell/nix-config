@@ -70,6 +70,12 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
+    users.groups.technitium = { };
+    users.users.technitium = {
+      isSystemUser = true;
+      group = "technitium";
+    };
+
 
     # Folder perms - only for containers
     systemd.tmpfiles.rules = [
@@ -85,6 +91,15 @@ in
     services.technitium-dns-server={
       enable=true;
       openFirewall=true;
+    };
+
+    # really hate dynamic user
+    systemd.services.technitium-dns-server ={
+      serviceConfig = {
+          User = "technitium";
+          Group = "technitium";
+          DynamicUser = mkForce false;
+      };
     };
 
 
