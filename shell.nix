@@ -26,5 +26,6 @@ pkgs.mkShell {
     deploy-rs
     cachix
     omnix
+    go-task
   ];
 }

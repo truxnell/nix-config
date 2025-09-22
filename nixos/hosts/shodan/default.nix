@@ -7,7 +7,7 @@
 , ...
 }: {
   mySystem.purpose = "Homelab";
-  mySystem.system.impermanence.enable = true;
+  # mySystem.system.impermanence.enable = true;
   mySystem.system.autoUpgrade.enable = true; # bold move cotton
   mySystem.services = {
     openssh.enable = true;
@@ -46,11 +46,11 @@
     rss-bridge.enable = true;
     # paperless.enable = true;
     rxresume.enable = true;
-    invidious.enable = true;
+    # invidious.enable = true;
     thelounge.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
-    vikunja.enable = true;
+    # vikunja.enable = true;
 
     # monitoring
     victoriametrics.enable = true;

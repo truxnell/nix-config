@@ -39,9 +39,9 @@
       prowlarr.enable = true;
       autobrr.enable = true;
       plex.enable = true;
-      maintainerr.enable = true;
+      # maintainerr.enable = true;
       immich.enable = true;
-      filebrowser.enable = true;
+      # filebrowser.enable = true;
       atuin.enable = true;
       syncthing = {
         enable = true;
@@ -62,7 +62,7 @@
       technitium-dns-server.enable=true;
       jellyfin.enable=true;
       # jellyseer.enable=true;
-      glance.enable=true;
+      # glance.enable=true;
       qbit-tqm.enable=true;
       qui.enable=true;
     };
