@@ -27,5 +27,5 @@ pkgs.mkShell {
     cachix
     omnix
     go-task
-  ];
+  deadnix];
 }
