@@ -93,7 +93,7 @@ in
         ''${config.sops.secrets."${category}/${app}/config.js".path}:/config/config.js:ro''
         "/etc/localtime:/etc/localtime:ro"
       ];
-      dependsOn = [ "qbittorrent" ];
+      dependsOn = [ "qbittorrent" "prowlarr" ];
 
     };
     systemd.services.${app} = {

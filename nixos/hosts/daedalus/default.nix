@@ -14,7 +14,7 @@
 
 
     mySystem.purpose = "Network Attached Storage";
-    mySystem.system.impermanence.enable = true;
+    # mySystem.system.impermanence.enable = true;
     mySystem.system.autoUpgrade.enable = true; # bold move cotton
     
     services.postgresqlBackup =  {
@@ -61,7 +61,7 @@
       };
       technitium-dns-server.enable=true;
       jellyfin.enable=true;
-      jellyseer.enable=true;
+      # jellyseer.enable=true;
       glance.enable=true;
       qbit-tqm.enable=true;
       qui.enable=true;
@@ -137,12 +137,12 @@
         fsType = "zfs";
       };
 
-    fileSystems."/persist" =
-      {
-        device = "rpool/safe/persist";
-        fsType = "zfs";
-        neededForBoot = true; # for impermanence
-      };
+    # fileSystems."/persist" =
+    #   {
+    #     device = "rpool/safe/persist";
+    #     fsType = "zfs";
+    #     neededForBoot = true; # for impermanence
+    #   };
 
     # deaders :(
     # fileSystems."/mnt/cache" =

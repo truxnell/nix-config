@@ -25,5 +25,6 @@ pkgs.mkShell {
     mqttui
     deploy-rs
     cachix
+    omnix
   ];
 }
