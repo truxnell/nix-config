@@ -107,7 +107,7 @@ in
       port = 8000;
       passwordFile = config.sops.secrets."${category}/${app}/passwordFile".path;
       settings = {
-        PAPERLESS_URL = "https:paperless.trux.dev";
+        PAPERLESS_URL = "https://paperless.trux.dev";
         PAPERLESS_OCR_LANGUAGE = "eng";
         PAPERLESS_CONSUMER_POLLING = "60";
         PAPERLESS_CONSUMER_RECURSIVE = "true";
