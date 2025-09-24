@@ -32,8 +32,25 @@ with lib;
     };
 
     services.logrotate.enable = mkDefault true;
-    services.smartd.enable = mkDefault true;
 
+    services.smartd = mkDefault {
+      enable = true;
+      autodetect = true;
+      defaults.autodetected = "-a -o on -S on -s (S/../.././02|L/../../6/03) -m root -M exec /run/smartdnotify";
+    };
+
+    systemd.services.smartdnotify = {
+      description = "Forward smartd alerts to ntfy";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+      script = ''
+        curl -H "tags:warning" -H "prio:high" \
+            -d "$SMARTD_MESSAGE" \
+            https://ntfy.trux.dev/smartd
+      '';
+    };
 
     # environment.noXlibs = mkDefault true;
     documentation = {
@@ -50,6 +67,7 @@ with lib;
     environment.systemPackages = with pkgs; [
       tmux
       btop
+      curl
     ];
 
 

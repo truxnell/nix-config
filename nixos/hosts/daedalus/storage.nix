@@ -113,7 +113,7 @@ let
     dataDisks);
   contentFiles =
     [
-      "/persist/var/snapraid.content"
+      "/var/snapraid/snapraid.content"
     ]
     ++ builtins.map (d: "/mnt/snapraid-content/${d.name}/snapraid.content") dataDisks;
   parityFiles = builtins.map (p: "/mnt/${p.name}/snapraid.parity") parityDisks;
@@ -143,8 +143,8 @@ in
   # 
 
   systemd.tmpfiles.rules = [
-    "f /persist/var/snapraid.content 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
-    "f /persist/var/snapraid.content.lock 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "f /var/snapraid/snapraid.content 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "f /var/snapraid/snapraid.content.lock 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
   ];
 
 
@@ -297,7 +297,7 @@ in
   # services.restic.backups = config.lib.mySystem.mkRestic
   #   {
   #     app = "snapraid-content";
-  #     paths = [ "/persist/var/snapraid.content" ];
+  #     paths = [ "/var/snapraid/snapraid.content" ];
   #   };
 
 
@@ -360,7 +360,7 @@ in
 
   systemd.services.snapraid-btrfs-scrub = {
     description = "Run the snapraid-btrfs scrub with the runner";
-    startAt = "06:00";
+    startAt = "Sat 04:00";
     serviceConfig = {
       Type = "oneshot";
       User = "root";
