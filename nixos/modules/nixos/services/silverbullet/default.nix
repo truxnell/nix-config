@@ -8,7 +8,7 @@ let
   app = "silverbullet";
   category = "services";
   description = "Note-taking app";
-  # image = "zefhemel/silverbullet:2.0.0";
+  # image = "zefhemel/silverbullet:2.1.3";
   user = "568"; #string
   group = "568"; #string
   port = 3888; #int
