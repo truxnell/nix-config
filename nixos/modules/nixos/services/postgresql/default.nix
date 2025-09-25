@@ -1,5 +1,6 @@
 { lib
 , config
+, pkgs
 , ...
 }:
 with lib;
@@ -57,24 +58,47 @@ in
       '';
       authentication = ''
         #type database  DBuser  auth-method optional_ident_map
-        local sameuser  all     peer        map=superuser_map
+        local sameuser  all     peer        map=
+        local   replication     postgres                                trust
+        local   all             postgres                                peer
         local rxresume  root    peer
       '';
       settings = {
         max_connections = 2000;
         random_page_cost = 1.1;
         shared_buffers = "6GB";
+        max_wal_senders = 3;
+        wal_level = "replica";
       };
     };
 
     # enable backups
-    services.postgresqlBackup = mkIf cfg.backup {
-      enable = lib.mkForce true;
-      location = "${config.mySystem.nasFolder}/backup/nixos/postgresql";
+    systemd.services.postgresql-backup = {
+      description = "PostgreSQL base backup";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "postgres";
+        Group = "postgres";
+        ExecStart = pkgs.writeScript "pg-backup" ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+
+          # Create compressed backup
+          ${pkgs.postgresql}/bin/pg_basebackup \
+            -D ${config.mySystem.nasFolder}/backups/postgres/basebackup-${config.networking.hostName}-$(date +%Y%m%d-%H%M%S) \
+            -Ft -z -P -v
+
+        '';
+      };
     };
 
-    systemd.services.postgresqlBackup = {
-      requires = [ "postgresql.service" ];
+    systemd.timers.postgresql-backup = {
+      description = "Daily PostgreSQL backup";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "daily";
+        Persistent = true;
+      };
     };
 
     services.prometheus.exporters.postgres = {
