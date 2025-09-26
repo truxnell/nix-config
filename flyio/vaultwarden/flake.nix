@@ -5,16 +5,13 @@
   };
 
   outputs =
-    { systems
-    , nixpkgs
-    , ...
+    {
+      systems,
+      nixpkgs,
+      ...
     }:
     let
-      eachSystem = f:
-        nixpkgs.lib.genAttrs (import systems) (
-          system:
-          f nixpkgs.legacyPackages.${system}
-        );
+      eachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f nixpkgs.legacyPackages.${system});
     in
     {
       devShells = eachSystem (pkgs: {

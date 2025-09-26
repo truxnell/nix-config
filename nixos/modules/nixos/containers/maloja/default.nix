@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -9,53 +10,47 @@ let
   category = "containers";
   description = "Music scrobbler";
   image = "krateng/maloja:3.2.4@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 42010; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 42010; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/appFolder";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add app to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add app to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -69,16 +64,23 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d persistentFolder/ 0750 user group -"
     # ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
       inherit app image;
@@ -94,8 +96,6 @@ in
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
     };
 
-
-
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
@@ -103,7 +103,11 @@ in
         group = "${category}";
         url = "https://${url}/admin_overview";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
       }
     ];
 
@@ -126,23 +130,22 @@ in
 
     ### backups
     warnings = [
-      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for app are disabled!")
+      (mkIf (
+        !cfg.backup && config.mySystem.purpose != "Development"
+      ) "WARNING: Backups for app are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-      {
+    services.restic.backups = mkIf cfg.backup (
+      config.lib.mySystem.mkRestic {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      });
-
+      }
+    );
 
     # services.postgresqlBackup = {
     #   databases = [ app ];
     # };
-
-
 
   };
 }

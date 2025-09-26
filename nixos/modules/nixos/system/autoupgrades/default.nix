@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 let
   cfg = config.mySystem.system.autoUpgrade;
@@ -13,7 +14,6 @@ with lib;
       type = lib.types.str;
       default = "Sun 06:00";
     };
-
 
   };
   config.system.autoUpgrade = mkIf cfg.enable {

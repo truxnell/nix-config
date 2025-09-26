@@ -1,19 +1,26 @@
-{ symlinkJoin
-, writeScriptBin
-, makeWrapper
-, coreutils
-, gnugrep
-, gawk
-, gnused
-, snapraid
-, snapper
-,
+{
+  symlinkJoin,
+  writeScriptBin,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+  gawk,
+  gnused,
+  snapraid,
+  snapper,
 }:
 let
   name = "snapraid-btrfs";
-  deps = [ coreutils gnugrep gawk gnused snapraid snapper ];
+  deps = [
+    coreutils
+    gnugrep
+    gawk
+    gnused
+    snapraid
+    snapper
+  ];
   # snapper 11 has broken the btrfs script for now
-  # patched at: 
+  # patched at:
   # TODO https://github.com/automorphism88/snapraid-btrfs/issues/35
   # script =
   #   (
@@ -28,13 +35,9 @@ let
   #   ).overrideAttrs (old: {
   #     buildCommand = "${old.buildCommand}\n patchShebangs $out";
   #   });
-  script =
-    (
-      writeScriptBin name
-        (builtins.readFile ./snapraid-btrfs.sh)
-    ).overrideAttrs (old: {
-      buildCommand = "${old.buildCommand}\n patchShebangs $out";
-    });
+  script = (writeScriptBin name (builtins.readFile ./snapraid-btrfs.sh)).overrideAttrs (old: {
+    buildCommand = "${old.buildCommand}\n patchShebangs $out";
+  });
 
 in
 symlinkJoin {

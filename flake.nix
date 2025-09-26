@@ -16,19 +16,29 @@
     deploy-rs.url = "github:serokell/deploy-rs";
 
     # Nixpkgs-following inputs
-    sops-nix = { url = "github:Mic92/sops-nix"; inputs.nixpkgs.follows = "nixpkgs"; };
-    nix-vscode-extensions = { url = "github:nix-community/nix-vscode-extensions"; inputs.nixpkgs.follows = "nixpkgs"; };
-    nix-index-database = { url = "github:nix-community/nix-index-database"; inputs.nixpkgs.follows = "nixpkgs"; };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-vscode-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    { self
-    , nixpkgs
-    , sops-nix
-    , impermanence
-    , deploy-rs
-    , ...
-    } @ inputs:
+    {
+      self,
+      nixpkgs,
+      sops-nix,
+      impermanence,
+      deploy-rs,
+      ...
+    }@inputs:
 
     let
       inherit (self) outputs;
@@ -46,7 +56,10 @@
       lib = nixpkgs.lib.extend (
         final: _prev: {
           inherit inputs;
-          myLib = import ./nixos/lib { inherit inputs; lib = final; };
+          myLib = import ./nixos/lib {
+            inherit inputs;
+            lib = final;
+          };
         }
       );
 
@@ -59,18 +72,19 @@
           overlays = import ./nixos/overlays { inherit inputs; };
 
           mkNixosConfig =
-            { hostname
-            , system ? "x86_64-linux"
-            , nixpkgs ? inputs.nixpkgs
-            , hardwareModules ? [ ]
-            , baseModules ? [
+            {
+              hostname,
+              system ? "x86_64-linux",
+              nixpkgs ? inputs.nixpkgs,
+              hardwareModules ? [ ],
+              baseModules ? [
                 sops-nix.nixosModules.sops
                 impermanence.nixosModules.impermanence
                 ./nixos/profiles/global.nix
                 ./nixos/modules/nixos
                 ./nixos/hosts/${hostname}
-              ]
-            , profileModules ? [ ]
+              ],
+              profileModules ? [ ],
             }:
             nixpkgs.lib.nixosSystem {
               inherit system lib;
@@ -104,7 +118,10 @@
             hostname = "shodan";
             system = "x86_64-linux";
             hardwareModules = [ ./nixos/profiles/hw-generic-x86.nix ];
-            profileModules = [ ./nixos/profiles/role-server.nix ./nixos/profiles/role-dev.nix ];
+            profileModules = [
+              ./nixos/profiles/role-server.nix
+              ./nixos/profiles/role-dev.nix
+            ];
           };
         };
 

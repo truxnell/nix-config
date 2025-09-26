@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, gettext }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cockpit-files";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   # postPatch = ''
   #   substituteInPlace Makefile \

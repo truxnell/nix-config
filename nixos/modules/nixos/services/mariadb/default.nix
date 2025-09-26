@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -10,22 +11,20 @@ let
   category = "services";
   description = "mysql-compatiable database";
   # image = "";#string
-  inherit (config.services.mysql) group;#string
+  inherit (config.services.mysql) group; # string
   # port = ; #int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
 
@@ -38,7 +37,6 @@ in
     # };
 
     users.users.truxnell.extraGroups = [ group ];
-
 
     ## service
     services.mysql = {

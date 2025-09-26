@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -22,7 +23,6 @@ in
       group = app;
       restartUnits = [ "${app}.service" ];
     };
-
 
     services.mosquitto = {
       enable = true;
@@ -46,9 +46,18 @@ in
       ];
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     users.users.truxnell.extraGroups = [ "mosquitto" ];
     networking.firewall.allowedTCPPorts = [ 1883 ];

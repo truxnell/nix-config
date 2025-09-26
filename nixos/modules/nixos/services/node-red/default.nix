@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -14,11 +15,12 @@ let
 
 in
 {
-  options.mySystem.services.node-red =
-    {
-      enable = mkEnableOption "node-red";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+  options.mySystem.services.node-red = {
+    enable = mkEnableOption "node-red";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
 
@@ -35,30 +37,41 @@ in
       };
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "media";
-      url = "https://${url}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
+    mySystem.services.gatus.monitors = [
       {
-        inherit app;
-        user = builtins.toString user;
-        excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
 
+        name = app;
+        group = "media";
+        url = "https://${url}";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
 
-
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app;
+      user = builtins.toString user;
+      excludePaths = [ "Backups" ];
+      paths = [ appFolder ];
+      inherit appFolder;
+    };
 
   };
 }

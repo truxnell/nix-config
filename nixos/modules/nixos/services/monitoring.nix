@@ -1,12 +1,13 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
   cfg = config.mySystem.services.monitoring;
   urlVmAgent = "vmagent-${config.networking.hostName}.${config.networking.domain}";
-  portVmAgent = 8429; #int
+  portVmAgent = 8429; # int
 in
 {
   options.mySystem.services.monitoring.enable = mkEnableOption "Prometheus Monitoring";
@@ -36,7 +37,6 @@ in
       smartctl = {
         enable = true;
       };
-
 
     };
 
@@ -89,8 +89,9 @@ in
       };
     };
 
-
-    mySystem.monitoring.scrapeConfigs.node-exporter = [ "${config.networking.hostName}:${toString config.services.prometheus.exporters.node.port}" ];
+    mySystem.monitoring.scrapeConfigs.node-exporter = [
+      "${config.networking.hostName}:${toString config.services.prometheus.exporters.node.port}"
+    ];
 
   };
 

@@ -1,4 +1,9 @@
-{ lib, pkgs, boot, ... }:
+{
+  lib,
+  pkgs,
+  boot,
+  ...
+}:
 
 with lib;
 {
@@ -12,7 +17,14 @@ with lib;
 
   boot = {
 
-    initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+      "ahci"
+      "usbhid"
+      "usb_storage"
+      "sd_mod"
+    ];
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
 
@@ -30,7 +42,5 @@ with lib;
 
   # set xserver videodrivers for NVIDIA 4080 gpu
   services.xserver.videoDrivers = [ "nvidia" ];
-
-
 
 }

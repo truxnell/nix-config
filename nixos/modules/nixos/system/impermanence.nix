@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 let
   cfg = config.mySystem.system.impermanence;
@@ -24,7 +25,6 @@ with lib;
 
   };
 
-
   config = lib.mkIf cfg.enable {
     # move ssh keys
 
@@ -40,13 +40,12 @@ with lib;
 
     environment.persistence."${cfg.persistPath}" = {
       hideMounts = true;
-      directories =
-        [
-          "/var/log" # persist logs between reboots for debugging
-          "/var/lib/containers" # cache files (restic, nginx, contaienrs)
-          "/var/lib/nixos" # nixos state
+      directories = [
+        "/var/log" # persist logs between reboots for debugging
+        "/var/lib/containers" # cache files (restic, nginx, contaienrs)
+        "/var/lib/nixos" # nixos state
 
-        ];
+      ];
       files = [
         "/etc/machine-id"
         # "/etc/adjtime" # hardware clock adjustment

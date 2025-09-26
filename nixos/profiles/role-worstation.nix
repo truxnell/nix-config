@@ -1,11 +1,16 @@
-{ config, lib, pkgs, boot, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  boot,
+  ...
+}:
 # Role for workstations
 # Covers desktops/laptops, expected to have a GUI and do worloads
 # Will have home-manager installs
 
 with config;
 {
-
 
   mySystem = {
 
@@ -48,12 +53,14 @@ with config;
     smartd.enable = true;
 
     # required for yubikey
-    udev.packages = [ pkgs.yubikey-personalization pkgs.android-udev-rules ];
+    udev.packages = [
+      pkgs.yubikey-personalization
+      pkgs.android-udev-rules
+    ];
     pcscd.enable = true;
   };
 
   users.users.truxnell.extraGroups = [ "adbusers" ];
-
 
   hardware = {
     enableAllFirmware = true;
@@ -70,8 +77,6 @@ with config;
     cpufrequtils
     cpupower-gui
 
-
-
   ];
 
   # split out
@@ -84,7 +89,6 @@ with config;
       };
     };
   };
-
 
   i18n = {
     defaultLocale = lib.mkDefault "en_AU.UTF-8";

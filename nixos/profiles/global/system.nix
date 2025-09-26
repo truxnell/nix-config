@@ -4,7 +4,12 @@ with lib;
   system = {
     # Enable printing changes on nix build etc with nvd
     activationScripts.report-changes = ''
-      PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}
+      PATH=$PATH:${
+        lib.makeBinPath [
+          pkgs.nvd
+          pkgs.nix
+        ]
+      }
       nvd diff $(ls -dv /nix/var/nix/profiles/system-*-link | tail -2)
     '';
 

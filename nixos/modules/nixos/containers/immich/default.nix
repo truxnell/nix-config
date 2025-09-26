@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -9,9 +10,9 @@ let
   category = "services";
   description = "Photo managment";
   # image = "";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 2283; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 2283; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -23,44 +24,38 @@ let
   };
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -69,7 +64,10 @@ in
       sopsFile = ./secrets.sops.yaml;
       owner = user;
       inherit group;
-      restartUnits = [ "${app}-server.service" "${app}-postgres.service" ];
+      restartUnits = [
+        "${app}-server.service"
+        "${app}-postgres.service"
+      ];
     };
 
     # users = {
@@ -95,7 +93,6 @@ in
 
     # };
 
-
     # Folder perms - only for containers
     systemd.tmpfiles.rules = [
       "d ${appFolder}/ 0750 ${user} ${group} -"
@@ -104,83 +101,89 @@ in
 
     ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
-    virtualisation.oci-containers.containers =
-      {
-        immich-server = {
-          image = "ghcr.io/immich-app/immich-server:v1.143.1";
-          environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-          inherit environment;
-          volumes = [
-            "/etc/localtime:/etc/localtime:ro"
-            "/zfs/photos/immich/:/usr/src/app/upload"
-          ];
-          dependsOn = [ "immich-redis" "immich-postgres" ];
-          ports = [ "${builtins.toString port}:${builtins.toString port}" ];
-          extraOptions = [
-            # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
-            # that includes both this server and the upstream system server, causing resolutions of other pod names
-            # to be inconsistent.
-            "--dns=10.88.0.1"
-            "--device=/dev/dri:/dev/dri"
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
           ];
         };
 
-
-
-        immich-machine-learning = {
-          image = "ghcr.io/immich-app/immich-machine-learning:v1.142.1";
-          inherit environment;
-          volumes = [
-            "/zfs/photos/immich/:/usr/src/app/upload"
-            "/var/lib/immich/machine-learning:/cache"
-          ];
-          extraOptions = [
-            # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
-            # that includes both this server and the upstream system server, causing resolutions of other pod names
-            # to be inconsistent.
-            "--dns=10.88.0.1"
-          ];
-
-        };
-
-        immich-redis = {
-          image = "registry.hub.docker.com/library/redis:8.0-alpine@sha256:25c0ae32c6c2301798579f5944af53729766a18eff5660bbef196fc2e6214a9c";
-          extraOptions = [
-            "--health-cmd=redis-cli ping || exit 1"
-            "--health-interval=10s"
-            "--health-timeout=5s"
-            "--health-start-period=30s"
-          ];
-
-        };
-
-
-        immich-postgres = {
-          image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0";
-          environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
-          environment = {
-            POSTGRES_INITDB_ARGS = "--data-checksums";
-          };
-          volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
-          #  extraOptions = [
-          #   ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
-          #   "--health-interval=10s"
-          #   "--health-timeout=5s"
-          #   "--health-start-period=30s"
-          # ];
-        };
+    virtualisation.oci-containers.containers = {
+      immich-server = {
+        image = "ghcr.io/immich-app/immich-server:v1.143.1";
+        environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
+        inherit environment;
+        volumes = [
+          "/etc/localtime:/etc/localtime:ro"
+          "/zfs/photos/immich/:/usr/src/app/upload"
+        ];
+        dependsOn = [
+          "immich-redis"
+          "immich-postgres"
+        ];
+        ports = [ "${builtins.toString port}:${builtins.toString port}" ];
+        extraOptions = [
+          # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
+          # that includes both this server and the upstream system server, causing resolutions of other pod names
+          # to be inconsistent.
+          "--dns=10.88.0.1"
+          "--device=/dev/dri:/dev/dri"
+        ];
       };
 
+      immich-machine-learning = {
+        image = "ghcr.io/immich-app/immich-machine-learning:v1.142.1";
+        inherit environment;
+        volumes = [
+          "/zfs/photos/immich/:/usr/src/app/upload"
+          "/var/lib/immich/machine-learning:/cache"
+        ];
+        extraOptions = [
+          # Force DNS resolution to only be the podman dnsname name server; by default podman provides a resolv.conf
+          # that includes both this server and the upstream system server, causing resolutions of other pod names
+          # to be inconsistent.
+          "--dns=10.88.0.1"
+        ];
+
+      };
+
+      immich-redis = {
+        image = "registry.hub.docker.com/library/redis:8.0-alpine@sha256:25c0ae32c6c2301798579f5944af53729766a18eff5660bbef196fc2e6214a9c";
+        extraOptions = [
+          "--health-cmd=redis-cli ping || exit 1"
+          "--health-interval=10s"
+          "--health-timeout=5s"
+          "--health-start-period=30s"
+        ];
+
+      };
+
+      immich-postgres = {
+        image = "ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0";
+        environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
+        environment = {
+          POSTGRES_INITDB_ARGS = "--data-checksums";
+        };
+        volumes = [ "/var/lib/immich/postgres/:/var/lib/postgresql/data" ];
+        #  extraOptions = [
+        #   ''--health-cmd=pg_isready --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} || exit 1; Chksum="$$(psql --dbname=''${DB_DATABASE_NAME} --username=''${DB_USERNAME} --tuples-only --no-align --command='SELECT COALESCE(SUM(checksum_failures), 0) FROM pg_stat_database')"; echo "checksum failure count is $$Chksum"; [ "$$Chksum" = '0' ] || exit 1''
+        #   "--health-interval=10s"
+        #   "--health-timeout=5s"
+        #   "--health-start-period=30s"
+        # ];
+      };
+    };
 
     # services.redis.servers.immich = {
     #   enable = true;
     #   user = "immich";
     # };
-
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
@@ -189,7 +192,11 @@ in
         group = "${category}";
         url = "https://${url}";
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
       }
     ];
 
@@ -232,26 +239,24 @@ in
       };
     };
 
-
     ### backups
     warnings = [
-      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for ${app} are disabled!")
+      (mkIf (
+        !cfg.backup && config.mySystem.purpose != "Development"
+      ) "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (config.lib.mySystem.mkRestic
-      {
+    services.restic.backups = mkIf cfg.backup (
+      config.lib.mySystem.mkRestic {
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      });
-
+      }
+    );
 
     # services.postgresqlBackup = {
     #   databases = [ app ];
     # };
-
-
 
   };
 }

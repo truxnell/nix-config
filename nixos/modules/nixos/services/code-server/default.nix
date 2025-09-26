@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -13,19 +14,27 @@ let
   group = "users";
 in
 {
-  options.mySystem.services.code-server =
-    {
-      enable = mkEnableOption "code-server";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+  options.mySystem.services.code-server = {
+    enable = mkEnableOption "code-server";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     services.code-server = {
       auth = "none";
@@ -42,16 +51,14 @@ in
       ];
       package = pkgs.vscode-with-extensions.override {
         vscode = pkgs.code-server;
-        vscodeExtensions = with pkgs.vscode-extensions;
-          [
-            # Nix
-            jnoortheen.nix-ide
-            mkhl.direnv
-            streetsidesoftware.code-spell-checker
-            oderwat.indent-rainbow
+        vscodeExtensions = with pkgs.vscode-extensions; [
+          # Nix
+          jnoortheen.nix-ide
+          mkhl.direnv
+          streetsidesoftware.code-spell-checker
+          oderwat.indent-rainbow
 
-
-          ];
+        ];
       };
       user = "truxnell";
     };
@@ -64,16 +71,20 @@ in
       };
     };
 
+    mySystem.services.gatus.monitors = [
+      {
 
-    mySystem.services.gatus.monitors = [{
-
-      name = "${app}-${config.networking.hostName}";
-      group = "services";
-      url = "https://${url}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
+        name = "${app}-${config.networking.hostName}";
+        group = "services";
+        url = "https://${url}";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
 
   };
 }

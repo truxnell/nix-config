@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -38,7 +39,6 @@ in
       #   # Prevent injection of code in other mime types (XSS Attacks)
       #   add_header X-Content-Type-Options nosniff;
 
-
       # '';
       # # TODO add cloudflre IP's when/if I ingest internally.
       # commonHttpConfig = ''
@@ -58,11 +58,16 @@ in
 
     };
 
-
     networking.firewall = {
 
-      allowedTCPPorts = [ 80 443 ];
-      allowedUDPPorts = [ 80 443 ];
+      allowedTCPPorts = [
+        80
+        443
+      ];
+      allowedUDPPorts = [
+        80
+        443
+      ];
     };
 
     # required for using acme certs

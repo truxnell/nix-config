@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -10,39 +11,43 @@ in
 {
   options.mySystem.system.resticBackup = {
     local = {
-      enable = mkEnableOption "Local backups" // { default = true; };
-      location = mkOption
-        {
-          type = types.str;
-          description = "Location for local backups";
-          default = "";
-        };
+      enable = mkEnableOption "Local backups" // {
+        default = true;
+      };
+      location = mkOption {
+        type = types.str;
+        description = "Location for local backups";
+        default = "";
+      };
     };
     remote = {
-      enable = mkEnableOption "Remote backups" // { default = true; };
-      location = mkOption
-        {
-          type = types.str;
-          description = "Location for remote backups";
-          default = "";
-        };
-    };
-    mountPath = mkOption
-      {
-        type = types.str;
-        description = "Location for  snapshot mount";
-        default = "/mnt/nightly_backup";
+      enable = mkEnableOption "Remote backups" // {
+        default = true;
       };
+      location = mkOption {
+        type = types.str;
+        description = "Location for remote backups";
+        default = "";
+      };
+    };
+    mountPath = mkOption {
+      type = types.str;
+      description = "Location for  snapshot mount";
+      default = "/mnt/nightly_backup";
+    };
 
   };
-
 
   config = {
 
     # Warn if backups are disable and machine isnt a dev box
     warnings = [
-      (mkIf (!cfg.local.enable && config.mySystem.purpose != "Development") "WARNING: Local backups are disabled!")
-      (mkIf (!cfg.remote.enable && config.mySystem.purpose != "Development") "WARNING: Remote backups are disabled!")
+      (mkIf (
+        !cfg.local.enable && config.mySystem.purpose != "Development"
+      ) "WARNING: Local backups are disabled!")
+      (mkIf (
+        !cfg.remote.enable && config.mySystem.purpose != "Development"
+      ) "WARNING: Remote backups are disabled!")
     ];
 
     sops.secrets = mkIf (cfg.local.enable || cfg.remote.enable) {
@@ -58,7 +63,6 @@ in
         group = "kah";
       };
     };
-
 
     # useful commands:
     # view snapshots - zfs list -t snapshot
@@ -89,7 +93,10 @@ in
       # if the folder exists and is already mounted.
       services.restic_nightly_snapshot = {
         description = "Nightly ZFS snapshot for Restic";
-        path = with pkgs; [ zfs busybox ];
+        path = with pkgs; [
+          zfs
+          busybox
+        ];
         serviceConfig.Type = "simple";
         script = ''
           mkdir -p /mnt/nightly_backup/ && \
@@ -114,14 +121,16 @@ in
       # if the folder exists and is already mounted.
       services.restic_nightly_snapshot_destroy = {
         description = "Nightly ZFS snapshot for Restic";
-        path = with pkgs; [ zfs busybox ];
+        path = with pkgs; [
+          zfs
+          busybox
+        ];
         serviceConfig.Type = "simple";
         script = ''
           umount ${cfg.mountPath} || true && \
           zfs destroy rpool/local/root@restic_nightly_snap || true
         '';
       };
-
 
     };
   };

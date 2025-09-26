@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -8,53 +9,47 @@ let
   app = "unpoller";
   category = "services";
   description = "";
-  user = "unpoller-exporter"; #string
-  group = "unpoller-exporter"; #string
-  port = 9130; #int
+  user = "unpoller-exporter"; # string
+  group = "unpoller-exporter"; # string
+  port = 9130; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -68,34 +63,42 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d ${appFolder}/ 0750 ${user} ${group} -"
     # ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     ## service
     services.prometheus.exporters.unpoller = {
       enable = true;
-      controllers = [{
-        url = "https://10.8.10.1";
-        verify_ssl = false;
-        user = "unifi_read_only";
-        pass = config.sops.secrets."${category}/${app}/pass".path;
-        save_ids = true;
-        save_events = true;
-        save_alarms = true;
-        save_anomalies = true;
-        # save_dpi = true;
-        # save_sites=true;
+      controllers = [
+        {
+          url = "https://10.8.10.1";
+          verify_ssl = false;
+          user = "unifi_read_only";
+          pass = config.sops.secrets."${category}/${app}/pass".path;
+          save_ids = true;
+          save_events = true;
+          save_alarms = true;
+          save_anomalies = true;
+          # save_dpi = true;
+          # save_sites=true;
 
-
-      }];
+        }
+      ];
     };
 
     services.vmagent = {
@@ -113,7 +116,6 @@ in
         ];
       };
     };
-
 
   };
 }

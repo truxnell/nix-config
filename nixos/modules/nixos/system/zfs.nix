@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 let
   cfg = config.mySystem.system.zfs;
@@ -29,7 +30,6 @@ with lib;
         extraPools = cfg.mountPoolsAtBoot;
       };
 
-
     };
 
     services.zfs = {
@@ -43,16 +43,17 @@ with lib;
 
     services.vmagent = {
       prometheusConfig = {
-        scrape_configs = [{
-          job_name = "zfs";
-          scrape_interval = "10s";
-          static_configs = [
-            { targets = [ "127.0.0.1:${builtins.toString config.services.prometheus.exporters.zfs.port}" ]; }
-          ];
-        }];
+        scrape_configs = [
+          {
+            job_name = "zfs";
+            scrape_interval = "10s";
+            static_configs = [
+              { targets = [ "127.0.0.1:${builtins.toString config.services.prometheus.exporters.zfs.port}" ]; }
+            ];
+          }
+        ];
       };
     };
-
 
     # Pushover notifications
     environment.systemPackages = with pkgs; [

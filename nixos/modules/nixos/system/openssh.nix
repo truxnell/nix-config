@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -8,21 +9,27 @@ let
 in
 {
   options.mySystem.services.openssh = {
-    enable = mkEnableOption "openssh" // { default = true; };
-    passwordAuthentication = mkOption
-      {
-        type = lib.types.bool;
-        description = "If password can be accepted for ssh (commonly disable for security hardening)";
-        default = false;
+    enable = mkEnableOption "openssh" // {
+      default = true;
+    };
+    passwordAuthentication = mkOption {
+      type = lib.types.bool;
+      description = "If password can be accepted for ssh (commonly disable for security hardening)";
+      default = false;
 
-      };
-    permitRootLogin = mkOption
-      {
-        type = types.enum [ "yes" "without-password" "prohibit-password" "forced-commands-only" "no" ];
-        description = "If root can login via ssh (commonly disable for security hardening)";
-        default = "no";
+    };
+    permitRootLogin = mkOption {
+      type = types.enum [
+        "yes"
+        "without-password"
+        "prohibit-password"
+        "forced-commands-only"
+        "no"
+      ];
+      description = "If root can login via ssh (commonly disable for security hardening)";
+      default = "no";
 
-      };
+    };
   };
 
   config = mkIf cfg.enable {

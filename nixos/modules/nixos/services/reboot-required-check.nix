@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -46,8 +47,6 @@ in
       };
     };
 
-
   };
-
 
 }

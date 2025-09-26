@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -12,24 +13,23 @@ let
   appFolder = config.services.postgresql.dataDir;
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -41,14 +41,22 @@ in
     #   restartUnits = [ "${app}.service" ];
     # };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = "postgres"; group = "postgres"; mode = "750"; }];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              user = "postgres";
+              group = "postgres";
+              mode = "750";
+            }
+          ];
+        };
 
     services.postgresql = {
       enable = true;
-        settings = {
+      settings = {
         max_connections = 2000;
         random_page_cost = 1.1;
         shared_buffers = "6GB";
@@ -90,16 +98,12 @@ in
       enable = true;
     };
 
-
     ### firewall config
 
     # networking.firewall = mkIf cfg.openFirewall {
     #   allowedTCPPorts = [ port ];
     #   allowedUDPPorts = [ port ];
     # };
-
-
-
 
   };
 }

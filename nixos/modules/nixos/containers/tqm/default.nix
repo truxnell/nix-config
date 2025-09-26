@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -9,49 +10,43 @@ let
   app = "qbit-tqm";
   category = "services";
   description = "qbit tag manager";
-  image = "ghcr.io/home-operations/tqm:1.17.0@sha256:05b62239063ad1e884f2254532e3dc9b60cff08870112dca244af328d761be0d"; #string
-  group = "568"; #string #int
+  image = "ghcr.io/home-operations/tqm:1.17.0@sha256:05b62239063ad1e884f2254532e3dc9b60cff08870112dca244af328d761be0d"; # string
+  group = "568"; # string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -94,8 +89,6 @@ in
         startAt = "hourly";
       };
 
-
-
     systemd.services."tqm-qb-clean" =
 
       {
@@ -125,9 +118,6 @@ in
         requires = [ "podman-qbittorrent.service" ];
         startAt = "daily";
       };
-
-
-
 
   };
 

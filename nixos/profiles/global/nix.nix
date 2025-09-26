@@ -43,8 +43,10 @@
       # Avoid copying unnecessary stuff over SSH
       builders-use-substitutes = true;
 
-
-      trusted-users = [ "root" "@wheel" ];
+      trusted-users = [
+        "root"
+        "@wheel"
+      ];
 
       warn-dirty = false;
 

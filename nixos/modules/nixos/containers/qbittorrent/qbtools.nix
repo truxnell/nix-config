@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   cfg = config.mySystem.services.qbittorrent;
   image = "ghcr.io/buroa/qbtools:v0.21.2@sha256:33da584c9d71bb2d8b9931995c41599bef1fdebf52cf5408cdd09175069f299a";
@@ -127,7 +132,6 @@ with lib;
         requires = [ "podman-qbittorrent.service" ];
         startAt = "daily";
       };
-
 
   };
 }

@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -8,12 +9,11 @@ let
 in
 {
   options.mySystem.system = {
-    packages = mkOption
-      {
-        type = with types; listOf package;
-        description = "List of system level package installs";
-        default = [ ];
-      };
+    packages = mkOption {
+      type = with types; listOf package;
+      description = "List of system level package installs";
+      default = [ ];
+    };
   };
 
   # System packages deployed globally.

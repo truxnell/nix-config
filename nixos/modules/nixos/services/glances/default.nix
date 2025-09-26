@@ -1,7 +1,8 @@
-{ pkgs
-, config
-, lib
-, ...
+{
+  pkgs,
+  config,
+  lib,
+  ...
 }:
 let
   cfg = config.mySystem.services.glances;
@@ -9,29 +10,29 @@ let
 in
 with lib;
 {
-  options.mySystem.services.glances =
-    {
-      enable = mkEnableOption "Glances system monitor";
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-
-        };
-      addToHomepage = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to homepage";
-          default = true;
-
-        };
+  options.mySystem.services.glances = {
+    enable = mkEnableOption "Glances system monitor";
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
 
     };
+    addToHomepage = mkOption {
+      type = lib.types.bool;
+      description = "Add to homepage";
+      default = true;
+
+    };
+
+  };
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs;
-      [ glances python310Packages.psutil hddtemp ];
+    environment.systemPackages = with pkgs; [
+      glances
+      python310Packages.psutil
+      hddtemp
+    ];
 
     # port 61208
     systemd.services.glances = {
@@ -45,7 +46,6 @@ with lib;
     networking = {
       firewall.allowedTCPPorts = [ 61208 ];
     };
-
 
     environment.etc."glances/glances.conf" = {
       text = ''
@@ -70,15 +70,21 @@ with lib;
       '';
     };
 
-    mySystem.services.gatus.monitors = mkIf cfg.monitor [{
+    mySystem.services.gatus.monitors = mkIf cfg.monitor [
+      {
 
-      name = "${app} ${config.networking.hostName}";
-      group = "${app}";
-      url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208:/api/3/status";
+        name = "${app} ${config.networking.hostName}";
+        group = "${app}";
+        url = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208:/api/3/status";
 
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
 
   };
 }

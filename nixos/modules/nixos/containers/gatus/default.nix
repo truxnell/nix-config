@@ -1,15 +1,16 @@
-{ lib
-, config
-, self
-, ...
+{
+  lib,
+  config,
+  self,
+  ...
 }:
 with lib;
 let
   app = "gatus";
   image = "ghcr.io/twin/gatus:v5.23.2@sha256:041514059279f102d8e549a7c7c9f813ae9a0bf505c6d7c37aea9201af0bec3a";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 8080; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 8080; # int
   cfg = config.mySystem.services.${app};
 
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -20,7 +21,7 @@ let
       group = "servers";
       url = "icmp://unifi.${config.mySystem.internalDomain}";
       interval = "1m";
-      alerts = [{ type = "pushover"; }];
+      alerts = [ { type = "pushover"; } ];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -28,7 +29,7 @@ let
       group = "servers";
       url = "icmp://pikvm.${config.mySystem.internalDomain}";
       interval = "1m";
-      alerts = [{ type = "pushover"; }];
+      alerts = [ { type = "pushover"; } ];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -36,7 +37,7 @@ let
       group = "servers";
       url = "icmp://ESP-B9C83C.${config.mySystem.internalDomain}";
       interval = "1m";
-      alerts = [{ type = "pushover"; }];
+      alerts = [ { type = "pushover"; } ];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -44,7 +45,7 @@ let
       group = "servers";
       url = "icmp://espressif.${config.mySystem.internalDomain}";
       interval = "1m";
-      alerts = [{ type = "pushover"; }];
+      alerts = [ { type = "pushover"; } ];
       conditions = [ "[CONNECTED] == true" ];
     }
     {
@@ -52,12 +53,14 @@ let
       group = "servers";
       url = "icmp://ESP-7DE997.${config.mySystem.internalDomain}";
       interval = "1m";
-      alerts = [{ type = "pushover"; }];
+      alerts = [ { type = "pushover"; } ];
       conditions = [ "[CONNECTED] == true" ];
     }
 
-  ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
-    (builtins.attrValues self.nixosConfigurations);
+  ]
+  ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors) (
+    builtins.attrValues self.nixosConfigurations
+  );
 
   configAlerting = {
     # TODO really should make this libdefault and let modules overwrite failure-threshold etc.
@@ -72,32 +75,32 @@ let
       };
     };
   };
-  configVar =
-    {
-      metrics = true;
-      endpoints = extraEndpoints;
-      alerting = configAlerting;
-      ui = {
-        title = "Home Status | Gatus";
-        header = "Home Status";
-      };
+  configVar = {
+    metrics = true;
+    endpoints = extraEndpoints;
+    alerting = configAlerting;
+    ui = {
+      title = "Home Status | Gatus";
+      header = "Home Status";
     };
+  };
 
   configFile = builtins.toFile "config.yaml" (builtins.toJSON configVar);
 
 in
 {
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitors = lib.mkOption {
-        type = lib.types.listOf lib.types.attrs;
-        description = "Services to add for montoring";
-        default = [ ];
-      };
-
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitors = lib.mkOption {
+      type = lib.types.listOf lib.types.attrs;
+      description = "Services to add for montoring";
+      default = [ ];
+    };
+
+  };
 
   config = mkIf cfg.enable {
     sops.secrets."services/${app}/env" = {
@@ -106,7 +109,6 @@ in
       inherit (config.users.users.kah) group;
       restartUnits = [ "podman-${app}.service" ];
     };
-
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
@@ -145,7 +147,6 @@ in
         ];
       };
     };
-
 
   };
 }

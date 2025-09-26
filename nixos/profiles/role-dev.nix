@@ -1,4 +1,9 @@
-{ config, pkgs, inputs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 # Role for dev stations
 # Could be a workstatio or a headless server.
 
@@ -33,6 +38,5 @@ with config;
     enable = true;
     nix-direnv.enable = true;
   };
-
 
 }

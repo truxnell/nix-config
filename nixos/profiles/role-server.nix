@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 # Role for headless servers
 # covers raspi's, sbc, NUC etc, anything
 # that is headless and minimal for running services
@@ -6,22 +11,22 @@
 with lib;
 {
 
-
   config = {
-
 
     # Enable monitoring for remote scraiping
     mySystem.services.monitoring.enable = true;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
     mySystem.system.motd.enable = true;
-    mySystem.services.gatus.monitors = [{
-      name = config.networking.hostName;
-      group = "servers";
-      url = "icmp://${config.networking.hostName}.${config.mySystem.internalDomain}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" ];
-    }];
+    mySystem.services.gatus.monitors = [
+      {
+        name = config.networking.hostName;
+        group = "servers";
+        url = "icmp://${config.networking.hostName}.${config.mySystem.internalDomain}";
+        interval = "1m";
+        conditions = [ "[CONNECTED] == true" ];
+      }
+    ];
 
     nix.settings = {
       # TODO factor out into mySystem
@@ -68,7 +73,6 @@ with lib;
       btop
       curl
     ];
-
 
     services.udisks2.enable = mkDefault false;
     # xdg = {

@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -9,58 +10,52 @@ let
   category = "containers";
   description = "Weather station to MQTT";
   image = "ghcr.io/bachya/ecowitt2mqtt:latest@sha256:2fd4793364117794923d38affda9ebf20d7b6b29a8c11dbe54981c21874b656c";
-  user = "1000"; #string
-  group = "1000"; #string
-  port = 8080; #int
+  user = "1000"; # string
+  group = "1000"; # string
+  port = 8080; # int
   # appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backupLocal = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable local backups";
-          default = true;
-        };
-      backupRemote = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable remote backups";
-          default = true;
-        };
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backupLocal = mkOption {
+      type = lib.types.bool;
+      description = "Enable local backups";
+      default = true;
+    };
+    backupRemote = mkOption {
+      type = lib.types.bool;
+      description = "Enable remote backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -74,7 +69,6 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d ${persistentFolder}/ 0750 ${user} ${group} -"
@@ -82,7 +76,12 @@ in
 
     ## service
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit
+        app
+        image
+        user
+        group
+        ;
       env = {
         ECOWITT2MQTT_MQTT_BROKER = "mqtt.trux.dev";
         ECOWITT2MQTT_MQTT_PORT = "1883";
@@ -94,7 +93,6 @@ in
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
     };
 
-
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
@@ -102,7 +100,11 @@ in
         group = "${category}";
         url = "http://${url}/data/report"; # check https & the reporting URL for 405 'method not allowed's
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 405" "[RESPONSE_TIME] < 1500" ];
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 405"
+          "[RESPONSE_TIME] < 1500"
+        ];
       }
     ];
 
@@ -141,7 +143,6 @@ in
     #     local = cfg.backupLocal;
     #     remote = cfg.backupRemote;
     #   };
-
 
   };
 }

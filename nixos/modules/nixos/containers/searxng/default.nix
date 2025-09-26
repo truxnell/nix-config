@@ -1,22 +1,24 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
-  app = "searxng"; #string
-  group = "977"; #string
-  port = 8084; #int
+  app = "searxng"; # string
+  group = "977"; # string
+  port = 8084; # int
   cfg = config.mySystem.services.${app};
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
 
@@ -109,7 +111,6 @@ in
           # General
           "bing".disabled = false;
 
-
           # Files
           "bt4g".disabled = true;
           "kickass".disabled = true;
@@ -130,7 +131,6 @@ in
           "artic".disable = true;
           "library of congress".disable = true;
 
-
           # Videos
           "duckduckgo videos".disable = false;
 
@@ -147,9 +147,6 @@ in
           # IT
           "hackernews".disabled = false;
           "lobste.rs".disabled = false;
-
-
-
 
         };
 
@@ -180,13 +177,16 @@ in
         # https://raw.githubusercontent.com/vnuxa/scribe_optimizations/refs/heads/main/brave.goggle
         hostnames = {
           remove = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./remove));
-          high_priority = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./higher_domains));
-          low_priority = builtins.map (x: "(.*\\.)" + x + "$") (lib.splitString "\n" (builtins.readFile ./lower_domains));
+          high_priority = builtins.map (x: "(.*\\.)" + x + "$") (
+            lib.splitString "\n" (builtins.readFile ./higher_domains)
+          );
+          low_priority = builtins.map (x: "(.*\\.)" + x + "$") (
+            lib.splitString "\n" (builtins.readFile ./lower_domains)
+          );
         };
 
       };
     };
-
 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
@@ -205,17 +205,21 @@ in
       };
     };
 
+    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [
+      {
 
+        name = app;
+        group = "media";
+        url = "https://${app}.${config.mySystem.domain}";
+        interval = "30s";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
 
-    mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
-
-      name = app;
-      group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "30s";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-
-    }];
+      }
+    ];
 
   };
 }

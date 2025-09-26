@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -9,51 +10,46 @@ let
   category = "services";
   description = "reddit alternative frontend";
   image = "quay.io/redlib/redlib:latest@sha256:c1fcda90dca9447d4aa7e18fd3ef85cc2044c29263490159e1ae4b472d0f285c";
-  user = "redlib"; #string
-  group = "redlib"; #string
-  port = 8080; #int
+  user = "redlib"; # string
+  group = "redlib"; # string
+  port = 8080; # int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backups = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable local backups";
-          default = true;
-        };
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backups = mkOption {
+      type = lib.types.bool;
+      description = "Enable local backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -67,7 +63,6 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms
     # systemd.tmpfiles.rules = [
     # "d ${appFolder}/ 0750 ${user} ${group} -"
@@ -80,9 +75,13 @@ in
 
     ## container
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
-      inherit app image user group;
+      inherit
+        app
+        image
+        user
+        group
+        ;
     };
-
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
@@ -91,7 +90,11 @@ in
         group = "${category}";
         url = "https://${url}/settings"; # settings page as pinging the main page is slow/creates requests
         interval = "1m";
-        conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
       }
     ];
 
@@ -125,7 +128,6 @@ in
     #     inherit appFolder;
 
     #   };
-
 
   };
 }

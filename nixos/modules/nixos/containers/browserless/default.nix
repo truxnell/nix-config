@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -9,49 +10,43 @@ let
   category = "services";
   description = "docker based browsers for automation";
   image = "ghcr.io/browserless/chrome";
-  user = "kah"; #string
-  group = "kah"; #string #int
+  user = "kah"; # string
+  group = "kah"; # string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -65,7 +60,6 @@ in
 
     # users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms - only for containers
     # systemd.tmpfiles.rules = [
     # "d ${appFolder}/ 0750 ${user} ${group} -"
@@ -74,7 +68,6 @@ in
     # environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
     #   directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     # };
-
 
     ## service
     # services.test= {
@@ -85,8 +78,8 @@ in
 
     virtualisation.oci-containers.containers = config.lib.mySystem.mkContainer {
       inherit app image;
-      user = "0"; #:()
-      group = "0"; #:()
+      user = "0"; # :()
+      group = "0"; # :()
       env = {
         TIMEOUT = "90000";
         CONCURRENT = "15";
@@ -108,8 +101,6 @@ in
       # ];
 
     };
-
-
 
     ### gatus integration
     # mySystem.services.gatus.monitors = mkIf cfg.monitor [
@@ -152,12 +143,9 @@ in
     #     inherit appFolder;
     #   });
 
-
     # services.postgresqlBackup = {
     #   databases = [ app ];
     # };
-
-
 
   };
 }

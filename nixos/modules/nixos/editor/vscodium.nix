@@ -1,8 +1,9 @@
-{ lib
-, config
-, pkgs
+{
+  lib,
+  config,
+  pkgs,
 
-, ...
+  ...
 }:
 
 with lib;
@@ -19,7 +20,8 @@ in
     environment.systemPackages = with pkgs; [
       (vscode-with-extensions.override {
         vscode = vscodium;
-        vscodeExtensions = with vscode-extensions;
+        vscodeExtensions =
+          with vscode-extensions;
           [
             bbenoist.nix
             mkhl.direnv
@@ -151,6 +153,5 @@ in
     ];
 
   };
-
 
 }

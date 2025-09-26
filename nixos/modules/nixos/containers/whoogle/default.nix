@@ -1,23 +1,25 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
   app = "whoogle";
   image = "ghcr.io/benbusby/whoogle-search:0.9.4@sha256:82d2514499cb3341deb3e9a12c94105a0776d12e5a4f47ed631533f3247780a5";
-  user = "927"; #string
-  group = "927"; #string
-  port = 5000; #int
+  user = "927"; # string
+  group = "927"; # string
+  port = 5000; # int
   cfg = config.mySystem.services.${app};
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
 
@@ -57,17 +59,20 @@ in
       };
     };
 
+    mySystem.services.gatus.monitors = [
+      {
 
-
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "services";
-      url = "https://${app}.${config.mySystem.domain}/healthz";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
+        name = app;
+        group = "services";
+        url = "https://${app}.${config.mySystem.domain}/healthz";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
 
   };
 }

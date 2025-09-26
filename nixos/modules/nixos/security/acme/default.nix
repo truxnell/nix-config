@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -18,10 +19,11 @@ in
       "security/acme/env".restartUnits = [ "${app}.service" ];
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [ "/var/lib/acme" ];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [ "/var/lib/acme" ];
+        };
 
     security.acme = {
       acceptTerms = true;
@@ -37,7 +39,6 @@ in
         credentialsFile = config.sops.secrets."security/acme/env".path;
       };
     };
-
 
   };
 }

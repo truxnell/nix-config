@@ -1,48 +1,53 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
   app = "qbittorrent";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 8080; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 8080; # int
   qbit_port = 32189;
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
-  xseedShell = pkgs.writeScriptBin "xseed.sh" # scrit to call cross-seed upon torrent finish
-    ''
-      #!/bin/bash
-      # qbit command: /scripts/xseed.sh "%F" 
-      /usr/bin/curl -H "X-Api-Key: 39934d99311cdb0695bf13b10dde639d892d0cb13c615ddb" -X POST --data-urlencode "infoHash=$1" https://cross-seed.trux.dev/api/webhook
-    '';
+  xseedShell =
+    pkgs.writeScriptBin "xseed.sh" # scrit to call cross-seed upon torrent finish
+      ''
+        #!/bin/bash
+        # qbit command: /scripts/xseed.sh "%F" 
+        /usr/bin/curl -H "X-Api-Key: 39934d99311cdb0695bf13b10dde639d892d0cb13c615ddb" -X POST --data-urlencode "infoHash=$1" https://cross-seed.trux.dev/api/webhook
+      '';
 
 in
 {
 
   imports = [
-    # ./qbtools.nix 
+    # ./qbtools.nix
     ./lts.nix
   ];
 
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      qbtools = mkEnableOption "qbtools" // { default = true; };
-      openFirewall = mkEnableOption "Open firewall for ${app}" // {
-        default = true;
-      };
-
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    qbtools = mkEnableOption "qbtools" // {
+      default = true;
+    };
+    openFirewall = mkEnableOption "Open firewall for ${app}" // {
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${appFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${appFolder} 0750 ${user} ${group} -" # The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     virtualisation.oci-containers.containers.${app} =
@@ -65,11 +70,18 @@ in
         ];
       };
 
-
-
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     services.nginx.virtualHosts."${app}.${config.networking.domain}" = {
       useACMEHost = config.networking.domain;
@@ -81,7 +93,6 @@ in
       };
     };
 
-
     # gotta open up that firewall
     networking.firewall = mkIf cfg.openFirewall {
 
@@ -89,25 +100,27 @@ in
       allowedUDPPorts = [ qbit_port ];
     };
 
-
-
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
+    mySystem.services.gatus.monitors = [
       {
-        inherit app user;
-        excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
 
+        name = app;
+        group = "media";
+        url = "https://${app}.${config.mySystem.domain}";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
+
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app user;
+      excludePaths = [ "Backups" ];
+      paths = [ appFolder ];
+      inherit appFolder;
+    };
 
   };
 }

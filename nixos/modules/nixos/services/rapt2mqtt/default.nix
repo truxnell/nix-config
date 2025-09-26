@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -10,52 +11,45 @@ let
   app = "rapt2mqtt";
   category = "services";
   description = "";
-  user = "root"; #string
-  group = "root"; #string #int
+  user = "root"; # string
+  group = "root"; # string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
+    };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
     };
 
-  config = mkIf cfg.enable {
+  };
 
+  config = mkIf cfg.enable {
 
     ## Secrets
     sops.secrets."${category}/${app}/env" = {
@@ -77,13 +71,18 @@ in
         # https://github.com/sgoadhouse/rapt-mqtt-bridge
         ExecStart =
           let
-            python = pkgs.python3.withPackages (ps: with ps; [ paho-mqtt requests python-dateutil ]);
+            python = pkgs.python3.withPackages (
+              ps: with ps; [
+                paho-mqtt
+                requests
+                python-dateutil
+              ]
+            );
           in
           "${python.interpreter} ${rapt2mqtt} -n 15 -f -s -v 1";
 
       };
     };
-
 
   };
 }

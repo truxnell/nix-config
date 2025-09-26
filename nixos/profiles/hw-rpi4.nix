@@ -1,10 +1,18 @@
-{ lib, pkgs, boot, ... }:
+{
+  lib,
+  pkgs,
+  boot,
+  ...
+}:
 
 with lib;
 {
   boot = {
 
-    initrd.availableKernelModules = [ "xhci_pci" "usb_storage" ];
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "usb_storage"
+    ];
     initrd.kernelModules = [ ];
     kernelModules = [ ];
     extraModulePackages = [ ];
@@ -26,6 +34,5 @@ with lib;
     libraspberrypi
     raspberrypi-eeprom
   ];
-
 
 }

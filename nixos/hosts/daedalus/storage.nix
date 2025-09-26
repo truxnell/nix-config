@@ -1,6 +1,7 @@
-{ lib
-, pkgs
-, ...
+{
+  lib,
+  pkgs,
+  ...
 }:
 let
   ## Formatting disks
@@ -61,17 +62,17 @@ let
 
   parityDisks = builtins.filter (d: d.type == "parity") disks;
   dataDisks = builtins.filter (d: d.type == "data") disks;
-  parityFs = builtins.listToAttrs (builtins.map
-    (d: {
+  parityFs = builtins.listToAttrs (
+    builtins.map (d: {
       name = "/mnt/${d.name}";
       value = {
         device = "/dev/disk/by-uuid/${d.uuid}";
         fsType = "xfs";
       };
-    })
-    parityDisks);
-  dataFs = builtins.listToAttrs (builtins.concatMap
-    (d: [
+    }) parityDisks
+  );
+  dataFs = builtins.listToAttrs (
+    builtins.concatMap (d: [
       {
         name = "/mnt/root/${d.name}";
         value = {
@@ -103,30 +104,29 @@ let
           options = [ "compress=zstd,subvol=content" ];
         };
       }
-    ])
-    dataDisks);
-  snapraidDataDisks = builtins.listToAttrs (lib.lists.imap0
-    (i: d: {
+    ]) dataDisks
+  );
+  snapraidDataDisks = builtins.listToAttrs (
+    lib.lists.imap0 (i: d: {
       name = "d${toString i}";
       value = "/mnt/${d.name}";
-    })
-    dataDisks);
-  contentFiles =
-    [
-      "/var/snapraid/snapraid.content"
-    ]
-    ++ builtins.map (d: "/mnt/snapraid-content/${d.name}/snapraid.content") dataDisks;
+    }) dataDisks
+  );
+  contentFiles = [
+    "/var/snapraid/snapraid.content"
+  ]
+  ++ builtins.map (d: "/mnt/snapraid-content/${d.name}/snapraid.content") dataDisks;
   parityFiles = builtins.map (p: "/mnt/${p.name}/snapraid.parity") parityDisks;
-  snapperConfigs = builtins.listToAttrs (builtins.map
-    (d: {
+  snapperConfigs = builtins.listToAttrs (
+    builtins.map (d: {
       name = "${d.name}";
       value = {
         SUBVOLUME = "/mnt/${d.name}";
         ALLOW_GROUPS = [ "wheel" ];
         SYNC_ACL = true;
       };
-    })
-    dataDisks);
+    }) dataDisks
+  );
 in
 {
   environment.systemPackages = with pkgs; [
@@ -140,63 +140,61 @@ in
 
   # format drive btrfs (parity xfs)
   # btrfs subvol create data/content/.snapshots
-  # 
+  #
 
   systemd.tmpfiles.rules = [
-    "f /var/snapraid/snapraid.content 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
-    "f /var/snapraid/snapraid.content.lock 0750 truxnell users -" #The - disables automatic cleanup, so the file wont be removed after a period
+    "f /var/snapraid/snapraid.content 0750 truxnell users -" # The - disables automatic cleanup, so the file wont be removed after a period
+    "f /var/snapraid/snapraid.content.lock 0750 truxnell users -" # The - disables automatic cleanup, so the file wont be removed after a period
   ];
 
-
-  fileSystems =
-    {
-      "/tank" = {
-        #/mnt/disk* /mnt/storage fuse.mergerfs defaults,nonempty,allow_other,use_ino,cache.files=partial,moveonenospc=true,dropcacheonclose=true,minfreespace=100G,fsname=mergerfs 0 0
-        device = lib.strings.concatMapStringsSep ":" (d: "/mnt/${d.name}") dataDisks;
-        fsType = "fuse.mergerfs";
-        options = [
-          "defaults"
-          "nofail" # I believe this needs fuse3
-          "nonempty"
-          "allow_other"
-          "use_ino"
-          "cache.files=partial"
-          "category.create=mfs"
-          "moveonenospc=true"
-          "dropcacheonclose=true"
-          "minfreespace=100G"
-          "fsname=mergerfs"
-          "ignorepponrename=true" # Helps hardlinking
-          # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
-          "noforget"
-          "inodecalc=path-hash"
-          # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
-          "func.getattr=newest"
-        ];
-      };
-      "/export/natflix" = {
-        device = "/tank/natflix";
-        options = [ "bind" ];
-      };
-      # "/export/syncthing" = {
-      #   device = "/zfs/syncthing";
-      #   options = [ "bind" ];
-      # };
-      # "/export/documents" = {
-      #   device = "/zfs/documents";
-      #   options = [ "bind" ];
-      # };
-      # "/export/photos" = {
-      #   device = "/zfs/photos";
-      #   options = [ "bind" ];
-      # };
-      # "/export/backup" = {
-      #   device = "/zfs/backup";
-      #   options = [ "bind" ];
-      # };
-    }
-    // parityFs
-    // dataFs;
+  fileSystems = {
+    "/tank" = {
+      #/mnt/disk* /mnt/storage fuse.mergerfs defaults,nonempty,allow_other,use_ino,cache.files=partial,moveonenospc=true,dropcacheonclose=true,minfreespace=100G,fsname=mergerfs 0 0
+      device = lib.strings.concatMapStringsSep ":" (d: "/mnt/${d.name}") dataDisks;
+      fsType = "fuse.mergerfs";
+      options = [
+        "defaults"
+        "nofail" # I believe this needs fuse3
+        "nonempty"
+        "allow_other"
+        "use_ino"
+        "cache.files=partial"
+        "category.create=mfs"
+        "moveonenospc=true"
+        "dropcacheonclose=true"
+        "minfreespace=100G"
+        "fsname=mergerfs"
+        "ignorepponrename=true" # Helps hardlinking
+        # For NFS: https://github.com/trapexit/mergerfs#can-mergerfs-mounts-be-exported-over-nfs
+        "noforget"
+        "inodecalc=path-hash"
+        # For kodi's "fasthash" functionality: https://github.com/trapexit/mergerfs#tips--notes
+        "func.getattr=newest"
+      ];
+    };
+    "/export/natflix" = {
+      device = "/tank/natflix";
+      options = [ "bind" ];
+    };
+    # "/export/syncthing" = {
+    #   device = "/zfs/syncthing";
+    #   options = [ "bind" ];
+    # };
+    # "/export/documents" = {
+    #   device = "/zfs/documents";
+    #   options = [ "bind" ];
+    # };
+    # "/export/photos" = {
+    #   device = "/zfs/photos";
+    #   options = [ "bind" ];
+    # };
+    # "/export/backup" = {
+    #   device = "/zfs/backup";
+    #   options = [ "bind" ];
+    # };
+  }
+  // parityFs
+  // dataFs;
 
   systemd.mounts = [
     {
@@ -270,8 +268,11 @@ in
     "vers4.1" = "false";
     "vers4.2" = "true";
   };
-  networking.firewall.allowedTCPPorts = [ 2049 20048 111 ];
-
+  networking.firewall.allowedTCPPorts = [
+    2049
+    20048
+    111
+  ];
 
   services.snapraid = {
     inherit contentFiles parityFiles;
@@ -300,8 +301,6 @@ in
   #     paths = [ "/var/snapraid/snapraid.content" ];
   #   };
 
-
-
   systemd.services.snapraid-btrfs-sync = {
     description = "Run the snapraid-btrfs sync with the runner";
     startAt = "01:00";
@@ -309,16 +308,14 @@ in
       Type = "oneshot";
       User = "root";
       ExecStart = [
-        (pkgs.writeScript "btrfs-sync.sh"
-          ''
-            #!${pkgs.bash}/bin/bash
+        (pkgs.writeScript "btrfs-sync.sh" ''
+          #!${pkgs.bash}/bin/bash
 
-            ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner && \
-            ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid sync succeeded" https://ntfy.trux.dev/snapraid || \
-            ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid sync FAILED" https://ntfy.trux.dev/snapraid
+          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs-runner && \
+          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid sync succeeded" https://ntfy.trux.dev/snapraid || \
+          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid sync FAILED" https://ntfy.trux.dev/snapraid
 
-          ''
-        )
+        '')
       ];
 
       Nice = 19;
@@ -345,16 +342,17 @@ in
       # CapabilityBoundingSet = "";
       # ProtectSystem = "strict";
       ProtectHome = "read-only";
-      ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
+      ReadOnlyPaths = [
+        "/etc/snapraid.conf"
+        "/etc/snapper"
+      ];
       ReadWritePaths =
         # sync requires access to directories containing content files
         # to remove them if they are stale
         let
           contentDirs = builtins.map builtins.dirOf contentFiles;
         in
-        lib.unique (
-          builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs
-        );
+        lib.unique (builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs);
     };
   };
 
@@ -365,15 +363,13 @@ in
       Type = "oneshot";
       User = "root";
       ExecStart = [
-        (pkgs.writeScript "btrfs-scrub.sh"
-          ''
-            #!${pkgs.bash}/bin/bash
+        (pkgs.writeScript "btrfs-scrub.sh" ''
+          #!${pkgs.bash}/bin/bash
 
-            ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs scrub -p 3 -o 30 && \
-            ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid scrub succeeded" https://ntfy.trux.dev/snapraid || \
-            ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid scrub FAILED" https://ntfy.trux.dev/snapraid
-          ''
-        )
+          ${pkgs.snapraid-btrfs-runner}/bin/snapraid-btrfs scrub -p 3 -o 30 && \
+          ${pkgs.curl}/bin/curl -H prio:low -d "Snapraid scrub succeeded" https://ntfy.trux.dev/snapraid || \
+          ${pkgs.curl}/bin/curl -H tags:warning -H prio:high -d "Snapraid scrub FAILED" https://ntfy.trux.dev/snapraid
+        '')
       ];
       Nice = 19;
       IOSchedulingPriority = 7;
@@ -399,16 +395,17 @@ in
       # CapabilityBoundingSet = "";
       # ProtectSystem = "strict";
       ProtectHome = "read-only";
-      ReadOnlyPaths = [ "/etc/snapraid.conf" "/etc/snapper" ];
+      ReadOnlyPaths = [
+        "/etc/snapraid.conf"
+        "/etc/snapper"
+      ];
       ReadWritePaths =
         # sync requires access to directories containing content files
         # to remove them if they are stale
         let
           contentDirs = builtins.map builtins.dirOf contentFiles;
         in
-        lib.unique (
-          builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs
-        );
+        lib.unique (builtins.attrValues snapraidDataDisks ++ parityFiles ++ contentDirs);
     };
   };
 

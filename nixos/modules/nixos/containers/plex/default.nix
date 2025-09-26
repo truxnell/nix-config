@@ -1,34 +1,45 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
   app = "plex";
   image = "ghcr.io/onedr0p/plex:1.40.1.8227-c0dd5a73e@sha256:a60bc6352543b4453b117a8f2b89549e458f3ed8960206d2f3501756b6beb519";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 32400; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 32400; # int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
 
   ## persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      openFirewall = mkEnableOption "Open firewall for ${app}" // {
-        default = true;
-      };
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    openFirewall = mkEnableOption "Open firewall for ${app}" // {
+      default = true;
+    };
+  };
 
   config = mkIf cfg.enable {
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     virtualisation.oci-containers.containers.${app} = {
       image = "${image}";
@@ -61,25 +72,27 @@ in
       };
     };
 
-
-
-
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "media";
-      url = "https://${app}.${config.mySystem.domain}/web/";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
+    mySystem.services.gatus.monitors = [
       {
-        inherit app user;
-        # excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
+
+        name = app;
+        group = "media";
+        url = "https://${app}.${config.mySystem.domain}/web/";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
+
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app user;
+      # excludePaths = [ "Backups" ];
+      paths = [ appFolder ];
+      inherit appFolder;
+    };
 
   };
 }

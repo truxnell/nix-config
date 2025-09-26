@@ -1,17 +1,18 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config
-, lib
-, pkgs
-, ...
-}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   imports = [
     ./storage.nix
 
   ];
   config = {
-
 
     mySystem.purpose = "Network Attached Storage";
     # mySystem.system.impermanence.enable = true;
@@ -93,11 +94,17 @@
       ];
     };
 
-
-
     boot = {
 
-      initrd.availableKernelModules = [ "xhci_pci" "ahci" "mpt3sas" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+      initrd.availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "mpt3sas"
+        "nvme"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
       initrd.kernelModules = [ ];
       kernelModules = [ "kvm-intel" ];
       extraModulePackages = [ ];
@@ -118,23 +125,20 @@
     networking.hostId = "485cafad"; # for zfs, helps stop importing to wrong machine
     networking.useDHCP = lib.mkDefault true;
 
-    fileSystems."/" =
-      {
-        device = "rpool/local/root";
-        fsType = "zfs";
-      };
+    fileSystems."/" = {
+      device = "rpool/local/root";
+      fsType = "zfs";
+    };
 
-    fileSystems."/boot" =
-      {
-        device = "/dev/disk/by-label/EFI";
-        fsType = "vfat";
-      };
+    fileSystems."/boot" = {
+      device = "/dev/disk/by-label/EFI";
+      fsType = "vfat";
+    };
 
-    fileSystems."/nix" =
-      {
-        device = "rpool/local/nix";
-        fsType = "zfs";
-      };
+    fileSystems."/nix" = {
+      device = "rpool/local/nix";
+      fsType = "zfs";
+    };
 
     # fileSystems."/persist" =
     #   {
@@ -198,12 +202,11 @@
       unrar
     ];
 
-
-
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [ "/var/lib/samba/" ];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [ "/var/lib/samba/" ];
+        };
 
   };
 }

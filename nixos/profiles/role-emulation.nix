@@ -1,11 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 # Role for headless servers
 # covers raspi's, sbc, NUC etc, anything
 # that is headless and minimal for running services
 
 with lib;
 {
-
 
   config = {
 

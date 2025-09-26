@@ -1,17 +1,23 @@
-{ symlinkJoin
-, fetchFromGitHub
-, writeScriptBin
-, writeTextFile
-, makeWrapper
-, python311
-, snapraid
-, snapraid-btrfs
-, snapper
-,
+{
+  symlinkJoin,
+  fetchFromGitHub,
+  writeScriptBin,
+  writeTextFile,
+  makeWrapper,
+  python311,
+  snapraid,
+  snapraid-btrfs,
+  snapper,
 }:
 let
   name = "snapraid-btrfs-runner";
-  deps = [ python311 config snapraid snapraid-btrfs snapper ];
+  deps = [
+    python311
+    config
+    snapraid
+    snapraid-btrfs
+    snapper
+  ];
   src = fetchFromGitHub {
     owner = "fmoledina";
     repo = "snapraid-btrfs-runner";
@@ -86,16 +92,17 @@ let
     destination = "/etc/${name}";
   };
   script =
-    (
-      writeScriptBin name
-        (builtins.readFile (src + "/snapraid-btrfs-runner.py"))
-    ).overrideAttrs (old: {
-      buildCommand = "${old.buildCommand}\n patchShebangs $out";
-    });
+    (writeScriptBin name (builtins.readFile (src + "/snapraid-btrfs-runner.py"))).overrideAttrs
+      (old: {
+        buildCommand = "${old.buildCommand}\n patchShebangs $out";
+      });
 in
 symlinkJoin {
   inherit name;
   paths = [ script ] ++ deps;
-  buildInputs = [ makeWrapper python311 ];
+  buildInputs = [
+    makeWrapper
+    python311
+  ];
   postBuild = "wrapProgram $out/bin/${name} --add-flags '-c ${config}/etc/snapraid-btrfs-runner' --set PATH $out/bin";
 }

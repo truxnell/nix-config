@@ -1,6 +1,7 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
@@ -15,9 +16,10 @@ in
 {
   options.mySystem.services.zigbee2mqtt = {
     enable = mkEnableOption "zigbee2mqtt";
-    addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
+    };
   };
-
 
   config = mkIf cfg.enable {
 
@@ -34,11 +36,10 @@ in
         homeassistant = true;
         permit_join = false;
         include_device_information = true;
-        frontend =
-          {
-            inherit port;
-            url = "https://${app}.${config.networking.domain}";
-          };
+        frontend = {
+          inherit port;
+          url = "https://${app}.${config.networking.domain}";
+        };
         client_id = "z2m";
         serial = {
           port = "tcp://10.8.30.110:6638";
@@ -59,7 +60,24 @@ in
         };
         advanced = {
           log_level = "debug";
-          network_key = [ 42 88 79 94 97 102 54 190 99 52 160 64 224 107 103 40 ];
+          network_key = [
+            42
+            88
+            79
+            94
+            97
+            102
+            54
+            190
+            99
+            52
+            160
+            64
+            224
+            107
+            103
+            40
+          ];
           pan_id = 62782;
           last_seen = "ISO_8601";
         };
@@ -67,9 +85,18 @@ in
       };
     };
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     users.users.truxnell.extraGroups = [ app ];
 
@@ -82,25 +109,26 @@ in
       };
     };
 
-
-
-
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "services";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
+    mySystem.services.gatus.monitors = [
       {
-        inherit app appFolder;
-        user = builtins.toString user;
-        paths = [ appFolder ];
-      };
 
+        name = app;
+        group = "services";
+        url = "https://${app}.${config.mySystem.domain}";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
+
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app appFolder;
+      user = builtins.toString user;
+      paths = [ appFolder ];
+    };
 
   };
 }

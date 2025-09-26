@@ -1,29 +1,31 @@
-{ lib
-, config
-, ...
+{
+  lib,
+  config,
+  ...
 }:
 with lib;
 let
   app = "home-assistant";
   image = "ghcr.io/home-operations/home-assistant:2025.9.4";
-  user = "kah"; #string
-  group = "kah"; #string
-  port = 8123; #int
+  user = "kah"; # string
+  group = "kah"; # string
+  port = 8123; # int
   cfg = config.mySystem.services.${app};
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.services.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
+  options.mySystem.services.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+  };
 
   config = mkIf cfg.enable {
     # ensure folder exist and has correct owner/group
     systemd.tmpfiles.rules = [
-      "d ${appFolder} 0750 ${user} ${group} -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${appFolder} 0750 ${user} ${group} -" # The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
     sops.secrets."services/${app}/env" = {
@@ -58,29 +60,40 @@ in
       };
     };
 
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              user = "kah";
+              group = "kah";
+              mode = "750";
+            }
+          ];
+        };
 
-
-
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; user = "kah"; group = "kah"; mode = "750"; }];
-    };
-
-    mySystem.services.gatus.monitors = [{
-
-      name = app;
-      group = "media";
-      url = "https://${app}.${config.mySystem.domain}";
-      interval = "1m";
-      conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
-    }];
-
-    services.restic.backups = config.lib.mySystem.mkRestic
+    mySystem.services.gatus.monitors = [
       {
-        inherit app;
-        user = builtins.toString user;
-        excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
+
+        name = app;
+        group = "media";
+        url = "https://${app}.${config.mySystem.domain}";
+        interval = "1m";
+        conditions = [
+          "[CONNECTED] == true"
+          "[STATUS] == 200"
+          "[RESPONSE_TIME] < 1500"
+        ];
+      }
+    ];
+
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app;
+      user = builtins.toString user;
+      excludePaths = [ "Backups" ];
+      paths = [ appFolder ];
+      inherit appFolder;
+    };
   };
 }

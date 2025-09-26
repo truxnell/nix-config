@@ -1,7 +1,8 @@
-{ lib
-, config
-, pkgs
-, ...
+{
+  lib,
+  config,
+  pkgs,
+  ...
 }:
 with lib;
 let
@@ -10,51 +11,45 @@ let
   category = "services";
   description = "xseed";
   image = "ghcr.io/cross-seed/cross-seed:6.13.4";
-  user = "568"; #string
-  group = "568"; #string
-  port = 2468; #int
+  user = "568"; # string
+  group = "568"; # string
+  port = 2468; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
 {
-  options.mySystem.${category}.${app} =
-    {
-      enable = mkEnableOption "${app}";
-      addToHomepage = mkEnableOption "Add ${app} to homepage" // { default = true; };
-      monitor = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable gatus monitoring";
-          default = true;
-        };
-      prometheus = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable prometheus scraping";
-          default = true;
-        };
-      addToDNS = mkOption
-        {
-          type = lib.types.bool;
-          description = "Add to DNS list";
-          default = true;
-        };
-      dev = mkOption
-        {
-          type = lib.types.bool;
-          description = "Development instance";
-          default = false;
-        };
-      backup = mkOption
-        {
-          type = lib.types.bool;
-          description = "Enable backups";
-          default = true;
-        };
-
-
-
+  options.mySystem.${category}.${app} = {
+    enable = mkEnableOption "${app}";
+    addToHomepage = mkEnableOption "Add ${app} to homepage" // {
+      default = true;
     };
+    monitor = mkOption {
+      type = lib.types.bool;
+      description = "Enable gatus monitoring";
+      default = true;
+    };
+    prometheus = mkOption {
+      type = lib.types.bool;
+      description = "Enable prometheus scraping";
+      default = true;
+    };
+    addToDNS = mkOption {
+      type = lib.types.bool;
+      description = "Add to DNS list";
+      default = true;
+    };
+    dev = mkOption {
+      type = lib.types.bool;
+      description = "Development instance";
+      default = false;
+    };
+    backup = mkOption {
+      type = lib.types.bool;
+      description = "Enable backups";
+      default = true;
+    };
+
+  };
 
   config = mkIf cfg.enable {
 
@@ -68,16 +63,23 @@ in
 
     users.users.truxnell.extraGroups = [ group ];
 
-
     # Folder perms - only for containers
     systemd.tmpfiles.rules = [
       "d ${appFolder}/ 0750 ${user} ${group} -"
     ];
 
-    environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
-      directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
-    };
-
+    environment.persistence."${config.mySystem.system.impermanence.persistPath}" =
+      lib.mkIf config.mySystem.system.impermanence.enable
+        {
+          directories = [
+            {
+              directory = appFolder;
+              inherit user;
+              inherit group;
+              mode = "750";
+            }
+          ];
+        };
 
     ## service
     virtualisation.oci-containers.containers.${app} = {
@@ -97,8 +99,14 @@ in
       serviceConfig = {
         ExecStartPre = "${pkgs.coreutils}/bin/sleep 30";
       };
-      requires = [ "qbittorrent.service" "cross-seed.service" ];
-      after = [ "qbittorrent.service" "cross-seed.service" ];
+      requires = [
+        "qbittorrent.service"
+        "cross-seed.service"
+      ];
+      after = [
+        "qbittorrent.service"
+        "cross-seed.service"
+      ];
 
     };
 
@@ -112,15 +120,12 @@ in
       };
     };
 
-
-    services.restic.backups = config.lib.mySystem.mkRestic
-      {
-        inherit app user;
-        excludePaths = [ "Backups" ];
-        paths = [ appFolder ];
-        inherit appFolder;
-      };
-
+    services.restic.backups = config.lib.mySystem.mkRestic {
+      inherit app user;
+      excludePaths = [ "Backups" ];
+      paths = [ appFolder ];
+      inherit appFolder;
+    };
 
   };
 }

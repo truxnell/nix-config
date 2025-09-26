@@ -20,14 +20,10 @@
     postgresql.enable = true;
     mariadb.enable = true;
 
-    
-
     nginx.enable = true;
 
     gatus.enable = true;
-    
 
-    
     tautulli.enable = true;
 
     # factorio.freight-forwarding.enable = true; # the factory must grow
@@ -45,15 +41,14 @@
 
     radicale.enable = true;
     miniflux.enable = true;
-    
+
     rss-bridge.enable = true;
-    
+
     rxresume.enable = true;
-    
+
     thelounge.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
-    
 
     # monitoring
     victoriametrics.enable = true;
@@ -61,7 +56,7 @@
     unpoller.enable = true;
 
     hs110-exporter.enable = true;
-    
+
     firefly-iii.enable = true;
     rapt2mqtt.enable = true;
     technitium-dns-server.enable = true;

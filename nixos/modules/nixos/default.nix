@@ -38,11 +38,9 @@ with lib;
     default = "Production";
   };
 
-
-
   config = {
     systemd.tmpfiles.rules = [
-      "d ${config.mySystem.persistentFolder} 777 - - -" #The - disables automatic cleanup, so the file wont be removed after a period
+      "d ${config.mySystem.persistentFolder} 777 - - -" # The - disables automatic cleanup, so the file wont be removed after a period
     ];
 
   };
