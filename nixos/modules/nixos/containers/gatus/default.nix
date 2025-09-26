@@ -31,6 +31,31 @@ let
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
     }
+    {
+      name = "weather station";
+      group = "servers";
+      url = "icmp://ESP-B9C83C.${config.mySystem.internalDomain}";
+      interval = "1m";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "zigbee";
+      group = "servers";
+      url = "icmp://espressif-.${config.mySystem.internalDomain}";
+      interval = "1m";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[CONNECTED] == true" ];
+    }
+    {
+      name = "brewpi fridge";
+      group = "servers";
+      url = "icmp://ESP-7DE997-.${config.mySystem.internalDomain}";
+      interval = "1m";
+      alerts = [{ type = "pushover"; }];
+      conditions = [ "[CONNECTED] == true" ];
+    }
+
   ] ++ builtins.concatMap (cfg: cfg.config.mySystem.services.gatus.monitors)
     (builtins.attrValues self.nixosConfigurations);
 
