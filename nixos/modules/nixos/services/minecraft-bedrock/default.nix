@@ -114,7 +114,6 @@ in
         group = "${category}";
         url = "udp://${config.networking.hostName}.${config.mySystem.internalDomain}:${builtins.toString port}";
         interval = "1m";
-        alerts = [ { type = "pushover"; } ];
         conditions = [
           "[CONNECTED] == true"
           "[RESPONSE_TIME] < 1000"
