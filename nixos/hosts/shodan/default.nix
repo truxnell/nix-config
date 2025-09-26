@@ -20,15 +20,15 @@
     postgresql.enable = true;
     mariadb.enable = true;
 
-    # frigate.enable = true;
+    
 
     nginx.enable = true;
 
     gatus.enable = true;
     homepage.enable = true;
-    # backrest.enable = true;
+    
 
-    overseerr.enable = true;
+    
     tautulli.enable = true;
 
     # factorio.freight-forwarding.enable = true; # the factory must grow
@@ -46,24 +46,23 @@
 
     radicale.enable = true;
     miniflux.enable = true;
-    # calibre-web.enable = true;
+    
     rss-bridge.enable = true;
-    # paperless.enable = true;
+    
     rxresume.enable = true;
-    # invidious.enable = true;
+    
     thelounge.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
-    # vikunja.enable = true;
+    
 
     # monitoring
     victoriametrics.enable = true;
     grafana.enable = true;
-    nextdns-exporter.enable = true;
     unpoller.enable = true;
 
     hs110-exporter.enable = true;
-    # afterlogic.enable=true;
+    
     firefly-iii.enable = true;
     rapt2mqtt.enable = true;
     perplexica.enable = true;

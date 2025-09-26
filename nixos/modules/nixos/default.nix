@@ -5,9 +5,7 @@ with lib;
     ./system
     ./programs
     ./services
-    ./de
     ./editor
-    ./hardware
     ./containers
     ./lib.nix
     ./security
