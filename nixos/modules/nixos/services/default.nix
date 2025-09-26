@@ -2,30 +2,20 @@
   imports = [
     ./monitoring.nix
     ./reboot-required-check.nix
-    ./cloudflare-dyndns
-    ./maddy
-    ./dnscrypt-proxy2
-    ./cockpit
     ./podman
-    ./traefik
     ./nfs
-    ./nix-serve
     ./glances
     ./syncthing
     ./restic
-    ./powerdns
-    ./adguardhome
     ./mosquitto
     ./zigbee2mqtt
     ./postgresql
-    ./blocky
     ./code-server
     ./grafana
     ./radicale
     ./node-red
     ./nginx
     ./miniflux
-    ./calibre-web
     ./rss-bridge
     ./paperless
     ./redis
@@ -34,7 +24,6 @@
     ./radarr
     ./sabnzbd
     ./minio
-    ./invidious
     ./thelounge
     ./victoriametrics
     ./unpoller
@@ -44,19 +33,14 @@
     ./mariadb
     ./code-server
     ./navidrome
-    ./vikunja
-    ./steam
     ./atuin
-    ./silverbullet
     ./tandoor
     ./open-webui
-    ./afterlogic
     ./ntfy-sh
     ./trilium
     ./seafile
     ./firefly-iii
     ./rapt2mqtt
-    ./perplexica
     ./technitium
     ./jellyfin
     ./minecraft-bedrock

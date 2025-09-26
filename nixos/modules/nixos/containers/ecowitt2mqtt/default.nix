@@ -94,16 +94,6 @@ in
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
     };
 
-    # homepage integration
-    # mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-    #   {
-    #     ${app} = {
-    #       icon = "${app}.svg";
-    #       href = "https://${url}";
-    #       description = description;
-    #     };
-    #   }
-    # ];
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [

@@ -166,23 +166,6 @@ in
     };
 
 
-
-    # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-          widget = {
-            type = "paperlessngx";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_PAPERLESS_API_KEY}}";
-          };
-        };
-      }
-    ];
-
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {

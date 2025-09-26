@@ -124,21 +124,6 @@ in
       };
     };
 
-    # homepage integration
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-          widget = {
-            type = "miniflux";
-            url = "https://${url}";
-            key = "{{HOMEPAGE_VAR_MINIFLUX_API_KEY}}";
-          };
-        };
-      }
-    ];
 
     # ensure postgresql setup
 

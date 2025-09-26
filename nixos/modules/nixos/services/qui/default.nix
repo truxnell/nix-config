@@ -90,19 +90,6 @@ in
 
     };
 
-
-
-    # homepage integration
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-          inherit description;
-        };
-      }
-    ];
-
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {

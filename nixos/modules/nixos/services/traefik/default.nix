@@ -201,20 +201,7 @@ in
         dynamicConfigFile = "/etc/traefik/config.yaml";
       };
 
-      mySystem.services.homepage.infrastructure = [
-        {
-          "Traefik  ${config.networking.hostName}" = {
-            icon = "traefik.png";
-            href = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}/dashboard/";
 
-            description = "Reverse Proxy";
-            widget = {
-              type = "traefik";
-              url = "https://traefik-${config.networking.hostName}.${config.mySystem.domain}";
-            };
-          };
-        }
-      ];
 
       mySystem.services.gatus.monitors = [{
 

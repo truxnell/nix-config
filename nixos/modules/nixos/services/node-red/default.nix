@@ -39,18 +39,6 @@ in
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
-    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${url}";
-
-          description = "Workflow automation";
-          container = "${app}";
-        };
-      }
-    ];
-
     mySystem.services.gatus.monitors = [{
 
       name = app;

@@ -50,7 +50,6 @@
       navidrome.enable = true;
       paperless.enable = true;
       redbot.enable = true;
-      silverbullet.enable = true;
       tandoor.enable = true;
       open-webui.enable = true;
       ntfy.enable = true;

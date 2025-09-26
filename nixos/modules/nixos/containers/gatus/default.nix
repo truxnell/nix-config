@@ -122,19 +122,5 @@ in
     };
 
 
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        "Gatus Internal" = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-          description = "Internal Infrastructure Monitoring";
-          container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-          };
-        };
-      }
-    ];
   };
 }

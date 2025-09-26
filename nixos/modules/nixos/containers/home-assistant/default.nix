@@ -60,16 +60,6 @@ in
 
 
 
-    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-          description = "Home automation";
-          container = "${app}";
-        };
-      }
-    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; user = "kah"; group = "kah"; mode = "750"; }];

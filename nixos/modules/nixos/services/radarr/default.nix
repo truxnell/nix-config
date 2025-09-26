@@ -84,22 +84,7 @@ in
     };
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        Radarr = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
 
-          description = "Movie management";
-          container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_RADARR__API_KEY}}";
-          };
-        };
-      }
-    ];
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [

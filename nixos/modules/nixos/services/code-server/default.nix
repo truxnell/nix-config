@@ -64,17 +64,6 @@ in
       };
     };
 
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        "code-${config.networking.hostName}" = {
-          icon = "vscode.svg";
-          href = "https://${url}";
-
-          description = "Code editor";
-          container = "${app}";
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = [{
 

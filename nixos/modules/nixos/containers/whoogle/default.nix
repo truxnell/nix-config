@@ -58,17 +58,6 @@ in
     };
 
 
-    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
-      {
-        Whoogle = {
-          icon = "whooglesearch.png";
-          href = "https://${app}.${config.mySystem.domain}";
-
-          description = "Google frontend";
-          container = "${app}";
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = [{
 

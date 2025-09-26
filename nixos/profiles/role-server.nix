@@ -14,7 +14,6 @@ with lib;
     mySystem.services.monitoring.enable = true;
     mySystem.services.rebootRequiredCheck.enable = true;
     mySystem.security.wheelNeedsSudoPassword = false;
-    mySystem.services.cockpit.enable = true;
     mySystem.system.motd.enable = true;
     mySystem.services.gatus.monitors = [{
       name = config.networking.hostName;

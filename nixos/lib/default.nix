@@ -26,7 +26,6 @@ rec {
 
       addTraefikLabels = if (builtins.hasAttr "container" options) && (builtins.hasAttr "addTraefikLabels" options.container) then options.container.addTraefikLabels else true;
       addToHomepage = lib.attrsets.attrByPath [ "homepage" "enable" ] true options;
-      homepageIcon = if (builtins.hasAttr "homepage" options) && (builtins.hasAttr "icon" options.homepage) then options.homepage.icon else "${options.app}.svg";
       subdomain = existsOrDefault "subdomainOverride" options options.app;
       host = existsOrDefault "host" options "${subdomain}.${options.domain}";
       # nix doesnt have an exhausive list of options for oci
@@ -70,17 +69,6 @@ rec {
       systemd.tmpfiles.rules = lib.optionals (lib.attrsets.hasAttrByPath [ "persistence" "folder" ] options) [ "d ${options.persistence.folder} 0750 ${user} ${group} -" ]
       ;
 
-      # built a entry for homepage
-      mySystem.services.homepage.${options.homepage.category} = mkIf addToHomepage [
-        {
-          ${options.app} = {
-            icon = homepageIcon;
-            href = "https://${ host }";
-            inherit host;
-            inherit (options) description;
-          };
-        }
-      ];
 
     }
 

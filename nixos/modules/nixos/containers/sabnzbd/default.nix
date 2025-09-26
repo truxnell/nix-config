@@ -50,21 +50,6 @@ in
     };
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        Sabnzbd = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-          description = "Usenet Downloader";
-          container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_SABNZBD__API_KEY}}";
-          };
-        };
-      }
-    ];
 
     environment.persistence."${config.mySystem.system.impermanence.persistPath}" = lib.mkIf config.mySystem.system.impermanence.enable {
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];

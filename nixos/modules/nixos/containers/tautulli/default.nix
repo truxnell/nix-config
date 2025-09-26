@@ -50,17 +50,6 @@ in
       directories = [{ directory = appFolder; inherit user; inherit group; mode = "750"; }];
     };
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        Tautulli = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-
-          description = "Plex Monitoring & Stats";
-          container = "${app}";
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = [{
 

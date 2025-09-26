@@ -86,22 +86,6 @@ in
     };
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        Qbittorrent = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-
-          description = "Torrent Downloader";
-          container = "${app}";
-          widget = {
-            type = "${app}";
-            url = "https://${app}.${config.mySystem.domain}";
-          };
-        };
-      }
-    ];
-
     mySystem.services.gatus.monitors = [{
 
       name = app;

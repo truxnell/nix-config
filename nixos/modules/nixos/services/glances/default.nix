@@ -80,15 +80,5 @@ with lib;
       conditions = [ "[CONNECTED] == true" "[STATUS] == 200" "[RESPONSE_TIME] < 1500" ];
     }];
 
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        "Glances ${config.networking.hostName}" = {
-          icon = "${app}.svg";
-          href = "http://${config.networking.hostName}.${config.mySystem.internalDomain}:61208";
-          description = "System Monitoring";
-          container = "Infrastructure";
-        };
-      }
-    ];
   };
 }

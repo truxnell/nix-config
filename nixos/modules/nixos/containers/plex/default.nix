@@ -63,22 +63,6 @@ in
 
 
 
-    mySystem.services.homepage.media = mkIf cfg.addToHomepage [
-      {
-        Plex = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-
-          description = "Media streaming service";
-          container = "${app}";
-          widget = {
-            type = "tautulli";
-            url = "https://tautulli.${config.mySystem.domain}";
-            key = "{{HOMEPAGE_VAR_TAUTULLI__API_KEY}}";
-          };
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = [{
 

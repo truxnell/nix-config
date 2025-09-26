@@ -206,16 +206,6 @@ in
     };
 
 
-    mySystem.services.homepage.home = mkIf cfg.addToHomepage [
-      {
-        Searxng = {
-          icon = "${app}.png";
-          href = "https://${app}.${config.mySystem.domain}";
-          ping = "https://${app}.${config.mySystem.domain}";
-          description = "Private meta search engine";
-        };
-      }
-    ];
 
     mySystem.services.gatus.monitors = mkIf config.mySystem.services.gatus.enable [{
 
