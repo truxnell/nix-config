@@ -108,24 +108,5 @@
           };
         };
 
-      # deploy-rs configuration
-      deploy = {
-        nodes = {
-          daedalus = {
-            hostname = "daedalus"; # or IP
-            profiles.system = {
-              user = "root";
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.daedalus;
-            };
-          };
-          shodan = {
-            hostname = "shodan"; # or IP
-            profiles.system = {
-              user = "root";
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.shodan;
-            };
-          };
-        };
-      };
     };
 }
