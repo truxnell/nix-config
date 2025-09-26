@@ -83,16 +83,7 @@ in
     };
 
 
-    mySystem.services.homepage.infrastructure = mkIf cfg.addToHomepage [
-      {
-        ${app} = {
-          icon = "${app}.svg";
-          href = "https://${app}.${config.mySystem.domain}";
-          description = "Zigbee bridge to MQTT";
-          container = "${app}";
-        };
-      }
-    ];
+
 
     mySystem.services.gatus.monitors = [{
 
