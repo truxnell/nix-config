@@ -110,14 +110,14 @@ in
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
-        name = app;
+        name = "${app}-${instance}";
         group = "${category}";
-        url = "https://${url}";
+        url = "udp://${config.networking.hostName}.${config.mySystem.internalDomain}:${builtins.toString port}";
         interval = "1m";
+        alerts = [ { type = "pushover"; } ];
         conditions = [
           "[CONNECTED] == true"
-          "[STATUS] == 200"
-          "[RESPONSE_TIME] < 50"
+          "[RESPONSE_TIME] < 1000"
         ];
       }
     ];
