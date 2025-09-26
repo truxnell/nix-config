@@ -48,22 +48,7 @@ in
 
     services.postgresql = {
       enable = true;
-      identMap = ''
-        # ArbitraryMapName systemUser DBUser
-        superuser_map      root      postgres
-        superuser_map      postgres  postgres
-        # Let other names login as themselves
-        superuser_map      /^(.*)$   \1
-        superuser_map      root      rxresume
-      '';
-      authentication = ''
-        #type database  DBuser  auth-method optional_ident_map
-        local sameuser  all     peer        map=
-        local   replication     postgres                                trust
-        local   all             postgres                                peer
-        local rxresume  root    peer
-      '';
-      settings = {
+        settings = {
         max_connections = 2000;
         random_page_cost = 1.1;
         shared_buffers = "6GB";

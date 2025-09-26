@@ -42,7 +42,7 @@ let
     {
       name = "zigbee";
       group = "servers";
-      url = "icmp://espressif-.${config.mySystem.internalDomain}";
+      url = "icmp://espressif.${config.mySystem.internalDomain}";
       interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
@@ -50,7 +50,7 @@ let
     {
       name = "brewpi fridge";
       group = "servers";
-      url = "icmp://ESP-7DE997-.${config.mySystem.internalDomain}";
+      url = "icmp://ESP-7DE997.${config.mySystem.internalDomain}";
       interval = "1m";
       alerts = [{ type = "pushover"; }];
       conditions = [ "[CONNECTED] == true" ];
