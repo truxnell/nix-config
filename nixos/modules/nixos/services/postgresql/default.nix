@@ -65,9 +65,13 @@ in
         superuser_map      root      rxresume
       '';
       authentication = ''
-        #type database  DBuser  auth-method optional_ident_map
-        local sameuser  all     peer        map=superuser_map
-        local rxresume  root    peer
+
+
+
+        #type database  DBuser     auth-method optional_ident_map
+        local all       postgres   peer        map=superuser_map
+        local sameuser  all        peer        map=superuser_map
+        local rxresume  root       peer
       '';
       settings = {
         random_page_cost = 1.1;
