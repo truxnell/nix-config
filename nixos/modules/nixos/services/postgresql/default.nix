@@ -70,53 +70,28 @@ in
         local rxresume  root    peer
       '';
       settings = {
-        max_connections = 2000;
         random_page_cost = 1.1;
         shared_buffers = "6GB";
-        max_wal_senders = 3;
-        wal_level = "replica";
       };
     };
 
-    # enable backups
-    systemd.services.postgresql-backup = {
-      description = "PostgreSQL base backup";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "postgres";
-        Group = "postgres";
-        ExecStart = pkgs.writeScript "pg-backup" ''
-          #!${pkgs.bash}/bin/bash
-          set -euo pipefail
+    services.restic.backups = mkIf cfg.backup (
+      config.lib.mySystem.mkRestic {
+        inherit app;
+        user="postgres";
+        paths = [ appFolder ];
+        inherit appFolder;
+      }
+    );
 
-          # Create compressed backup
-          ${pkgs.postgresql}/bin/pg_basebackup \
-            -D ${config.mySystem.nasFolder}/backups/postgres/basebackup-${config.networking.hostName}-$(date +%Y%m%d-%H%M%S) \
-            -Ft -z -P -v
+    systemd.services.restic-backups-postgresql-local.serviceConfig.ExecStart = mkForce
+      (pkgs.writeShellScript "restic-backups-postgresql-local-ExecStart" ''
+        set -o pipefail
+        ${config.services.postgresql.package}/bin/pg_dumpall -U postgres \
+          | ${pkgs.restic}/bin/restic backup --stdin --stdin-filename postgres.sql
+      '');
 
-        '';
-      };
-    };
-
-    systemd.timers.postgresql-backup = {
-      description = "Daily PostgreSQL backup";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "daily";
-        Persistent = true;
-      };
-    };
-
-    services.prometheus.exporters.postgres = {
-      enable = true;
-    };
-
-    ### firewall config
-
-    # networking.firewall = mkIf cfg.openFirewall {
-    #   allowedTCPPorts = [ port ];
-    #   allowedUDPPorts = [ port ];
-    # };
+    
 
   };
 }

@@ -62,6 +62,7 @@ with lib;
           RandomizedDelaySec = "1h";
         };
         pruneOpts = [
+          "--keep-last 3"
           "--keep-daily 7"
           "--keep-weekly 5"
           "--keep-monthly 12"
