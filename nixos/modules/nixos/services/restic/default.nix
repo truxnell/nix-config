@@ -115,22 +115,6 @@ in
         timerConfig.Persistent = "true";
       };
 
-      # recreate snapshot and mount, ready for backup
-      # I used mkdir -p over a nix tmpfile, as mkdir -p exits cleanly
-      # if the folder already exists, and tmpfiles complain
-      # if the folder exists and is already mounted.
-      services.restic_nightly_snapshot_destroy = {
-        description = "Nightly ZFS snapshot for Restic";
-        path = with pkgs; [
-          zfs
-          busybox
-        ];
-        serviceConfig.Type = "simple";
-        script = ''
-          umount ${cfg.mountPath} || true && \
-          zfs destroy rpool/local/root@restic_nightly_snap || true
-        '';
-      };
 
     };
   };
