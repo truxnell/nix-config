@@ -9,7 +9,7 @@ let
   app = "rxresume";
   category = "services";
   description = "Resume builder";
-  image = "ghcr.io/amruthpillai/reactive-resume:v4.4.6@sha256:53ce201e15d79535494d278fd13658f57d0331f2b5eba12163bf38b879366c65";
+  image = "ghcr.io/amruthpillai/reactive-resume:v4.5.0@sha256:46999abe24b0d41fb8b3c32e479f06035fa755db8c3243d03335e74fa6a2e74f";
   user = "kah"; # string
   group = "kah"; # string
   port = 3000; # int
