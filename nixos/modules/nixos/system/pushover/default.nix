@@ -13,7 +13,7 @@ in
   options.mySystem.system.systemd.pushover-alerts.enable =
     mkEnableOption "Pushover alers for systemd failures"
     // {
-      default = true;
+      default = false;
     };
   options.systemd.services = mkOption {
     type =

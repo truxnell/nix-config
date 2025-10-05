@@ -15,6 +15,7 @@ let
   port = 8428; # int
   portAM = 9093; # int
   portVAM = 8880; # int
+  alertmanagerNtfyPort = 8087;
 
   appFolder = "/var/lib/private/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -112,49 +113,12 @@ in
       webExternalUrl = "https://alertmanager.${config.networking.domain}";
       configuration = {
         route = {
-          receiver = "pushover";
-          group_by = [
-            "alertname"
-            "job"
-          ];
-          group_wait = "5m";
-          group_interval = "1m";
-          repeat_interval = "24h";
+          receiver = "ntfy";
         };
         receivers = [
           {
-            name = "pushover";
-            pushover_configs = [
-              {
-                user_key = "$PUSHOVER_USER_KEY";
-                token = "$PUSHOVER_TOKEN";
-                priority = ''{{ if eq .Status " firing " }}1{{ else }}0{{ end }}'';
-                title = ''{{ .CommonLabels.alertname }} [{{ .Status | toUpper }}{{ if eq .Status " firing " }}:{{ .Alerts.Firing | len }}{{ end }}]'';
-                message = ''
-                  {{- range .Alerts }}
-                    {{- if ne .Annotations.description "" }}
-                      {{ .Annotations.description }}
-                    {{- else if ne .Annotations.summary "" }}
-                      {{ .Annotations.summary }}
-                    {{- else if ne .Annotations.message "" }}
-                      {{ .Annotations.message }}
-                    {{- else }}
-                      Alert description not available
-                    {{- end }}
-                    {{- if gt (len .Labels.SortedPairs) 0 }}
-                      <small>
-                      {{- range .Labels.SortedPairs }}
-                        <b>{{ .Name }}:</b> {{ .Value }}
-                      {{- end }}
-                      </small>
-                    {{- end }}
-                  {{- end }}
-                '';
-                send_resolved = true;
-                html = true;
-
-              }
-            ];
+              name = "ntfy";
+              webhook_configs = [ { url = "http://127.0.0.1:${toString alertmanagerNtfyPort}/hook"; } ];
           }
           {
             name = "default";
@@ -162,6 +126,36 @@ in
         ];
       };
     };
+
+  services.prometheus.alertmanager-ntfy = {
+    enable = true;
+    settings = {
+      http.addr = "127.0.0.1:${toString alertmanagerNtfyPort}";
+      ntfy = {
+        baseurl = "https://ntfy.${config.networking.domain}";
+        notification = {
+          topic = "alertmanager";
+          priority = ''
+            status == "firing" ? "high" : "default"
+          '';
+          tags = [
+            {
+              tag = "+1";
+              condition = ''status == "resolved"'';
+            }
+            {
+              tag = "rotating_light";
+              condition = ''status == "firing"'';
+            }
+          ];
+          templates = {
+            title = ''{{ if eq .Status "resolved" }}Resolved: {{ end }}{{ index .Annotations "summary" }}'';
+            description = ''{{ index .Annotations "description" }}'';
+          };
+        };
+      };
+    };
+  };
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
@@ -226,7 +220,7 @@ in
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      }
+      }http://localhost:9100/metrics
     );
 
     # services.postgresqlBackup = {
