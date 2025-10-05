@@ -220,7 +220,7 @@ in
         inherit app user;
         paths = [ appFolder ];
         inherit appFolder;
-      }http://localhost:9100/metrics
+      }
     );
 
     # services.postgresqlBackup = {
