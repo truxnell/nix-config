@@ -294,13 +294,20 @@ lib.mapAttrsToList
     ###############################################################################
     # 0. Exporter health
     ###############################################################################
-    smartctl_exporter_err = {
-      condition = ''smartctl_device_smartctl_exit_status > 0'';
-      time      = "10m";
-      description = "smartctl exit non-zero on {{$labels.device}} – disk may be sleeping or unreachable";
-      labels = {
-        severity = "warning";
-      };
+    # Bit 3 (value 8) set → "DISK FAILING"
+    smart_exit_disk_failing = {
+      condition = ''smartctl_device_smartctl_exit_status % 16 >= 8'';
+      time      = "2m";
+      description = "smartctl bit-3 set on {{$labels.device}} – DISK FAILING";
+      labels = { severity = "critical"; };
+    };
+
+    # Bit 4 (value 16) set → pre-fail attribute below threshold
+    smart_exit_prefail = {
+      condition = ''smartctl_device_smartctl_exit_status % 32 >= 16'';
+      time      = "2m";
+      description = "smartctl bit-4 set on {{$labels.device}} – pre-fail attr below threshold";
+      labels = { severity = "warning"; };
     };
 
     ###############################################################################
@@ -339,74 +346,68 @@ lib.mapAttrsToList
     ###############################################################################
     # 3. Reallocated / Pending / Uncorrectable sectors
     ###############################################################################
+    # Reallocated is a lifetime counter → look for *new* ones this hour
     smart_realloc_warn = {
-      condition = ''smartctl_device_attribute{attribute_name="Reallocated_Sector_Ct",attribute_value_type="raw"} > 0'';
-      time      = "10m";
-      description = "Reallocated sectors > 0 on {{$labels.device}} – monitor closely";
-      labels = {
-        severity = "warning";
-      };
+      condition = ''increase(smartctl_device_attribute{attribute_name="Reallocated_Sector_Ct",attribute_value_type="raw"}[1h]) > 0'';
+      time      = "0m";
+      description = "New reallocated sectors on {{$labels.device}} – monitor closely";
+      labels = { severity = "warning"; };
     };
 
     smart_realloc_crit = {
-      condition = ''smartctl_device_attribute{attribute_name="Reallocated_Sector_Ct",attribute_value_type="raw"} >= 10'';
-      time      = "10m";
-      description = "Reallocated sectors ≥ 10 on {{$labels.device}} – replace disk soon";
-      labels = {
-        severity = "critical";
-      };
+      condition = ''increase(smartctl_device_attribute{attribute_name="Reallocated_Sector_Ct",attribute_value_type="raw"}[1h]) >= 5'';
+      time      = "0m";
+      description = "≥5 new reallocated sectors/hour on {{$labels.device}} – replace disk soon";
+      labels = { severity = "critical"; };
     };
 
+    # Pending is already an absolute gauge – keep static threshold
     smart_pending = {
       condition = ''smartctl_device_attribute{attribute_name="Current_Pending_Sector",attribute_value_type="raw"} > 0'';
       time      = "2m";
       description = "Pending sectors on {{$labels.device}} – data at risk, backup & replace";
-      labels = {
-        severity = "critical";
-      };
+      labels = { severity = "critical"; };
     };
 
+    # Offline_Uncorrectable is a lifetime counter → use increase
     smart_offline_uncorr = {
-      condition = ''smartctl_device_attribute{attribute_name="Offline_Uncorrectable",attribute_value_type="raw"} > 0'';
-      time      = "2m";
-      description = "Offline uncorrectable errors on {{$labels.device}} – replace disk";
-      labels = {
-        severity = "critical";
-      };
+      condition = ''increase(smartctl_device_attribute{attribute_name="Offline_Uncorrectable",attribute_value_type="raw"}[1h]) > 0'';
+      time      = "0m";
+      description = "New offline uncorrectable errors on {{$labels.device}} – replace disk";
+      labels = { severity = "critical"; };
     };
 
+    # Reported_Uncorrect is a lifetime counter → use increase
     smart_reported_uncorr = {
-      condition = ''smartctl_device_attribute{attribute_name="Reported_Uncorrect",attribute_value_type="raw"} > 0'';
-      time      = "2m";
-      description = "Reported uncorrectable errors on {{$labels.device}} – replace disk";
-      labels = {
-        severity = "critical";
-      };
+      condition = ''increase(smartctl_device_attribute{attribute_name="Reported_Uncorrect",attribute_value_type="raw"}[1h]) > 0'';
+      time      = "0m";
+      description = "New reported uncorrectable errors on {{$labels.device}} – replace disk";
+      labels = { severity = "critical"; };
     };
 
     ###############################################################################
     # 4. Mechanical / spin retry
     ###############################################################################
+    # Spin_Retry_Count is a lifetime counter → use increase
     smart_spin_retry = {
-      condition = ''smartctl_device_attribute{attribute_name="Spin_Retry_Count",attribute_value_type="raw"} > 0'';
-      time      = "2m";
-      description = "Spin retry events on {{$labels.device}} – failure likely, replace disk";
-      labels = {
-        severity = "critical";
-      };
+      condition = ''increase(smartctl_device_attribute{attribute_name="Spin_Retry_Count",attribute_value_type="raw"}[1h]) > 0'';
+      time      = "0m";
+      description = "New spin-retry events on {{$labels.device}} – replace disk";
+      labels = { severity = "critical"; };
     };
-
+    
     ###############################################################################
     # 5. Cable / port issues
     ###############################################################################
-    smart_crc_warn = {
-      condition = ''smartctl_device_attribute{attribute_name="UDMA_CRC_Error_Count",attribute_value_type="raw"} >= 50'';
-      time      = "10m";
-      description = "High UDMA CRC errors on {{$labels.device}} – check cable/port/power";
+    smart_crc_increase = {
+      condition = ''increase(smartctl_device_attribute{attribute_name="UDMA_CRC_Error_Count",attribute_value_type="raw"}[10m]) > 0'';
+      time      = "0m";
+      description = "Fresh UDMA CRC errors on {{$labels.device}} – check cable/port/power";
       labels = {
         severity = "warning";
       };
     };
+
 
 
     # ###############################################################################
