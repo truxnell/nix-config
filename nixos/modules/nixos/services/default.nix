@@ -47,5 +47,6 @@
     ./jellyseer
     ./glance
     ./qui
+    ./satisfactory
   ];
 }
