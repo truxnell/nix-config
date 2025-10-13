@@ -13,8 +13,7 @@ let
   user = "1000"; # string
   group = "1000"; # string
   gamePort = 7777; # int - Game port (UDP)
-  queryPort = 15777; # int - Query port (UDP) 
-  beaconPort = 15000; # int - Beacon port (UDP)
+  queryPort = 8888; # int - Query port (UDP) 
   appFolder = "/var/lib/${app}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
@@ -63,7 +62,7 @@ in
     maxPlayers = mkOption {
       type = lib.types.int;
       description = "Maximum number of players";
-      default = 4;
+      default = 10;
     };
     adminPassword = mkOption {
       type = lib.types.str;
@@ -111,33 +110,19 @@ in
       ];
       environment = {
         # Server Configuration
-        SERVERNAME = cfg.serverName;
         MAXPLAYERS = builtins.toString cfg.maxPlayers;
         PGID = group;
         PUID = user;
-        STEAMBETA = "false";
-        
-        # Network Configuration  
-        SERVERPORT = builtins.toString gamePort;
-        SERVERQUERYPORT = builtins.toString queryPort;
-        SERVERBEGONPORT = builtins.toString beaconPort;
-        
+        STEAMBETA = "false";        
         # Game Settings
-        AUTOPAUSE = if cfg.autoPause then "true" else "false";
-        AUTOSAVEINTERVAL = builtins.toString cfg.autoSaveInterval;
-        AUTOSAVENUM = "5";
         
-        # Performance
-        TIMEOUT = "30";
-        SKIPUPDATE = "false";
         
-        # Admin
-        ADMINPASSWORD = cfg.adminPassword;
       };
       # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       ports = [
         "${builtins.toString gamePort}:${builtins.toString gamePort}/udp"    # Game port
-        "${builtins.toString queryPort}:${builtins.toString queryPort}/udp"  # Query port  
+        "${builtins.toString gamePort}:${builtins.toString gamePort}/tcp"    # Game port
+        "${builtins.toString queryPort}:${builtins.toString queryPort}/tcp"  # Query port  
         "${builtins.toString beaconPort}:${builtins.toString beaconPort}/udp" # Beacon port
       ];
       extraOptions = [
@@ -179,11 +164,9 @@ in
     networking.firewall = mkIf cfg.openFirewall {
       allowedUDPPorts = [ 
         gamePort     # 7777 - Game traffic
-        queryPort    # 15777 - Server queries  
-        beaconPort   # 15000 - Server beacon
       ];
       # Optional: Allow TCP port 8080 for web interface if exposed
-      # allowedTCPPorts = [ 8080 ];
+      allowedTCPPorts = [ gamePort queryPort ];
     };
 
     ### backups
