@@ -114,6 +114,7 @@ in
       configuration = {
         route = {
           receiver = "ntfy";
+          repeat_interval = "120000h";
         };
         receivers = [
           {

@@ -123,7 +123,6 @@ in
         "${builtins.toString gamePort}:${builtins.toString gamePort}/udp"    # Game port
         "${builtins.toString gamePort}:${builtins.toString gamePort}/tcp"    # Game port
         "${builtins.toString queryPort}:${builtins.toString queryPort}/tcp"  # Query port  
-        "${builtins.toString beaconPort}:${builtins.toString beaconPort}/udp" # Beacon port
       ];
       extraOptions = [
         "--pull=always"
