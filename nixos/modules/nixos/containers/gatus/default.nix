@@ -7,7 +7,7 @@
 with lib;
 let
   app = "gatus";
-  image = "ghcr.io/twin/gatus:v5.28.0@sha256:99d1953e9f48ca7fd7feb4417f88379bfc63d6bb7ee1f87d775e01e905f94fe6";
+  image = "ghcr.io/twin/gatus:v5.29.0@sha256:b4afbcaf1cdfcda0b87e732914f101b0e2fab71485ae5d691ceb7b97d021b642";
   user = "kah"; # string
   group = "kah"; # string
   port = 8080; # int
