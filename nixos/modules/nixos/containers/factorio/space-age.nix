@@ -7,7 +7,7 @@ with lib;
 let
   app = "factorio";
   instance = "space-age";
-  image = "factoriotools/factorio:stable";
+  image = "docker.io/factoriotools/factorio:stable";
   user = "845"; # string
   group = "845"; # string
   port = 34204; # int

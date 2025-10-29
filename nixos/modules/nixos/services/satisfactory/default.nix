@@ -9,7 +9,7 @@ let
   app = "satisfactory";
   category = "services";
   description = "Satisfactory Dedicated Server";
-  image = "wolveix/satisfactory-server:latest";
+  image = "docker.io/wolveix/satisfactory-server:latest";
   user = "1000"; # string
   group = "1000"; # string
   gamePort = 7777; # int - Game port (UDP)

@@ -9,7 +9,7 @@ let
   app = "redbot";
   category = "services";
   description = "Discord bot";
-  image = "phasecorex/red-discordbot:core-audio";
+  image = "docker.io/phasecorex/red-discordbot:core-audio";
   user = "568"; # string
   group = "568"; # string
   # port = ; #int
