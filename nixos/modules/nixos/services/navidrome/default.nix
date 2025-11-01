@@ -22,7 +22,7 @@ in
   options.mySystem.${category}.${app} = {
     enable = mkEnableOption "${app}";
     addToHomepage = mkEnableOption "Add ${app} to homepage" // {
-      default = true;
+      deault = true;
     };
     monitor = mkOption {
       type = lib.types.bool;
@@ -54,13 +54,13 @@ in
 
   config = mkIf cfg.enable {
 
-    ## Secrets
-    # sops.secrets."${category}/${app}/env" = {
-    #   sopsFile = ./secrets.sops.yaml;
-    #   owner = user;
-    #   group = group;
-    #   restartUnits = [ "${app}.service" ];
-    # };
+    # Secrets
+    sops.secrets."${category}/${app}/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = user;
+      group = group;
+      restartUnits = [ "${app}.service" ];
+    };
 
     users.users.truxnell.extraGroups = [ group ];
 
@@ -93,11 +93,9 @@ in
         AutoImportPlaylists = false;
         EnableSharing = true;
         # Scanner.PurgeMissing = "always";
-        # "LastFM.Enabled" = true;
-        # "LastFM.ApiKey" = config.sops.secrets.last-fm-key.path;
-        # "LastFM.Secret" = config.sops.secrets.last-fm-secret.path;
         ListenBrainz.BaseURL="https://multi-scrobbler.trux.dev/1/";
       };
+      environmentFile=config.sops.secrets."${category}/${app}/env".path;
     };
 
     ### gatus integration
