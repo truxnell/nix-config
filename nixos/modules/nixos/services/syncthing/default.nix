@@ -117,7 +117,7 @@ in
         devices = {
           # TODO secret lul
           "Nat Pixel 6Pro" = {
-            id = "M7LCNZI-CCAFOXA-LD55CRE-O7DXKBB-H3MXOLV-2LUQBRC-VAFOCJO-A5DNJQW";
+            id = "NUDB3DX-DK3WAV3-NLNOTAF-PB4MG6O-BC53XNB-MPYBPLT-NAT3KRU-EUTJLQW";
           };
           "daedalus" = {
             id = "HJOBCTW-NZHZLUU-HOUBWYC-R3MX3PL-EI4R6PN-74RN7EW-UBEUY7H-TNMEPQB";
@@ -170,6 +170,22 @@ in
           };
           "Mackup" = {
             path = "${cfg.syncPath}/Mackup";
+            devices = [
+              "daedalus"
+              "citadel-bazzite"
+              "rickenbacker"
+            ];
+          };
+          "Projects" = {
+            path = "${cfg.syncPath}/project";
+            devices = [
+              "daedalus"
+              "citadel-bazzite"
+              "rickenbacker"
+            ];
+          };
+          "obsidian" = {
+            path = "${cfg.syncPath}/obsidian";
             devices = [
               "daedalus"
               "citadel-bazzite"
