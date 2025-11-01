@@ -95,7 +95,7 @@ in
         AutoImportPlaylists = false;
         EnableSharing = true;
         # Scanner.PurgeMissing = "always";
-        ListenBrainz.BaseURL="https://multi-scrobbler.trux.dev/1/";
+        "ListenBrainz.BaseURL"="https://multi-scrobbler.trux.dev/1/";
       };
       environmentFile=config.sops.secrets."${category}/${app}/env".path;
     };
