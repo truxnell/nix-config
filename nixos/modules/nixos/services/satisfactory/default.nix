@@ -143,21 +143,6 @@ in
       }
     ];
 
-    ### Ingress - Web interface for server management
-    services.nginx.virtualHosts.${url} = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:8080"; # Satisfactory web interface
-        extraConfig = ''
-          resolver 10.88.0.1;
-          proxy_set_header Host $host;
-          proxy_set_header X-Real-IP $remote_addr;
-          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-          proxy_set_header X-Forwarded-Proto $scheme;
-        '';
-      };
-    };
 
     ### firewall config
     networking.firewall = mkIf cfg.openFirewall {
@@ -183,47 +168,6 @@ in
       }
     );
 
-    # Add backup script for world saves
-    systemd.services."${app}-backup-saves" = mkIf cfg.backup {
-      description = "Backup Satisfactory world saves";
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-      };
-      script = ''
-        # Stop the container before backup to ensure save consistency
-        ${config.virtualisation.oci-containers.backend} stop ${app} || true
-        sleep 5
-        
-        # Create timestamped backup
-        timestamp=$(date +%Y%m%d_%H%M%S)
-        backup_dir="${appFolder}/backups"
-        mkdir -p "$backup_dir"
-        
-        # Backup game saves
-        if [ -d "${appFolder}/gamefiles" ]; then
-          tar -czf "$backup_dir/satisfactory_saves_$timestamp.tar.gz" -C "${appFolder}" gamefiles/
-          echo "✅ Created backup: satisfactory_saves_$timestamp.tar.gz"
-          
-          # Keep only last 7 backups
-          cd "$backup_dir" && ls -t satisfactory_saves_*.tar.gz | tail -n +8 | xargs -r rm
-        fi
-        
-        # Restart the container
-        ${config.virtualisation.oci-containers.backend} start ${app}
-      '';
-    };
-
-    # Schedule regular save backups (in addition to restic)
-    systemd.timers."${app}-backup-saves" = mkIf cfg.backup {
-      description = "Timer for Satisfactory save backups";
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnCalendar = "*-*-* 04:00:00"; # Daily at 4 AM
-        Persistent = true;
-        RandomizedDelaySec = "15m";
-      };
-    };
 
   };
 }

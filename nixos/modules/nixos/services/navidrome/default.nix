@@ -96,6 +96,7 @@ in
         # "LastFM.Enabled" = true;
         # "LastFM.ApiKey" = config.sops.secrets.last-fm-key.path;
         # "LastFM.Secret" = config.sops.secrets.last-fm-secret.path;
+        ListenBrainz.BaseURL="https://multi-scrobbler.trux.dev/1/";
       };
     };
 
