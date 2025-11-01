@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 with lib;
@@ -85,6 +86,7 @@ in
     ## service
     services.navidrome = {
       enable = true;
+      package=pkgs.unstable.navidrome;
       settings = {
         Address = "0.0.0.0";
         Port = 4533;
