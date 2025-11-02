@@ -7,13 +7,13 @@ Where possible ill use the `mySystem` option list to configure defaults via thes
 
 ## Global
 
-Default global settings that will apply to every device. Things like locale, timezone, etc that wont change machine to machine
-
-## Hardware
-
-Hardware settings so I can apply per set of machines as standard- i.e. all Raspi4's may benefit from a specific set of additions/hardware overlays.
+Default global settings that will apply to every device. Things like locale, timezone, boot configuration, and hardware platform settings that apply to all machines.
 
 ## Role
 
 The role the machine have. Machines may have multiple roles
 i.e. servers will want to have bare minimal, remote build settings, where as main desktop/laptop will have full blow GUIs.
+
+Current role profiles:
+- `role-server.nix` - Headless server configuration with monitoring, minimal packages, etc.
+- `role-dev.nix` - Development tools and utilities

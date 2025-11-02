@@ -23,14 +23,39 @@ with lib;
 
   config = {
 
-    boot.tmp.cleanOnBoot = true;
+    boot = {
+      tmp.cleanOnBoot = true;
+
+      initrd.availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+        "usb_storage"
+        "sd_mod"
+      ];
+      kernelModules = [ ];
+      extraModulePackages = [ ];
+
+      # for managing/mounting ntfs
+      supportedFilesystems = [ "ntfs" ];
+
+      loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+        # why not ensure we can memtest workstatons easily?
+        grub.memtest86.enable = true;
+      };
+    };
+
+    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
     mySystem = {
 
       # basics for all devices
       time.timeZone = "Australia/Melbourne";
       security.increaseWheelLoginLimits = true;
-      system.packages = [ pkgs.bat ];
+      system.packages = with pkgs; [ bat ntfs3g just ];
       domain = "trux.dev";
       internalDomain = "l.voltaicforge.com";
 
