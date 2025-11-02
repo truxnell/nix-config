@@ -53,14 +53,17 @@
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-tree);
 
       # Development shell with essential tools
-      devShells = forAllSystems (system:
+      devShells = forAllSystems (
+        system:
         let
           pkgs = nixpkgs.legacyPackages."${system}";
-          python-with-packages = pkgs.python3.withPackages (ps: with ps; [
-            mkdocs-material
-            mkdocs-minify
-            pygments
-          ]);
+          python-with-packages = pkgs.python3.withPackages (
+            ps: with ps; [
+              mkdocs-material
+              mkdocs-minify
+              pygments
+            ]
+          );
         in
         {
           default = pkgs.mkShell {
@@ -73,21 +76,22 @@
               statix
               nixfmt-rfc-style
               nil
-              
+
               # Development & linting
               pre-commit
               deadnix
-              
+
               # Deployment & operations
               deploy-rs.packages."${system}".default
               nvd
-              
+
               # Documentation
               python-with-packages
               mkdocs
+              just
             ];
           };
-          
+
           # Fly.io Vaultwarden deployment shell
           flyio-vaultwarden = pkgs.mkShell {
             buildInputs = with pkgs; [
@@ -96,7 +100,8 @@
               go-task
             ];
           };
-        });
+        }
+      );
 
       # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
@@ -156,18 +161,35 @@
           "daedalus" = mkNixosConfig {
             hostname = "daedalus";
             system = "x86_64-linux";
-            profileModules = [ ./nixos/profiles/role-server.nix ];
           };
 
           "shodan" = mkNixosConfig {
             hostname = "shodan";
             system = "x86_64-linux";
-            profileModules = [
-              ./nixos/profiles/role-server.nix
-              ./nixos/profiles/role-dev.nix
-            ];
           };
         };
+
+      # deploy-rs configuration for remote deployments
+      deploy = {
+        nodes = {
+          daedalus = {
+            hostname = "daedalus";
+            profiles.system = {
+              sshUser = "root";
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.daedalus;
+            };
+          };
+          shodan = {
+            hostname = "shodan";
+            profiles.system = {
+              sshUser = "root";
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.shodan;
+            };
+          };
+        };
+      };
 
     };
 }

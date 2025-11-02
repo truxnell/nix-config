@@ -127,53 +127,6 @@ After making changes, run tests in this order:
 **When:** When modifying `nixos/lib/default.nix`  
 **Duration:** 5-10 seconds
 
-### 7. Application Import Validation
-**Command:** 
-```bash
-# Verify all imports in services/default.nix point to existing files
-for import in $(grep -E "applications/[^/]+/[^/]+" nixos/modules/nixos/services/default.nix | sed 's|.*applications/||; s|/default.nix||; s|$||'); do
-  if [ ! -f "nixos/modules/applications/${import}/default.nix" ]; then
-    echo "ERROR: Missing ${import}"; exit 1
-  fi
-done
-```
-**When:** After moving or restructuring application modules  
-**Duration:** < 1 second
-
-### 8. Comprehensive Test Script
-**Command:** `./test-flake.sh`  
-**When:** Before committing, runs all fast tests  
-**Duration:** 30-60 seconds
-
-### 9. Nix Expression Tests
-**Command:** `nix eval --impure -f test-nix-expressions.nix`  
-**When:** When modifying flake structure or outputs  
-**Duration:** 5-10 seconds
-
-## Common Issues and Solutions
-
-### Circular Dependencies
-- **Symptom:** "infinite recursion" errors in flake check
-- **Cause:** Modules accessing `config` during option definition
-- **Solution:** Use `mkOption` with functions, avoid accessing config in option definitions
-
-### Missing Imports
-- **Symptom:** "option does not exist" errors
-- **Cause:** Application module not imported in `nixos/modules/nixos/services/default.nix` or `nixos/modules/nixos/containers/default.nix`
-- **Solution:** Add import path with explicit `/default.nix` suffix (e.g., `../../applications/media/jellyfin/default.nix`)
-
-### Import Path Errors
-- **Symptom:** "File does not exist" errors
-- **Cause:** Relative paths incorrect after restructuring
-- **Solution:** Always use explicit paths with `/default.nix` for directory imports
-
-### SOPS Secrets Missing
-- **Symptom:** Build failures referencing `.sops.yaml` files
-- **Cause:** Secrets not encrypted or missing keys
-- **Solution:** Ensure secrets are properly encrypted with correct machine keys
-
-## Code Style and Patterns
-
 ### Application Module Structure
 Each application in `nixos/modules/applications/` should:
 - Have a `default.nix` file (required for imports)
@@ -208,14 +161,6 @@ Each application in `nixos/modules/applications/` should:
 - GitHub Actions automatically runs `nix flake check` on PRs
 - Workflow: `.github/workflows/check-flakes.yaml`
 - Triggered on: PR opens, flake file changes, or lock file updates
-
-## Key Files to Monitor
-
-- `flake.nix` - Main flake definition, outputs, and host configurations
-- `nixos/modules/nixos/services/default.nix` - Service module imports
-- `nixos/modules/nixos/containers/default.nix` - Container module imports
-- `nixos/lib/default.nix` - Custom library functions
-- `nixos/hosts/*/default.nix` - Host-specific configurations
 
 ## Archive Management
 

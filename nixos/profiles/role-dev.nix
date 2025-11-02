@@ -6,8 +6,6 @@
 }:
 # Role for dev stations
 # Could be a workstatio or a headless server.
-
-with config;
 {
 
   environment.systemPackages = with pkgs; [
