@@ -1,5 +1,6 @@
 {
-
-  mySystem = import ./nixos;
-
+  imports = [
+    ./nixos
+    ./applications
+  ];
 }

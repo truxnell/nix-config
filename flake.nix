@@ -121,7 +121,7 @@
                 sops-nix.nixosModules.sops
                 impermanence.nixosModules.impermanence
                 ./nixos/global.nix
-                ./nixos/modules/nixos
+                ./nixos/modules
                 ./nixos/hosts/${hostname}
               ],
               profileModules ? [ ],

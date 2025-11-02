@@ -4,9 +4,9 @@ with lib;
   imports = [
     ./system
     ./programs
-    ./services
+    ./services/monitoring.nix
+    ./services/reboot-required-check.nix
     ./editor
-    ./containers
     ./lib.nix
     ./security
   ];
