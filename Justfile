@@ -113,3 +113,14 @@ pre-commit-update:
 # Run pre-commit on all files
 pre-commit-run:
     pre-commit run --all-files
+
+# Container lifecycle management
+dev-start:
+    podman run -d --rm \
+        -v /mnt/nas/backup/nix-config/:/workspace:Z \
+        -u 1000:1000 \
+        -p 2222:22 \
+        ghcr.io/xtruder/nix-devcontainer
+
+
+
