@@ -88,13 +88,23 @@ done
 - `0`: All tests passed
 - `1`: One or more tests failed
 
-### 5. Nix Expression Tests
+### 5. Flake Output Validation
 
 **Purpose**: Validate flake outputs and structure.
 
-**Command**:
+**Commands**:
 ```bash
-nix eval --impure -f test-nix-expressions.nix
+# Check all hosts are accessible
+nix eval --impure .#nixosConfigurations --apply 'x: builtins.attrNames x'
+
+# Check formatter is defined
+nix eval --impure .#formatter --apply 'x: builtins.hasAttr "x86_64-linux" x'
+
+# Check lib output exists
+nix eval --impure .#lib --apply 'x: builtins.hasAttr "myLib" x'
+
+# Check devShells are defined
+nix eval --impure .#devShells --apply 'x: builtins.hasAttr "x86_64-linux" x'
 ```
 
 **What it validates**:
@@ -105,7 +115,7 @@ nix eval --impure -f test-nix-expressions.nix
 
 **When to run**: When modifying flake structure or outputs.
 
-**Duration**: 5-10 seconds
+**Duration**: 5-10 seconds per check
 
 ### 6. Import Path Validation
 

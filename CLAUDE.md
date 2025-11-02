@@ -37,7 +37,8 @@ nixos/
 │   └── nixos/          # Core NixOS modules
 │       ├── services/   # Service module import registry (default.nix + special files)
 │       └── containers/ # Container module import registry (default.nix only)
-├── profiles/           # Reusable system profiles
+├── global.nix          # Base system configuration (includes global, server, and dev roles)
+├── global-secrets.sops.yaml # Global SOPS secrets
 ├── lib/                # Custom library functions
 └── overlays/           # Nix package overlays
 
@@ -90,9 +91,12 @@ After making changes, run tests in this order:
    ./test-flake.sh
    ```
 
-6. **Nix expression tests:**
+6. **Flake output validation:**
    ```bash
-   nix eval --impure -f test-nix-expressions.nix
+   # Validate hosts
+   nix eval --impure .#nixosConfigurations --apply 'x: builtins.attrNames x'
+   # Validate formatter
+   nix eval --impure .#formatter --apply 'x: builtins.hasAttr "x86_64-linux" x'
    ```
 
 ## Fast Tests Documentation

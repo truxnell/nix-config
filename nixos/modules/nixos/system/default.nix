@@ -11,5 +11,6 @@
     ./motd
     ./pushover
     ./autoupgrades
+    ./deploy-user.nix
   ];
 }

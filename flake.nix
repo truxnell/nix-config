@@ -6,10 +6,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Core tools
-    colmena.url = "github:zhaofengli/colmena";
-    cachix.url = "github:cachix/cachix";
     impermanence.url = "github:nix-community/impermanence";
-    nixos-hardware.url = "github:NixOS/nixos-hardware";
     nix-inspect.url = "github:bluskript/nix-inspect";
 
     # deploy-rs for remote deployment
@@ -18,14 +15,6 @@
     # Nixpkgs-following inputs
     sops-nix = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-vscode-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -131,7 +120,7 @@
               baseModules ? [
                 sops-nix.nixosModules.sops
                 impermanence.nixosModules.impermanence
-                ./nixos/profiles/global.nix
+                ./nixos/global.nix
                 ./nixos/modules/nixos
                 ./nixos/hosts/${hostname}
               ],
@@ -175,7 +164,7 @@
           daedalus = {
             hostname = "daedalus";
             profiles.system = {
-              sshUser = "root";
+              sshUser = "deploy";
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.daedalus;
             };
@@ -183,7 +172,7 @@
           shodan = {
             hostname = "shodan";
             profiles.system = {
-              sshUser = "root";
+              sshUser = "deploy";
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.shodan;
             };
