@@ -57,6 +57,8 @@
 
     hs110-exporter.enable = true;
 
+    forgejo.enable = true;
+
     firefly-iii.enable = true;
     rapt2mqtt.enable = true;
     technitium-dns-server.enable = true;

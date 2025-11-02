@@ -13,6 +13,7 @@ This is a NixOS homelab configuration repository using Nix Flakes. It manages:
 - Application modules organized by category (media, productivity, infrastructure, etc.)
 - System profiles and hardware configurations
 - Secrets management via SOPS
+- use standard nixos modules unless there is none or it isnt reliable, in that case a container is acceptable.
 
 ## Repository Structure
 
@@ -48,6 +49,8 @@ flake.nix               # Main flake definition
 ## When to Run Tests
 
 ### Automatic Test Execution
+
+Remember to run test as impure or run `git add .` on changes, nix only runs tracket files in a git.
 
 **Always run `nix flake check` when:**
 - Modifying `flake.nix`
