@@ -49,7 +49,7 @@
 
     in
     rec {
-      # Use nixfmt-tree for 'nix fmt'
+      # Use nixfmt-tree for 'nix fmt' (official formatter from https://github.com/NixOS/nixfmt)
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-tree);
 
       # Development shell with essential tools
@@ -71,7 +71,7 @@
               nix
               sops
               statix
-              nixfmt-tree
+              nixfmt-rfc-style
               nil
               
               # Development & linting
