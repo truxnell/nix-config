@@ -86,7 +86,7 @@ in
     ## service
     services.navidrome = {
       enable = true;
-      package=pkgs.unstable.navidrome;
+      package = pkgs.unstable.navidrome;
       settings = {
         Address = "0.0.0.0";
         Port = 4533;
@@ -95,9 +95,9 @@ in
         AutoImportPlaylists = false;
         EnableSharing = true;
         # Scanner.PurgeMissing = "always";
-        "ListenBrainz.BaseURL"="https://multi-scrobbler.trux.dev/1/";
+        "ListenBrainz.BaseURL" = "https://multi-scrobbler.trux.dev/1/";
       };
-      environmentFile=config.sops.secrets."${category}/${app}/env".path;
+      environmentFile = config.sops.secrets."${category}/${app}/env".path;
     };
 
     ### gatus integration

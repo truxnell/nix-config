@@ -118,8 +118,8 @@ in
         };
         receivers = [
           {
-              name = "ntfy";
-              webhook_configs = [ { url = "http://127.0.0.1:${toString alertmanagerNtfyPort}/hook"; } ];
+            name = "ntfy";
+            webhook_configs = [ { url = "http://127.0.0.1:${toString alertmanagerNtfyPort}/hook"; } ];
           }
           {
             name = "default";
@@ -128,35 +128,35 @@ in
       };
     };
 
-  services.prometheus.alertmanager-ntfy = {
-    enable = true;
-    settings = {
-      http.addr = "127.0.0.1:${toString alertmanagerNtfyPort}";
-      ntfy = {
-        baseurl = "https://ntfy.${config.networking.domain}";
-        notification = {
-          topic = "alertmanager";
-          priority = ''
-            status == "firing" ? "high" : "default"
-          '';
-          tags = [
-            {
-              tag = "+1";
-              condition = ''status == "resolved"'';
-            }
-            {
-              tag = "rotating_light";
-              condition = ''status == "firing"'';
-            }
-          ];
-          templates = {
-            title = ''{{ if eq .Status "resolved" }}Resolved: {{ end }}{{ index .Annotations "summary" }}'';
-            description = ''{{ index .Annotations "description" }}'';
+    services.prometheus.alertmanager-ntfy = {
+      enable = true;
+      settings = {
+        http.addr = "127.0.0.1:${toString alertmanagerNtfyPort}";
+        ntfy = {
+          baseurl = "https://ntfy.${config.networking.domain}";
+          notification = {
+            topic = "alertmanager";
+            priority = ''
+              status == "firing" ? "high" : "default"
+            '';
+            tags = [
+              {
+                tag = "+1";
+                condition = ''status == "resolved"'';
+              }
+              {
+                tag = "rotating_light";
+                condition = ''status == "firing"'';
+              }
+            ];
+            templates = {
+              title = ''{{ if eq .Status "resolved" }}Resolved: {{ end }}{{ index .Annotations "summary" }}'';
+              description = ''{{ index .Annotations "description" }}'';
+            };
           };
         };
       };
     };
-  };
 
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [

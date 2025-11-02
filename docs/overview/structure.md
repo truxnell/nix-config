@@ -12,7 +12,6 @@ Here is a bit of a walkthrough of the repository structure so ~~you~~ I can have
 │   ├── renovate            Renovate modules
 │   ├── workflows             Github Action workflows (i.e. CI/Site building)
 │   └── renovate.json5        Renovate core settings
-├── .taskfiles              go-task file modules
 ├── docs                    This mkdocs-material site
 │   nixos                   Nixos Modules
 │   └── home                  home-manager nix files
@@ -27,8 +26,7 @@ Here is a bit of a walkthrough of the repository structure so ~~you~~ I can have
 ├── flake.nix               Core flake
 ├── flake.lock              Lockfile
 ├── LICENSE                 Project License
-├── mkdocs.yml              mkdocs settings
-└── Taskfile.yaml           go-task core file
+└── mkdocs.yml              mkdocs settings
 ```
 
 Whew that wasnt so hard right... right?

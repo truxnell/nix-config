@@ -62,7 +62,7 @@
     technitium-dns-server.enable = true;
     minecraft-bedrock.CordiWorld.enable = true;
     satisfactory.enable = true; # the factory must be satisfactory
- 
+
   };
 
   mySystem.containers = {

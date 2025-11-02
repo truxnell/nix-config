@@ -30,7 +30,15 @@ with lib;
       # basics for all devices
       time.timeZone = "Australia/Melbourne";
       security.increaseWheelLoginLimits = true;
+<<<<<<< Updated upstream
       system.packages = [ pkgs.bat ];
+=======
+      system.packages = with pkgs; [
+        bat
+        ntfs3g
+        just
+      ];
+>>>>>>> Stashed changes
       domain = "trux.dev";
       internalDomain = "l.voltaicforge.com";
 
