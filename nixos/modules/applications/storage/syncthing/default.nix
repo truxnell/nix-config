@@ -105,13 +105,13 @@ in
     #
     services.syncthing = {
       enable = true;
-      group = cfg.group;
+      inherit (cfg) group;
       guiAddress = "0.0.0.0:8384";
       openDefaultPorts = true;
       overrideDevices = true;
       overrideFolders = true;
-      user = cfg.user;
-      dataDir = cfg.dataDir;
+      inherit (cfg) user;
+      inherit (cfg) dataDir;
       settings = {
         options.urAccepted = -1;
         devices = {

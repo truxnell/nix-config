@@ -11,7 +11,7 @@ let
   description = "synced terminal history";
   # image = ""; #string
   group = "568"; # string
-  port = config.services.atuin.port; # int
+  inherit (config.services.atuin) port; # int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";

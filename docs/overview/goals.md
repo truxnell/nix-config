@@ -12,7 +12,7 @@ A master list of ideas/goals/etc can be found at :octicons-issue-tracks-16: [Iss
 - __:material-cloud-upload: Backups__<br>Nightly restic backups to both cloud and NAS. All databases to have nightly backups. _Test backups regulary_
 - __:repeat: Reproducability__<br>Flakes & Git for version pinning, SHA256 tags for containers.
 - __:alarm_clock: Monitoring__<br>Automated monitoring on failure & critical summaries, using basic tools. Use Gatus for both internal and external monitoring
-- __:clipboard: Continuous Integration__<br>CI against main branch to ensure all code compiles OK. Use PR's to add to main and dont skip CI due to impatience
+- __:clipboard: Continuous Integration__<br>CI against main branch to ensure all code compiles OK. Use PR's to add to main and dont skip CI due to impatience. Comprehensive testing infrastructure with automated validation, linting, and formatting checks
 - __:material-security: Security__<br>Dont use containers with S6 overlay/root (i.e. LSIO :grey_question:{ title="LSIO trades security for convenience with their container configuration" }). Expose minimal ports at router, Reduce attack surface by keeping it simple, review hardening containers/podman/NixOS
 - __:fontawesome-solid-martini-glass-citrus: Ease of administration__<br>Lean into the devil that is SystemD - and have one standard interface to see logs, manipulate services, etc. Run containers as podman services, and webui's for watching/debugging
 - __:simple-letsencrypt: Secrets__ _~ssshh~.._<br>[Sops-nix](https://github.com/Mic92/sops-nix) for secrets, living in my gitrepo. Avoid cloud services like I used in k8s (i.e. [Doppler.io](https://doppler.io))

@@ -11,8 +11,8 @@ let
   category = "services";
   description = "Music streaming";
   # image = "";
-  user = config.services.navidrome.user; # string
-  group = config.services.navidrome.group; # string
+  inherit (config.services.navidrome) user; # string
+  inherit (config.services.navidrome) group; # string
   port = config.services.navidrome.settings.Port; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
@@ -59,7 +59,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       restartUnits = [ "${app}.service" ];
     };
 

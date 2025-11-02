@@ -86,7 +86,7 @@ in
     services.trilium-server = {
       enable = true;
       package = pkgs.unstable.trilium-next-server;
-      port = port;
+      inherit port;
     };
 
     ### gatus integration

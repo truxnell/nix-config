@@ -49,8 +49,54 @@
 
     in
     rec {
-      # Use nixpkgs-fmt for 'nix fmt'
-      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
+      # Use nixfmt-tree for 'nix fmt' (official formatter from https://github.com/NixOS/nixfmt)
+      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-tree);
+
+      # Development shell with essential tools
+      devShells = forAllSystems (system:
+        let
+          pkgs = nixpkgs.legacyPackages."${system}";
+          python-with-packages = pkgs.python3.withPackages (ps: with ps; [
+            mkdocs-material
+            mkdocs-minify
+            pygments
+          ]);
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              # Essential CLI tools
+              just
+              git
+              nix
+              sops
+              statix
+              nixfmt-rfc-style
+              nil
+              
+              # Development & linting
+              pre-commit
+              deadnix
+              
+              # Deployment & operations
+              deploy-rs.packages."${system}".default
+              nvd
+              
+              # Documentation
+              python-with-packages
+              mkdocs
+            ];
+          };
+          
+          # Fly.io Vaultwarden deployment shell
+          flyio-vaultwarden = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              flyctl
+              doppler
+              go-task
+            ];
+          };
+        });
 
       # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
@@ -110,14 +156,12 @@
           "daedalus" = mkNixosConfig {
             hostname = "daedalus";
             system = "x86_64-linux";
-            hardwareModules = [ ./nixos/profiles/hw-generic-x86.nix ];
             profileModules = [ ./nixos/profiles/role-server.nix ];
           };
 
           "shodan" = mkNixosConfig {
             hostname = "shodan";
             system = "x86_64-linux";
-            hardwareModules = [ ./nixos/profiles/hw-generic-x86.nix ];
             profileModules = [
               ./nixos/profiles/role-server.nix
               ./nixos/profiles/role-dev.nix

@@ -21,4 +21,7 @@ jobs:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
-      - run: nix flake check
+      - name: Check code formatting
+        run: nix fmt --check || (echo "❌ Code formatting check failed. Run 'nix fmt' to fix." && exit 1)
+      - name: Check flake structure
+        run: nix flake check

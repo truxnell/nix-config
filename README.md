@@ -27,12 +27,24 @@ To Install
 
 ## Goals
 
+### Completed
 - [X] Learn nix
 - [X] Mostly reproduce features from my existing homelab
 - [X] Replace existing ubuntu-based 'NAS'
+- [X] Handle secrets - decided on SOPS for simplicity
+- [X] Keep it simple, use trusted boring tools
+- [X] Establish code quality infrastructure (formatting, linting, pre-commit)
+
+### Active Focus
 - [ ] Expand usage to other shell environments such as WSL, etc
-- [X] handle secrets - decide between sweet and simple SOPS or re-use my doppler setup.
-- [x] keep it simple, use trusted boring tools
+- [ ] Comprehensive testing infrastructure
+- [ ] Enhanced CI/CD workflows
+- [ ] Developer experience improvements
+
+### Future
+- [ ] Additional hosts (NUC, RasPi)
+- [ ] VM build configurations
+- [ ] Expanded monitoring and observability
 
 ## TODO
 
@@ -69,6 +81,53 @@ Applying configuration changes to a remote machine can be done as follows:
 cd ~/dotfiles
 nixos-rebuild switch --flake .#nameOfMachine --target-host machineToSshInto --use-remote-sudo
 ```
+
+## Developer Workflow
+
+### Code Quality
+
+Before committing changes:
+
+```bash
+# Format code
+just fmt
+
+# Run linting
+just lint
+
+# Run comprehensive checks (lint + pre-commit)
+just check
+
+# Run full test suite
+just test-all
+```
+
+### Pre-Commit Setup
+
+Install pre-commit hooks for automatic checks:
+
+```bash
+just pre-commit-init
+```
+
+This will run formatting, linting, and security checks automatically on commit.
+
+### Testing
+
+Run validation tests:
+
+```bash
+# Quick validation
+nix flake check --no-build
+
+# Comprehensive test suite
+./test-flake.sh
+
+# Test specific host configuration
+nix eval --impure .#nixosConfigurations.daedalus.config.system.name
+```
+
+See [Testing Guide](docs/development/testing.md) for more details.
 
 ## Hacking at nix files
 

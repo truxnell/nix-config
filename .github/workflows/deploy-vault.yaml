@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/deploy-vault.yaml
-      - "flyio/vaultwarden/fly.toml"
+      - "deployments/flyio/vaultwarden/fly.toml"
 
 jobs:
   build-deploy:
@@ -20,7 +20,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Publish
-        run: flyctl deploy --config fly/vaultwarden/fly.toml
+        run: flyctl deploy --config deployments/flyio/vaultwarden/fly.toml
         env:
           FLY_ACCESS_TOKEN: ${{ secrets.FLY_ACCESS_TOKEN }}
           FLY_APP: ${{ secrets.FLY_APP_VAULTWARDEN }}
