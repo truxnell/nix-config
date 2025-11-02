@@ -49,8 +49,8 @@
 
     in
     rec {
-      # Use nixpkgs-fmt for 'nix fmt'
-      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
+      # Use nixfmt-tree for 'nix fmt'
+      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-tree);
 
       # Development shell with essential tools
       devShells = forAllSystems (system:
@@ -71,7 +71,7 @@
               nix
               sops
               statix
-              nixpkgs-fmt
+              nixfmt-tree
               nil
               
               # Development & linting
@@ -85,6 +85,15 @@
               # Documentation
               python-with-packages
               mkdocs
+            ];
+          };
+          
+          # Fly.io Vaultwarden deployment shell
+          flyio-vaultwarden = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              flyctl
+              doppler
+              go-task
             ];
           };
         });
@@ -147,14 +156,12 @@
           "daedalus" = mkNixosConfig {
             hostname = "daedalus";
             system = "x86_64-linux";
-            hardwareModules = [ ./nixos/profiles/hw-generic-x86.nix ];
             profileModules = [ ./nixos/profiles/role-server.nix ];
           };
 
           "shodan" = mkNixosConfig {
             hostname = "shodan";
             system = "x86_64-linux";
-            hardwareModules = [ ./nixos/profiles/hw-generic-x86.nix ];
             profileModules = [
               ./nixos/profiles/role-server.nix
               ./nixos/profiles/role-dev.nix

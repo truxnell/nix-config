@@ -1,0 +1,53 @@
+primary_region = "syd"
+kill_signal = "SIGINT"
+kill_timeout = "5s"
+app = "vaultwarden"
+
+[experimental]
+auto_rollback = true
+
+[build]
+image = "ghcr.io/dani-garcia/vaultwarden:1.34.3@sha256:84fd8a47f58d79a1ad824c27be0a9492750c0fa5216b35c749863093bfa3c3d7"
+
+[env]
+DATABASE_URL = "data/db.sqlite3"
+PASSWORD_ITERATIONS = "2000000"
+PRIMARY_REGION = "syd"
+SIGNUPS_ALLOWED = "false"
+INVITATIONS_ALLOWED = "true"
+SMTP_FROM_NAME = "Vault"
+SMTP_SECURITY = "off"
+SMTP_SSL = "true"
+TZ = "Australia/Melbourne"
+WEB_VAULT_ENABLED = "true"
+WEB_VAULT_FOLDER = "web-vault"
+DATA_FOLDER = "data"
+
+[[mounts]]
+source = "vw_data_machines"
+destination = "/data"
+processes = ["app"]
+
+[[services]]
+protocol = "tcp"
+internal_port = 80
+processes = ["app"]
+
+[[services.ports]]
+port = 80
+handlers = ["http"]
+force_https = true
+
+[[services.ports]]
+port = 443
+handlers = ["tls", "http"]
+[services.concurrency]
+type = "connections"
+hard_limit = 25
+soft_limit = 20
+
+[[services.tcp_checks]]
+interval = "15s"
+timeout = "2s"
+grace_period = "1s"
+restart_limit = 0

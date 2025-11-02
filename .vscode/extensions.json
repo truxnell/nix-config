@@ -3,6 +3,12 @@
     "jnoortheen.nix-ide",
     "shipitsmarter.sops-edit",
     "ionutvmi.path-autocomplete",
-    "redhat.vscode-yaml"
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "github.vscode-pull-request-github",
+    "skellock.just",
+    "stefanhoelzl.vscode-pre-commit",
+    "streetsidesoftware.code-spell-checker",
+    "ms-vscode.vscode-json"
   ]
 }
