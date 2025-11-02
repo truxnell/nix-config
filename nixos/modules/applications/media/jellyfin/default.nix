@@ -9,8 +9,8 @@ let
   app = "jellyfin";
   category = "services";
   description = "Media Player";
-  user = config.services.jellyfin.user; # string
-  group = config.services.jellyfin.group; # string
+  inherit (config.services.jellyfin) user; # string
+  inherit (config.services.jellyfin) group; # string
   port = 8096; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

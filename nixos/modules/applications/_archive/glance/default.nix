@@ -78,7 +78,7 @@ in
       settings = {
         server = {
           openFirewall = true;
-          port = port;
+          inherit port;
         };
         pages = [
           {

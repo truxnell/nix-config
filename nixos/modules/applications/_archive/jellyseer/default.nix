@@ -11,7 +11,7 @@ let
   description = "Requests for NatFlix";
   user = "568"; # string
   group = "568"; # string
-  port = config.services.jellyseerr.port; # int
+  inherit (config.services.jellyseerr) port; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");

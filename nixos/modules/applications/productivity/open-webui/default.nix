@@ -58,7 +58,7 @@ in
     sops.secrets."${category}/${app}/env" = {
       sopsFile = ./secrets.sops.yaml;
       owner = user;
-      group = group;
+      inherit group;
       mode = "0666";
       restartUnits = [ "podman-${app}.service" ];
     };

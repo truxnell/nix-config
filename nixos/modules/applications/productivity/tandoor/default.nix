@@ -12,7 +12,7 @@ let
   # image = "";
   user = "568"; # string
   group = "568"; # string
-  port = config.services.tandoor-recipes.port; # int
+  inherit (config.services.tandoor-recipes) port; # int
   appFolder = "/var/lib/private/tandor-recipes/";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
