@@ -52,6 +52,43 @@
       # Use nixpkgs-fmt for 'nix fmt'
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixpkgs-fmt);
 
+      # Development shell with essential tools
+      devShells = forAllSystems (system:
+        let
+          pkgs = nixpkgs.legacyPackages."${system}";
+          python-with-packages = pkgs.python3.withPackages (ps: with ps; [
+            mkdocs-material
+            mkdocs-minify
+            pygments
+          ]);
+        in
+        {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              # Essential CLI tools
+              just
+              git
+              nix
+              sops
+              statix
+              nixpkgs-fmt
+              nil
+              
+              # Development & linting
+              pre-commit
+              deadnix
+              
+              # Deployment & operations
+              deploy-rs.packages."${system}".default
+              nvd
+              
+              # Documentation
+              python-with-packages
+              mkdocs
+            ];
+          };
+        });
+
       # extend lib with my custom functions
       lib = nixpkgs.lib.extend (
         final: _prev: {
