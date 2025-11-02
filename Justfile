@@ -22,6 +22,10 @@ check:
     just lint
     just pre-commit-run
 
+# Run comprehensive test suite
+test-all:
+    ./test-flake.sh
+
 # Local NixOS Operations
 # Build the system profile for a given host
 build host:
