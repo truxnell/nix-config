@@ -1,28 +1,26 @@
 {
   imports = [
-    ./gatus
-    ./qbittorrent
-    ./plex
-    ./tautulli
-    ./searxng
-    ./factorio
-    ./whoogle
-    ./redlib
-    ./home-assistant
-    ./calibre
-    ./ecowitt2mqtt
-    ./maloja
-    ./multi-scrobbler
-    ./immich
-    ./rxresume
-    ./browserless
-    ./changedetection
-    ./hs110-exporter
-    ./linkding
-    ./autobrr
-    ./maintainerr
-    ./cross-seed
-    ./redbot
-    ./tqm
+    ../../applications/monitoring/gatus/default.nix
+    ../../applications/media/qbittorrent/default.nix
+    ../../applications/media/plex/default.nix
+    ../../applications/media/tautulli/default.nix
+    ../../applications/search/searxng/default.nix
+    ../../applications/gaming/factorio/default.nix
+    ../../applications/search/whoogle/default.nix
+    ../../applications/misc/redlib/default.nix
+    ../../applications/misc/home-assistant/default.nix
+    ../../applications/misc/calibre/default.nix
+    ../../applications/misc/ecowitt2mqtt/default.nix
+    ../../applications/misc/maloja/default.nix
+    ../../applications/misc/multi-scrobbler/default.nix
+    ../../applications/media/immich/default.nix
+    ../../applications/productivity/rxresume/default.nix
+    ../../applications/productivity/changedetection/default.nix
+    ../../applications/monitoring/hs110-exporter/default.nix
+    ../../applications/productivity/linkding/default.nix
+    ../../applications/media/autobrr/default.nix
+    ../../applications/media/cross-seed/default.nix
+    ../../applications/misc/redbot/default.nix
+    ../../applications/misc/tqm/default.nix
   ];
 }
