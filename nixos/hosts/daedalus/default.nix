@@ -23,48 +23,74 @@
     };
 
     mySystem.services = {
+      # Infrastructure
+      # Databases
       postgresql.enable = true;
+      # System
       openssh.enable = true;
-      minio.enable = true;
       podman.enable = true;
+      # Storage
+      minio.enable = true;
+      # Web server
       nginx.enable = true;
+
+      # Media
+      # Media servers
+      plex.enable = true;
+      jellyfin.enable = true;
+      # Arr stack
       sonarr.enable = true;
       radarr.enable = true;
       recyclarr.enable = true;
       lidarr.enable = true;
       readarr.enable = true;
-      sabnzbd.enable = true;
+      # Torrent stack
       qbittorrent.enable = true;
       qbittorrent-lts.enable = true;
+      sabnzbd.enable = true;
       cross-seed.enable = true;
+      # Media automation
       prowlarr.enable = true;
       autobrr.enable = true;
-      plex.enable = true;
-      # maintainerr.enable = true;
-      immich.enable = true;
-      # filebrowser.enable = true;
+      # Music
+      navidrome.enable = true;
+
+      # Productivity
+      # Documentation
+      paperless.enable = true;
+      trilium.enable = true;
+      # Tools
+      tandoor.enable = true;
+      open-webui.enable = true;
       atuin.enable = true;
+      # Communication
+      redbot.enable = true;
+
+      # Storage
       syncthing = {
         enable = true;
         syncPath = "/zfs/syncthing/";
       };
-      navidrome.enable = true;
-      paperless.enable = true;
-      redbot.enable = true;
-      tandoor.enable = true;
-      open-webui.enable = true;
-      ntfy.enable = true;
-      trilium.enable = true;
       seafile = {
         enable = true;
         fileLocation = "/zfs/seafile";
       };
+
+      # Development
+      forgejo.enable = true;
+
+      # Networking
       technitium-dns-server.enable = true;
-      jellyfin.enable = true;
-      # jellyseer.enable=true;
-      # glance.enable=true;
+
+      # Misc
+      immich.enable = true;
+      ntfy.enable = true;
       qbit-tqm.enable = true;
       qui.enable = true;
+      # maintainerr.enable = true;
+      # filebrowser.enable = true;
+      # jellyseer.enable = true;
+      # glance.enable = true;
     };
     mySystem.security.acme.enable = true;
 

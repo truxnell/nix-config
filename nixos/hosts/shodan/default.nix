@@ -14,57 +14,70 @@
     dates = "Wed 06:00";
   }; # bold move cotton
   mySystem.services = {
+    # Infrastructure
+    # System
     openssh.enable = true;
     podman.enable = true;
-    # databases
+    # Databases
     postgresql.enable = true;
     mariadb.enable = true;
-
+    # Web server
     nginx.enable = true;
 
+    # Monitoring
+    # Metrics
+    victoriametrics.enable = true;
+    grafana.enable = true;
+    unpoller.enable = true;
+    # Monitoring tools
     gatus.enable = true;
+    hs110-exporter.enable = true;
 
+    # Media
+    # Plex monitoring
     tautulli.enable = true;
 
-    # factorio.freight-forwarding.enable = true; # the factory must grow
-    factorio.space-age.enable = true; # the factory must launch into space
+    # Automation/IoT
+    # MQTT
+    mosquitto.enable = true;
+    zigbee2mqtt.enable = true;
+    rapt2mqtt.enable = true;
+    # Automation
+    node-red.enable = true;
+    home-assistant.enable = true;
 
+    # Search
     searxng.enable = true;
     whoogle.enable = true;
     redlib.enable = true;
 
-    mosquitto.enable = true;
-    zigbee2mqtt.enable = true;
-    node-red.enable = true;
-    home-assistant.enable = true;
-    code-server.enable = true;
-
-    radicale.enable = true;
+    # Productivity
+    # RSS
     miniflux.enable = true;
-
     rss-bridge.enable = true;
-
-    rxresume.enable = true;
-
-    thelounge.enable = true;
+    # Organization
+    radicale.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
+    # Communication
+    thelounge.enable = true;
+    # Tools
+    rxresume.enable = true;
 
-    # monitoring
-    victoriametrics.enable = true;
-    grafana.enable = true;
-    unpoller.enable = true;
+    # Development
+    code-server.enable = true;
 
-    hs110-exporter.enable = true;
-
-    forgejo.enable = true;
-
-    firefly-iii.enable = true;
-    rapt2mqtt.enable = true;
-    technitium-dns-server.enable = true;
+    # Gaming
+    # factorio.freight-forwarding.enable = true; # the factory must grow
+    factorio.space-age.enable = true; # the factory must launch into space
     minecraft-bedrock.CordiWorld.enable = true;
     satisfactory.enable = true; # the factory must be satisfactory
- 
+
+    # Networking
+    technitium-dns-server.enable = true;
+
+    # Misc
+    firefly-iii.enable = true;
   };
 
   mySystem.containers = {
