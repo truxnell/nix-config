@@ -43,7 +43,7 @@ in
 
       shell.fish.enable = true;
       # But wont enable plugins globally, leave them for workstations
-      system.resticBackup.remote.location = "s3:https://f3b4625a2d02b0e6d1dec5a44f427191.r2.cloudflarestorage.com/nixos-restic";
+      system.resticBackup.remote.location = "s3:s3.us-west-002.backblazeb2.com/trux-backup-02f07ef6fe/nixos-restic";
     };
 
     environment.systemPackages = with pkgs; [
@@ -199,16 +199,6 @@ in
           "/etc/ssh/ssh_host_ed25519_key"
       )
     ];
-    # Secret for machine-specific pushover
-    sops.secrets."services/pushover/env" = {
-      sopsFile = ./global-secrets.sops.yaml;
-    };
-    sops.secrets.pushover-user-key = {
-      sopsFile = ./global-secrets.sops.yaml;
-    };
-    sops.secrets.pushover-api-key = {
-      sopsFile = ./global-secrets.sops.yaml;
-    };
 
     sops.secrets.truxnell-password = {
       sopsFile = ./global-secrets.sops.yaml;

@@ -26,6 +26,11 @@ check:
 test-all:
     ./test-flake.sh
 
+# Validate OCI container images from NixOS configurations
+validate-images:
+    #!/usr/bin/env bash
+    nix-shell -p skopeo jq --run './scripts/validate-oci-images.sh'
+
 # Local NixOS Operations
 # Build the system profile for a given host
 build host:
@@ -51,15 +56,24 @@ switch-debug host:
 # Remote Deployment (deploy-rs)
 # Dry-run deploy (activate script is run with --dry-activate)
 dry-deploy host:
-    deploy --flake .#{{host}} --dry-activate --remote-build --skip-checks
+    deploy .#{{host}} --dry-activate --remote-build --skip-checks
 
 # Deploy a single host with deploy-rs
 deploy host:
-    deploy --flake .#{{host}} --remote-build
+    deploy .#{{host}} --remote-build
 
 # Deploy all defined hosts
 deploy-all:
-    deploy --flake . --remote-build 
+    deploy . --remote-build 
+
+# Restic Backup Justfile Deployment
+# Deploy restic backup Justfiles to all nodes
+deploy-backup-justfiles:
+    deploy . --remote-build
+
+# Deploy restic backup Justfile to a specific host
+deploy-backup-justfile host:
+    deploy .#{{host}} --remote-build
 
 # Maintenance
 # Garbage collect old generations

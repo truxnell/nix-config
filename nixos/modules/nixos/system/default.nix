@@ -11,5 +11,6 @@
     ./motd
     ./autoupgrades
     ./deploy-user.nix
+    ./restic-justfile.nix
   ];
 }
