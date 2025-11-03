@@ -9,7 +9,6 @@
     ./impermanence.nix
     ./nfs
     ./motd
-    ./pushover
     ./autoupgrades
     ./deploy-user.nix
   ];

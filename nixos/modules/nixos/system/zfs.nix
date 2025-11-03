@@ -55,10 +55,6 @@ with lib;
       };
     };
 
-    # Pushover notifications
-    environment.systemPackages = with pkgs; [
-      busybox
-    ];
 
     services.zfs.zed.settings = {
       ZED_NTFY_TOPIC = "homelab";

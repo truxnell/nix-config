@@ -51,15 +51,15 @@ switch-debug host:
 # Remote Deployment (deploy-rs)
 # Dry-run deploy (activate script is run with --dry-activate)
 dry-deploy host:
-    nix run .#deploy -- --dry-activate --skip-checks {{host}}
+    deploy --flake .#{{host}} --dry-activate --remote-build --skip-checks
 
 # Deploy a single host with deploy-rs
 deploy host:
-    nix run .#deploy -- {{host}}
+    deploy --flake .#{{host}} --remote-build
 
 # Deploy all defined hosts
 deploy-all:
-    nix run .#deploy
+    deploy --flake . --remote-build 
 
 # Maintenance
 # Garbage collect old generations

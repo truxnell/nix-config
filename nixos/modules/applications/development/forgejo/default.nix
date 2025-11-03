@@ -83,6 +83,7 @@ in
     ## service
     services.forgejo = {
       enable = true;
+      repositoryRoot="/zfs/forgejo";
       # SQLite is the default database, no configuration needed
       settings = {
         server = {
@@ -92,7 +93,7 @@ in
           LANDING_PAGE = "explore";
         };
         service = {
-          DISABLE_REGISTRATION = false;
+          DISABLE_REGISTRATION = true;
         };
       };
     };
