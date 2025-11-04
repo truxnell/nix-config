@@ -211,6 +211,7 @@ in
       hashedPasswordFile = config.sops.secrets.truxnell-password.path;
       extraGroups = [
         "wheel"
+        "kah"
       ]
       ++ ifTheyExist [
         "network"
