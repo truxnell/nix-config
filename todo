@@ -1,0 +1,7 @@
+create a distrobox with ssh:
+
+distrobox create --name ssh-test --image debian:latest --init --additional-packages "systemd"
+
+config ssh
+
+start its
