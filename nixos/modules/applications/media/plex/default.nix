@@ -47,7 +47,7 @@ in
       volumes = [
         "${appFolder}:/config:rw"
         "${config.mySystem.nasFolder}/natflix:/data:rw"
-        "/zfs/backup/kubernetes/apps/plex:/config/backup:rw" # TODO fix backup path with var.
+        "/zfs/backup/nixos/plex:/config/backup:rw" # TODO fix backup path with var.
         "/dev/dri:/dev/dri" # for hardware transcoding
         "/etc/localtime:/etc/localtime:ro"
       ];
