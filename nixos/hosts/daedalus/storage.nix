@@ -303,7 +303,7 @@ in
   #   };
 
   services.restic.backups = {
-    "forgejo-zfs-b2" = {
+    "zfs-forgejo-b2" = {
       pruneOpts = [
         "--keep-last 3"
         "--keep-daily 7"
@@ -327,6 +327,33 @@ in
       repository = "s3:s3.us-west-002.backblazeb2.com/trux-backup-02f07ef6fe/zfs/forgejo";
     };
   };
+
+  services.restic.backups = {
+    "zfs-backup-b2" = {
+      pruneOpts = [
+        "--keep-last 3"
+        "--keep-daily 7"
+        "--keep-weekly 5"
+        "--keep-monthly 12"
+      ];
+      timerConfig = {
+        OnCalendar = "02:05";
+        Persistent = true;
+        RandomizedDelaySec = "1h";
+      };
+      initialize = true;
+      backupPrepareCommand = ''
+        # remove stale locks - this avoids some occasional annoyance
+        #
+        ${pkgs.restic}/bin/restic unlock --remove-all || true
+      '';
+      paths = [ "/zfs/backup" ];
+      environmentFile = config.sops.secrets."services/restic/env".path;
+      passwordFile = config.sops.secrets."services/restic/password".path;
+      repository = "s3:s3.us-west-002.backblazeb2.com/trux-backup-02f07ef6fe/zfs/backup";
+    };
+  };
+
 
   systemd.services.snapraid-btrfs-sync = {
     description = "Run the snapraid-btrfs sync with the runner";

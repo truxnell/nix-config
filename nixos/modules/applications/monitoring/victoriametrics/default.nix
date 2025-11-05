@@ -216,13 +216,14 @@ in
       ) "WARNING: Backups for ${app} are disabled!")
     ];
 
-    services.restic.backups = mkIf cfg.backup (
-      config.lib.mySystem.mkRestic {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
-      }
-    );
+   # dont need to backup logs thx
+   # services.restic.backups = mkIf cfg.backup (
+   #   config.lib.mySystem.mkRestic {
+   #     inherit app user;
+   #     paths = [ appFolder ];
+   #     inherit appFolder;
+   #   }
+   # );
 
     # services.postgresqlBackup = {
     #   databases = [ app ];
