@@ -38,6 +38,7 @@
       # Media servers
       plex.enable = true;
       jellyfin.enable = true;
+      jellyseer.enable=true;
       # Arr stack
       sonarr.enable = true;
       radarr.enable = true;

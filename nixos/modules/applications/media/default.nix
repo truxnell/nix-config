@@ -15,6 +15,7 @@
     ./sabnzbd/default.nix
     ./sonarr/default.nix
     ./tautulli/default.nix
+    ./jellyseer/default.nix
   ];
 }
 

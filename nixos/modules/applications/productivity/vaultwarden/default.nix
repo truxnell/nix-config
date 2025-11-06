@@ -12,7 +12,7 @@ let
   user = "kah"; # string
   group = "kah"; # string
   port = 8222; # int
-  appFolder = "/var/lib/${app}";
+  appFolder = "/var/lib/bitwarden_rs";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "vault.${config.networking.domain}";
 in
@@ -77,7 +77,7 @@ in
     ## service
     services.vaultwarden = {
       enable = true;
-      backupDir = appFolder;
+      # backupDir = "${config.mySystem.nasFolder}";
       dbBackend = "sqlite";
       environmentFile = config.sops.secrets."${category}/${app}/env".path;
       config = {
