@@ -5,6 +5,7 @@ This file provides context and guidelines for AI assistants working with this Ni
 ## Critical Methodology
 The goal of this homelab is to be simple, reliable and robust.
 Avoid importing dependencies unless the benefits of the dependency outweigh the extra maintenance burden.
+Use plain nix or nix modules over extra dependencies or oci-containers.
 
 ## Repository Overview
 

@@ -59,6 +59,8 @@
     radicale.enable = true;
     changedetection.enable = true;
     linkding.enable = true;
+    # Password management
+    vaultwarden.enable = true;
     # Communication
     thelounge.enable = true;
     # Tools

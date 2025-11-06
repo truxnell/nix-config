@@ -13,6 +13,7 @@
     ./tandoor/default.nix
     ./thelounge/default.nix
     ./trilium/default.nix
+    ./vaultwarden/default.nix
   ];
 }
 
