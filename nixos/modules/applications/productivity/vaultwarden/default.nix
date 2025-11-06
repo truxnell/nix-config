@@ -14,7 +14,7 @@ let
   port = 8222; # int
   appFolder = "/var/lib/${app}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
-  url = "${host}.${config.networking.domain}";
+  url = "vault.${config.networking.domain}";
 in
 {
   options.mySystem.${category}.${app} = {
