@@ -55,7 +55,6 @@ with lib;
       };
     };
 
-
     services.zfs.zed.settings = {
       ZED_NTFY_TOPIC = "homelab";
       ZED_NTFY_URL = "https://ntfy.trux.dev";

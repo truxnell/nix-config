@@ -4,4 +4,3 @@
     ./forgejo/default.nix
   ];
 }
-

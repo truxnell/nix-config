@@ -5,4 +5,3 @@
     ./satisfactory/default.nix
   ];
 }
-

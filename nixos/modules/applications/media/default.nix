@@ -18,4 +18,3 @@
     ./jellyseer/default.nix
   ];
 }
-

@@ -34,11 +34,16 @@
       # Web server
       nginx.enable = true;
 
+      # Monitoring
+      loki.enable = true;
+      loki.retention = "720h"; # 30 days
+      promtail.enable = true;
+
       # Media
       # Media servers
       plex.enable = true;
       jellyfin.enable = true;
-      jellyseer.enable=true;
+      jellyseer.enable = true;
       # Arr stack
       sonarr.enable = true;
       radarr.enable = true;

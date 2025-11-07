@@ -83,7 +83,7 @@ in
     ## service
     services.forgejo = {
       enable = true;
-      repositoryRoot="/zfs/forgejo";
+      repositoryRoot = "/zfs/forgejo";
       # SQLite is the default database, no configuration needed
       settings = {
         server = {
@@ -155,4 +155,3 @@ in
 
   };
 }
-

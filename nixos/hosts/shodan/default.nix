@@ -32,6 +32,7 @@
     # Monitoring tools
     gatus.enable = true;
     hs110-exporter.enable = true;
+    promtail.enable = true;
 
     # Media
     # Plex monitoring

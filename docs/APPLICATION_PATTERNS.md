@@ -174,12 +174,6 @@ in
       };
     };
 
-    ## Backup Configuration
-    warnings = [
-      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for ${app} are disabled!")
-    ];
-
     # File-based backups
     services.restic.backups = mkIf cfg.backup (
       config.lib.mySystem.mkRestic {
@@ -356,12 +350,6 @@ in
         extraConfig = "resolver 10.88.0.1;";  # Enable service discovery
       };
     };
-
-    ## Backup Configuration
-    warnings = [
-      (mkIf (!cfg.backup && config.mySystem.purpose != "Development")
-        "WARNING: Backups for ${app} are disabled!")
-    ];
 
     services.restic.backups = mkIf cfg.backup (
       config.lib.mySystem.mkRestic {

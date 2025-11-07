@@ -8,4 +8,3 @@
     ./zigbee2mqtt/default.nix
   ];
 }
-

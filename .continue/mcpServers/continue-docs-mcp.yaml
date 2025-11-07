@@ -1,0 +1,5 @@
+name: Continue Documentation MCP
+version: 0.0.1
+schema: v1
+mcpServers:
+  - uses: continuedev/continue-docs-mcp

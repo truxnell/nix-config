@@ -119,6 +119,13 @@ in
               isDefault = true;
               url = "http://localhost${config.services.victoriametrics.listenAddress}";
             }
+            {
+              uid = "loki";
+              name = "Loki";
+              type = "loki";
+              access = "proxy";
+              url = "https://loki.${config.networking.domain}";
+            }
           ];
         };
         dashboards.settings.providers =

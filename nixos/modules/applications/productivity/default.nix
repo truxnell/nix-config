@@ -16,4 +16,3 @@
     ./vaultwarden/default.nix
   ];
 }
-

@@ -13,7 +13,7 @@ let
   user = "1000"; # string
   group = "1000"; # string
   gamePort = 7777; # int - Game port (UDP)
-  queryPort = 8888; # int - Query port (UDP) 
+  queryPort = 8888; # int - Query port (UDP)
   appFolder = "/var/lib/${app}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";
@@ -113,16 +113,15 @@ in
         MAXPLAYERS = builtins.toString cfg.maxPlayers;
         PGID = group;
         PUID = user;
-        STEAMBETA = "false";        
+        STEAMBETA = "false";
         # Game Settings
-        
-        
+
       };
       # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
       ports = [
-        "${builtins.toString gamePort}:${builtins.toString gamePort}/udp"    # Game port
-        "${builtins.toString gamePort}:${builtins.toString gamePort}/tcp"    # Game port
-        "${builtins.toString queryPort}:${builtins.toString queryPort}/tcp"  # Query port  
+        "${builtins.toString gamePort}:${builtins.toString gamePort}/udp" # Game port
+        "${builtins.toString gamePort}:${builtins.toString gamePort}/tcp" # Game port
+        "${builtins.toString queryPort}:${builtins.toString queryPort}/tcp" # Query port
       ];
       extraOptions = [
         "--pull=always"
@@ -143,14 +142,16 @@ in
       }
     ];
 
-
     ### firewall config
     networking.firewall = mkIf cfg.openFirewall {
-      allowedUDPPorts = [ 
-        gamePort     # 7777 - Game traffic
+      allowedUDPPorts = [
+        gamePort # 7777 - Game traffic
       ];
       # Optional: Allow TCP port 8080 for web interface if exposed
-      allowedTCPPorts = [ gamePort queryPort ];
+      allowedTCPPorts = [
+        gamePort
+        queryPort
+      ];
     };
 
     ### backups
@@ -167,7 +168,6 @@ in
         inherit appFolder;
       }
     );
-
 
   };
 }

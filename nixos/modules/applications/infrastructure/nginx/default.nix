@@ -29,6 +29,32 @@ in
       # Only allow PFS-enabled ciphers with AES256
       sslCiphers = "AES256+EECDH:AES256+EDH:!aNULL";
 
+      # Enhanced logging for better log analysis
+      commonHttpConfig = ''
+        # JSON-formatted access logs for better parsing
+        log_format json_combined escape=json
+        '{'
+          '"time_local":"$time_local",'
+          '"remote_addr":"$remote_addr",'
+          '"method":"$request_method",'
+          '"request_uri":"$request_uri",'
+          '"status":$status,'
+          '"body_bytes_sent":$body_bytes_sent,'
+          '"request_time":$request_time,'
+          '"http_referrer":"$http_referer",'
+          '"http_user_agent":"$http_user_agent",'
+          '"host":"$host",'
+          '"upstream_addr":"$upstream_addr",'
+          '"upstream_response_time":"$upstream_response_time"'
+        '}';
+        
+        # Use JSON format for access logs
+        access_log /var/log/nginx/access.log json_combined;
+        
+        # Enhanced error logging
+        error_log /var/log/nginx/error.log warn;
+      '';
+
       # appendHttpConfig = ''
       #   # Minimize information leaked to other domains
       #   add_header 'Referrer-Policy' 'origin-when-cross-origin';

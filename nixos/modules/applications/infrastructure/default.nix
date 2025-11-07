@@ -10,4 +10,3 @@
     ./restic/default.nix
   ];
 }
-

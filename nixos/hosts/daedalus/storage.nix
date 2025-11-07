@@ -354,7 +354,6 @@ in
     };
   };
 
-
   systemd.services.snapraid-btrfs-sync = {
     description = "Run the snapraid-btrfs sync with the runner";
     startAt = "01:00";

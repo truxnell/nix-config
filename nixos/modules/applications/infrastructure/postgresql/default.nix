@@ -82,20 +82,19 @@ in
     services.restic.backups = mkIf cfg.backup (
       config.lib.mySystem.mkRestic {
         inherit app;
-        user="postgres";
+        user = "postgres";
         paths = [ appFolder ];
         inherit appFolder;
       }
     );
 
-    systemd.services.restic-backups-postgresql-local.serviceConfig.ExecStart = mkForce
-      (pkgs.writeShellScript "restic-backups-postgresql-local-ExecStart" ''
+    systemd.services.restic-backups-postgresql-local.serviceConfig.ExecStart = mkForce (
+      pkgs.writeShellScript "restic-backups-postgresql-local-ExecStart" ''
         set -o pipefail
         ${config.services.postgresql.package}/bin/pg_dumpall -U postgres \
           | ${pkgs.restic}/bin/restic backup --stdin --stdin-filename postgres.sql
-      '');
-
-    
+      ''
+    );
 
   };
 }

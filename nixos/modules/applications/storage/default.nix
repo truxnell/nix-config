@@ -4,4 +4,3 @@
     ./syncthing/default.nix
   ];
 }
-

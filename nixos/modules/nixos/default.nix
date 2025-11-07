@@ -5,6 +5,7 @@ with lib;
     ./system
     ./programs
     ./services/monitoring.nix
+    ./services/promtail.nix
     ./services/reboot-required-check.nix
     ./editor
     ./lib.nix
