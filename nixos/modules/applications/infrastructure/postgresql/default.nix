@@ -79,14 +79,14 @@ in
       };
     };
 
-    services.restic.backups = mkIf cfg.backup (
-      config.lib.mySystem.mkRestic {
-        inherit app;
-        user = "postgres";
-        paths = [ appFolder ];
-        inherit appFolder;
-      }
-    );
+    # services.restic.backups = mkIf cfg.backup (
+    #   config.lib.mySystem.mkRestic {
+    #     inherit app;
+    #     user = "postgres";
+    #     paths = [ appFolder ];
+    #     inherit appFolder;
+    #   }
+    # );
 
     systemd.services.restic-backups-postgresql-local.serviceConfig.ExecStart = mkForce (
       pkgs.writeShellScript "restic-backups-postgresql-local-ExecStart" ''
