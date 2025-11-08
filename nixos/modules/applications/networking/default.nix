@@ -1,6 +1,7 @@
 {
   imports = [
     ./mosquitto/default.nix
+    ./n8n/default.nix
     ./node-red/default.nix
     ./ntfy-sh/default.nix
     ./rapt2mqtt/default.nix
