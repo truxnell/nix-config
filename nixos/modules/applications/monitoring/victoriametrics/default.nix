@@ -115,11 +115,30 @@ in
         route = {
           receiver = "ntfy";
           repeat_interval = "120000h";
+          routes = [
+            {
+              receiver = "n8n";
+              continue = true;
+            }
+          ];
         };
         receivers = [
           {
             name = "ntfy";
-            webhook_configs = [ { url = "http://127.0.0.1:${toString alertmanagerNtfyPort}/hook"; } ];
+            webhook_configs = [
+              {
+                url = "http://127.0.0.1:${toString alertmanagerNtfyPort}/hook";
+              }
+            ];
+          }
+          {
+            name = "n8n";
+            webhook_configs = [
+              {
+                url = "https://n8n.trux.dev/webhook/alertmanager";
+                send_resolved = true;
+              }
+            ];
           }
           {
             name = "default";
