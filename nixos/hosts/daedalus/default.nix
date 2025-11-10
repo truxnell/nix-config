@@ -38,6 +38,7 @@
       loki.enable = true;
       loki.retention = "720h"; # 30 days
       promtail.enable = true;
+      mcp-grafana.enable = true;
 
       # Media
       # Media servers
