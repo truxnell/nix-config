@@ -9,7 +9,7 @@ let
   app = "qui";
   category = "services";
   description = "qbittorrent webui alternative";
-  image = "ghcr.io/autobrr/qui:v1.6.1@sha256:331a5c8f5b3efc1fb76b3aa61abe2c24b953846780cdc78990146c3c7eec4304";
+  image = "ghcr.io/autobrr/qui:v1.7.0@sha256:cea707c0254b3afbce24a91350d771123ad769b4e66b30b7e651c78f0b350951";
   user = "568"; # string
   group = "568"; # string
   port = 7476; # int
