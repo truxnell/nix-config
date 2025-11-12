@@ -9,10 +9,10 @@ let
   app = "mcp-grafana";
   category = "services";
   description = "MCP server for Grafana";
-  image = "ghcr.io/grafana/mcp-grafana";
+  image = "docker.io/grafana/mcp-grafana";
   user = "kah";
   group = "kah";
-  port = 8000; # Default port for SSE/HTTP transport
+  port = 9092; # Default port for SSE/HTTP transport
   appFolder = "/var/lib/${app}";
   
   # Get Loki URL from Loki configuration
@@ -87,7 +87,7 @@ in
       envFiles = [ config.sops.secrets."${category}/${app}/env".path ];
       # Use SSE transport for systemd-managed service
       # MCP clients can connect via SSE or use stdio by spawning the container directly
-      cmd = [ "-t" "sse" "-addr" ":${builtins.toString port}" ];
+      cmd = [ "-t" "sse" "-address" ":${builtins.toString port}" ];
       volumes = [ ];
       ports = [ "${builtins.toString port}:${builtins.toString port}" ];
     };

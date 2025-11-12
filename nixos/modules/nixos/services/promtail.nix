@@ -139,7 +139,9 @@ in
               }
             ];
             pipeline_stages = [
-              # Parse structured logs from applications
+              # Detect log level from content and override incorrect systemd priority
+              # This fixes container logs (conmon) that are incorrectly classified as error
+              # Step 1: Try to extract level from JSON structured logs
               {
                 match = {
                   selector = ''{unit=~".+"}'';
@@ -147,18 +149,32 @@ in
                     {
                       json = {
                         expressions = {
-                          level = "level";
+                          content_level = "level";
                           msg = "msg";
                           timestamp = "timestamp";
                         };
                       };
                     }
-                    {
-                      labels = {
-                        level = null;
-                      };
-                    }
                   ];
+                };
+              }
+              # Step 2: If no JSON level, detect from text patterns (level=info, INFO, etc.)
+              {
+                regex = {
+                  expression = ''(?i)(?:^|\s|\[)(?:level[=:]?\s*)?(?P<text_level>emergency|alert|critical|error|warning|warn|notice|info|debug|trace)(?:\s|$|\[|:|])'';
+                };
+              }
+              # Step 3: Use detected level from content if available, otherwise keep systemd priority
+              # This prioritizes: JSON level > regex level > systemd priority
+              {
+                template = {
+                  source = "detected_level";
+                  template = ''{{ if .content_level }}{{ .content_level | ToLower }}{{ else if .text_level }}{{ .text_level | ToLower }}{{ else }}{{ .level }}{{ end }}'';
+                };
+              }
+              {
+                labels = {
+                  level = "detected_level";
                 };
               }
             ];

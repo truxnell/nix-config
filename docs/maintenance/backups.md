@@ -19,6 +19,35 @@ The timeline then is:
 | 02.00         | ZFS deletes prior snapshot and creates new one, to `rpool/safe/persist@restic_nightly_snap`                                      |
 | 02.05 - 04.05 | Restic backs up from new snapshot's hidden read-only mount `.zfs` with random delays per-service - to local and remote locations |
 
+## Backup Status Overview
+
+This table provides a comprehensive overview of backup coverage across all systems and data:
+
+| Component | Current Status | Action Required | Implementation |
+|-----------|---------------|-----------------|----------------|
+| **Application Persistent Data** | | | |
+| Most apps (via mkRestic) | ✅ Backed up (local + remote) | None | Already configured via `mkRestic` helper |
+| Apps on `/tank` (mergerfs) | ⚠️ May not be in ZFS snapshot | Verify coverage | Check if audiobookshelf, etc. need special handling |
+| **ZFS Datasets** | | | |
+| `/zfs/backup` | ✅ Backed up to B2 | None | Configured in `nixos/hosts/daedalus/storage.nix` |
+| `/zfs/forgejo` | ✅ Backed up to B2 | None | Configured in `nixos/hosts/daedalus/storage.nix` |
+| `/zfs/syncthing` | ❓ Check if backed up | Verify | May need explicit backup |
+| `/zfs/documents` | ❓ Check if backed up | Verify | May need explicit backup |
+| `/zfs/photos` | ❓ Check if backed up | Verify | May need explicit backup |
+| **Seafile** | | | |
+| Config (`/var/lib/seafile`) | ✅ Backed up via mkRestic | None | Configured in `nixos/modules/applications/storage/seafile/default.nix` |
+| File storage (`/zfs/seafile`) | ❌ Not backed up | Add rclone export backup | Create new backup job |
+| **Desktop Systems** | | | |
+| Desktop workstations | ❌ Not configured | Add backup configuration | Create desktop backup module or script |
+| **Other** | | | |
+| External HDD script | ✅ Exists | Enhance if needed | `scripts/backup-to-external-hdd.sh` |
+
+### Backup Locations
+
+- **Local backups**: `/zfs/backup/nixos/nixos` (daedalus) or `/mnt/nas/backup/nixos/nixos` (shodan)
+- **Remote backups**: Backblaze B2 (`s3:s3.us-west-002.backblazeb2.com/trux-backup-02f07ef6fe/nixos-restic`)
+- **Backup retention**: Keep last 3, daily 7, weekly 5, monthly 12
+
 ## Automatic Backups
 
 I have added a sops secret for both my local and remote servers in my restic module :simple-github: [/nixos/modules/nixos/services/restic/](https://github.com/truxnell/nix-config/blob/main/nixos/modules/nixos/services/restic/default.nix). This provides the restic password and 'AWS' credentials for the S3-compatible R2 bucket.
