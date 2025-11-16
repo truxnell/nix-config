@@ -192,6 +192,15 @@ in
               "rickenbacker"
             ];
           };
+          "org" = {
+            path = "${cfg.syncPath}/org";
+            devices = [
+              "daedalus"
+              "citadel-bazzite"
+              "rickenbacker"
+              "Nat Pixel 6Pro"
+            ];
+          };
 
         };
       };
