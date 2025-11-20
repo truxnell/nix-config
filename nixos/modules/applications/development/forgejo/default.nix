@@ -11,6 +11,7 @@ let
   category = "services";
   description = "Git forge service";
   port = 3000; # int
+  sshPort = 2222; # int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -91,6 +92,10 @@ in
           ROOT_URL = "https://${url}/";
           HTTP_PORT = port;
           LANDING_PAGE = "explore";
+          START_SSH_SERVER = true;
+          SSH_PORT = sshPort;  # Non-privileged port avoids permission issues 【0】
+          SSH_LISTEN_HOST = "0.0.0.0";
+          SSH_DOMAIN = "daedalus";  # Match your server hostname
         };
         service = {
           DISABLE_REGISTRATION = true;
@@ -128,10 +133,9 @@ in
 
     ### firewall config
 
-    # networking.firewall = mkIf cfg.openFirewall {
-    #   allowedTCPPorts = [ port ];
-    #   allowedUDPPorts = [ port ];
-    # };
+    networking.firewall = {
+      allowedTCPPorts = [ sshPort ];
+    };
 
     ### backups
     warnings = [
