@@ -128,7 +128,7 @@ in
     virtualisation.oci-containers.containers = {
       gotenberg = {
         user = "gotenberg:gotenberg";
-        image = "docker.io/gotenberg/gotenberg:8.24.0";
+        image = "docker.io/gotenberg/gotenberg:8.25.0";
         cmd = [
           "gotenberg"
           "--chromium-disable-javascript=true"
