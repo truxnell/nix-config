@@ -156,6 +156,11 @@
             hostname = "shodan";
             system = "x86_64-linux";
           };
+
+          "xerxes" = mkNixosConfig {
+            hostname = "xerxes";
+            system = "x86_64-linux";
+          };
         };
 
       # deploy-rs configuration for remote deployments
@@ -175,6 +180,15 @@
               sshUser = "deploy";
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.shodan;
+            };
+          };
+
+          xerxes = {
+            hostname = "xerxes";
+            profiles.system = {
+              sshUser = "root";
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.xerxes;
             };
           };
         };

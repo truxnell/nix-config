@@ -241,5 +241,129 @@
           directories = [ "/var/lib/samba/" ];
         };
 
+    systemd.services.org-bom-weather = {
+      description = "Update and run BOM weather script";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        StateDirectory = "org-bom-weather";
+        ExecStart = [
+          (pkgs.writeScript "org-bom-weather.sh" ''
+            #!${pkgs.bash}/bin/bash
+            set -euo pipefail
+
+            # Ensure SSH and git are in PATH
+            export PATH="${pkgs.openssh}/bin:${pkgs.git}/bin:${pkgs.python3}/bin:$PATH"
+
+            REPO_DIR="/var/lib/org-bom-weather"
+            REPO_URL="ssh://forgejo@daedalus:2222/truxnell/org-bom-weather.git"
+            OUTPUT_FILE="/zfs/syncthing/org/weather.org"
+
+            # Clone if directory doesn't exist or is empty
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              git clone "$REPO_URL" "$REPO_DIR"
+            else
+              # Force update if directory exists
+              cd "$REPO_DIR"
+              git fetch --force origin
+              git reset --hard origin/main || git reset --hard origin/master
+            fi
+
+            # Run the Python script
+            cd "$REPO_DIR"
+            python3 bom_weather.py -o "$OUTPUT_FILE"
+          '')
+        ];
+        ReadWritePaths = [
+          "/var/lib/org-bom-weather"
+          "/zfs/syncthing/org"
+        ];
+      };
+    };
+
+    systemd.timers.org-bom-weather = {
+      description = "Timer for BOM weather script";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = [
+          "*-*-* 05:30:00"
+          "*-*-* 11:30:00"
+          "*-*-* 17:30:00"
+          "*-*-* 23:30:00"
+        ];
+        TimeZone = "Australia/Melbourne";
+      };
+    };
+
+    systemd.services.org-git-sync = {
+      description = "Auto-commit and push changes in /zfs/syncthing/org/";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        ExecStart = [
+          (pkgs.writeScript "org-git-sync.sh" ''
+            #!${pkgs.bash}/bin/bash
+            set -euo pipefail
+
+            # Ensure git and SSH are in PATH
+            export PATH="${pkgs.openssh}/bin:${pkgs.git}/bin:$PATH"
+
+            REPO_DIR="/zfs/syncthing/org"
+
+            # Check if directory exists and is a git repository
+            if [ ! -d "$REPO_DIR" ]; then
+              echo "Directory $REPO_DIR does not exist, skipping"
+              exit 0
+            fi
+
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              echo "Directory $REPO_DIR is not a git repository, skipping"
+              exit 0
+            fi
+
+            cd "$REPO_DIR"
+
+            # Check if there are any changes to commit
+            if git diff --quiet && git diff --cached --quiet; then
+              echo "No changes to commit"
+              # Still try to push in case local is behind remote
+            else
+              # Add all changes
+              git add -A
+
+              # Create commit message with timestamp
+              COMMIT_MSG="Auto-commit: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+              git commit -m "$COMMIT_MSG" || {
+                echo "Commit failed (might be no changes after staging), continuing..."
+              }
+            fi
+
+            # Push to remote (non-destructive, will fail if remote is ahead)
+            # Use --set-upstream if needed, but don't force push
+            if git remote | grep -q .; then
+              git push || {
+                echo "Push failed (remote might be ahead or network issue), this is non-fatal"
+                exit 0
+              }
+            else
+              echo "No remote configured, skipping push"
+            fi
+          '')
+        ];
+        ReadWritePaths = [
+          "/zfs/syncthing/org"
+        ];
+      };
+    };
+
+    systemd.timers.org-git-sync = {
+      description = "Timer for auto-committing org directory";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "hourly";
+        RandomizedDelaySec = "5m";
+      };
+    };
+
   };
 }
