@@ -295,6 +295,70 @@
       };
     };
 
+    ## Secrets
+    sops.secrets."services/org-weather-observations/env" = {
+      sopsFile = ./secrets.sops.yaml;
+      owner = "root";
+      group = "root";
+      restartUnits = [ "org-weather-observations.service" ];
+    };
+
+    systemd.services.org-weather-observations = let
+      # Create Python environment with common dependencies
+      # Add more packages here as needed
+      pythonEnv = pkgs.python3.withPackages (ps: with ps; [
+        paho-mqtt
+        # Add other dependencies here when known
+      ]);
+    in {
+      description = "Update and run weather observations script";
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+        StateDirectory = "org-weather-observations";
+        EnvironmentFile = [ config.sops.secrets."services/org-weather-observations/env".path ];
+        ExecStart = [
+          (pkgs.writeScript "org-weather-observations.sh" ''
+            #!${pkgs.bash}/bin/bash
+            set -euo pipefail
+
+            # Ensure SSH and git are in PATH
+            export PATH="${pkgs.openssh}/bin:${pkgs.git}/bin:${pythonEnv}/bin:$PATH"
+
+            REPO_DIR="/var/lib/org-weather-observations"
+            REPO_URL="ssh://forgejo@daedalus:2222/truxnell/org-weather-observations.git"
+            OUTPUT_FILE="/zfs/syncthing/org/weather.org"
+
+            # Clone if directory doesn't exist or is empty
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              git clone "$REPO_URL" "$REPO_DIR"
+            else
+              # Force update if directory exists
+              cd "$REPO_DIR"
+              git fetch --force origin
+              git reset --hard origin/main || git reset --hard origin/master
+            fi
+
+
+            # Run the Python script
+            python3 weather_org_integration.py -o "$OUTPUT_FILE" --timeout 120
+          '')
+        ];
+        ReadWritePaths = [
+          "/var/lib/org-weather-observations"
+          "/zfs/syncthing/org"
+        ];
+      };
+    };
+
+    systemd.timers.org-weather-observations = {
+      description = "Timer for weather observations script";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = "*:0/15";
+      };
+    };
+
     systemd.services.org-git-sync = {
       description = "Auto-commit and push changes in /zfs/syncthing/org/";
       serviceConfig = {
