@@ -186,7 +186,7 @@
           xerxes = {
             hostname = "xerxes";
             profiles.system = {
-              sshUser = "root";
+              sshUser = "deploy";
               user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.xerxes;
             };

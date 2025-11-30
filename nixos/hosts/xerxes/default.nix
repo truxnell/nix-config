@@ -7,7 +7,17 @@
     networking.hostName = "xerxes";
     networking.useDHCP = lib.mkDefault true;
     system.stateVersion = lib.mkDefault "23.11";
+    services.smartd.enable=false; # no smartd disks on vps
+  mySystem.security.acme.enable = true;
 
+  mySystem.services = {
+
+    openssh.enable = true;
+    podman.enable = true;
+    # Networking
+    nginx.enable = true;
+    technitium-dns-server.enable = true;
+  };
 
  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ ];
@@ -24,9 +34,9 @@
       fsType = "ext4";
     };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/7e2ffce0-4f21-45a8-93b2-9ea83377f9ec"; }
-    ];
+  # swapDevices =
+  #   [ { device = "/dev/disk/by-uuid/7e2ffce0-4f21-45a8-93b2-9ea83377f9ec"; }
+  #   ];
 
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";

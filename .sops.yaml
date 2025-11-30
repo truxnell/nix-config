@@ -18,6 +18,7 @@ keys:
   - &durandal age1j2r8mypw44uvqhfs53424h6fu2rkr5m7asl7rl3zn3xzva9m3dcqpa97gw
   - &daedalus age1ezmtw7qaw93yggtcncqpyej9qjlref8au5uceqat49htmlfgps2swsttyr
   - &playsatan age1m24gvg0wq5ps872ezcjwdx7e9rrs65rq2vt05qwt9purptxyyessasckk9
+  - &xerxes age13dmfusa7kvgmc9xqzu55ws07y6etzcxa5cx58vkthdaeyuv32ecq3c624g
 
 creation_rules:
   - path_regex: .*\.sops\.yaml$
@@ -32,3 +33,4 @@ creation_rules:
           - *durandal
           - *daedalus
           - *playsatan
+          - *xerxes
