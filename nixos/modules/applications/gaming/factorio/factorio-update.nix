@@ -12,7 +12,7 @@ let
     # Define the container name, registry, and tag
     CONTAINER_NAME="factorio-space-age"
     REGISTRY="docker.io/factoriotools/factorio"
-    TAG="stable"
+    TAG="latest"
 
     # Check if there are players playing online
     PLAYER_STATUS=$(${pkgs.podman}/bin/podman exec $CONTAINER_NAME rcon /players online)
