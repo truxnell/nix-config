@@ -9,7 +9,7 @@ let
   app = "linkding";
   category = "services";
   description = "Bookmark manager";
-  image = "docker.io/sissbruecker/linkding:1.44.1";
+  image = "docker.io/sissbruecker/linkding:1.44.2";
   user = "kah"; # string
   group = "kah"; # string
   port = 9090; # int
