@@ -37,6 +37,8 @@ Github repo updates are provided by :simple-renovatebot: [Renovate](https://www.
 
 The primary CI is a Garnix build, which Is already building and caching all my systems. Knowing all of the systems have built and cached goes a huge way toward ensuring main is a stable branch.
 
+For major NixOS upgrades (for example to NixOS 25.11), see `docs/maintenance/upgrade-25.11.md` for a step‑by‑step process.
+
 ## Docker container updates
 
 Container updates are provided by :simple-renovatebot: [Renovate](https://www.mend.io/renovate/) by [Mend](https://mend.io). These will either be manually merged after I have checked the upstream projects notes for breaking changes _or_ auto-merged based on settings I have in :simple-github: [/.github/renovate/autoMerge.json5](https://github.com/truxnell/nix-config/blob/dev2/.github/renovate/autoMerge.json5).

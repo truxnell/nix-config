@@ -1,6 +1,6 @@
 {
   imports = [
-    ./seafile/default.nix
+    # ./seafile/default.nix
     ./syncthing/default.nix
   ];
 }

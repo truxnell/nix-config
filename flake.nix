@@ -2,7 +2,9 @@
   description = "My nixos homelab";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    # NixOS 25.11 release channel
+    # After changing this, run `nix flake update` to refresh flake.lock.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Core tools
@@ -49,7 +51,7 @@
           python-with-packages = pkgs.python3.withPackages (
             ps: with ps; [
               mkdocs-material
-              mkdocs-minify
+              mkdocs-minify-plugin
               pygments
             ]
           );

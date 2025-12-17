@@ -78,10 +78,11 @@
         enable = true;
         syncPath = "/zfs/syncthing/";
       };
-      seafile = {
-        enable = true;
-        fileLocation = "/zfs/seafile";
-      };
+      # Deprecated, have to move to docker setup
+      # seafile = {
+      #   enable = true;
+      #   fileLocation = "/zfs/seafile";
+      # };
 
       # Development
       forgejo.enable = true;

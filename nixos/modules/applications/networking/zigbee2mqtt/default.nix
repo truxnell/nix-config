@@ -33,7 +33,7 @@ in
     services.zigbee2mqtt = {
       enable = true;
       settings = {
-        homeassistant = true;
+        homeassistant = mkForce true;
         permit_join = false;
         include_device_information = true;
         frontend = {

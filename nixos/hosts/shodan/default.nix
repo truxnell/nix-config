@@ -44,7 +44,7 @@
     zigbee2mqtt.enable = true;
     rapt2mqtt.enable = true;
     # Automation
-    n8n.enable = true;
+    # n8n.enable = true;  
     node-red.enable = true;
     home-assistant.enable = true;
 
