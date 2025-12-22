@@ -43,6 +43,8 @@ in
         client_id = "z2m";
         serial = {
           port = "tcp://10.8.30.110:6638";
+          adapter = "zstack";
+          baudrate = 115200;
         };
         mqtt = {
           server = "mqtt://mqtt.trux.dev:1883";

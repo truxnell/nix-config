@@ -98,6 +98,26 @@ in
       dataDir = cfg.fileLocation;
     };
 
+    services.mysql = {
+      enable = true;
+      package = lib.mkDefault pkgs.mariadb;
+      ensureDatabases = [
+        "ccnet_db"
+        "seafile_db"
+        "seahub_db"
+      ];
+      ensureUsers = [
+        {
+          name = cfg.user;
+          ensurePermissions = {
+            "ccnet_db.*" = "ALL PRIVILEGES";
+            "seafile_db.*" = "ALL PRIVILEGES";
+            "seahub_db.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+    };
+
     ### gatus integration
     mySystem.services.gatus.monitors = mkIf cfg.monitor [
       {
