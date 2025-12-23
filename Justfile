@@ -61,6 +61,12 @@ dry-deploy host:
 # Deploy a single host with deploy-rs
 deploy host:
     deploy .#{{host}} --remote-build
+# Deploy a single host with deploy-rs
+deploy-force host:
+    deploy .#{{host}} --remote-build --auto-rollback false
+# Deploy a single host with deploy-rs
+deploy host:
+    deploy .#{{host}} --remote-build
 
 # Deploy all defined hosts
 deploy-all:

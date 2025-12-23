@@ -304,6 +304,13 @@
       restartUnits = [ "org-weather-observations.service" ];
     };
 
+    # sops.secrets."services/webdav/htpasswd" = {
+    #   sopsFile = ./secrets.sops.yaml;
+    #   owner = "nginx";
+    #   group = "nginx";
+    #   restartUnits = [ "nginx.service" ];
+    # };
+
     systemd.services.org-weather-observations = let
       # Create Python environment with common dependencies
       # Add more packages here as needed
@@ -429,6 +436,27 @@
         RandomizedDelaySec = "5m";
       };
     };
+
+    # WebDAV service for /zfs/syncthing/org/
+    # Ensure nginx user can access the directory
+    users.users.nginx.extraGroups = [ "kah" ];
+
+    services.nginx.virtualHosts."webdav.${config.networking.domain}" = {
+      forceSSL = true;
+      useACMEHost = config.networking.domain;
+      root = "/zfs/syncthing/org/";
+      locations."/" = {
+        extraConfig = ''
+          dav_methods PUT DELETE MKCOL COPY MOVE;
+          dav_ext_methods PROPFIND OPTIONS;
+          create_full_put_path on;
+          client_max_body_size 0;
+        '';
+      };
+    };
+              # auth_basic "Restricted Access";
+          # auth_basic_user_file ${config.sops.secrets."services/webdav/htpasswd".path};
+# 
 
   };
 }
