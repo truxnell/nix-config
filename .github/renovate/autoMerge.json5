@@ -21,6 +21,9 @@
         'ghcr.io/jorenn92/Maintainerr',
         'github.com/zricethezav/gitleaks',
         'github.com/actions/create-github-app-token',
+        'ghcr.io/autobrr/qui',
+        'docker.io/sissbruecker/linkding',
+        'ghcr.io/home-operations/home-assistant'
         
       ],
 
