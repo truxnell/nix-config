@@ -55,7 +55,7 @@
       qbittorrent.enable = true;
       qbittorrent-lts.enable = true;
       sabnzbd.enable = true;
-      cross-seed.enable = true;
+      # cross-seed.enable = true; #QUI handles this now
       # Media automation
       prowlarr.enable = true;
       autobrr.enable = true;
@@ -93,7 +93,7 @@
       # Misc
       immich.enable = true;
       ntfy.enable = true;
-      qbit-tqm.enable = true;
+      # qbit-tqm.enable = true; #qui handles this
       qui.enable = true;
       # maintainerr.enable = true;
       # filebrowser.enable = true;
