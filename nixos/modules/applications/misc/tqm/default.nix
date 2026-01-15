@@ -10,7 +10,7 @@ let
   app = "qbit-tqm";
   category = "services";
   description = "qbit tag manager";
-  image = "ghcr.io/home-operations/tqm:1.18.0@sha256:454864e1f56a86550c54776c3ba5f3439133b4fc4e66ef69ff90a6ee65db6cc5"; # string
+  image = "ghcr.io/home-operations/tqm:1.19.0@sha256:025ee0c0c8b75f4c7bffa90216eedb494b9884e092a47e9c49824fe63427808c"; # string
   group = "568"; # string #int
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
 in
