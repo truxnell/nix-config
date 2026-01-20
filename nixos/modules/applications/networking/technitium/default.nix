@@ -12,7 +12,7 @@ let
   user = "568"; # string
   group = "568"; # string
   port = 53443; # int
-  appFolder = "/var/lib/private/${app}";
+  appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
   url = "${host}.${config.networking.domain}";

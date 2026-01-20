@@ -88,6 +88,8 @@ in
       user = "568:568";
       volumes = [
         "${appFolder}/:/config"
+        "/tank/natflix/downloads/qbittorrent:/tank/natflix/downloads/qbittorrent:rw"
+        "/tank/natflix/downloads/qbittorrent-lts:/tank/natflix/downloads/qbittorrent-lts:rw"
       ];
 
     };
