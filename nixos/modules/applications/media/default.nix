@@ -16,5 +16,7 @@
     ./sonarr/default.nix
     ./tautulli/default.nix
     ./jellyseer/default.nix
+    ./kavita/default.nix
+    
   ];
 }

@@ -55,13 +55,16 @@
       qbittorrent.enable = true;
       qbittorrent-lts.enable = true;
       sabnzbd.enable = true;
+      
       # cross-seed.enable = true; #QUI handles this now
       # Media automation
       prowlarr.enable = true;
       autobrr.enable = true;
       # Music
       navidrome.enable = true;
-
+      
+      # Comics
+      kavita.enable=true;
       # Productivity
       # Documentation
       paperless.enable = true;
