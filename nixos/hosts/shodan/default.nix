@@ -150,26 +150,26 @@
   fileSystems."/" = {
     device = "rpool/local/root";
     fsType = "zfs";
-    options = [ "zfsutil" ]
+    options = [ "zfsutil" ];
   };
 
   fileSystems."/nix" = {
     device = "rpool/local/nix";
     fsType = "zfs";
-    options = [ "zfsutil" ]
+    options = [ "zfsutil" ];
   };
 
   fileSystems."/persist" = {
     device = "rpool/safe/persist";
     fsType = "zfs";
-    options = [ "zfsutil" ]
+    options = [ "zfsutil" ];
     neededForBoot = true; # for impermanence
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/76FA-78DF";
     fsType = "vfat";
-    options = [ "zfsutil" ]
+    options = [ "zfsutil" ];
     options = [
       "fmask=0022"
       "dmask=0022"
