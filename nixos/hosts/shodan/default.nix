@@ -169,7 +169,6 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/76FA-78DF";
     fsType = "vfat";
-    options = [ "zfsutil" ];
     options = [
       "fmask=0022"
       "dmask=0022"
