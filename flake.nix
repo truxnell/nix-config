@@ -129,7 +129,8 @@
               profileModules ? [ ],
             }:
             nixpkgs.lib.nixosSystem {
-              inherit system lib;
+              inherit hostPlatform lib;
+              
               modules = baseModules ++ hardwareModules ++ profileModules;
               specialArgs = { inherit self inputs nixpkgs; };
               pkgs = import nixpkgs {
@@ -151,17 +152,17 @@
         rec {
           "daedalus" = mkNixosConfig {
             hostname = "daedalus";
-            system = "x86_64-linux";
+            hostPlatform="x86_64";
           };
 
           "shodan" = mkNixosConfig {
             hostname = "shodan";
-            system = "x86_64-linux";
+            hostPlatform="x86_64";
           };
 
           "xerxes" = mkNixosConfig {
             hostname = "xerxes";
-            system = "x86_64-linux";
+            hostPlatform="x86_64";
           };
         };
 
