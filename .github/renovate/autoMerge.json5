@@ -29,7 +29,7 @@
         'docker.io/gotenberg/gotenberg',
         'ghcr.io/dgtlmoon/changedetection.io',
         'adrienverge/yamllint',
-        'ghcr.io/benbusby/whoogle-search,
+        'ghcr.io/benbusby/whoogle-search',
         'ghcr.io/home-operations/tqm',
         'Lucas-C/pre-commit-hooks',
         
