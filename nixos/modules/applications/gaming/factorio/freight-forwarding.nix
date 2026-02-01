@@ -107,7 +107,8 @@ in
     ];
 
     services.restic.backups = config.lib.mySystem.mkRestic {
-      inherit app user;
+      inherit user;
+      app = "${app}-${instance}";
       paths = [ appFolder ];
       inherit appFolder;
     };
