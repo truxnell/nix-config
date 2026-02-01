@@ -91,7 +91,7 @@ in
       retentionPeriod = "12";
     };
 
-    services.vmalert = {
+    services.vmalert.instances."homelab" = {
       enable = true;
       settings = {
         "datasource.url" = "http://localhost:${builtins.toString port}";

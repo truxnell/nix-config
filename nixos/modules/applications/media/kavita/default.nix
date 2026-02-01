@@ -12,7 +12,7 @@ let
   image = "";
   user = "568"; #string
   group = "568"; #string
-  port = config.services.kavita.port; #int
+  port = config.services.kavita.settings.Port; #int
   appFolder = "/var/lib/${app}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";
   host = "${app}" + (if cfg.dev then "-dev" else "");
@@ -118,6 +118,7 @@ in
       locations."^~ /" = {
         proxyPass = "http://127.0.0.1:${builtins.toString port}";
         extraConfig = "resolver 10.88.0.1;";
+        proxyWebsockets = true;
       };
     };
 

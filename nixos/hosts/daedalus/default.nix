@@ -70,7 +70,7 @@
       paperless.enable = true;
       trilium.enable = true;
       # Tools
-      tandoor.enable = true;
+      # tandoor.enable = true;
       open-webui.enable = true;
       atuin.enable = true;
       # Communication

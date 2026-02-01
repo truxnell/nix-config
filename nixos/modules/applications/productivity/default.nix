@@ -10,7 +10,6 @@
     ./radicale/default.nix
     ./rss-bridge/default.nix
     ./rxresume/default.nix
-    ./tandoor/default.nix
     ./thelounge/default.nix
     ./trilium/default.nix
     ./vaultwarden/default.nix

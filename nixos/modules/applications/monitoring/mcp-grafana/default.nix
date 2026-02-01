@@ -93,19 +93,19 @@ in
     };
 
     ### backups
-    warnings = [
-      (mkIf (
-        !cfg.backup && config.mySystem.purpose != "Development"
-      ) "WARNING: Backups for ${app} are disabled!")
-    ];
+    # warnings = [
+    #   (mkIf (
+    #     !cfg.backup && config.mySystem.purpose != "Development"
+    #   ) "WARNING: Backups for ${app} are disabled!")
+    # ];
 
-    services.restic.backups = mkIf cfg.backup (
-      config.lib.mySystem.mkRestic {
-        inherit app user;
-        paths = [ appFolder ];
-        inherit appFolder;
-      }
-    );
+    # services.restic.backups = mkIf cfg.backup (
+    #   config.lib.mySystem.mkRestic {
+    #     inherit app user;
+    #     paths = [ appFolder ];
+    #     inherit appFolder;
+    #   }
+    # );
   };
 }
 
