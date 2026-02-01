@@ -82,7 +82,7 @@
     technitium-dns-server.enable = true;
 
     # Misc
-    firefly-iii.enable = true;
+    # firefly-iii.enable = true;
   };
 
   mySystem.containers = {
@@ -150,19 +150,19 @@
   fileSystems."/" = {
     device = "rpool/local/root";
     fsType = "zfs";
-    options = [ "zfsutil" ];
+    # options = [ "zfsutil" ];
   };
 
   fileSystems."/nix" = {
     device = "rpool/local/nix";
     fsType = "zfs";
-    options = [ "zfsutil" ];
+    # options = [ "zfsutil" ];
   };
 
   fileSystems."/persist" = {
     device = "rpool/safe/persist";
     fsType = "zfs";
-    options = [ "zfsutil" ];
+    # options = [ "zfsutil" ];
     neededForBoot = true; # for impermanence
   };
 

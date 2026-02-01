@@ -127,14 +127,14 @@ in
     ];
 
     ### Ingress
-    services.nginx.virtualHosts.${url} = {
-      forceSSL = true;
-      useACMEHost = config.networking.domain;
-      locations."^~ /" = {
-        proxyPass = "http://127.0.0.1:${builtins.toString port}";
-        extraConfig = "resolver 10.88.0.1;";
-      };
-    };
+    # services.nginx.virtualHosts.${url} = {
+    #   forceSSL = true;
+    #   useACMEHost = config.networking.domain;
+    #   locations."^~ /" = {
+    #     proxyPass = "http://127.0.0.1:${builtins.toString port}";
+    #     extraConfig = "resolver 10.88.0.1;";
+    #   };
+    # };
 
     ### firewall config
 

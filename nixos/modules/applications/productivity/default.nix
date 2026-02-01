@@ -2,7 +2,6 @@
   imports = [
     ./atuin/default.nix
     ./changedetection/default.nix
-    ./firefly-iii/default.nix
     ./linkding/default.nix
     ./miniflux/default.nix
     ./open-webui/default.nix

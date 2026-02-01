@@ -4,7 +4,7 @@
     {
   // automerge minor, patch, digest
       "matchDatasources": ['docker', 'github-tags'],
-      "automerge": "true",
+    "automerge": "true",
       "automergeType": "branch",
       "schedule": [ "before 11am on Sunday" ],
       "matchUpdateTypes": [ 'minor', 'patch', 'digest'],
@@ -23,7 +23,15 @@
         'github.com/actions/create-github-app-token',
         'ghcr.io/autobrr/qui',
         'docker.io/sissbruecker/linkding',
-        'ghcr.io/home-operations/home-assistant'
+        'ghcr.io/home-operations/home-assistant',
+        'ghcr.io/foxxmd/multi-scrobbler',
+        'ghcr.io/home-operations/plex',
+        'docker.io/gotenberg/gotenberg',
+        'ghcr.io/dgtlmoon/changedetection.io',
+        'adrienverge/yamllint',
+        'ghcr.io/benbusby/whoogle-search,
+        'ghcr.io/home-operations/tqm',
+        'Lucas-C/pre-commit-hooks',
         
       ],
 
