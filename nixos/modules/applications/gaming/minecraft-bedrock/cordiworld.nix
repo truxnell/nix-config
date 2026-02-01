@@ -83,6 +83,10 @@ in
           ];
         };
 
+    systemd.tmpfiles.rules = [
+      "d ${appFolder}/ 0750 ${user} ${group} -"
+    ];
+
     virtualisation.oci-containers.containers."${app}-${instance}" = {
       image = "${image}";
       user = "${user}:${group}";
