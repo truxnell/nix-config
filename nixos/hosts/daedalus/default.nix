@@ -165,19 +165,16 @@
     fileSystems."/" = {
       device = "rpool/local/root";
       fsType = "zfs";
-      options = [ "zfsutil" ];
     };
 
     fileSystems."/boot" = {
       device = "/dev/disk/by-label/EFI";
       fsType = "vfat";
-      options = [ "zfsutil" ];
     };
 
     fileSystems."/nix" = {
       device = "rpool/local/nix";
       fsType = "zfs";
-      options = [ "zfsutil" ];
     };
 
     # fileSystems."/persist" =
