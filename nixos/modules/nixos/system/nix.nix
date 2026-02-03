@@ -37,7 +37,7 @@ in
       # garbage collection
       automatic = cfg.gc.enable;
       dates = "daily";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 14d";
       inherit (cfg.gc) persistent;
     };
 
