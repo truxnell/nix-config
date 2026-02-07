@@ -6,7 +6,7 @@
 with lib;
 let
   app = "home-assistant";
-  image = "ghcr.io/home-operations/home-assistant:2026.1.3";
+  image = "ghcr.io/home-operations/home-assistant:2026.2.1";
   user = "kah"; # string
   group = "kah"; # string
   port = 8123; # int
