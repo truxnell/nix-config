@@ -36,7 +36,7 @@ in
       };
       volumes = [
         "${appFolder}:/config:rw"
-        "${config.mySystem.nasFolder}/natflix:/tank:rw"
+        "${config.mySystem.nasFolder}/natflix/downloads/sabnzbd/:/tank/natflix/downloads/sabnzbd/:rw"
         "/etc/localtime:/etc/localtime:ro"
       ];
     };
