@@ -12,7 +12,7 @@ let
   image = "docker.io/itzg/minecraft-bedrock-server:latest";
   user = "568"; # string
   group = "568"; # string
-  port = 19133; # int
+  port = 19132; # int
   cfg = config.mySystem.services.${app}.${instance};
   appFolder = "/var/lib/${app}/${instance}";
   # persistentFolder = "${config.mySystem.persistentFolder}/var/lib/${appFolder}";

@@ -76,6 +76,10 @@
       # Communication
       redbot.enable = true;
 
+      # Games
+      minecraft-bedrock.survival.enable = true;
+
+
       # Storage
       syncthing = {
         enable = true;

@@ -76,7 +76,6 @@
     factorio.space-age.enable = true; # the factory must launch into space
     satisfactory.enable = true; # the factory must be satisfactory
     minecraft-bedrock.CordiWorld.enable = true;
-    minecraft-bedrock.survival.enable = true;
 
     # Networking
     technitium-dns-server.enable = true;
