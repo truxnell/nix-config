@@ -116,7 +116,7 @@ in
 
     virtualisation.oci-containers.containers = {
       immich-server = {
-        image = "ghcr.io/immich-app/immich-server:v2.5.2";
+        image = "ghcr.io/immich-app/immich-server:v2.5.6";
         environmentFiles = [ config.sops.secrets."${category}/${app}/env".path ];
         inherit environment;
         volumes = [
@@ -138,7 +138,7 @@ in
       };
 
       immich-machine-learning = {
-        image = "ghcr.io/immich-app/immich-machine-learning:v2.5.2";
+        image = "ghcr.io/immich-app/immich-machine-learning:v2.5.6";
         inherit environment;
         volumes = [
           "/zfs/photos/immich/:/usr/src/app/upload"
