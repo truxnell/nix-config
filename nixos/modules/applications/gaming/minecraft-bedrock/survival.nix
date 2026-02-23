@@ -105,7 +105,7 @@ in
         LEVEL_NAME = instance;
         TEXTUREPACK_REQUIRED = "false";
         WHITE_LIST = "false";
-        ALLOW_CHEATS = "true";
+        ALLOW_CHEATS = "false";
         SERVER_PORT="${builtins.toString port}";
       };
       # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
