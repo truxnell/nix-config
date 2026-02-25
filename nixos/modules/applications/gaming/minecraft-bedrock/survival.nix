@@ -106,6 +106,7 @@ in
         TEXTUREPACK_REQUIRED = "false";
         WHITE_LIST = "false";
         ALLOW_CHEATS = "true";
+        OPS="2535472098228540,2533274802773416";
         SERVER_PORT="${builtins.toString port}";
       };
       # environmentFiles = [ config.sops.secrets."services/${app}/env".path ];
