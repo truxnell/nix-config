@@ -98,7 +98,7 @@ in
           SSH_DOMAIN = "daedalus";  # Match your server hostname
         };
         service = {
-          DISABLE_REGISTRATION = true;
+          DISABLE_REGISTRATION = false;
         };
       };
     };
