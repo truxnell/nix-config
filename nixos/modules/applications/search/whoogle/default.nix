@@ -6,7 +6,7 @@
 with lib;
 let
   app = "whoogle";
-  image = "ghcr.io/benbusby/whoogle-search:1.2.3@sha256:fe591802cff66864a36f23fa42e5cb4e518001ce21f0cfb4fb5597adacd29e25";
+  image = "ghcr.io/benbusby/whoogle-search:1.2.4@sha256:6ae072238642b7e5860c8fa7f68cf06be797eb4e2278fc41d17d3b5e8a051eea";
   user = "927"; # string
   group = "927"; # string
   port = 5000; # int
