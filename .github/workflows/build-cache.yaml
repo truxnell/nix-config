@@ -19,7 +19,7 @@ jobs:
 
       - uses: DeterminateSystems/nix-installer-action@v21
 
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - uses: DeterminateSystems/magic-nix-cache-action@v14
 
       - uses: cachix/cachix-action@v16
         with:
