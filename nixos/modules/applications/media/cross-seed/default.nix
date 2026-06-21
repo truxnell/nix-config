@@ -10,7 +10,7 @@ let
   app = "cross-seed";
   category = "services";
   description = "xseed";
-  image = "ghcr.io/cross-seed/cross-seed:6.13.6";
+  image = "ghcr.io/cross-seed/cross-seed:6.13.7";
   user = "568"; # string
   group = "568"; # string
   port = 2468; # int
