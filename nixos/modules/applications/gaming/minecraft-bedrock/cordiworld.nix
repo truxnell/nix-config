@@ -97,7 +97,7 @@ in
       environment = {
         SERVER_NAME = "Natflix Servers Creative";
         EULA = "TRUE";
-        GAMEMODE = "survival";
+        GAMEMODE = "creative";
         DIFFICULTY = "easy";
         FORCE_GAMEMODE = "false";
         TICK_DISTANCE = "12";
