@@ -77,7 +77,7 @@
       redbot.enable = true;
 
       # Games
-      minecraft-bedrock.survival.enable = true;
+      minecraft-bedrock.creative.enable = true;
 
 
       # Storage
