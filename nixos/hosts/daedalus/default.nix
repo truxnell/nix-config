@@ -77,7 +77,7 @@
       redbot.enable = true;
 
       # Games
-      minecraft-bedrock.cordiworld.enable = true;
+      minecraft-bedrock.CordiWorld.enable = true;
 
 
       # Storage
