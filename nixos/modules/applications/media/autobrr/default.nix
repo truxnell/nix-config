@@ -9,7 +9,7 @@ let
   app = "autobrr";
   category = "services";
   description = "Torrent brr-er";
-  image = "ghcr.io/autobrr/autobrr:v1.81@sha256:491e3e1a81fe5ced6b542621e49985d0dea58d23257684b0b19d881761736303";
+  image = "ghcr.io/autobrr/autobrr:v1.82@sha256:63a014b42992ada7e03fa1bbd4f02ad02d96665b172bf42106ccfcb7e23144d8";
   user = "kah"; # string
   group = "kah"; # string
   port = 7474; # int
