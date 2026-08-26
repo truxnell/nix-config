@@ -9,7 +9,7 @@ let
   app = "open-webui";
   category = "services";
   description = "front end for LLM and stable-diffusion";
-  image = "ghcr.io/open-webui/open-webui:latest@sha256:6a773e5c3a246b65cbe74ce942b294292c0e5f81c138f703d111bc162f7d7c3d";
+  image = "ghcr.io/open-webui/open-webui:latest@sha256:c792953395b43d4f49085fa4026850c5e923578345ebeaf56eabd980bcfc273a";
   user = "kah"; # string
   group = "kah"; # string
   port = 11111; # int
