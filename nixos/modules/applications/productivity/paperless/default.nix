@@ -139,7 +139,7 @@ in
         ];
       };
       tika = {
-        image = "docker.io/apache/tika:2.5.0";
+        image = "docker.io/apache/tika:4.0.0";
         ports = [
           "127.0.0.1:${tikaPort}:9998"
         ];
