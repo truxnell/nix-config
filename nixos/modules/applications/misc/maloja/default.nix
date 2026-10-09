@@ -9,7 +9,7 @@ let
   app = "maloja";
   category = "containers";
   description = "Music scrobbler";
-  image = "docker.io/krateng/maloja:3.2.4@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95";
+  image = "docker.io/krateng/maloja:3.2.7@sha256:8864145b0107f9edfdd6672b366deb84378f4b20ea48730206bc5a56e3f82460";
   user = "kah"; # string
   group = "kah"; # string
   port = 42010; # int
