@@ -6,7 +6,7 @@
 with lib;
 let
   app = "plex";
-  image = "ghcr.io/home-operations/plex:1.43.4";
+  image = "ghcr.io/home-operations/plex:1.43.5";
   user = "kah"; # string
   group = "kah"; # string
   port = 32400; # int
