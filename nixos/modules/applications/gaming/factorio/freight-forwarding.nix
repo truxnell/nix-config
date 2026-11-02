@@ -7,7 +7,7 @@ with lib;
 let
   app = "factorio";
   instance = "freight-forwarding";
-  image = "factoriotools/factorio:stable@sha256:fb83f98b901688d101e2f12d9a2109b085b216790012324f04320cdc01a069d4";
+  image = "factoriotools/factorio:stable@sha256:0ef394757b906f8e2e42d7e1f05332ad7cf7575c40d9b2412fa4c477189bdea7";
   user = "845"; # string
   group = "845"; # string
   port = 34203; # int
