@@ -10,7 +10,7 @@ let
   app = "recyclarr";
   category = "services";
   description = "TRaSH guides sync";
-  image = "ghcr.io/recyclarr/recyclarr:7.5.2@sha256:2550848d43a453f2c6adf3582f2198ac719f76670691d76de0819053103ef2fb";
+  image = "ghcr.io/recyclarr/recyclarr:9.0.0@sha256:4973d11b18b5ef09fb226f4161eecb16434ff7e6b43c56d50fceb52fb22c66c7";
   user = "kah"; # string
   group = "kah"; # string #int
   appFolder = "/var/lib/${app}";
